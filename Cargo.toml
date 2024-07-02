@@ -1,6 +1,6 @@
 [package]
 name = "rustybuzz"
-version = "0.15.0"
+version = "0.16.0"
 authors = ["Yevhenii Reizner <razrfalcon@gmail.com>"]
 edition = "2021"
 description = "A complete harfbuzz shaping algorithm port to Rust."
@@ -15,18 +15,18 @@ exclude = ["benches/", "tests/"]
 [dependencies]
 bitflags = "2.4.1"
 bytemuck = { version = "1.5", features = ["extern_crate_alloc"] }
+core_maths = { version = "0.1.0" }
 smallvec = "1.6"
 unicode-bidi-mirroring = "0.3.0"
 unicode-ccc = "0.3.0"
 unicode-properties = { version = "0.1.0", default-features = false, features = ["general-category"] }
 unicode-script = "0.5.2"
-libm = { version = "0.2.2", optional = true }
 # Use git rev to handle 'true' font header
 # TODO: replace with read-fonts
 skrifa = { git = "https://github.com/googlefonts/fontations", rev = "2eb4b1c" }
 
 [dependencies.ttf-parser]
-version = "0.22.0"
+version = "0.23.0"
 default-features = false
 features = [
     "opentype-layout",
@@ -38,7 +38,6 @@ features = [
 [features]
 default = ["std"]
 std = ["ttf-parser/std"]
-no-std-float = ["libm", "ttf-parser/no-std-float"]
 
 [dev-dependencies]
 pico-args = { version = "0.5", features = ["eq-separator"] }

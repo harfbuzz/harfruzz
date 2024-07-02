@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.16.0] - 2024-07-02
+- Sync with HarfBuzz 9.0.0.
+  Thanks to [@LaurenzV](https://github.com/LaurenzV).
+
+### Changed
+- Bump `ttf-parser`.
+- Use `core_maths` instead of `libm`. Should simplify the build process.
+
+### Removed
+- `no-std-float` build flag. Should be handled automatically now.
+
 ## [0.15.0] - 2024-06-29
 - Sync with HarfBuzz 8.5.0 🎉<br>
   `rustybuzz` is finally in-sync with `harfbuzz`.
@@ -203,7 +214,8 @@ At this point, this is just a simple Rust bindings to a stripped down harfbuzz.
   Embedded harfbuzz relies only on internal TrueType implementation.
 - Most of the non-shaping harfbuzz API.
 
-[Unreleased]: https://github.com/RazrFalcon/rustybuzz/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/RazrFalcon/rustybuzz/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.14.1...v0.15.0
 [0.14.1]: https://github.com/RazrFalcon/rustybuzz/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.13.0...v0.14.0
