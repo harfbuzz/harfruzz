@@ -4,6 +4,7 @@ use ttf_parser::opentype_layout::LayoutTable;
 use ttf_parser::{GlyphId, RgbaColor};
 
 use super::buffer::GlyphPropsFlags;
+use super::fonta;
 use super::ot_layout::TableIndex;
 use super::ot_layout_common::{PositioningTable, SubstitutionTable};
 use crate::Variation;
@@ -26,6 +27,7 @@ const UNICODE_FULL_ENCODING: u16 = 6;
 #[derive(Clone)]
 pub struct hb_font_t<'a> {
     pub(crate) ttfp_face: ttf_parser::Face<'a>,
+    pub(crate) font: fonta::Font<'a>,
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
     pub(crate) points_per_em: Option<f32>,
@@ -70,14 +72,26 @@ impl<'a> hb_font_t<'a> {
     /// Data will be referenced, not owned.
     pub fn from_slice(data: &'a [u8], face_index: u32) -> Option<Self> {
         let face = ttf_parser::Face::parse(data, face_index).ok()?;
-        Some(Self::from_face(face))
+        let font = fonta::Font::new(data, face_index)?;
+        Some(hb_font_t {
+            font,
+            units_per_em: face.units_per_em(),
+            pixels_per_em: None,
+            points_per_em: None,
+            prefered_cmap_encoding_subtable: find_best_cmap_subtable(&face),
+            gsub: face.tables().gsub.map(SubstitutionTable::new),
+            gpos: face.tables().gpos.map(PositioningTable::new),
+            ttfp_face: face,
+        })
     }
 
     /// Creates a new [`Face`] from [`ttf_parser::Face`].
     ///
     /// Data will be referenced, not owned.
     pub fn from_face(face: ttf_parser::Face<'a>) -> Self {
+        let font = fonta::Font::new(face.raw_face().data, 0).unwrap();
         hb_font_t {
+            font,
             units_per_em: face.units_per_em(),
             pixels_per_em: None,
             points_per_em: None,
@@ -125,6 +139,7 @@ impl<'a> hb_font_t<'a> {
         for variation in variations {
             self.set_variation(variation.tag, variation.value);
         }
+        self.font.set_coords(self.ttfp_face.variation_coordinates());
     }
 
     pub(crate) fn has_glyph(&self, c: u32) -> bool {

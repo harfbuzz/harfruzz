@@ -4,6 +4,7 @@
 #![allow(non_snake_case)]
 
 mod algs;
+mod fonta;
 #[macro_use]
 pub mod buffer;
 mod aat_layout;

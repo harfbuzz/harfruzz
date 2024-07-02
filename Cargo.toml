@@ -21,6 +21,9 @@ unicode-ccc = "0.3.0"
 unicode-properties = { version = "0.1.0", default-features = false, features = ["general-category"] }
 unicode-script = "0.5.2"
 libm = { version = "0.2.2", optional = true }
+# Use git rev to handle 'true' font header
+# TODO: replace with read-fonts
+skrifa = { git = "https://github.com/googlefonts/fontations", rev = "2eb4b1c" }
 
 [dependencies.ttf-parser]
 version = "0.22.0"

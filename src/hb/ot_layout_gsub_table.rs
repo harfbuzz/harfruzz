@@ -11,7 +11,14 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use OT::hb_ot_apply_context_t;
 
 pub fn substitute(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
-    apply_layout_table(plan, face, buffer, face.gsub.as_ref());
+    // apply_layout_table(plan, face, buffer, face.gsub.as_ref());
+    apply_layout_table2(
+        plan,
+        face,
+        buffer,
+        face.gsub.as_ref(),
+        face.font.ot.gsub.as_ref(),
+    );
 }
 
 impl<'a> LayoutTable for SubstitutionTable<'a> {

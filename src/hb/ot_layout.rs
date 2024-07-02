@@ -261,6 +261,45 @@ pub fn apply_layout_table<T: LayoutTable>(
     }
 }
 
+/// Applies the lookups in the given GSUB or GPOS table.
+pub fn apply_layout_table2<T: LayoutTable, T2: LayoutTable>(
+    plan: &hb_ot_shape_plan_t,
+    face: &hb_font_t,
+    buffer: &mut hb_buffer_t,
+    table: Option<&T>,
+    table2: Option<&T2>,
+) {
+    let mut ctx = OT::hb_ot_apply_context_t::new(T::INDEX, face, buffer);
+
+    for (stage_index, stage) in plan.ot_map.stages(T::INDEX).iter().enumerate() {
+        for lookup in plan.ot_map.stage_lookups(T::INDEX, stage_index) {
+            ctx.lookup_index = lookup.index;
+            ctx.set_lookup_mask(lookup.mask);
+            ctx.auto_zwj = lookup.auto_zwj;
+            ctx.auto_zwnj = lookup.auto_zwnj;
+
+            ctx.random = lookup.random;
+            ctx.per_syllable = lookup.per_syllable;
+
+            if let Some(table) = &table2 {
+                if let Some(lookup) = table.get_lookup(lookup.index) {
+                    apply_string::<T2>(&mut ctx, lookup);
+                    continue;
+                }
+            }
+            if let Some(table) = &table {
+                if let Some(lookup) = table.get_lookup(lookup.index) {
+                    apply_string::<T>(&mut ctx, lookup);
+                }
+            }
+        }
+
+        if let Some(func) = stage.pause_func {
+            func(plan, face, ctx.buffer);
+        }
+    }
+}
+
 fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &T::Lookup) {
     if ctx.buffer.is_empty() || ctx.lookup_mask() == 0 {
         return;

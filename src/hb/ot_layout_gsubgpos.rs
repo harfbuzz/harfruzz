@@ -470,7 +470,7 @@ impl Apply for ContextLookup<'_> {
                         usize::from(coverages_len),
                         &mut match_positions,
                         match_end,
-                        lookups,
+                        lookups.into_iter(),
                     );
                     return Some(());
                 } else {
@@ -662,7 +662,7 @@ impl Apply for ChainedContextLookup<'_> {
                     usize::from(input_coverages.len()),
                     &mut match_positions,
                     match_end,
-                    lookups,
+                    lookups.into_iter(),
                 );
 
                 Some(())
@@ -763,7 +763,7 @@ fn apply_context(
             usize::from(input.len()),
             &mut match_positions,
             match_end,
-            lookups,
+            lookups.into_iter(),
         );
         return Some(());
     }
@@ -834,18 +834,18 @@ fn apply_chain_context(
         usize::from(input.len()),
         &mut match_positions,
         match_end,
-        lookups,
+        lookups.into_iter(),
     );
 
     Some(())
 }
 
-fn apply_lookup(
+pub(super) fn apply_lookup(
     ctx: &mut hb_ot_apply_context_t,
     input_len: usize,
     match_positions: &mut smallvec::SmallVec<[usize; 4]>,
     match_end: usize,
-    lookups: LazyArray16<SequenceLookupRecord>,
+    lookups: impl Iterator<Item = SequenceLookupRecord>,
 ) {
     let mut count = input_len + 1;
 
@@ -1077,24 +1077,50 @@ pub mod OT {
 
             self.lookup_index = sub_lookup_index;
             let applied = match self.table_index {
-                TableIndex::GSUB => self
-                    .face
-                    .gsub
-                    .as_ref()
-                    .and_then(|table| table.get_lookup(sub_lookup_index))
-                    .and_then(|lookup| {
+                TableIndex::GSUB => {
+                    if let Some(lookup) = self
+                        .face
+                        .font
+                        .ot
+                        .gsub
+                        .as_ref()
+                        .and_then(|gsub| gsub.get_lookup(sub_lookup_index))
+                    {
                         self.lookup_props = lookup.props();
                         lookup.apply(self)
-                    }),
-                TableIndex::GPOS => self
-                    .face
-                    .gpos
-                    .as_ref()
-                    .and_then(|table| table.get_lookup(sub_lookup_index))
-                    .and_then(|lookup| {
+                    } else {
+                        self.face
+                            .gsub
+                            .as_ref()
+                            .and_then(|table| table.get_lookup(sub_lookup_index))
+                            .and_then(|lookup| {
+                                self.lookup_props = lookup.props();
+                                lookup.apply(self)
+                            })
+                    }
+                }
+                TableIndex::GPOS => {
+                    if let Some(lookup) = self
+                        .face
+                        .font
+                        .ot
+                        .gpos
+                        .as_ref()
+                        .and_then(|gsub| gsub.get_lookup(sub_lookup_index))
+                    {
                         self.lookup_props = lookup.props();
                         lookup.apply(self)
-                    }),
+                    } else {
+                        self.face
+                            .gpos
+                            .as_ref()
+                            .and_then(|table| table.get_lookup(sub_lookup_index))
+                            .and_then(|lookup| {
+                                self.lookup_props = lookup.props();
+                                lookup.apply(self)
+                            })
+                    }
+                }
             };
 
             self.lookup_props = saved_props;
