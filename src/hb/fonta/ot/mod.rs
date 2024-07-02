@@ -7,9 +7,9 @@ use skrifa::raw::{
     TableProvider,
 };
 
+mod contextual;
 mod gpos;
 mod gsub;
-mod contextual;
 mod lookup_cache;
 
 pub use gpos::GposTable;

@@ -1,7 +1,7 @@
 //! OpenType GSUB lookups.
 
-use crate::hb::ot_layout::TableIndex;
 use super::{LookupCache, LookupInfo};
+use crate::hb::ot_layout::TableIndex;
 use skrifa::raw::{tables::gsub::Gsub, TableProvider};
 
 mod alternate;

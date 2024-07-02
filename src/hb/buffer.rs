@@ -208,8 +208,8 @@ impl hb_glyph_info_t {
     pub(crate) fn as_skrifa_glyph(&self) -> skrifa::GlyphId {
         debug_assert!(self.glyph_id <= u32::from(u16::MAX));
         (self.glyph_id as u16).into()
-    }  
-   
+    }
+
     // Var allocation: unicode_props
     // Used during the entire shaping process to store unicode properties
 

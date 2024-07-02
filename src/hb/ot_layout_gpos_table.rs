@@ -10,7 +10,13 @@ use ttf_parser::opentype_layout::LookupIndex;
 
 pub fn position(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     //apply_layout_table(plan, face, buffer, face.gpos.as_ref());
-    apply_layout_table2(plan, face, buffer, face.gpos.as_ref(), face.font.ot.gpos.as_ref());
+    apply_layout_table2(
+        plan,
+        face,
+        buffer,
+        face.gpos.as_ref(),
+        face.font.ot.gpos.as_ref(),
+    );
 }
 
 pub(crate) trait ValueRecordExt {

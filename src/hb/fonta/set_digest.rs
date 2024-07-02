@@ -145,4 +145,3 @@ where
 
 type DigestInner =
     DigestCombiner<DigestPattern<4>, DigestCombiner<DigestPattern<0>, DigestPattern<9>>>;
-    
