@@ -1,4 +1,5 @@
 /target
+/benches/target
 Cargo.lock
 .directory
 .DS_Store

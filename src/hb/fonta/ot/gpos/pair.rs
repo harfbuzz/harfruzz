@@ -1,7 +1,8 @@
 use crate::hb::ot_layout_gpos_table::ValueRecordExt;
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{skipping_iterator_t, Apply};
-use skrifa::raw::tables::gpos::{PairPosFormat1, PairPosFormat2};
+use skrifa::raw::tables::gpos::{PairPosFormat1, PairPosFormat2, PairSet, PairValueRecord};
+use skrifa::raw::FontData;
 
 use super::Value;
 
@@ -62,14 +63,17 @@ impl Apply for PairPosFormat1<'_> {
                 success(ctx, iter_index, flag1, flag2, has_record2)
             };
 
-        let sets = self.pair_sets();
-        let pair_sets = sets.get(first_glyph_coverage_index as usize).ok()?;
-        let data = pair_sets.offset_data();
-        let pair = pair_sets
-            .pair_value_records()
-            .iter()
-            .filter_map(|value| value.ok())
-            .find(|value| value.second_glyph() == second_glyph)?;
+        let (pair, data) =
+            find_second_glyph(self, first_glyph_coverage_index as usize, second_glyph)?;
+        // let sets = self.pair_sets();
+        // let data = sets.offset_data();
+        // let sets = self.pair_sets();
+        // let pair_sets = sets.get(first_glyph_coverage_index as usize).ok()?;
+        // let pair = pair_sets
+        //     .pair_value_records()
+        //     .iter()
+        //     .filter_map(|value| value.ok())
+        //     .find(|value| value.second_glyph() == second_glyph)?;
         let values = (
             Value {
                 record: pair.value_record1,
@@ -82,6 +86,38 @@ impl Apply for PairPosFormat1<'_> {
         );
         bail(ctx, &mut iter.buf_idx, values)
     }
+}
+
+fn find_second_glyph<'a>(
+    pair_pos: &PairPosFormat1<'a>,
+    set_index: usize,
+    second_glyph: skrifa::GlyphId,
+) -> Option<(PairValueRecord, FontData<'a>)> {
+    let set_offset = pair_pos.pair_set_offsets().get(set_index)?.get().to_u32() as usize;
+    let format1 = pair_pos.value_format1();
+    let format2 = pair_pos.value_format2();
+    let record_size = format1.record_byte_len() + format2.record_byte_len() + 2;
+    let base_data = pair_pos.offset_data();
+    let pair_value_count = base_data.read_at::<u16>(set_offset).ok()? as usize;
+    let mut hi = pair_value_count;
+    let mut lo = 0;
+    while lo < hi {
+        let mid = (lo + hi) / 2;
+        let record_offset = set_offset + 2 + mid * record_size;
+        let glyph_id = base_data.read_at::<skrifa::GlyphId>(record_offset).ok()?;
+        if glyph_id < second_glyph {
+            lo = mid + 1
+        } else if glyph_id > second_glyph {
+            hi = mid;
+        } else {
+            let set = pair_pos.pair_sets().get(set_index).ok()?;
+            return Some((
+                set.pair_value_records().get(mid).ok()?,
+                set.offset_data(),
+            ));
+        }
+    }
+    None
 }
 
 impl Apply for PairPosFormat2<'_> {

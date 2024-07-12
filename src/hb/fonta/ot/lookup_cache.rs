@@ -179,6 +179,7 @@ impl LookupCache {
                 coverage_offset: 0,
                 is_subst: data.is_subst,
                 lookup_type: subtable_kind as u8,
+                digest: Default::default(),
             };
             // TODO: update as we add more subtables
             let is_supported = match (data.is_subst, subtable_kind) {
@@ -205,6 +206,7 @@ impl LookupCache {
             }
             let subtable = subtable_info.materialize(data.table_data.as_bytes())?;
             let (coverage, coverage_offset) = subtable.coverage_and_offset()?;
+            subtable_info.digest.insert_coverage(&coverage);
             entry.digest.insert_coverage(&coverage);
             subtable_info.coverage_offset = coverage_offset;
             self.subtables.push(subtable_info);
@@ -294,6 +296,7 @@ pub struct SubtableInfo {
     pub is_subst: bool,
     /// Original lookup type.
     pub lookup_type: u8,
+    pub digest: SetDigest,
 }
 
 impl SubtableInfo {

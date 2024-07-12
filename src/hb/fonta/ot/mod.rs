@@ -55,7 +55,8 @@ impl LayoutLookup for LookupInfo {
 
 impl Apply for LookupInfo {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        if !self.covers(ctx.buffer.cur(0).as_glyph()) {
+        let glyph = ctx.buffer.cur(0).as_glyph();
+        if !self.covers(glyph) {
             return None;
         }
         let (table_data, lookups) = if self.is_subst {
@@ -67,6 +68,15 @@ impl Apply for LookupInfo {
         };
         let subtables = lookups.subtables(self)?;
         for subtable_info in subtables {
+            if !subtable_info.digest.may_contain(glyph.0) {
+                continue;
+            }
+            // if subtable_info
+            //     .primary_coverage(table_data, skrifa::GlyphId::from(glyph.0))
+            //     .is_none()
+            // {
+            //     continue;
+            // }
             let Ok(subtable) = subtable_info.materialize(table_data) else {
                 continue;
             };

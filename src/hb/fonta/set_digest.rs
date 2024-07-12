@@ -27,8 +27,20 @@ impl SetDigest {
 
     /// Inserts all glyphs from a coverage table.
     pub fn insert_coverage(&mut self, coverage: &CoverageTable) {
-        for gid in coverage.iter() {
-            self.insert(gid.to_u16())
+        match coverage {
+            CoverageTable::Format1(table) => {
+                for glyph in table.glyph_array() {
+                    self.insert(glyph.get().to_u32());
+                }
+            }
+            CoverageTable::Format2(table) => {
+                for range in table.range_records() {
+                    self.insert_range(
+                        range.start_glyph_id().to_u32(),
+                        range.end_glyph_id().to_u32(),
+                    );
+                }
+            }
         }
     }
 
