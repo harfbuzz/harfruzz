@@ -1,6 +1,7 @@
 use crate::hb::{
     ot_layout::LayoutLookup,
     ot_layout_gsubgpos::{Apply, OT::hb_ot_apply_context_t},
+    set_digest::hb_set_digest_ext,
 };
 use skrifa::raw::{
     tables::{gdef::Gdef, variations::ItemVariationStore},
@@ -44,19 +45,19 @@ impl LayoutLookup for LookupInfo {
         self.props
     }
 
-    fn covers(&self, glyph: ttf_parser::GlyphId) -> bool {
-        self.digest.may_contain(glyph.0)
-    }
-
     fn is_reverse(&self) -> bool {
         self.is_reversed
+    }
+
+    fn digest(&self) -> &crate::hb::set_digest::hb_set_digest_t {
+        &self.digest
     }
 }
 
 impl Apply for LookupInfo {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let glyph = ctx.buffer.cur(0).as_glyph();
-        if !self.covers(glyph) {
+        if !self.digest.may_have_glyph(glyph) {
             return None;
         }
         let (table_data, lookups) = if self.is_subst {
@@ -68,7 +69,7 @@ impl Apply for LookupInfo {
         };
         let subtables = lookups.subtables(self)?;
         for subtable_info in subtables {
-            if !subtable_info.digest.may_contain(glyph.0) {
+            if !subtable_info.digest.may_have_glyph(glyph) {
                 continue;
             }
             // if subtable_info

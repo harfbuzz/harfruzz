@@ -111,10 +111,7 @@ fn find_second_glyph<'a>(
             hi = mid;
         } else {
             let set = pair_pos.pair_sets().get(set_index).ok()?;
-            return Some((
-                set.pair_value_records().get(mid).ok()?,
-                set.offset_data(),
-            ));
+            return Some((set.pair_value_records().get(mid).ok()?, set.offset_data()));
         }
     }
     None

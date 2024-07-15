@@ -1,3 +1,5 @@
+use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
+
 use super::super::SetDigest;
 use alloc::vec::Vec;
 use core::ops::Range;
@@ -206,8 +208,10 @@ impl LookupCache {
             }
             let subtable = subtable_info.materialize(data.table_data.as_bytes())?;
             let (coverage, coverage_offset) = subtable.coverage_and_offset()?;
-            subtable_info.digest.insert_coverage(&coverage);
-            entry.digest.insert_coverage(&coverage);
+            add_coverage_to_digest(&coverage, &mut subtable_info.digest);
+            add_coverage_to_digest(&coverage, &mut entry.digest);
+            // subtable_info.digest.insert_coverage(&coverage);
+            // entry.digest.insert_coverage(&coverage);
             subtable_info.coverage_offset = coverage_offset;
             self.subtables.push(subtable_info);
             entry.subtables_count += 1;
@@ -241,6 +245,24 @@ fn is_reversed(table_data: FontData, lookup: &Lookup<()>, lookup_offset: usize) 
     }
 }
 
+fn add_coverage_to_digest(coverage: &CoverageTable, digest: &mut hb_set_digest_t) {
+    match coverage {
+        CoverageTable::Format1(table) => {
+            for glyph in table.glyph_array() {
+                digest.add(ttf_parser::GlyphId(glyph.get().to_u32() as _));
+            }
+        }
+        CoverageTable::Format2(table) => {
+            for range in table.range_records() {
+                let first = range.start_glyph_id().to_u32();
+                let last = range.end_glyph_id().to_u32();
+                let [first, last] = [first, last].map(|gid| ttf_parser::GlyphId(gid as _));
+                digest.add_range(first, last);
+            }
+        }
+    }
+}
+
 /// Current state of a lookup cache entry.
 #[derive(Copy, Clone, PartialEq, Eq, Default, Debug)]
 #[repr(u8)]
@@ -256,7 +278,7 @@ pub enum LookupState {
 }
 
 /// Cached information about a lookup.
-#[derive(Copy, Clone, Default, Debug)]
+#[derive(Clone, Default, Debug)]
 pub struct LookupInfo {
     /// Current state of this lookup info entry.
     pub state: LookupState,
@@ -272,7 +294,7 @@ pub struct LookupInfo {
     pub subtables_count: u16,
     /// Bloom filter representing the set of glyphs from the primary
     /// coverage of all subtables in the lookup.
-    pub digest: SetDigest,
+    pub digest: hb_set_digest_t,
 }
 
 impl LookupInfo {
@@ -283,7 +305,7 @@ impl LookupInfo {
 }
 
 /// Cached information about a subtable.
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Debug)]
 pub struct SubtableInfo {
     /// Byte offset to the subtable from the base of the GSUB or GPOS
     /// table.
@@ -296,7 +318,7 @@ pub struct SubtableInfo {
     pub is_subst: bool,
     /// Original lookup type.
     pub lookup_type: u8,
-    pub digest: SetDigest,
+    pub digest: hb_set_digest_t,
 }
 
 impl SubtableInfo {
