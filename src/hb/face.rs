@@ -1,4 +1,4 @@
-#[allow(unused_imports)]
+#[cfg(not(feature = "std"))]
 use core_maths::CoreFloat;
 
 use crate::hb::paint_extents::hb_paint_extents_context_t;
@@ -290,7 +290,11 @@ impl<'a> hb_font_t<'a> {
             return ret;
         }
 
-        let bbox = self.ttfp_face.glyph_bounding_box(glyph);
+        let mut bbox = None;
+
+        if let Some(glyf) = self.ttfp_face.tables().glyf {
+            bbox = glyf.bbox(glyph);
+        }
 
         // See https://github.com/RazrFalcon/rustybuzz/pull/98#issuecomment-1948430785
         if self.ttfp_face.tables().glyf.is_some() && bbox.is_none() {
@@ -346,9 +350,13 @@ impl<'a> hb_font_t<'a> {
 }
 
 #[derive(Clone, Copy, Default)]
+#[repr(C)]
 pub struct hb_glyph_extents_t {
     pub x_bearing: i32,
     pub y_bearing: i32,
     pub width: i32,
     pub height: i32,
 }
+
+unsafe impl bytemuck::Zeroable for hb_glyph_extents_t {}
+unsafe impl bytemuck::Pod for hb_glyph_extents_t {}

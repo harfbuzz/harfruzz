@@ -1,7 +1,10 @@
 mod aots;
-mod extra;
+mod custom;
 mod in_house;
+mod macos;
 mod text_rendering_tests;
+#[cfg(feature="wasm-shaper")]
+mod wasm;
 
 use std::str::FromStr;
 

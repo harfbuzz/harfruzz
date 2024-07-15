@@ -1,13 +1,13 @@
 use alloc::{string::String, vec::Vec};
 use core::cmp::min;
 use core::convert::TryFrom;
-
 use ttf_parser::GlyphId;
 
 use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};
 use super::face::hb_glyph_extents_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
 use super::{hb_font_t, hb_mask_t};
+use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
 use crate::{script, BufferClusterLevel, BufferFlags, Direction, Language, Script, SerializeFlags};
 
 const CONTEXT_LENGTH: usize = 5;
@@ -119,7 +119,7 @@ pub struct GlyphPosition {
     /// How much the glyph moves on the Y-axis before drawing it, this should
     /// not affect how much the line advances.
     pub y_offset: i32,
-    var: u32,
+    pub(crate) var: u32,
 }
 
 unsafe impl bytemuck::Zeroable for GlyphPosition {}
@@ -485,6 +485,12 @@ impl hb_buffer_t {
         &mut self.out_info_mut()[idx]
     }
 
+    pub fn digest(&self) -> hb_set_digest_t {
+        let mut digest = hb_set_digest_t::new();
+        digest.add_array(self.info.iter().map(|i| GlyphId(i.glyph_id as u16)));
+        digest
+    }
+
     fn clear(&mut self) {
         self.direction = Direction::Invalid;
         self.script = None;
@@ -528,7 +534,8 @@ impl hb_buffer_t {
 
     #[inline]
     fn next_serial(&mut self) -> u8 {
-        self.serial += 1;
+        // A `serial` overflow/wrap-around here is perfectly fine.
+        self.serial = self.serial.wrapping_add(1);
 
         if self.serial == 0 {
             self.serial += 1;
@@ -667,6 +674,7 @@ impl hb_buffer_t {
             let pos: Vec<hb_glyph_info_t> = bytemuck::cast_vec(core::mem::take(&mut self.pos));
             self.pos = info;
             self.info = pos;
+            self.have_separate_output = false;
         }
 
         self.len = self.out_len;
@@ -1120,10 +1128,6 @@ impl hb_buffer_t {
     }
 
     pub fn unsafe_to_break_from_outbuffer(&mut self, start: Option<usize>, end: Option<usize>) {
-        if !self.flags.contains(BufferFlags::PRODUCE_UNSAFE_TO_CONCAT) {
-            return;
-        }
-
         self._set_glyph_flags(
             UNSAFE_TO_BREAK | UNSAFE_TO_CONCAT,
             start,
@@ -1134,6 +1138,10 @@ impl hb_buffer_t {
     }
 
     pub fn unsafe_to_concat_from_outbuffer(&mut self, start: Option<usize>, end: Option<usize>) {
+        if !self.flags.contains(BufferFlags::PRODUCE_UNSAFE_TO_CONCAT) {
+            return;
+        }
+
         self._set_glyph_flags(UNSAFE_TO_CONCAT, start, end, Some(false), Some(true));
     }
 
@@ -1333,7 +1341,7 @@ impl hb_buffer_t {
             }
         }
 
-        cluster.min(self.info[start].cluster.min(self.info[end - 1].cluster))
+        cluster.min(info[start].cluster.min(info[end - 1].cluster))
     }
 
     fn _infos_set_glyph_flags(
