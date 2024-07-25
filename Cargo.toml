@@ -1,18 +1,12 @@
 [package]
-name = "rustybuzz"
-version = "0.20.1"
-authors = [
-    "Caleb Maclennan <caleb@alerque.com>",
-    "Laurenz Stampfl <laurenz.stampfl@gmail.com>",
-    "Yevhenii Reizner <razrfalcon@gmail.com>",
-    "خالد حسني (Khaled Hosny) <khaled@aliftype.com>"
-]
+name = "harfruzz"
+version = "0.0.1"
 edition = "2021"
 rust-version = "1.65.0"
 description = "A complete harfbuzz shaping algorithm port to Rust."
-documentation = "https://docs.rs/rustybuzz/"
+documentation = "https://docs.rs/harfruzz/"
 readme = "README.md"
-repository = "https://github.com/harfbuzz/rustybuzz"
+repository = "https://github.com/harfbuzz/harfruzz"
 license = "MIT"
 keywords = ["text", "shaping", "opentype", "truetype"]
 categories = ["text-processing"]
@@ -30,6 +24,7 @@ unicode-script = "0.5"
 wasmi = { version = "0.40", optional = true }
 log = "0.4"
 
+# TODO: remove entirely
 [dependencies.ttf-parser]
 version = "0.25"
 default-features = false
