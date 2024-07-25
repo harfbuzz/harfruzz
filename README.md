@@ -25,7 +25,8 @@ The following conformance issues need to be fixed:
 * harfruzz does not yet fully pass the harfbuzz shaping or fuzzing tests
 * Malformed fonts will cause an error
    * HarfBuzz uses fallback/dummy shaper in this case
-* No Arabic fallback shaper (requires subsetting)
+* No Arabic fallback shaper
+   * This requires the ability to build lookups on the fly. In HarfBuzz (C++) this requires serialization code that is associated with subsetting.
 * `avar2` as well as other parts of the boring-expansion-spec are not supported yet.
 
 ## Major changes
