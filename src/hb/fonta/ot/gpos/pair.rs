@@ -1,7 +1,7 @@
 use crate::hb::ot_layout_gpos_table::ValueRecordExt;
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{skipping_iterator_t, Apply};
-use skrifa::raw::tables::gpos::{PairPosFormat1, PairPosFormat2, PairSet, PairValueRecord};
+use skrifa::raw::tables::gpos::{PairPosFormat1, PairPosFormat2, PairValueRecord};
 use skrifa::raw::FontData;
 
 use super::Value;
@@ -104,7 +104,7 @@ fn find_second_glyph<'a>(
     while lo < hi {
         let mid = (lo + hi) / 2;
         let record_offset = set_offset + 2 + mid * record_size;
-        let glyph_id = base_data.read_at::<skrifa::GlyphId>(record_offset).ok()?;
+        let glyph_id = base_data.read_at::<skrifa::GlyphId16>(record_offset).ok()?;
         if glyph_id < second_glyph {
             lo = mid + 1
         } else if glyph_id > second_glyph {
@@ -119,7 +119,7 @@ fn find_second_glyph<'a>(
 
 impl Apply for PairPosFormat2<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let first_glyph = ctx.buffer.cur(0).as_skrifa_glyph();
+        let first_glyph = ctx.buffer.cur(0).as_skrifa_glyph16();
         self.coverage().ok()?.get(first_glyph)?;
 
         let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
@@ -132,7 +132,7 @@ impl Apply for PairPosFormat2<'_> {
         }
 
         let second_glyph_index = iter.index();
-        let second_glyph = ctx.buffer.info[second_glyph_index].as_skrifa_glyph();
+        let second_glyph = ctx.buffer.info[second_glyph_index].as_skrifa_glyph16();
 
         let finish = |ctx: &mut hb_ot_apply_context_t, iter_index: &mut usize, has_record2| {
             if has_record2 {

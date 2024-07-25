@@ -1,6 +1,5 @@
 use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
 
-use super::super::SetDigest;
 use alloc::vec::Vec;
 use core::ops::Range;
 use skrifa::raw::{
@@ -146,7 +145,7 @@ impl LookupCache {
         let lookup_flag = lookup.lookup_flag();
         entry.props = u32::from(lookup.lookup_flag().to_bits());
         if lookup_flag.to_bits() & LookupFlag::USE_MARK_FILTERING_SET.to_bits() != 0 {
-            entry.props |= u32::from(lookup.mark_filtering_set()) << 16;
+            entry.props |= (lookup.mark_filtering_set().unwrap_or_default() as u32) << 16;
         }
         entry.is_rtl = lookup_flag.to_bits() & LookupFlag::RIGHT_TO_LEFT.to_bits() != 0;
         if data.is_subst {

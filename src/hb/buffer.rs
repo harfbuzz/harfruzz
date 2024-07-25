@@ -204,8 +204,15 @@ impl hb_glyph_info_t {
         GlyphId(self.glyph_id as u16)
     }
 
+    // TODO: delete me and my bad u16 assumptions
     #[inline]
     pub(crate) fn as_skrifa_glyph(&self) -> skrifa::GlyphId {
+        debug_assert!(self.glyph_id <= u32::from(u16::MAX));
+        (self.glyph_id as u16).into()
+    }
+
+    #[inline]
+    pub(crate) fn as_skrifa_glyph16(&self) -> skrifa::GlyphId16 {
         debug_assert!(self.glyph_id <= u32::from(u16::MAX));
         (self.glyph_id as u16).into()
     }

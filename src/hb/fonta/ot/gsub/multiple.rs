@@ -20,8 +20,8 @@ impl WouldApply for MultipleSubstFormat1<'_> {
 
 impl Apply for MultipleSubstFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = ctx.buffer.cur(0).as_glyph().0;
-        let index = self.coverage().ok()?.get(skrifa::GlyphId::new(glyph))? as usize;
+        let gid = ctx.buffer.cur(0).as_skrifa_glyph16();
+        let index = self.coverage().ok()?.get(gid)? as usize;
         let substs = self.sequences().get(index).ok()?.substitute_glyph_ids();
         match substs.len() {
             // Spec disallows this, but Uniscribe allows it.

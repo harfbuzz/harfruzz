@@ -133,13 +133,15 @@ impl<'a> hb_font_t<'a> {
     }
 
     pub(crate) fn get_nominal_glyph(&self, c: u32) -> Option<GlyphId> {
-        self.font.nominal_glyph(c).map(|gid| GlyphId(gid.to_u16()))
+        self.font
+            .nominal_glyph(c)
+            .map(|gid| GlyphId(gid.to_u32() as u16)) // TODO: remove as u16 when fully on read-fonts GlyphId
     }
 
     pub(crate) fn glyph_variation_index(&self, c: char, vs: char) -> Option<GlyphId> {
         self.font
             .nominal_variant_glyph(c as u32, vs as u32)
-            .map(|gid| GlyphId(gid.to_u16()))
+            .map(|gid| GlyphId(gid.to_u32() as u16)) // TODO: remove as u16 when fully on read-fonts GlyphId
     }
 
     pub(crate) fn glyph_h_advance(&self, glyph: GlyphId) -> i32 {

@@ -59,7 +59,7 @@ fn match_class<'a>(
     |glyph, value| {
         class_def
             .as_ref()
-            .map(|class_def| class_def.get(skrifa::GlyphId::from(glyph.0)) == value)
+            .map(|class_def| class_def.get(skrifa::GlyphId16::new(glyph.0)) == value)
             .unwrap_or(false)
     }
 }
@@ -69,7 +69,7 @@ impl Apply for ChainedSequenceContextFormat2<'_> {
         let backtrack_classes = self.backtrack_class_def().ok();
         let input_classes = self.input_class_def().ok();
         let lookahead_classes = self.lookahead_class_def().ok();
-        let glyph = skrifa::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let glyph = ctx.buffer.cur(0).as_skrifa_glyph16();
         self.coverage().ok()?.get(glyph)?;
         let index = input_classes.as_ref()?.get(glyph) as usize;
         let set = self.chained_class_seq_rule_sets().get(index)?.ok()?;
@@ -223,7 +223,7 @@ trait ToU16: Copy {
     fn to_u16(self) -> u16;
 }
 
-impl ToU16 for BigEndian<skrifa::GlyphId> {
+impl ToU16 for BigEndian<skrifa::GlyphId16> {
     fn to_u16(self) -> u16 {
         self.get().to_u16()
     }

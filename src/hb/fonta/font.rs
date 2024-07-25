@@ -11,7 +11,7 @@ use skrifa::{
         },
         ReadError, TableProvider,
     },
-    GlyphId, MetadataProvider,
+    GlyphId,
 };
 use ttf_parser::NormalizedCoordinate;
 
