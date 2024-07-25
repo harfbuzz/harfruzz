@@ -1,39 +1,41 @@
-# rustybuzz
-![Build Status](https://github.com/RazrFalcon/rustybuzz/workflows/Rust/badge.svg)
-[![Crates.io](https://img.shields.io/crates/v/rustybuzz.svg)](https://crates.io/crates/rustybuzz)
-[![Documentation](https://docs.rs/rustybuzz/badge.svg)](https://docs.rs/rustybuzz)
+# harfruzz
+![Build Status](https://github.com/harfbuzz/harfruzz/workflows/Rust/badge.svg)
+[![Crates.io](https://img.shields.io/crates/v/harfruzz.svg)](https://crates.io/crates/harfruzz)
+[![Documentation](https://docs.rs/harfruzz/badge.svg)](https://docs.rs/harfruzz)
+
+`harfruzz` is a fork of [`rustybuzz`](https://docs.rs/rustybuzz) to explore porting from `ttf-parser` to 
+[`read-fonts`](https://docs.rs/read-fonts) to avoid shipping (and maintaining)
+multiple implementations of core font parsing for [`skrifa`](https://docs.rs/skrifa) consumers.
+Further context in https://github.com/googlefonts/fontations/issues/956.
 
 `rustybuzz` is a complete [harfbuzz](https://github.com/harfbuzz/harfbuzz)'s
 shaping algorithm port to Rust.
 
-Matches `harfbuzz` v9.0.0
+Matches `harfbuzz` [v9.0.0](https://github.com/harfbuzz/harfbuzz/releases/tag/9.0.0).
 
 ## Why?
 
-Because you can add `rustybuzz = "*"` to your project and it just works.
-No need for a C++ compiler. No need to configure anything. No need to link to system libraries.
+https://github.com/googlefonts/oxidize outlines Google Fonts motivations to try to migrate font
+production and consumption to Rust.
 
 ## Conformance
 
-rustybuzz passes nearly all of harfbuzz shaping tests (2221 out of 2252 to be more precise).
-So it's mostly identical, but there are still some tiny edge-cases which
-are not implemented yet or cannot be implemented at all.
+The following conformance issues need to be fixed:
+
+* harfruzz does not yet fully pass the harfbuzz shaping or fuzzing tests
+* Malformed fonts will cause an error
+   * HarfBuzz uses fallback/dummy shaper in this case
+* No Arabic fallback shaper (requires subsetting)
+* `avar2` as well as other parts of the boring-expansion-spec are not supported yet.
 
 ## Major changes
 
-- Subsetting removed.
-- TrueType parsing is completely handled by the
-  [ttf-parser](https://github.com/RazrFalcon/ttf-parser).
-  And while the parsing algorithm is very different, it's not better or worse, just different.
-- Malformed fonts will cause an error. HarfBuzz uses fallback/dummy shaper in this case.
 - No font size property. Shaping is always using UnitsPerEm. You should scale the result manually.
 - Most of the TrueType and Unicode handling code was moved into separate crates.
-- rustybuzz doesn't interact with any system libraries and must produce exactly the same
+- harfruzz doesn't interact with any system libraries and must produce exactly the same
   results on all OS'es and targets.
 - `mort` table is not supported, since it's deprecated by Apple.
-- No Arabic fallback shaper, since it requires subsetting.
 - No `graphite` library support.
-- `avar2` as well as other parts of the boring-expansion-spec are not supported yet.
 
 ## Performance
 
@@ -43,31 +45,25 @@ See [benches/README.md](./benches/README.md) for details.
 
 ## Notes about the port
 
-rustybuzz is not a faithful port.
+harfruzz is not a faithful port.
 
-harfbuzz can roughly be split into 6 parts: shaping, subsetting, TrueType parsing,
-Unicode routines, custom containers and utilities (harfbuzz doesn't use C++ std)
-and glue for system/3rd party libraries. In the mean time, rustybuzz contains only shaping.
-All of the TrueType parsing was moved to the [ttf-parser](https://github.com/RazrFalcon/ttf-parser).
-Subsetting was removed. Unicode code was mostly moved to external crates.
-We don't need custom containers because Rust's std is good enough.
-And we do not use any non Rust libraries, so no glue code either.
+harfbuzz (C++ edition) can roughly be split into 6 parts: 
 
-In the end, we still have around 23 KLOC. While harfbuzz is around 80 KLOC.
+1. shaping, handled by harfruzz
+1. subsetting, (`hb-subset`) moves to a standalone crate, [klippa](https://github.com/googlefonts/fontations/tree/main/klippa)
+1. TrueType parsing, handled by [`read-fonts`](https://docs.rs/read-fonts)
+1. Unicode routines, migrated to external crates
+1. custom containers and utilities (harfbuzz doesn't use C++ std), reimplemented in [`fontations`](https://github.com/googlefonts/fontations) where appropriate (e.g. int set)
+1. glue for system/3rd party libraries, just gone
 
 ## Lines of code
 
-As mentioned above, rustybuzz has around 23 KLOC. But this is not strictly true,
-because there are a lot of auto-generated data tables.
-
-You can find the "real" code size using:
+You can find the "real" code size (eliminating generated code) using:
 
 ```sh
 tokei --exclude hb/unicode_norm.rs --exclude hb/ot_shaper_vowel_constraints.rs \
       --exclude '*_machine.rs' --exclude '*_table.rs' src
 ```
-
-Which gives us around 17 KLOC, which is still a lot.
 
 ## Future work
 
@@ -121,6 +117,6 @@ But except that, there are no `unsafe` in this library and in most of its depend
 
 ## License
 
-`rustybuzz` is licensed under the **MIT**.
+`harfruzz` is licensed under the **MIT** license.
 
 `harfbuzz` is [licensed](https://github.com/harfbuzz/harfbuzz/blob/master/COPYING) under the **Old MIT**

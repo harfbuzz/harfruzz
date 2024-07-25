@@ -134,7 +134,7 @@ fn font_get_glyph(caller: Caller<'_, ShapingData>, _font: u32, codepoint: u32, u
 // fn font_get_scale(font: u32, x_scale: *mut i32, y_scale: *mut i32);
 // Returns the scale of the current font.
 fn font_get_scale(mut caller: Caller<'_, ShapingData>, _font: u32, x_scale: u32, y_scale: u32) {
-    // Return upem as rustybuzz has no scale.
+    // Return upem as harfruzz has no scale.
     let memory = caller.get_export("memory").unwrap().into_memory().unwrap();
     let upem = caller.data().font.units_per_em();
 
@@ -550,8 +550,8 @@ fn shape_with(
         .unwrap_or_default()
         .to_string_lossy();
 
-    if !(shaper.eq_ignore_ascii_case("ot") || shaper.eq_ignore_ascii_case("rustybuzz")) {
-        log::warn!("Only ot shaper is available in rustybuzz.");
+    if !(shaper.eq_ignore_ascii_case("ot") || shaper.eq_ignore_ascii_case("harfruzz")) {
+        log::warn!("Only ot shaper is available in harfruzz.");
         return 0;
     }
 

@@ -8,19 +8,19 @@ mod wasm;
 
 use std::str::FromStr;
 
-use rustybuzz::BufferFlags;
+use harfruzz::BufferFlags;
 
 struct Args {
     face_index: u32,
     font_ptem: Option<f32>,
     variations: Vec<String>,
-    direction: Option<rustybuzz::Direction>,
-    language: Option<rustybuzz::Language>,
-    script: Option<rustybuzz::Script>,
+    direction: Option<harfruzz::Direction>,
+    language: Option<harfruzz::Language>,
+    script: Option<harfruzz::Script>,
     #[allow(dead_code)]
     remove_default_ignorables: bool,
     unsafe_to_concat: bool,
-    cluster_level: rustybuzz::BufferClusterLevel,
+    cluster_level: harfruzz::BufferClusterLevel,
     features: Vec<String>,
     pre_context: Option<String>,
     post_context: Option<String>,
@@ -78,11 +78,11 @@ fn parse_string_list(s: &str) -> Result<Vec<String>, String> {
     Ok(s.split(',').map(|s| s.to_string()).collect())
 }
 
-fn parse_cluster(s: &str) -> Result<rustybuzz::BufferClusterLevel, String> {
+fn parse_cluster(s: &str) -> Result<harfruzz::BufferClusterLevel, String> {
     match s {
-        "0" => Ok(rustybuzz::BufferClusterLevel::MonotoneGraphemes),
-        "1" => Ok(rustybuzz::BufferClusterLevel::MonotoneCharacters),
-        "2" => Ok(rustybuzz::BufferClusterLevel::Characters),
+        "0" => Ok(harfruzz::BufferClusterLevel::MonotoneGraphemes),
+        "1" => Ok(harfruzz::BufferClusterLevel::MonotoneCharacters),
+        "2" => Ok(harfruzz::BufferClusterLevel::Characters),
         _ => Err(format!("invalid cluster level")),
     }
 }
@@ -107,7 +107,7 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
 
     let font_data =
         std::fs::read(font_path).unwrap_or_else(|e| panic!("Could not read {}: {}", font_path, e));
-    let mut face = rustybuzz::Face::from_slice(&font_data, args.face_index).unwrap();
+    let mut face = harfruzz::Face::from_slice(&font_data, args.face_index).unwrap();
 
     face.set_points_per_em(args.font_ptem);
 
@@ -115,12 +115,12 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         let variations: Vec<_> = args
             .variations
             .iter()
-            .map(|s| rustybuzz::Variation::from_str(s).unwrap())
+            .map(|s| harfruzz::Variation::from_str(s).unwrap())
             .collect();
         face.set_variations(&variations);
     }
 
-    let mut buffer = rustybuzz::UnicodeBuffer::new();
+    let mut buffer = harfruzz::UnicodeBuffer::new();
     if let Some(pre_context) = args.pre_context {
         buffer.set_pre_context(&pre_context);
     }
@@ -156,35 +156,35 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
 
     let mut features = Vec::new();
     for feature_str in args.features {
-        let feature = rustybuzz::Feature::from_str(&feature_str).unwrap();
+        let feature = harfruzz::Feature::from_str(&feature_str).unwrap();
         features.push(feature);
     }
 
-    let glyph_buffer = rustybuzz::shape(&face, &features, buffer);
+    let glyph_buffer = harfruzz::shape(&face, &features, buffer);
 
-    let mut format_flags = rustybuzz::SerializeFlags::default();
+    let mut format_flags = harfruzz::SerializeFlags::default();
     if args.no_glyph_names {
-        format_flags |= rustybuzz::SerializeFlags::NO_GLYPH_NAMES;
+        format_flags |= harfruzz::SerializeFlags::NO_GLYPH_NAMES;
     }
 
     if args.no_clusters || args.ned {
-        format_flags |= rustybuzz::SerializeFlags::NO_CLUSTERS;
+        format_flags |= harfruzz::SerializeFlags::NO_CLUSTERS;
     }
 
     if args.no_positions {
-        format_flags |= rustybuzz::SerializeFlags::NO_POSITIONS;
+        format_flags |= harfruzz::SerializeFlags::NO_POSITIONS;
     }
 
     if args.no_advances || args.ned {
-        format_flags |= rustybuzz::SerializeFlags::NO_ADVANCES;
+        format_flags |= harfruzz::SerializeFlags::NO_ADVANCES;
     }
 
     if args.show_extents {
-        format_flags |= rustybuzz::SerializeFlags::GLYPH_EXTENTS;
+        format_flags |= harfruzz::SerializeFlags::GLYPH_EXTENTS;
     }
 
     if args.show_flags {
-        format_flags |= rustybuzz::SerializeFlags::GLYPH_FLAGS;
+        format_flags |= harfruzz::SerializeFlags::GLYPH_FLAGS;
     }
 
     glyph_buffer.serialize(&face, format_flags)

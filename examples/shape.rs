@@ -44,16 +44,16 @@ struct Args {
     font_file: Option<PathBuf>,
     face_index: u32,
     font_ptem: Option<f32>,
-    variations: Vec<rustybuzz::Variation>,
+    variations: Vec<harfruzz::Variation>,
     text: Option<String>,
     text_file: Option<PathBuf>,
     unicodes: Option<String>,
-    direction: Option<rustybuzz::Direction>,
-    language: rustybuzz::Language,
-    script: Option<rustybuzz::Script>,
+    direction: Option<harfruzz::Direction>,
+    language: harfruzz::Language,
+    script: Option<harfruzz::Script>,
     utf8_clusters: bool,
-    cluster_level: rustybuzz::BufferClusterLevel,
-    features: Vec<rustybuzz::Feature>,
+    cluster_level: harfruzz::BufferClusterLevel,
+    features: Vec<harfruzz::Feature>,
     no_glyph_names: bool,
     no_positions: bool,
     no_advances: bool,
@@ -145,7 +145,7 @@ fn main() {
     }
 
     let font_data = std::fs::read(font_path).unwrap();
-    let mut face = rustybuzz::Face::from_slice(&font_data, args.face_index).unwrap();
+    let mut face = harfruzz::Face::from_slice(&font_data, args.face_index).unwrap();
 
     face.set_points_per_em(args.font_ptem);
 
@@ -175,7 +175,7 @@ fn main() {
     };
 
     for text in lines {
-        let mut buffer = rustybuzz::UnicodeBuffer::new();
+        let mut buffer = harfruzz::UnicodeBuffer::new();
         buffer.push_str(&text);
 
         if let Some(d) = args.direction {
@@ -194,31 +194,31 @@ fn main() {
             buffer.reset_clusters();
         }
 
-        let glyph_buffer = rustybuzz::shape(&face, &args.features, buffer);
+        let glyph_buffer = harfruzz::shape(&face, &args.features, buffer);
 
-        let mut format_flags = rustybuzz::SerializeFlags::default();
+        let mut format_flags = harfruzz::SerializeFlags::default();
         if args.no_glyph_names {
-            format_flags |= rustybuzz::SerializeFlags::NO_GLYPH_NAMES;
+            format_flags |= harfruzz::SerializeFlags::NO_GLYPH_NAMES;
         }
 
         if args.no_clusters || args.ned {
-            format_flags |= rustybuzz::SerializeFlags::NO_CLUSTERS;
+            format_flags |= harfruzz::SerializeFlags::NO_CLUSTERS;
         }
 
         if args.no_positions {
-            format_flags |= rustybuzz::SerializeFlags::NO_POSITIONS;
+            format_flags |= harfruzz::SerializeFlags::NO_POSITIONS;
         }
 
         if args.no_advances || args.ned {
-            format_flags |= rustybuzz::SerializeFlags::NO_ADVANCES;
+            format_flags |= harfruzz::SerializeFlags::NO_ADVANCES;
         }
 
         if args.show_extents {
-            format_flags |= rustybuzz::SerializeFlags::GLYPH_EXTENTS;
+            format_flags |= harfruzz::SerializeFlags::GLYPH_EXTENTS;
         }
 
         if args.show_flags {
-            format_flags |= rustybuzz::SerializeFlags::GLYPH_FLAGS;
+            format_flags |= harfruzz::SerializeFlags::GLYPH_FLAGS;
         }
 
         println!("{}", glyph_buffer.serialize(&face, format_flags));
@@ -239,39 +239,39 @@ fn parse_unicodes(s: &str) -> Result<String, String> {
     Ok(text)
 }
 
-fn parse_features(s: &str) -> Result<Vec<rustybuzz::Feature>, String> {
+fn parse_features(s: &str) -> Result<Vec<harfruzz::Feature>, String> {
     let mut features = Vec::new();
     for f in s.split(',') {
-        features.push(rustybuzz::Feature::from_str(&f)?);
+        features.push(harfruzz::Feature::from_str(&f)?);
     }
 
     Ok(features)
 }
 
-fn parse_variations(s: &str) -> Result<Vec<rustybuzz::Variation>, String> {
+fn parse_variations(s: &str) -> Result<Vec<harfruzz::Variation>, String> {
     let mut variations = Vec::new();
     for v in s.split(',') {
-        variations.push(rustybuzz::Variation::from_str(&v)?);
+        variations.push(harfruzz::Variation::from_str(&v)?);
     }
 
     Ok(variations)
 }
 
-fn parse_cluster(s: &str) -> Result<rustybuzz::BufferClusterLevel, String> {
+fn parse_cluster(s: &str) -> Result<harfruzz::BufferClusterLevel, String> {
     match s {
-        "0" => Ok(rustybuzz::BufferClusterLevel::MonotoneGraphemes),
-        "1" => Ok(rustybuzz::BufferClusterLevel::MonotoneCharacters),
-        "2" => Ok(rustybuzz::BufferClusterLevel::Characters),
+        "0" => Ok(harfruzz::BufferClusterLevel::MonotoneGraphemes),
+        "1" => Ok(harfruzz::BufferClusterLevel::MonotoneCharacters),
+        "2" => Ok(harfruzz::BufferClusterLevel::Characters),
         _ => Err(format!("invalid cluster level")),
     }
 }
 
-fn system_language() -> rustybuzz::Language {
+fn system_language() -> harfruzz::Language {
     unsafe {
         libc::setlocale(libc::LC_ALL, b"\0" as *const _ as *const i8);
         let s = libc::setlocale(libc::LC_CTYPE, std::ptr::null());
         let s = std::ffi::CStr::from_ptr(s);
         let s = s.to_str().expect("locale must be ASCII");
-        rustybuzz::Language::from_str(s).unwrap()
+        harfruzz::Language::from_str(s).unwrap()
     }
 }
