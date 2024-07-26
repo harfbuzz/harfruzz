@@ -99,11 +99,8 @@ All of this is a lot of work, so contributions are more than welcome.
 
 ## Safety
 
-The library is completely safe.
-
-We do have one `unsafe` to cast between two POD structures, which is perfectly safe.
-But except that, there are no `unsafe` in this library and in most of its dependencies
-(excluding `bytemuck`).
+Unsafe code is forbidden by a `#![forbid(unsafe_code)]` attribute in the root
+of the library.
 
 ## Alternatives
 

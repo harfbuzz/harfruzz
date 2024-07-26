@@ -1,4 +1,5 @@
 use alloc::{borrow::ToOwned, ffi::CString, format};
+use bytemuck::{Pod, Zeroable};
 use core::ffi::CStr;
 use ttf_parser::{GlyphId, Tag};
 use wasmi::{self, AsContextMut, Caller, Config, Engine, Linker, Module, Store};
@@ -224,7 +225,7 @@ enum PointType {
 }
 
 #[repr(C)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Zeroable, Pod)]
 struct OutlinePoint {
     x: f32,
     y: f32,
@@ -235,9 +236,6 @@ impl OutlinePoint {
         OutlinePoint { x, y, kind }
     }
 }
-
-unsafe impl bytemuck::Zeroable for OutlinePoint {}
-unsafe impl bytemuck::Pod for OutlinePoint {}
 
 #[derive(Default)]
 struct GlyphOutline {
@@ -279,16 +277,13 @@ impl ttf_parser::OutlineBuilder for GlyphOutline {
 }
 
 #[repr(C)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Zeroable, Pod)]
 struct CGlyphOutline {
     n_points: u32,
     points: u32, // pointer
     n_contours: u32,
     contours: u32, // pointer
 }
-
-unsafe impl bytemuck::Zeroable for CGlyphOutline {}
-unsafe impl bytemuck::Pod for CGlyphOutline {}
 
 // fn font_copy_glyph_outline(font: u32, glyph: u32, outline: *mut CGlyphOutline) -> bool;
 // Copies the outline of the given glyph ID, at current scale and variation settings, into the outline structure provided.
@@ -352,15 +347,12 @@ fn font_copy_glyph_outline(
 }
 
 #[repr(C)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Zeroable, Pod)]
 struct Blob {
     // Length of the blob in bytes
     length: u32,
     data: u32, // pointer
 }
-
-unsafe impl bytemuck::Zeroable for Blob {}
-unsafe impl bytemuck::Pod for Blob {}
 
 // fn face_copy_table(font: u32, tag: u32, blob: *mut Blob) -> bool;
 // Copies the binary data in the OpenType table referenced by tag into the supplied blob structure.
@@ -462,15 +454,12 @@ fn buffer_copy_contents(mut caller: Caller<'_, ShapingData>, _buffer: u32, cbuff
 }
 
 #[repr(C)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Zeroable, Pod)]
 struct CBufferContents {
     length: u32,
     info: u32,     // pointer
     position: u32, // pointer
 }
-
-unsafe impl bytemuck::Zeroable for CBufferContents {}
-unsafe impl bytemuck::Pod for CBufferContents {}
 
 // fn buffer_set_contents(buffer: u32, cbuffer: &CBufferContents) -> bool;
 // Copy the buffer_contents structure back into the host shaping engine's buffer. This should typically be called at the end of shaping.

@@ -13,7 +13,7 @@ exclude = ["benches/", "tests/"]
 
 [dependencies]
 bitflags = "2.4.1"
-bytemuck = { version = "1.5", features = ["extern_crate_alloc"] }
+bytemuck = { version = "1.5", features = ["extern_crate_alloc", "derive"] }
 core_maths = "0.1.0" # only for no_std builds
 smallvec = "1.6"
 unicode-bidi-mirroring = "0.3.0"
