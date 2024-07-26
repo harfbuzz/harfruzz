@@ -1,12 +1,20 @@
+use std::ops::Sub;
+
 use crate::hb::{
+    hb_font_t,
     ot_layout::LayoutLookup,
-    ot_layout_gsubgpos::{Apply, OT::hb_ot_apply_context_t},
+    ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext, OT::hb_ot_apply_context_t},
     set_digest::hb_set_digest_ext,
 };
 use skrifa::raw::{
-    tables::{gdef::Gdef, variations::ItemVariationStore},
-    TableProvider,
+    tables::{
+        gdef::Gdef,
+        layout::{ClassDef, CoverageTable},
+        variations::ItemVariationStore,
+    },
+    ReadError, TableProvider,
 };
+use ttf_parser::GlyphId;
 
 mod contextual;
 mod gpos;
@@ -96,10 +104,12 @@ impl Apply for LookupInfo {
                 Subtable::MarkBasePos1(subtable) => subtable.apply(ctx),
                 Subtable::MarkLigPos1(subtable) => subtable.apply(ctx),
                 Subtable::MarkMarkPos1(subtable) => subtable.apply(ctx),
+                Subtable::ContextFormat1(subtable) => subtable.apply(ctx),
+                Subtable::ContextFormat2(subtable) => subtable.apply(ctx),
+                Subtable::ContextFormat3(subtable) => subtable.apply(ctx),
                 Subtable::ChainedContextFormat1(subtable) => subtable.apply(ctx),
                 Subtable::ChainedContextFormat2(subtable) => subtable.apply(ctx),
                 Subtable::ChainedContextFormat3(subtable) => subtable.apply(ctx),
-                _ => None,
             };
             if result.is_some() {
                 return Some(());
@@ -107,4 +117,62 @@ impl Apply for LookupInfo {
         }
         None
     }
+}
+
+impl LookupInfo {
+    pub fn would_apply(&self, face: &hb_font_t, ctx: &WouldApplyContext) -> Option<bool> {
+        let glyph = ctx.glyphs[0];
+        if !self.digest.may_have_glyph(glyph) {
+            return Some(false);
+        }
+        let (table_data, lookups) = if self.is_subst {
+            let table = face.font.ot.gsub.as_ref()?;
+            (table.table.offset_data().as_bytes(), &table.lookups)
+        } else {
+            let table = face.font.ot.gpos.as_ref()?;
+            (table.table.offset_data().as_bytes(), &table.lookups)
+        };
+        let subtables = lookups.subtables(self)?;
+        for subtable_info in subtables {
+            if !subtable_info.digest.may_have_glyph(glyph) {
+                continue;
+            }
+            let Ok(subtable) = subtable_info.materialize(table_data) else {
+                continue;
+            };
+            let result = match subtable {
+                Subtable::SingleSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::SingleSubst2(subtable) => subtable.would_apply(ctx),
+                Subtable::MultipleSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::AlternateSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::LigatureSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::ReverseChainContext(subtable) => subtable.would_apply(ctx),
+                Subtable::ContextFormat1(subtable) => subtable.would_apply(ctx),
+                Subtable::ContextFormat2(subtable) => subtable.would_apply(ctx),
+                Subtable::ContextFormat3(subtable) => subtable.would_apply(ctx),
+                Subtable::ChainedContextFormat1(subtable) => subtable.would_apply(ctx),
+                Subtable::ChainedContextFormat2(subtable) => subtable.would_apply(ctx),
+                Subtable::ChainedContextFormat3(subtable) => subtable.would_apply(ctx),
+                _ => false,
+            };
+            return Some(result);
+        }
+        None
+    }
+}
+
+fn coverage_index(coverage: Result<CoverageTable, ReadError>, gid: GlyphId) -> Option<u16> {
+    let gid = skrifa::GlyphId16::new(gid.0);
+    coverage.ok().and_then(|coverage| coverage.get(gid))
+}
+
+fn covered(coverage: Result<CoverageTable, ReadError>, gid: GlyphId) -> bool {
+    coverage_index(coverage, gid).is_some()
+}
+
+fn glyph_class(class_def: Result<ClassDef, ReadError>, gid: GlyphId) -> u16 {
+    let gid = skrifa::GlyphId16::new(gid.0);
+    class_def
+        .map(|class_def| class_def.get(gid))
+        .unwrap_or_default()
 }

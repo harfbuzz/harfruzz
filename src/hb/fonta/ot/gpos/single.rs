@@ -1,5 +1,4 @@
 use super::Value;
-use crate::hb::ot_layout_gpos_table::ValueRecordExt;
 use crate::hb::ot_layout_gsubgpos::Apply;
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use skrifa::raw::tables::gpos::{SinglePosFormat1, SinglePosFormat2};

@@ -1,9 +1,9 @@
 //! OpenType GPOS lookups.
 
 use super::{LookupCache, LookupInfo};
-use crate::hb::{
-    ot_layout::TableIndex, ot_layout_gpos_table::ValueRecordExt,
-    ot_layout_gsubgpos::OT::hb_ot_apply_context_t,
+use crate::{
+    hb::{ot_layout::TableIndex, ot_layout_gsubgpos::OT::hb_ot_apply_context_t},
+    GlyphPosition,
 };
 use skrifa::raw::{
     tables::{
@@ -53,7 +53,7 @@ struct Value<'a> {
     data: FontData<'a>,
 }
 
-impl ValueRecordExt for Value<'_> {
+impl Value<'_> {
     fn is_empty(&self) -> bool {
         self.record.x_placement.is_none()
             && self.record.y_placement.is_none()
@@ -72,11 +72,7 @@ impl ValueRecordExt for Value<'_> {
         worked
     }
 
-    fn apply_to_pos(
-        &self,
-        ctx: &mut hb_ot_apply_context_t,
-        pos: &mut crate::GlyphPosition,
-    ) -> bool {
+    fn apply_to_pos(&self, ctx: &mut hb_ot_apply_context_t, pos: &mut GlyphPosition) -> bool {
         let horizontal = ctx.buffer.direction.is_horizontal();
         let mut worked = false;
 

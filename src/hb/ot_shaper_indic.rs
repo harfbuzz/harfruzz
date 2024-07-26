@@ -8,7 +8,7 @@ use ttf_parser::GlyphId;
 use super::algs::*;
 use super::buffer::hb_buffer_t;
 use super::ot_layout::*;
-use super::ot_layout_gsubgpos::{WouldApply, WouldApplyContext};
+use super::ot_layout_gsubgpos::WouldApplyContext;
 use super::ot_map::*;
 use super::ot_shape::*;
 use super::ot_shape_normalize::*;
@@ -422,10 +422,12 @@ impl IndicWouldSubstituteFeature {
                 zero_context: self.zero_context,
             };
             if face
+                .font
+                .ot
                 .gsub
                 .as_ref()
                 .and_then(|table| table.get_lookup(lookup.index))
-                .map_or(false, |lookup| lookup.would_apply(&ctx))
+                .map_or(false, |lookup| lookup.would_apply(face, &ctx) == Some(true))
             {
                 return true;
             }

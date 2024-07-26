@@ -1093,14 +1093,7 @@ pub mod OT {
                         self.lookup_props = lookup.props();
                         lookup.apply(self)
                     } else {
-                        self.face
-                            .gsub
-                            .as_ref()
-                            .and_then(|table| table.get_lookup(sub_lookup_index))
-                            .and_then(|lookup| {
-                                self.lookup_props = lookup.props();
-                                lookup.apply(self)
-                            })
+                        None
                     }
                 }
                 TableIndex::GPOS => {
@@ -1115,14 +1108,7 @@ pub mod OT {
                         self.lookup_props = lookup.props();
                         lookup.apply(self)
                     } else {
-                        self.face
-                            .gpos
-                            .as_ref()
-                            .and_then(|table| table.get_lookup(sub_lookup_index))
-                            .and_then(|lookup| {
-                                self.lookup_props = lookup.props();
-                                lookup.apply(self)
-                            })
+                        None
                     }
                 }
             };

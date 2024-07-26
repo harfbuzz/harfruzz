@@ -1,4 +1,3 @@
-use crate::hb::ot_layout_gpos_table::ValueRecordExt;
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{skipping_iterator_t, Apply};
 use skrifa::raw::tables::gpos::{PairPosFormat1, PairPosFormat2, PairValueRecord};
