@@ -1,5 +1,6 @@
 //! Matching of glyph patterns.
 
+use skrifa::raw::tables::layout::SequenceLookupRecord;
 use ttf_parser::opentype_layout::*;
 use ttf_parser::GlyphId;
 
@@ -401,7 +402,7 @@ pub(super) fn apply_lookup(
     input_len: usize,
     match_positions: &mut smallvec::SmallVec<[usize; 4]>,
     match_end: usize,
-    lookups: impl Iterator<Item = SequenceLookupRecord>,
+    lookups: &[SequenceLookupRecord],
 ) {
     let mut count = input_len + 1;
 
@@ -428,7 +429,7 @@ pub(super) fn apply_lookup(
             break;
         }
 
-        let idx = usize::from(record.sequence_index);
+        let idx = usize::from(record.sequence_index.get());
         if idx >= count {
             continue;
         }
@@ -448,7 +449,7 @@ pub(super) fn apply_lookup(
             break;
         }
 
-        if ctx.recurse(record.lookup_list_index).is_none() {
+        if ctx.recurse(record.lookup_list_index.get()).is_none() {
             continue;
         }
 

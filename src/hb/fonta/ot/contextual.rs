@@ -6,10 +6,10 @@ use crate::hb::ot_layout_gsubgpos::{
 };
 use skrifa::raw::tables::layout::{
     ChainedSequenceContextFormat1, ChainedSequenceContextFormat2, ChainedSequenceContextFormat3,
-    SequenceContextFormat1, SequenceContextFormat2, SequenceContextFormat3,
+    SequenceContextFormat1, SequenceContextFormat2, SequenceContextFormat3, SequenceLookupRecord,
 };
 use skrifa::raw::types::BigEndian;
-use ttf_parser::{opentype_layout::SequenceLookupRecord, GlyphId};
+use ttf_parser::GlyphId;
 
 impl WouldApply for SequenceContextFormat1<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
@@ -47,19 +47,7 @@ impl Apply for SequenceContextFormat1<'_> {
         let set = self.seq_rule_sets().get(index)?.ok()?;
         for rule in set.seq_rules().iter().filter_map(|rule| rule.ok()) {
             let input = rule.input_sequence();
-            if apply_context(
-                ctx,
-                input,
-                &match_glyph,
-                rule.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
-            )
-            .is_some()
-            {
+            if apply_context(ctx, input, &match_glyph, rule.seq_lookup_records()).is_some() {
                 return Some(());
             }
         }
@@ -107,12 +95,7 @@ impl Apply for SequenceContextFormat2<'_> {
                 ctx,
                 input,
                 &match_class(&input_classes),
-                rule.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
+                rule.seq_lookup_records(),
             )
             .is_some()
             {
@@ -165,12 +148,7 @@ impl Apply for SequenceContextFormat3<'_> {
                 input_coverages.len() - 1,
                 &mut match_positions,
                 match_end,
-                self.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
+                self.seq_lookup_records(),
             );
             Some(())
         } else {
@@ -225,12 +203,7 @@ impl Apply for ChainedSequenceContextFormat1<'_> {
                 input,
                 lookahead,
                 [&match_glyph; 3],
-                rule.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
+                rule.seq_lookup_records(),
             )
             .is_some()
             {
@@ -310,12 +283,7 @@ impl Apply for ChainedSequenceContextFormat2<'_> {
                     &match_class(&input_classes),
                     &match_class(&lookahead_classes),
                 ],
-                rule.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
+                rule.seq_lookup_records(),
             )
             .is_some()
             {
@@ -426,12 +394,7 @@ impl Apply for ChainedSequenceContextFormat3<'_> {
             input_coverages.len() - 1,
             &mut match_positions,
             match_end,
-            self.seq_lookup_records()
-                .iter()
-                .map(|rec| SequenceLookupRecord {
-                    sequence_index: rec.sequence_index(),
-                    lookup_list_index: rec.lookup_list_index(),
-                }),
+            self.seq_lookup_records(),
         );
 
         Some(())
@@ -458,7 +421,7 @@ fn apply_context<T: ToU16>(
     ctx: &mut hb_ot_apply_context_t,
     input: &[T],
     match_func: &match_func_t,
-    lookups: impl Iterator<Item = SequenceLookupRecord>,
+    lookups: &[SequenceLookupRecord],
 ) -> Option<()> {
     let match_func = |glyph, index| {
         let value = input.get(index as usize).unwrap().to_u16();
@@ -483,7 +446,7 @@ fn apply_context<T: ToU16>(
             usize::from(input.len()),
             &mut match_positions,
             match_end,
-            lookups.into_iter(),
+            lookups,
         );
         return Some(());
     }
@@ -497,7 +460,7 @@ fn apply_chain_context<T: ToU16>(
     input: &[T],
     lookahead: &[T],
     match_funcs: [&match_func_t; 3],
-    lookups: impl Iterator<Item = SequenceLookupRecord>,
+    lookups: &[SequenceLookupRecord],
 ) -> Option<()> {
     // NOTE: Whenever something in this method changes, we also need to
     // change it in the `apply` implementation for ChainedContextLookup.
