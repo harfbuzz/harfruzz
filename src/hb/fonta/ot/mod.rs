@@ -1,5 +1,3 @@
-use std::ops::Sub;
-
 use crate::hb::{
     hb_font_t,
     ot_layout::LayoutLookup,
