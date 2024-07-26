@@ -1,3 +1,4 @@
+use bytemuck::{Pod, Zeroable};
 #[cfg(not(feature = "std"))]
 use core_maths::CoreFloat;
 
@@ -351,7 +352,7 @@ impl<'a> hb_font_t<'a> {
     }
 }
 
-#[derive(Clone, Copy, Default)]
+#[derive(Clone, Copy, Default, Zeroable, Pod)]
 #[repr(C)]
 pub struct hb_glyph_extents_t {
     pub x_bearing: i32,
@@ -359,6 +360,3 @@ pub struct hb_glyph_extents_t {
     pub width: i32,
     pub height: i32,
 }
-
-unsafe impl bytemuck::Zeroable for hb_glyph_extents_t {}
-unsafe impl bytemuck::Pod for hb_glyph_extents_t {}
