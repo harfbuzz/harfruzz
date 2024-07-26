@@ -182,29 +182,6 @@ impl LookupCache {
                 lookup_type: subtable_kind as u8,
                 digest: Default::default(),
             };
-            // TODO: update as we add more subtables
-            let is_supported = match (data.is_subst, subtable_kind) {
-                // (true, 1) | (true, 2) | (true, 3) | (true, 4) => true,
-                (true, 1) | (true, 2) | (true, 3) | (true, 4) => true,
-                (false, 4) | (false, 6) => true,
-                // single pos
-                (false, 1) => true,
-                // pair pos
-                (false, 2) => true,
-                // cursive pos
-                (false, 3) => true,
-                // mark lig pos
-                (false, 5) => true,
-                // chained sequence context
-                (true, 6) => true,
-                (false, 8) => true,
-                // reverse chained context
-                (true, 8) => true,
-                _ => false,
-            };
-            if !is_supported {
-                return Err(ReadError::MalformedData("unsupported subtable"));
-            }
             let subtable = subtable_info.materialize(data.table_data.as_bytes())?;
             let (coverage, coverage_offset) = subtable.coverage_and_offset()?;
             add_coverage_to_digest(&coverage, &mut subtable_info.digest);

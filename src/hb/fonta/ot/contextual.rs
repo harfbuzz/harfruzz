@@ -1,3 +1,4 @@
+use super::{coverage_index, covered, glyph_class};
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{
     apply_lookup, match_backtrack, match_func_t, match_glyph, match_input, match_lookahead, Apply,
@@ -5,13 +6,185 @@ use crate::hb::ot_layout_gsubgpos::{
 };
 use skrifa::raw::tables::layout::{
     ChainedSequenceContextFormat1, ChainedSequenceContextFormat2, ChainedSequenceContextFormat3,
+    SequenceContextFormat1, SequenceContextFormat2, SequenceContextFormat3, SequenceLookupRecord,
 };
 use skrifa::raw::types::BigEndian;
-use ttf_parser::{opentype_layout::SequenceLookupRecord, GlyphId};
+use ttf_parser::GlyphId;
+
+impl WouldApply for SequenceContextFormat1<'_> {
+    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
+        coverage_index(self.coverage(), ctx.glyphs[0])
+            .and_then(|index| {
+                self.seq_rule_sets()
+                    .get(index as usize)
+                    .transpose()
+                    .ok()
+                    .flatten()
+            })
+            .map(|set| {
+                set.seq_rules().iter().any(|rule| {
+                    rule.map(|rule| {
+                        let input = rule.input_sequence();
+                        ctx.glyphs.len() == input.len() + 1
+                            && input.iter().enumerate().all(|(i, value)| {
+                                match_glyph(ctx.glyphs[i + 1], value.get().to_u16())
+                            })
+                    })
+                    .unwrap_or(false)
+                })
+            })
+            .unwrap_or_default()
+    }
+}
+
+impl Apply for SequenceContextFormat1<'_> {
+    fn apply(
+        &self,
+        ctx: &mut crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t,
+    ) -> Option<()> {
+        let glyph = skrifa::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let index = self.coverage().ok()?.get(glyph)? as usize;
+        let set = self.seq_rule_sets().get(index)?.ok()?;
+        for rule in set.seq_rules().iter().filter_map(|rule| rule.ok()) {
+            let input = rule.input_sequence();
+            if apply_context(ctx, input, &match_glyph, rule.seq_lookup_records()).is_some() {
+                return Some(());
+            }
+        }
+        None
+    }
+}
+
+impl WouldApply for SequenceContextFormat2<'_> {
+    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
+        let class_def = self.class_def().ok();
+        let match_fn = &match_class(&class_def);
+        let class = glyph_class(self.class_def(), ctx.glyphs[0]);
+        self.class_seq_rule_sets()
+            .get(class as usize)
+            .transpose()
+            .ok()
+            .flatten()
+            .map(|set| {
+                set.class_seq_rules().iter().any(|rule| {
+                    rule.map(|rule| {
+                        let input = rule.input_sequence();
+                        ctx.glyphs.len() == input.len() + 1
+                            && input
+                                .iter()
+                                .enumerate()
+                                .all(|(i, value)| match_fn(ctx.glyphs[i + 1], value.get()))
+                    })
+                    .unwrap_or(false)
+                })
+            })
+            .unwrap_or_default()
+    }
+}
+
+impl Apply for SequenceContextFormat2<'_> {
+    fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
+        let input_classes = self.class_def().ok();
+        let glyph = ctx.buffer.cur(0).as_skrifa_glyph16();
+        self.coverage().ok()?.get(glyph)?;
+        let index = input_classes.as_ref()?.get(glyph) as usize;
+        let set = self.class_seq_rule_sets().get(index)?.ok()?;
+        for rule in set.class_seq_rules().iter().filter_map(|rule| rule.ok()) {
+            let input = rule.input_sequence();
+            if apply_context(
+                ctx,
+                input,
+                &match_class(&input_classes),
+                rule.seq_lookup_records(),
+            )
+            .is_some()
+            {
+                return Some(());
+            }
+        }
+        None
+    }
+}
+
+impl WouldApply for SequenceContextFormat3<'_> {
+    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
+        let coverages = self.coverages();
+        ctx.glyphs.len() == usize::from(coverages.len()) + 1
+            && coverages
+                .iter()
+                .enumerate()
+                .all(|(i, coverage)| covered(coverage, ctx.glyphs[i + 1]))
+    }
+}
+
+impl Apply for SequenceContextFormat3<'_> {
+    fn apply(
+        &self,
+        ctx: &mut crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t,
+    ) -> Option<()> {
+        let glyph = skrifa::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let input_coverages = self.coverages();
+        input_coverages.get(0).ok()?.get(glyph)?;
+        let input = |glyph: GlyphId, index: u16| {
+            input_coverages
+                .get(index as usize + 1)
+                .map(|cov| cov.get(skrifa::GlyphId::from(glyph.0)).is_some())
+                .unwrap_or_default()
+        };
+        let mut match_end = 0;
+        let mut match_positions = smallvec::SmallVec::from_elem(0, 4);
+        if match_input(
+            ctx,
+            input_coverages.len() as u16 - 1,
+            &input,
+            &mut match_end,
+            &mut match_positions,
+            None,
+        ) {
+            ctx.buffer
+                .unsafe_to_break_from_outbuffer(Some(ctx.buffer.idx), Some(match_end));
+            apply_lookup(
+                ctx,
+                input_coverages.len() - 1,
+                &mut match_positions,
+                match_end,
+                self.seq_lookup_records(),
+            );
+            Some(())
+        } else {
+            ctx.buffer
+                .unsafe_to_concat(Some(ctx.buffer.idx), Some(match_end));
+            None
+        }
+    }
+}
 
 impl WouldApply for ChainedSequenceContextFormat1<'_> {
-    fn would_apply(&self, _ctx: &WouldApplyContext) -> bool {
-        false
+    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
+        coverage_index(self.coverage(), ctx.glyphs[0])
+            .and_then(|index| {
+                self.chained_seq_rule_sets()
+                    .get(index as usize)
+                    .transpose()
+                    .ok()
+                    .flatten()
+            })
+            .map(|set| {
+                set.chained_seq_rules().iter().any(|rule| {
+                    rule.map(|rule| {
+                        let input = rule.input_sequence();
+                        (!ctx.zero_context
+                            || (rule.backtrack_glyph_count() == 0
+                                && rule.lookahead_glyph_count() == 0))
+                            && ctx.glyphs.len() == input.len() + 1
+                            && input.iter().enumerate().all(|(i, value)| {
+                                match_glyph(ctx.glyphs[i + 1], value.get().to_u16())
+                            })
+                    })
+                    .unwrap_or(false)
+                })
+            })
+            .unwrap_or_default()
     }
 }
 
@@ -30,12 +203,7 @@ impl Apply for ChainedSequenceContextFormat1<'_> {
                 input,
                 lookahead,
                 [&match_glyph; 3],
-                rule.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
+                rule.seq_lookup_records(),
             )
             .is_some()
             {
@@ -47,8 +215,32 @@ impl Apply for ChainedSequenceContextFormat1<'_> {
 }
 
 impl WouldApply for ChainedSequenceContextFormat2<'_> {
-    fn would_apply(&self, _ctx: &WouldApplyContext) -> bool {
-        false
+    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
+        let class_def = self.input_class_def().ok();
+        let match_fn = &match_class(&class_def);
+        let class = glyph_class(self.input_class_def(), ctx.glyphs[0]);
+        self.chained_class_seq_rule_sets()
+            .get(class as usize)
+            .transpose()
+            .ok()
+            .flatten()
+            .map(|set| {
+                set.chained_class_seq_rules().iter().any(|rule| {
+                    rule.map(|rule| {
+                        let input = rule.input_sequence();
+                        (!ctx.zero_context
+                            || (rule.backtrack_glyph_count() == 0
+                                && rule.lookahead_glyph_count() == 0))
+                            && ctx.glyphs.len() == input.len() + 1
+                            && input
+                                .iter()
+                                .enumerate()
+                                .all(|(i, value)| match_fn(ctx.glyphs[i + 1], value.get()))
+                    })
+                    .unwrap_or(false)
+                })
+            })
+            .unwrap_or_default()
     }
 }
 
@@ -91,12 +283,7 @@ impl Apply for ChainedSequenceContextFormat2<'_> {
                     &match_class(&input_classes),
                     &match_class(&lookahead_classes),
                 ],
-                rule.seq_lookup_records()
-                    .iter()
-                    .map(|rec| SequenceLookupRecord {
-                        sequence_index: rec.sequence_index(),
-                        lookup_list_index: rec.lookup_list_index(),
-                    }),
+                rule.seq_lookup_records(),
             )
             .is_some()
             {
@@ -207,12 +394,7 @@ impl Apply for ChainedSequenceContextFormat3<'_> {
             input_coverages.len() - 1,
             &mut match_positions,
             match_end,
-            self.seq_lookup_records()
-                .iter()
-                .map(|rec| SequenceLookupRecord {
-                    sequence_index: rec.sequence_index(),
-                    lookup_list_index: rec.lookup_list_index(),
-                }),
+            self.seq_lookup_records(),
         );
 
         Some(())
@@ -235,13 +417,50 @@ impl ToU16 for BigEndian<u16> {
     }
 }
 
+fn apply_context<T: ToU16>(
+    ctx: &mut hb_ot_apply_context_t,
+    input: &[T],
+    match_func: &match_func_t,
+    lookups: &[SequenceLookupRecord],
+) -> Option<()> {
+    let match_func = |glyph, index| {
+        let value = input.get(index as usize).unwrap().to_u16();
+        match_func(glyph, value)
+    };
+
+    let mut match_end = 0;
+    let mut match_positions = smallvec::SmallVec::from_elem(0, 4);
+
+    if match_input(
+        ctx,
+        input.len() as _,
+        &match_func,
+        &mut match_end,
+        &mut match_positions,
+        None,
+    ) {
+        ctx.buffer
+            .unsafe_to_break(Some(ctx.buffer.idx), Some(match_end));
+        apply_lookup(
+            ctx,
+            usize::from(input.len()),
+            &mut match_positions,
+            match_end,
+            lookups,
+        );
+        return Some(());
+    }
+
+    None
+}
+
 fn apply_chain_context<T: ToU16>(
     ctx: &mut hb_ot_apply_context_t,
     backtrack: &[T],
     input: &[T],
     lookahead: &[T],
     match_funcs: [&match_func_t; 3],
-    lookups: impl Iterator<Item = SequenceLookupRecord>,
+    lookups: &[SequenceLookupRecord],
 ) -> Option<()> {
     // NOTE: Whenever something in this method changes, we also need to
     // change it in the `apply` implementation for ChainedContextLookup.
