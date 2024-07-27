@@ -52,7 +52,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
 
         // https://github.com/harfbuzz/harfbuzz/issues/2124
         let apply_morx =
-            face.tables().morx.is_some() && (direction.is_horizontal() || face.gsub.is_none());
+            face.tables().morx.is_some() && (direction.is_horizontal() || face.font.ot.gsub.is_none());
 
         // https://github.com/harfbuzz/harfbuzz/issues/1528
         if apply_morx && shaper as *const _ != &DEFAULT_SHAPER as *const _ {

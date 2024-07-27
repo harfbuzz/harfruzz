@@ -4,13 +4,11 @@ use core_maths::CoreFloat;
 
 use crate::hb::paint_extents::hb_paint_extents_context_t;
 use ttf_parser::gdef::GlyphClass;
-use ttf_parser::opentype_layout::LayoutTable;
 use ttf_parser::{GlyphId, RgbaColor};
 
 use super::buffer::GlyphPropsFlags;
 use super::fonta;
 use super::ot_layout::TableIndex;
-use super::ot_layout_common::{PositioningTable, SubstitutionTable};
 use crate::Variation;
 
 /// A font face handle.
@@ -21,8 +19,6 @@ pub struct hb_font_t<'a> {
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
     pub(crate) points_per_em: Option<f32>,
-    pub(crate) gsub: Option<SubstitutionTable<'a>>,
-    pub(crate) gpos: Option<PositioningTable<'a>>,
 }
 
 impl<'a> AsRef<ttf_parser::Face<'a>> for hb_font_t<'a> {
@@ -67,26 +63,8 @@ impl<'a> hb_font_t<'a> {
             units_per_em: face.units_per_em(),
             pixels_per_em: None,
             points_per_em: None,
-            gsub: face.tables().gsub.map(SubstitutionTable::new),
-            gpos: face.tables().gpos.map(PositioningTable::new),
             ttfp_face: face,
         })
-    }
-
-    /// Creates a new [`Face`] from [`ttf_parser::Face`].
-    ///
-    /// Data will be referenced, not owned.
-    pub fn from_face(face: ttf_parser::Face<'a>) -> Self {
-        let font = fonta::Font::new(face.raw_face().data, 0).unwrap();
-        hb_font_t {
-            font,
-            units_per_em: face.units_per_em(),
-            pixels_per_em: None,
-            points_per_em: None,
-            gsub: face.tables().gsub.map(SubstitutionTable::new),
-            gpos: face.tables().gpos.map(PositioningTable::new),
-            ttfp_face: face,
-        }
     }
 
     // TODO: remove
@@ -338,17 +316,24 @@ impl<'a> hb_font_t<'a> {
         }
     }
 
-    pub(crate) fn layout_table(&self, table_index: TableIndex) -> Option<&LayoutTable<'a>> {
+    pub(crate) fn layout_table(
+        &self,
+        table_index: TableIndex,
+    ) -> Option<fonta::ot::LayoutTable<'a>> {
         match table_index {
-            TableIndex::GSUB => self.gsub.as_ref().map(|table| &table.inner),
-            TableIndex::GPOS => self.gpos.as_ref().map(|table| &table.inner),
+            TableIndex::GSUB => Some(fonta::ot::LayoutTable::Gsub(
+                self.font.ot.gsub.as_ref()?.table.clone(),
+            )),
+            TableIndex::GPOS => Some(fonta::ot::LayoutTable::Gpos(
+                self.font.ot.gpos.as_ref()?.table.clone(),
+            )),
         }
     }
 
     pub(crate) fn layout_tables(
         &self,
-    ) -> impl Iterator<Item = (TableIndex, &LayoutTable<'a>)> + '_ {
-        TableIndex::iter().filter_map(move |idx| self.layout_table(idx).map(|table| (idx, table)))
+    ) -> impl Iterator<Item = (TableIndex, fonta::ot::LayoutTable<'a>)> + '_ {
+        TableIndex::iter().filter_map(move |idx| Some((idx, self.layout_table(idx)?)))
     }
 }
 

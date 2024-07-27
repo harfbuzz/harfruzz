@@ -394,7 +394,7 @@ impl<'a> hb_ot_map_builder_t<'a> {
             if !found && info.flags & F_GLOBAL_SEARCH != 0 {
                 // hb_ot_layout_table_find_feature
                 for (table_index, table) in self.face.layout_tables() {
-                    if let Some(idx) = table.features.index(info.tag) {
+                    if let Some(idx) = table.feature_index(info.tag) {
                         feature_index[table_index] = Some(idx);
                         found = true;
                     }
@@ -491,11 +491,11 @@ impl<'a> hb_ot_map_builder_t<'a> {
             let mut stage_index = 0;
             let mut last_lookup = 0;
 
-            let coords = self.face.ttfp_face.variation_coordinates();
+            let coords = &self.face.font.coords;
             let variation_index = self
                 .face
                 .layout_table(table_index)
-                .and_then(|t| t.variations?.find_index(coords));
+                .and_then(|t| t.feature_variation_index(coords));
 
             for stage in 0..self.current_stage[table_index] {
                 if let Some(feature_index) = required_feature_index[table_index] {
@@ -586,16 +586,16 @@ impl<'a> hb_ot_map_builder_t<'a> {
     ) -> Option<()> {
         let table = self.face.layout_table(table_index)?;
 
-        let lookup_count = table.lookups.len();
+        let lookup_count = table.lookup_count();
         let feature = match variation_index {
             Some(idx) => table
-                .variations
-                .and_then(|var| var.find_substitute(feature_index, idx))
-                .or_else(|| table.features.get(feature_index))?,
-            None => table.features.get(feature_index)?,
+                .feature_substitution(idx, feature_index)
+                .or_else(|| table.feature(feature_index))?,
+            None => table.feature(feature_index)?,
         };
 
-        for index in feature.lookup_indices {
+        for index in feature.lookup_list_indices() {
+            let index = index.get();
             if index < lookup_count {
                 lookups.push(lookup_map_t {
                     mask,
