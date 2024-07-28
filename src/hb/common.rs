@@ -1,7 +1,7 @@
 use alloc::string::String;
 use core::ops::{Bound, RangeBounds};
 
-use ttf_parser::Tag;
+use skrifa::raw::types::Tag;
 
 use super::text_parser::TextParser;
 
@@ -215,7 +215,7 @@ pub struct Script(pub(crate) Tag);
 impl Script {
     #[inline]
     pub(crate) const fn from_bytes(bytes: &[u8; 4]) -> Self {
-        Script(Tag::from_bytes(bytes))
+        Script(Tag::new(bytes))
     }
 
     /// Converts an ISO 15924 script tag to a corresponding `Script`.
@@ -225,9 +225,9 @@ impl Script {
         }
 
         // Be lenient, adjust case (one capital letter followed by three small letters).
-        let tag = Tag((tag.as_u32() & 0xDFDFDFDF) | 0x00202020);
+        let tag = Tag::from_u32((tag.as_u32() & 0xDFDFDFDF) | 0x00202020);
 
-        match &tag.to_bytes() {
+        match &tag.to_be_bytes() {
             // These graduated from the 'Q' private-area codes, but
             // the old code is still aliased by Unicode, and the Qaai
             // one in use by ICU.
@@ -628,7 +628,7 @@ mod tests_features {
             fn $name() {
                 assert_eq!(
                     Feature::from_str($text).unwrap(),
-                    Feature::new(Tag::from_bytes($tag), $value, $range)
+                    Feature::new(Tag::new($tag), $value, $range)
                 );
             }
         };
@@ -703,6 +703,9 @@ impl core::str::FromStr for Variation {
 }
 
 pub trait TagExt {
+    fn from_bytes_lossy(bytes: &[u8]) -> Self;
+    fn as_u32(self) -> u32;
+    fn is_null(self) -> bool;
     fn default_script() -> Self;
     fn default_language() -> Self;
     #[cfg(test)]
@@ -711,22 +714,38 @@ pub trait TagExt {
 }
 
 impl TagExt for Tag {
+    fn from_bytes_lossy(bytes: &[u8]) -> Self {
+        let mut array = [b' '; 4];
+        for (src, dest) in bytes.iter().zip(&mut array) {
+            *dest = *src;
+        }
+        Tag::new(&array)
+    }
+
+    fn as_u32(self) -> u32 {
+        u32::from_be_bytes(self.to_be_bytes())
+    }
+
+    fn is_null(self) -> bool {
+        self.to_be_bytes() == [0, 0, 0, 0]
+    }
+
     #[inline]
     fn default_script() -> Self {
-        Tag::from_bytes(b"DFLT")
+        Tag::new(b"DFLT")
     }
 
     #[inline]
     fn default_language() -> Self {
-        Tag::from_bytes(b"dflt")
+        Tag::new(b"dflt")
     }
 
     /// Converts tag to lowercase.
     #[cfg(test)]
     #[inline]
     fn to_lowercase(&self) -> Self {
-        let b = self.to_bytes();
-        Tag::from_bytes(&[
+        let b = self.to_be_bytes();
+        Tag::new(&[
             b[0].to_ascii_lowercase(),
             b[1].to_ascii_lowercase(),
             b[2].to_ascii_lowercase(),
@@ -737,8 +756,8 @@ impl TagExt for Tag {
     /// Converts tag to uppercase.
     #[inline]
     fn to_uppercase(&self) -> Self {
-        let b = self.to_bytes();
-        Tag::from_bytes(&[
+        let b = self.to_be_bytes();
+        Tag::new(&[
             b[0].to_ascii_uppercase(),
             b[1].to_ascii_uppercase(),
             b[2].to_ascii_uppercase(),

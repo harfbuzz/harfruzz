@@ -98,7 +98,7 @@ impl hb_aat_map_builder_t {
     pub fn add_feature(&mut self, face: &hb_font_t, feature: &Feature) -> Option<()> {
         let feat = face.tables().feat?;
 
-        if feature.tag == hb_tag_t::from_bytes(b"aalt") {
+        if feature.tag == hb_tag_t::new(b"aalt") {
             let exposes_feature = feat
                 .names
                 .find(HB_AAT_LAYOUT_FEATURE_TYPE_CHARACTER_ALTERNATIVES as u16)

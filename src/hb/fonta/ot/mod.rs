@@ -168,10 +168,6 @@ pub enum LayoutTable<'a> {
     Gpos(Gpos<'a>),
 }
 
-fn conv_tag(tag: hb_tag_t) -> skrifa::raw::types::Tag {
-    skrifa::raw::types::Tag::from_u32(tag.0)
-}
-
 impl<'a> LayoutTable<'a> {
     fn script_list(&self) -> Option<ScriptList<'a>> {
         match self {
@@ -199,7 +195,6 @@ impl<'a> LayoutTable<'a> {
 
     fn script_index(&self, tag: hb_tag_t) -> Option<u16> {
         let list = self.script_list()?;
-        let tag = conv_tag(tag);
         list.script_records()
             .binary_search_by_key(&tag, |rec| rec.script_tag())
             .map(|index| index as u16)
@@ -214,7 +209,6 @@ impl<'a> LayoutTable<'a> {
 
     fn langsys_index(&self, script_index: u16, tag: hb_tag_t) -> Option<u16> {
         let script = self.script(script_index)?;
-        let tag = conv_tag(tag);
         script
             .lang_sys_records()
             .binary_search_by_key(&tag, |rec| rec.lang_sys_tag())
@@ -241,7 +235,7 @@ impl<'a> LayoutTable<'a> {
     fn feature_tag(&self, index: u16) -> Option<hb_tag_t> {
         let list = self.feature_list()?;
         let record = list.feature_records().get(index as usize)?;
-        Some(hb_tag_t(u32::from_be_bytes(record.feature_tag().to_raw())))
+        Some(record.feature_tag())
     }
 
     pub(crate) fn feature_variation_index(&self, coords: &[F2Dot14]) -> Option<u32> {
@@ -310,7 +304,6 @@ impl<'a> LayoutTable<'a> {
 
     pub(crate) fn feature_index(&self, tag: hb_tag_t) -> Option<u16> {
         let list = self.feature_list()?;
-        let tag = conv_tag(tag);
         for (index, feature) in list.feature_records().iter().enumerate() {
             if feature.feature_tag() == tag {
                 return Some(index as u16);
@@ -351,7 +344,7 @@ impl crate::hb::ot_layout::LayoutTableExt for LayoutTable<'_> {
             hb_tag_t::default_language(),
             // try with 'latn'; some old fonts put their features there even though
             // they're really trying to support Thai, for example :(
-            hb_tag_t::from_bytes(b"latn"),
+            hb_tag_t::new(b"latn"),
         ] {
             if let Some(index) = self.script_index(tag) {
                 return Some((false, index, tag));

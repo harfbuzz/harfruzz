@@ -17,7 +17,7 @@ pub const HEBREW_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     decompose: None,
     compose: Some(compose),
     setup_masks: None,
-    gpos_tag: Some(hb_tag_t::from_bytes(b"hebr")),
+    gpos_tag: Some(hb_tag_t::new(b"hebr")),
     reorder_marks: Some(reorder_marks_hebrew),
     zero_width_marks: HB_OT_SHAPE_ZERO_WIDTH_MARKS_BY_GDEF_LATE,
     fallback_position: true,

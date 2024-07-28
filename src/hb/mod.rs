@@ -58,7 +58,7 @@ mod text_parser;
 mod unicode;
 mod unicode_norm;
 
-use ttf_parser::Tag as hb_tag_t;
+use skrifa::raw::types::Tag as hb_tag_t;
 
 use self::buffer::hb_glyph_info_t;
 use self::face::hb_font_t;
