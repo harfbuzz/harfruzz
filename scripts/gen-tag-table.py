@@ -882,7 +882,7 @@ print('pub const OPEN_TYPE_LANGUAGES: &[LangTag] = &[')
 
 def hb_tag(tag):
     if tag == DEFAULT_LANGUAGE_SYSTEM:
-        return 'Tag::new(&[0; 4])\t           '
+        return 'Tag::new(&[0; 4])'
     return 'Tag::new(b\"%s%s%s%s\")' % tuple(('%-4s' % tag)[:4])
 
 
