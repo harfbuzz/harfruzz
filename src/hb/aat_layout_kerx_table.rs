@@ -53,7 +53,7 @@ pub(crate) fn apply(
     buffer.unsafe_to_concat(None, None);
 
     let mut seen_cross_stream = false;
-    for subtable in face.tables().kerx?.subtables {
+    for subtable in face.aat_tables.kerx.as_ref()?.subtables {
         if subtable.variable {
             continue;
         }
@@ -110,7 +110,7 @@ pub(crate) fn apply(
                 let mut driver = Driver4 {
                     mark_set: false,
                     mark: 0,
-                    ankr_table: face.tables().ankr.clone(),
+                    ankr_table: face.aat_tables.ankr.clone(),
                 };
 
                 apply_state_machine_kerning(&subtable, sub, &mut driver, plan, buffer);

@@ -96,7 +96,7 @@ impl Default for hb_aat_map_builder_t {
 
 impl hb_aat_map_builder_t {
     pub fn add_feature(&mut self, face: &hb_font_t, feature: &Feature) -> Option<()> {
-        let feat = face.tables().feat?;
+        let feat = face.aat_tables.feat.as_ref()?;
 
         if feature.tag == hb_tag_t::new(b"aalt") {
             let exposes_feature = feat

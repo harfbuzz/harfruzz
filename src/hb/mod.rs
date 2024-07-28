@@ -3,6 +3,7 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_snake_case)]
 
+mod aat_tables;
 mod algs;
 mod fonta;
 #[macro_use]

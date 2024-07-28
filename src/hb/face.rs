@@ -1,14 +1,17 @@
 use bytemuck::{Pod, Zeroable};
 #[cfg(not(feature = "std"))]
 use core_maths::CoreFloat;
+use skrifa::raw::TableProvider;
+use skrifa::FontRef;
 
 use crate::hb::paint_extents::hb_paint_extents_context_t;
 use ttf_parser::gdef::GlyphClass;
 use ttf_parser::{GlyphId, RgbaColor};
 
+use super::aat_tables::AatTables;
 use super::buffer::GlyphPropsFlags;
-use super::fonta;
 use super::common::TagExt;
+use super::fonta;
 use super::ot_layout::TableIndex;
 use crate::Variation;
 
@@ -17,6 +20,7 @@ use crate::Variation;
 pub struct hb_font_t<'a> {
     pub(crate) ttfp_face: ttf_parser::Face<'a>,
     pub(crate) font: fonta::Font<'a>,
+    pub(crate) aat_tables: AatTables<'a>,
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
     pub(crate) points_per_em: Option<f32>,
@@ -37,10 +41,17 @@ impl<'a> hb_font_t<'a> {
     /// Data will be referenced, not owned.
     pub fn from_slice(data: &'a [u8], face_index: u32) -> Option<Self> {
         let face = ttf_parser::Face::parse(data, face_index).ok()?;
+        let font_ref = FontRef::from_index(data, face_index).ok()?;
+        let units_per_em = font_ref
+            .head()
+            .map(|head| head.units_per_em())
+            .unwrap_or_default();
         let font = fonta::Font::new(data, face_index)?;
+        let aat_tables = AatTables::new(&font_ref);
         Some(hb_font_t {
             font,
-            units_per_em: face.units_per_em(),
+            aat_tables,
+            units_per_em,
             pixels_per_em: None,
             points_per_em: None,
             ttfp_face: face,
@@ -82,7 +93,8 @@ impl<'a> hb_font_t<'a> {
     /// Sets font variations.
     pub fn set_variations(&mut self, variations: &[Variation]) {
         for variation in variations {
-            self.ttfp_face.set_variation(ttf_parser::Tag(variation.tag.as_u32()), variation.value);
+            self.ttfp_face
+                .set_variation(ttf_parser::Tag(variation.tag.as_u32()), variation.value);
         }
         self.font.set_coords(self.ttfp_face.variation_coordinates());
     }
