@@ -8,25 +8,3 @@ pub mod lookup_flags {
     pub const USE_MARK_FILTERING_SET: u16 = 0x0010;
     pub const MARK_ATTACHMENT_TYPE_MASK: u16 = 0xFF00;
 }
-
-#[derive(Clone)]
-pub struct PositioningTable<'a> {
-    pub inner: ttf_parser::opentype_layout::LayoutTable<'a>,
-}
-
-impl<'a> PositioningTable<'a> {
-    pub fn new(inner: ttf_parser::opentype_layout::LayoutTable<'a>) -> Self {
-        Self { inner }
-    }
-}
-
-#[derive(Clone)]
-pub struct SubstitutionTable<'a> {
-    pub inner: ttf_parser::opentype_layout::LayoutTable<'a>,
-}
-
-impl<'a> SubstitutionTable<'a> {
-    pub fn new(inner: ttf_parser::opentype_layout::LayoutTable<'a>) -> Self {
-        Self { inner }
-    }
-}

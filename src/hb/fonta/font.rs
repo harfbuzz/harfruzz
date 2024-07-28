@@ -54,14 +54,12 @@ impl<'a> Font<'a> {
     pub(crate) fn set_coords(&mut self, coords: &[NormalizedCoordinate]) {
         self.coords.clear();
         if !coords.is_empty() && !coords.iter().all(|coord| coord.get() == 0) {
+            self.coords.extend(
+                coords
+                    .iter()
+                    .map(|coord| NormalizedCoord::from_bits(coord.get())),
+            );            
             let ivs = self.ivs.take().or_else(|| self.ot.item_variation_store());
-            if ivs.is_some() {
-                self.coords.extend(
-                    coords
-                        .iter()
-                        .map(|coord| NormalizedCoord::from_bits(coord.get())),
-                );
-            }
             self.ivs = ivs;
         } else {
             self.ivs = None;
