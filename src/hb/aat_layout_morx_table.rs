@@ -28,7 +28,7 @@ pub fn compile_flags(
             .is_ok()
     };
 
-    let chains = face.tables().morx.as_ref()?.chains;
+    let chains = face.aat_tables.morx.as_ref()?.chains;
     let chain_len = chains.clone().into_iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
@@ -71,7 +71,7 @@ pub fn compile_flags(
 pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) -> Option<()> {
     c.buffer.unsafe_to_concat(None, None);
 
-    let chains = c.face.tables().morx.as_ref()?.chains;
+    let chains = c.face.aat_tables.morx.as_ref()?.chains;
     let chain_len = chains.clone().into_iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
