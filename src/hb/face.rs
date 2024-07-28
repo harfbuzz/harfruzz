@@ -21,33 +21,12 @@ pub struct hb_font_t<'a> {
     pub(crate) points_per_em: Option<f32>,
 }
 
-impl<'a> AsRef<ttf_parser::Face<'a>> for hb_font_t<'a> {
-    #[inline]
-    fn as_ref(&self) -> &ttf_parser::Face<'a> {
-        &self.ttfp_face
-    }
-}
-
-impl<'a> AsMut<ttf_parser::Face<'a>> for hb_font_t<'a> {
-    #[inline]
-    fn as_mut(&mut self) -> &mut ttf_parser::Face<'a> {
-        &mut self.ttfp_face
-    }
-}
-
 impl<'a> core::ops::Deref for hb_font_t<'a> {
     type Target = ttf_parser::Face<'a>;
 
     #[inline]
     fn deref(&self) -> &Self::Target {
         &self.ttfp_face
-    }
-}
-
-impl<'a> core::ops::DerefMut for hb_font_t<'a> {
-    #[inline]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.ttfp_face
     }
 }
 
@@ -102,7 +81,7 @@ impl<'a> hb_font_t<'a> {
     /// Sets font variations.
     pub fn set_variations(&mut self, variations: &[Variation]) {
         for variation in variations {
-            self.set_variation(variation.tag, variation.value);
+            self.ttfp_face.set_variation(variation.tag, variation.value);
         }
         self.font.set_coords(self.ttfp_face.variation_coordinates());
     }
