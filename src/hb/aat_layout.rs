@@ -393,7 +393,7 @@ impl hb_aat_feature_mapping_t {
         selector_to_disable: u8,
     ) -> Self {
         hb_aat_feature_mapping_t {
-            ot_feature_tag: hb_tag_t::from_bytes(ot_feature_tag),
+            ot_feature_tag: hb_tag_t::new(ot_feature_tag),
             aat_feature_type,
             selector_to_enable,
             selector_to_disable,

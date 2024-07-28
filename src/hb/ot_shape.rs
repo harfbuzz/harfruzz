@@ -73,23 +73,23 @@ impl<'a> hb_ot_shape_planner_t<'a> {
 
     pub fn collect_features(&mut self, user_features: &[Feature]) {
         const COMMON_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
-            (hb_tag_t::from_bytes(b"abvm"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"blwm"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"ccmp"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"locl"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"mark"), F_GLOBAL_MANUAL_JOINERS),
-            (hb_tag_t::from_bytes(b"mkmk"), F_GLOBAL_MANUAL_JOINERS),
-            (hb_tag_t::from_bytes(b"rlig"), F_GLOBAL),
+            (hb_tag_t::new(b"abvm"), F_GLOBAL),
+            (hb_tag_t::new(b"blwm"), F_GLOBAL),
+            (hb_tag_t::new(b"ccmp"), F_GLOBAL),
+            (hb_tag_t::new(b"locl"), F_GLOBAL),
+            (hb_tag_t::new(b"mark"), F_GLOBAL_MANUAL_JOINERS),
+            (hb_tag_t::new(b"mkmk"), F_GLOBAL_MANUAL_JOINERS),
+            (hb_tag_t::new(b"rlig"), F_GLOBAL),
         ];
 
         const HORIZONTAL_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
-            (hb_tag_t::from_bytes(b"calt"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"clig"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"curs"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"dist"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"kern"), F_GLOBAL_HAS_FALLBACK),
-            (hb_tag_t::from_bytes(b"liga"), F_GLOBAL),
-            (hb_tag_t::from_bytes(b"rclt"), F_GLOBAL),
+            (hb_tag_t::new(b"calt"), F_GLOBAL),
+            (hb_tag_t::new(b"clig"), F_GLOBAL),
+            (hb_tag_t::new(b"curs"), F_GLOBAL),
+            (hb_tag_t::new(b"dist"), F_GLOBAL),
+            (hb_tag_t::new(b"kern"), F_GLOBAL_HAS_FALLBACK),
+            (hb_tag_t::new(b"liga"), F_GLOBAL),
+            (hb_tag_t::new(b"rclt"), F_GLOBAL),
         ];
 
         let empty = F_NONE;
@@ -97,36 +97,36 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         self.ot_map.is_simple = true;
 
         self.ot_map
-            .enable_feature(hb_tag_t::from_bytes(b"rvrn"), empty, 1);
+            .enable_feature(hb_tag_t::new(b"rvrn"), empty, 1);
         self.ot_map.add_gsub_pause(None);
 
         match self.direction {
             Direction::LeftToRight => {
                 self.ot_map
-                    .enable_feature(hb_tag_t::from_bytes(b"ltra"), empty, 1);
+                    .enable_feature(hb_tag_t::new(b"ltra"), empty, 1);
                 self.ot_map
-                    .enable_feature(hb_tag_t::from_bytes(b"ltrm"), empty, 1);
+                    .enable_feature(hb_tag_t::new(b"ltrm"), empty, 1);
             }
             Direction::RightToLeft => {
                 self.ot_map
-                    .enable_feature(hb_tag_t::from_bytes(b"rtla"), empty, 1);
+                    .enable_feature(hb_tag_t::new(b"rtla"), empty, 1);
                 self.ot_map
-                    .add_feature(hb_tag_t::from_bytes(b"rtlm"), empty, 1);
+                    .add_feature(hb_tag_t::new(b"rtlm"), empty, 1);
             }
             _ => {}
         }
 
         // Automatic fractions.
         self.ot_map
-            .add_feature(hb_tag_t::from_bytes(b"frac"), empty, 1);
+            .add_feature(hb_tag_t::new(b"frac"), empty, 1);
         self.ot_map
-            .add_feature(hb_tag_t::from_bytes(b"numr"), empty, 1);
+            .add_feature(hb_tag_t::new(b"numr"), empty, 1);
         self.ot_map
-            .add_feature(hb_tag_t::from_bytes(b"dnom"), empty, 1);
+            .add_feature(hb_tag_t::new(b"dnom"), empty, 1);
 
         // Random!
         self.ot_map.enable_feature(
-            hb_tag_t::from_bytes(b"rand"),
+            hb_tag_t::new(b"rand"),
             F_RANDOM,
             hb_ot_map_t::MAX_VALUE,
         );
@@ -135,12 +135,12 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         // AAT 'trak' table using features.
         // https://github.com/harfbuzz/harfbuzz/issues/1303
         self.ot_map
-            .enable_feature(hb_tag_t::from_bytes(b"trak"), F_HAS_FALLBACK, 1);
+            .enable_feature(hb_tag_t::new(b"trak"), F_HAS_FALLBACK, 1);
 
         self.ot_map
-            .enable_feature(hb_tag_t::from_bytes(b"Harf"), empty, 1); // Considered required.
+            .enable_feature(hb_tag_t::new(b"Harf"), empty, 1); // Considered required.
         self.ot_map
-            .enable_feature(hb_tag_t::from_bytes(b"HARF"), empty, 1); // Considered discretionary.
+            .enable_feature(hb_tag_t::new(b"HARF"), empty, 1); // Considered discretionary.
 
         if let Some(func) = self.shaper.collect_features {
             self.ot_map.is_simple = false;
@@ -148,9 +148,9 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         }
 
         self.ot_map
-            .enable_feature(hb_tag_t::from_bytes(b"Buzz"), empty, 1); // Considered required.
+            .enable_feature(hb_tag_t::new(b"Buzz"), empty, 1); // Considered required.
         self.ot_map
-            .enable_feature(hb_tag_t::from_bytes(b"BUZZ"), empty, 1); // Considered discretionary.
+            .enable_feature(hb_tag_t::new(b"BUZZ"), empty, 1); // Considered discretionary.
 
         for &(tag, flags) in COMMON_FEATURES {
             self.ot_map.add_feature(tag, flags, 1);
@@ -170,7 +170,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             // See various bugs referenced from:
             // https://github.com/harfbuzz/harfbuzz/issues/63
             self.ot_map
-                .enable_feature(hb_tag_t::from_bytes(b"vert"), F_GLOBAL_SEARCH, 1);
+                .enable_feature(hb_tag_t::new(b"vert"), F_GLOBAL_SEARCH, 1);
         }
 
         if user_features.len() != 0 {
@@ -190,23 +190,23 @@ impl<'a> hb_ot_shape_planner_t<'a> {
     pub fn compile(mut self, user_features: &[Feature]) -> hb_ot_shape_plan_t {
         let ot_map = self.ot_map.compile();
 
-        let frac_mask = ot_map.get_1_mask(hb_tag_t::from_bytes(b"frac"));
-        let numr_mask = ot_map.get_1_mask(hb_tag_t::from_bytes(b"numr"));
-        let dnom_mask = ot_map.get_1_mask(hb_tag_t::from_bytes(b"dnom"));
+        let frac_mask = ot_map.get_1_mask(hb_tag_t::new(b"frac"));
+        let numr_mask = ot_map.get_1_mask(hb_tag_t::new(b"numr"));
+        let dnom_mask = ot_map.get_1_mask(hb_tag_t::new(b"dnom"));
         let has_frac = frac_mask != 0 || (numr_mask != 0 && dnom_mask != 0);
 
-        let rtlm_mask = ot_map.get_1_mask(hb_tag_t::from_bytes(b"rtlm"));
-        let has_vert = ot_map.get_1_mask(hb_tag_t::from_bytes(b"vert")) != 0;
+        let rtlm_mask = ot_map.get_1_mask(hb_tag_t::new(b"rtlm"));
+        let has_vert = ot_map.get_1_mask(hb_tag_t::new(b"vert")) != 0;
 
         let horizontal = self.direction.is_horizontal();
         let kern_tag = if horizontal {
-            hb_tag_t::from_bytes(b"kern")
+            hb_tag_t::new(b"kern")
         } else {
-            hb_tag_t::from_bytes(b"vkrn")
+            hb_tag_t::new(b"vkrn")
         };
         let kern_mask = ot_map.get_mask(kern_tag).0;
         let requested_kerning = kern_mask != 0;
-        let trak_mask = ot_map.get_mask(hb_tag_t::from_bytes(b"trak")).0;
+        let trak_mask = ot_map.get_mask(hb_tag_t::new(b"trak")).0;
         let requested_tracking = trak_mask != 0;
 
         let has_gpos_kern = ot_map
@@ -251,7 +251,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             && !apply_kerx
             && (!apply_kern || !hb_ot_layout_has_machine_kerning(self.face));
 
-        let has_gpos_mark = ot_map.get_1_mask(hb_tag_t::from_bytes(b"mark")) != 0;
+        let has_gpos_mark = ot_map.get_1_mask(hb_tag_t::new(b"mark")) != 0;
 
         let mut adjust_mark_positioning_when_zeroing = !apply_gpos
             && !apply_kerx
