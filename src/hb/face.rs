@@ -7,8 +7,8 @@ use ttf_parser::gdef::GlyphClass;
 use ttf_parser::{GlyphId, RgbaColor};
 
 use super::buffer::GlyphPropsFlags;
-use super::fonta;
 use super::common::TagExt;
+use super::fonta;
 use super::ot_layout::TableIndex;
 use crate::Variation;
 
@@ -20,15 +20,6 @@ pub struct hb_font_t<'a> {
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
     pub(crate) points_per_em: Option<f32>,
-}
-
-impl<'a> core::ops::Deref for hb_font_t<'a> {
-    type Target = ttf_parser::Face<'a>;
-
-    #[inline]
-    fn deref(&self) -> &Self::Target {
-        &self.ttfp_face
-    }
 }
 
 impl<'a> hb_font_t<'a> {
@@ -79,10 +70,15 @@ impl<'a> hb_font_t<'a> {
         self.points_per_em = ptem;
     }
 
+    pub(crate) fn tables(&self) -> &ttf_parser::FaceTables<'a> {
+        self.ttfp_face.tables()
+    }
+
     /// Sets font variations.
     pub fn set_variations(&mut self, variations: &[Variation]) {
         for variation in variations {
-            self.ttfp_face.set_variation(ttf_parser::Tag(variation.tag.as_u32()), variation.value);
+            self.ttfp_face
+                .set_variation(ttf_parser::Tag(variation.tag.as_u32()), variation.value);
         }
         self.font.set_coords(self.ttfp_face.variation_coordinates());
     }
@@ -215,7 +211,7 @@ impl<'a> hb_font_t<'a> {
                 return false;
             }
 
-            if let Some(clip_box) = colr.clip_box(glyph, self.variation_coordinates()) {
+            if let Some(clip_box) = colr.clip_box(glyph, self.ttfp_face.variation_coordinates()) {
                 // Floor
                 glyph_extents.x_bearing = (clip_box.x_min).round() as i32;
                 glyph_extents.y_bearing = (clip_box.y_max).round() as i32;
@@ -230,7 +226,7 @@ impl<'a> hb_font_t<'a> {
                     glyph,
                     0,
                     &mut extents_data,
-                    self.variation_coordinates(),
+                    self.ttfp_face.variation_coordinates(),
                     RgbaColor::new(0, 0, 0, 0),
                 )
                 .is_some();
