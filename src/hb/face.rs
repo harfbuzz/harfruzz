@@ -8,6 +8,7 @@ use ttf_parser::{GlyphId, RgbaColor};
 
 use super::buffer::GlyphPropsFlags;
 use super::fonta;
+use super::common::TagExt;
 use super::ot_layout::TableIndex;
 use crate::Variation;
 
@@ -81,7 +82,7 @@ impl<'a> hb_font_t<'a> {
     /// Sets font variations.
     pub fn set_variations(&mut self, variations: &[Variation]) {
         for variation in variations {
-            self.ttfp_face.set_variation(variation.tag, variation.value);
+            self.ttfp_face.set_variation(ttf_parser::Tag(variation.tag.as_u32()), variation.value);
         }
         self.font.set_coords(self.ttfp_face.variation_coordinates());
     }

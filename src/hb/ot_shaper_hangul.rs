@@ -26,13 +26,13 @@ impl hb_glyph_info_t {
 fn collect_features_hangul(planner: &mut hb_ot_shape_planner_t) {
     planner
         .ot_map
-        .add_feature(hb_tag_t::from_bytes(b"ljmo"), F_NONE, 1);
+        .add_feature(hb_tag_t::new(b"ljmo"), F_NONE, 1);
     planner
         .ot_map
-        .add_feature(hb_tag_t::from_bytes(b"vjmo"), F_NONE, 1);
+        .add_feature(hb_tag_t::new(b"vjmo"), F_NONE, 1);
     planner
         .ot_map
-        .add_feature(hb_tag_t::from_bytes(b"tjmo"), F_NONE, 1);
+        .add_feature(hb_tag_t::new(b"tjmo"), F_NONE, 1);
 }
 
 fn override_features_hangul(planner: &mut hb_ot_shape_planner_t) {
@@ -41,7 +41,7 @@ fn override_features_hangul(planner: &mut hb_ot_shape_planner_t) {
     // in calt, which is not desirable.
     planner
         .ot_map
-        .disable_feature(hb_tag_t::from_bytes(b"calt"));
+        .disable_feature(hb_tag_t::new(b"calt"));
 }
 
 struct hangul_shape_plan_t {
@@ -52,9 +52,9 @@ fn data_create_hangul(map: &hb_ot_map_t) -> hangul_shape_plan_t {
     hangul_shape_plan_t {
         mask_array: [
             0,
-            map.get_1_mask(hb_tag_t::from_bytes(b"ljmo")),
-            map.get_1_mask(hb_tag_t::from_bytes(b"vjmo")),
-            map.get_1_mask(hb_tag_t::from_bytes(b"tjmo")),
+            map.get_1_mask(hb_tag_t::new(b"ljmo")),
+            map.get_1_mask(hb_tag_t::new(b"vjmo")),
+            map.get_1_mask(hb_tag_t::new(b"tjmo")),
         ],
     }
 }

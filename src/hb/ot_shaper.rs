@@ -177,9 +177,9 @@ pub fn hb_ot_shape_complex_categorize(
             //
             // If it's indy3 tag, send to USE.
             if gsub_script == Some(hb_tag_t::default_script()) ||
-               gsub_script == Some(hb_tag_t::from_bytes(b"latn")) {
+               gsub_script == Some(hb_tag_t::new(b"latn")) {
                 &DEFAULT_SHAPER
-            } else if gsub_script.map_or(false, |tag| tag.to_bytes()[3] == b'3') {
+            } else if gsub_script.map_or(false, |tag| tag.to_be_bytes()[3] == b'3') {
                 &crate::hb::ot_shaper_use::UNIVERSAL_SHAPER
             } else {
                 &crate::hb::ot_shaper_indic::INDIC_SHAPER
@@ -197,8 +197,8 @@ pub fn hb_ot_shape_complex_categorize(
             // shaper.  That's tag used from before Myanmar shaping spec
             // was developed.  The shaping spec uses 'mym2' tag.
             if gsub_script == Some(hb_tag_t::default_script()) ||
-               gsub_script == Some(hb_tag_t::from_bytes(b"latn")) ||
-               gsub_script == Some(hb_tag_t::from_bytes(b"mymr"))
+               gsub_script == Some(hb_tag_t::new(b"latn")) ||
+               gsub_script == Some(hb_tag_t::new(b"mymr"))
             {
                 &DEFAULT_SHAPER
             } else {
@@ -331,7 +331,7 @@ pub fn hb_ot_shape_complex_categorize(
             // Note that for some simple scripts, there may not be *any*
             // GSUB/GPOS needed, so there may be no scripts found!
             if gsub_script == Some(hb_tag_t::default_script()) ||
-               gsub_script == Some(hb_tag_t::from_bytes(b"latn")) {
+               gsub_script == Some(hb_tag_t::new(b"latn")) {
                 &DEFAULT_SHAPER
             } else {
                 &crate::hb::ot_shaper_use::UNIVERSAL_SHAPER

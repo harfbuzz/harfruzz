@@ -3,13 +3,16 @@ use core::cmp::Ordering;
 use core::ops::Range;
 use ttf_parser::FromData;
 
-use ttf_parser::opentype_layout::{
-    FeatureIndex, LanguageIndex, LookupIndex, ScriptIndex, VariationIndex,
-};
+pub type FeatureIndex = u16;
+pub type LanguageIndex = u16;
+pub type LookupIndex = u16;
+pub type ScriptIndex = u16;
+pub type VariationIndex = u32;
 
 use super::buffer::{glyph_flag, hb_buffer_t};
 use super::ot_layout::{LayoutTableExt, TableIndex};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
+use super::common::TagExt;
 use super::{hb_font_t, hb_mask_t, hb_tag_t, tag, Language, Script};
 
 pub struct hb_ot_map_t {
