@@ -12,7 +12,6 @@ use super::aat_tables::AatTables;
 use super::buffer::GlyphPropsFlags;
 use super::common::TagExt;
 use super::fonta;
-use super::common::TagExt;
 use super::ot_layout::TableIndex;
 use crate::Variation;
 
