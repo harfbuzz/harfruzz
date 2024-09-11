@@ -1,8 +1,11 @@
 use core::num::NonZeroU16;
-use skrifa::raw::{types::Tag, FontRef, TableProvider};
+use skrifa::raw::{
+    tables::{ankr::Ankr, feat::Feat},
+    types::Tag,
+    FontRef, TableProvider,
+};
 use ttf_parser::{
-    ankr::Table as Ankr, feat::Table as Feat, kern::Table as Kern, kerx::Table as Kerx,
-    morx::Table as Morx, trak::Table as Trak,
+    kern::Table as Kern, kerx::Table as Kerx, morx::Table as Morx, trak::Table as Trak,
 };
 
 #[derive(Clone, Default)]
@@ -28,9 +31,7 @@ impl<'a> AatTables<'a> {
             morx: font
                 .table_data(Tag::new(b"morx"))
                 .and_then(|data| Morx::parse(num_glyphs, data.as_bytes())),
-            ankr: font
-                .table_data(Tag::new(b"ankr"))
-                .and_then(|data| Ankr::parse(num_glyphs, data.as_bytes())),
+            ankr: font.ankr().ok(),
             kern: font
                 .table_data(Tag::new(b"kern"))
                 .and_then(|data| Kern::parse(data.as_bytes())),
@@ -40,9 +41,7 @@ impl<'a> AatTables<'a> {
             trak: font
                 .table_data(Tag::new(b"trak"))
                 .and_then(|data| Trak::parse(data.as_bytes())),
-            feat: font
-                .table_data(Tag::new(b"feat"))
-                .and_then(|data| Feat::parse(data.as_bytes())),
+            feat: font.feat().ok(),
         }
     }
 }

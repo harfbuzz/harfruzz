@@ -1,6 +1,7 @@
 use core::convert::TryFrom;
 
-use ttf_parser::{ankr, apple_layout, kerx, FromData, GlyphId};
+use skrifa::raw::tables::ankr::Ankr;
+use ttf_parser::{apple_layout, kerx, FromData, GlyphId};
 
 use super::buffer::*;
 use super::hb_font_t;
@@ -411,7 +412,7 @@ impl StateTableDriver<kerx::Subtable1<'_>, kerx::EntryData> for Driver1 {
 struct Driver4<'a> {
     mark_set: bool,
     mark: usize,
-    ankr_table: Option<ankr::Table<'a>>,
+    ankr_table: Option<Ankr<'a>>,
 }
 
 impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
@@ -430,19 +431,23 @@ impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
 
                 let mark_idx = buffer.info[self.mark].as_glyph();
                 let mark_anchor = ankr_table
-                    .points(mark_idx)
-                    .and_then(|list| list.get(u32::from(point.0)))
+                    .anchor_points(mark_idx.0.into())
+                    .ok()
+                    .and_then(|list| list.get(usize::from(point.0)))
+                    .map(|point| (point.x(), point.y()))
                     .unwrap_or_default();
 
                 let curr_idx = buffer.cur(0).as_glyph();
                 let curr_anchor = ankr_table
-                    .points(curr_idx)
-                    .and_then(|list| list.get(u32::from(point.1)))
+                    .anchor_points(curr_idx.0.into())
+                    .ok()
+                    .and_then(|list| list.get(usize::from(point.1)))
+                    .map(|point| (point.x(), point.y()))
                     .unwrap_or_default();
 
                 let pos = buffer.cur_pos_mut();
-                pos.x_offset = i32::from(mark_anchor.x - curr_anchor.x);
-                pos.y_offset = i32::from(mark_anchor.y - curr_anchor.y);
+                pos.x_offset = i32::from(mark_anchor.0 - curr_anchor.0);
+                pos.y_offset = i32::from(mark_anchor.1 - curr_anchor.1);
             }
 
             buffer.cur_pos_mut().set_attach_type(attach_type::MARK);
