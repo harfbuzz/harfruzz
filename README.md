@@ -1,5 +1,5 @@
 # rustybuzz
-![Build Status](https://github.com/RazrFalcon/rustybuzz/workflows/Rust/badge.svg)
+![Build Status](https://github.com/harfbuzz/rustybuzz/workflows/Rust/badge.svg)
 [![Crates.io](https://img.shields.io/crates/v/rustybuzz.svg)](https://crates.io/crates/rustybuzz)
 [![Documentation](https://docs.rs/rustybuzz/badge.svg)](https://docs.rs/rustybuzz)
 
@@ -123,4 +123,4 @@ But except that, there are no `unsafe` in this library and in most of its depend
 
 `rustybuzz` is licensed under the **MIT**.
 
-`harfbuzz` is [licensed](https://github.com/harfbuzz/harfbuzz/blob/master/COPYING) under the **Old MIT**
+`harfbuzz` is [licensed](https://github.com/harfbuzz/harfbuzz/blob/main/COPYING) under the **Old MIT**

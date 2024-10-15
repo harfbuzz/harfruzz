@@ -319,7 +319,7 @@ impl<'a> hb_font_t<'a> {
             bbox = glyf.bbox(glyph);
         }
 
-        // See https://github.com/RazrFalcon/rustybuzz/pull/98#issuecomment-1948430785
+        // See https://github.com/harfbuzz/rustybuzz/pull/98#issuecomment-1948430785
         if self.ttfp_face.tables().glyf.is_some() && bbox.is_none() {
             // Empty glyph; zero extents.
             return true;
