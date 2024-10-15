@@ -103,8 +103,8 @@ If not, then either your change was incorrect or there is a bug in `rustybuzz`.
 ## Commit Messages
 
 Make sure each `rustybuzz` commit contains a link to the related `harfbuzz` commit.
-[Example](https://github.com/RazrFalcon/rustybuzz/commit/5637691426b72dcac2c56a3d1fabe104438b5db7).
+[Example](https://github.com/harfbuzz/rustybuzz/commit/5637691426b72dcac2c56a3d1fabe104438b5db7).
 Commit message itself can be copy-pasted from `harfbuzz`.
 
 
-[discussion]: https://github.com/RazrFalcon/rustybuzz/discussions/79
+[discussion]: https://github.com/harfbuzz/rustybuzz/discussions/79
