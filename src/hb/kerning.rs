@@ -175,7 +175,7 @@ fn apply_state_machine_kerning(
                 .class(buffer.info[buffer.idx].as_glyph())
                 .unwrap_or(1)
         } else {
-            apple_layout::class::END_OF_TEXT as u8
+            apple_layout::class::END_OF_TEXT
         };
 
         let entry = match state_table.entry(state, class) {

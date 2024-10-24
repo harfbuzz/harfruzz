@@ -29,7 +29,7 @@ pub fn compile_flags(
     };
 
     let chains = face.tables().morx.as_ref()?.chains;
-    let chain_len = chains.clone().into_iter().count();
+    let chain_len = chains.into_iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
     for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
@@ -72,7 +72,7 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
     c.buffer.unsafe_to_concat(None, None);
 
     let chains = c.face.tables().morx.as_ref()?.chains;
-    let chain_len = chains.clone().into_iter().count();
+    let chain_len = chains.into_iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
     for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
@@ -256,18 +256,18 @@ fn drive<T: FromData>(
             };
 
             // 2c'
-            if c.is_actionable(&wouldbe_entry, &ac.buffer) {
+            if c.is_actionable(&wouldbe_entry, ac.buffer) {
                 return false;
             }
 
             // 2c"
-            return next_state == wouldbe_entry.new_state
-                && c.can_advance(&entry) == c.can_advance(&wouldbe_entry);
+            next_state == wouldbe_entry.new_state
+                && c.can_advance(&entry) == c.can_advance(&wouldbe_entry)
         };
 
         let is_safe_to_break = || {
             // 1
-            if c.is_actionable(&entry, &ac.buffer) {
+            if c.is_actionable(&entry, ac.buffer) {
                 return false;
             }
 
@@ -285,7 +285,7 @@ fn drive<T: FromData>(
                 Some(v) => v,
                 None => return false,
             };
-            return !c.is_actionable(&end_entry, &ac.buffer);
+            !c.is_actionable(&end_entry, ac.buffer)
         };
 
         if !is_safe_to_break() && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {

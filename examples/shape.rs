@@ -180,7 +180,7 @@ fn main() {
 
     for text in lines {
         let mut buffer = rustybuzz::UnicodeBuffer::new();
-        buffer.push_str(&text);
+        buffer.push_str(text);
 
         if let Some(d) = args.direction {
             buffer.set_direction(d);
@@ -250,7 +250,7 @@ fn parse_unicodes(s: &str) -> Result<String, String> {
 fn parse_features(s: &str) -> Result<Vec<rustybuzz::Feature>, String> {
     let mut features = Vec::new();
     for f in s.split(',') {
-        features.push(rustybuzz::Feature::from_str(&f)?);
+        features.push(rustybuzz::Feature::from_str(f)?);
     }
 
     Ok(features)
@@ -259,7 +259,7 @@ fn parse_features(s: &str) -> Result<Vec<rustybuzz::Feature>, String> {
 fn parse_variations(s: &str) -> Result<Vec<rustybuzz::Variation>, String> {
     let mut variations = Vec::new();
     for v in s.split(',') {
-        variations.push(rustybuzz::Variation::from_str(&v)?);
+        variations.push(rustybuzz::Variation::from_str(v)?);
     }
 
     Ok(variations)
@@ -270,7 +270,7 @@ fn parse_cluster(s: &str) -> Result<rustybuzz::BufferClusterLevel, String> {
         "0" => Ok(rustybuzz::BufferClusterLevel::MonotoneGraphemes),
         "1" => Ok(rustybuzz::BufferClusterLevel::MonotoneCharacters),
         "2" => Ok(rustybuzz::BufferClusterLevel::Characters),
-        _ => Err(format!("invalid cluster level")),
+        _ => Err("invalid cluster level".to_string()),
     }
 }
 

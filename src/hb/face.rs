@@ -195,10 +195,10 @@ impl<'a> hb_font_t<'a> {
 
         if is_vertical {
             if face.tables().vmtx.is_some() {
-                return face.glyph_ver_advance(glyph).unwrap_or(0) as u32;
+                face.glyph_ver_advance(glyph).unwrap_or(0) as u32
             } else {
                 // TODO: Original code calls `h_extents_with_fallback`
-                return (face.ascender() - face.descender()) as u32;
+                (face.ascender() - face.descender()) as u32
             }
         } else if !is_vertical && face.tables().hmtx.is_some() {
             face.glyph_hor_advance(glyph).unwrap_or(0) as u32
@@ -222,7 +222,7 @@ impl<'a> hb_font_t<'a> {
                     } else {
                         let advance = self.ttfp_face.ascender() - self.ttfp_face.descender();
                         let diff = advance as i32 - -extents.height;
-                        return extents.y_bearing + (diff >> 1);
+                        extents.y_bearing + (diff >> 1)
                     }
                 } else {
                     // TODO: Original code calls `h_extents_with_fallback`
@@ -253,10 +253,7 @@ impl<'a> hb_font_t<'a> {
         glyph: GlyphId,
         glyph_extents: &mut hb_glyph_extents_t,
     ) -> bool {
-        let pixels_per_em = match self.pixels_per_em {
-            Some(ppem) => ppem.0,
-            None => core::u16::MAX,
-        };
+        let pixels_per_em = self.pixels_per_em.map_or(u16::MAX, |ppem| ppem.0);
 
         if let Some(img) = self.ttfp_face.glyph_raster_image(glyph, pixels_per_em) {
             // HarfBuzz also supports only PNG.
@@ -334,7 +331,7 @@ impl<'a> hb_font_t<'a> {
         glyph_extents.width = i32::from(bbox.width());
         glyph_extents.height = i32::from(bbox.y_min - bbox.y_max);
 
-        return true;
+        true
     }
 
     pub(crate) fn glyph_name(&self, glyph: GlyphId) -> Option<&str> {

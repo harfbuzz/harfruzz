@@ -62,6 +62,6 @@ impl Apply for ReverseChainSingleSubstitution<'_> {
 
         ctx.buffer
             .unsafe_to_concat_from_outbuffer(Some(start_index), Some(end_index));
-        return None;
+        None
     }
 }
