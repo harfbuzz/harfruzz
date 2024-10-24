@@ -40,13 +40,13 @@ impl hb_extents_t {
     }
 }
 
-impl Into<hb_extents_t> for RectF {
-    fn into(self) -> hb_extents_t {
-        hb_extents_t {
-            x_min: self.x_min,
-            y_min: self.y_min,
-            x_max: self.x_max,
-            y_max: self.y_max,
+impl From<RectF> for hb_extents_t {
+    fn from(val: RectF) -> Self {
+        Self {
+            x_min: val.x_min,
+            y_min: val.y_min,
+            x_max: val.x_max,
+            y_max: val.y_max,
         }
     }
 }
