@@ -858,7 +858,7 @@ fn zero_width_default_ignorables(buffer: &mut hb_buffer_t) {
 }
 
 fn deal_with_variation_selectors(buffer: &mut hb_buffer_t) {
-    if !(buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK != 0) {
+    if buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK == 0 {
         return;
     }
 
