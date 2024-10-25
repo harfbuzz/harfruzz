@@ -28,11 +28,9 @@ are not implemented yet or cannot be implemented at all.
 - Malformed fonts will cause an error. HarfBuzz uses fallback/dummy shaper in this case.
 - No font size property. Shaping is always using UnitsPerEm. You should scale the result manually.
 - Most of the TrueType and Unicode handling code was moved into separate crates.
-- rustybuzz doesn't interact with any system libraries and must produce exactly the same
-  results on all OS'es and targets.
+- rustybuzz doesn't provide any integration with external libraries, so no FreeType, CoreText, or Uniscribe/DirectWrite font-loading integration, and no ICU, or GLib Unicode-functions integration, as well as no `graphite2` library support.
 - `mort` table is not supported, since it's deprecated by Apple.
-- No Arabic fallback shaper, since it requires subsetting.
-- No `graphite` library support.
+- No Arabic fallback shaper. This requires the ability to build lookups on the fly. In HarfBuzz (C++) this requires serialization code that is associated with subsetting.
 - `avar2` as well as other parts of the boring-expansion-spec are not supported yet.
 
 ## Performance
