@@ -86,14 +86,14 @@ fn parse_cluster(s: &str) -> Result<rustybuzz::BufferClusterLevel, String> {
         "0" => Ok(rustybuzz::BufferClusterLevel::MonotoneGraphemes),
         "1" => Ok(rustybuzz::BufferClusterLevel::MonotoneCharacters),
         "2" => Ok(rustybuzz::BufferClusterLevel::Characters),
-        _ => Err(format!("invalid cluster level")),
+        _ => Err("invalid cluster level".to_string()),
     }
 }
 
 fn parse_unicodes(s: &str) -> Result<String, String> {
     s.split(',')
         .map(|s| {
-            let s = s.strip_prefix("U+").unwrap_or(&s);
+            let s = s.strip_prefix("U+").unwrap_or(s);
             let cp = u32::from_str_radix(s, 16).map_err(|e| format!("{e}"))?;
             char::from_u32(cp).ok_or_else(|| format!("{cp:X} is not a valid codepoint"))
         })
@@ -104,7 +104,7 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
     let args = options
         .split(' ')
         .filter(|s| !s.is_empty())
-        .map(|s| std::ffi::OsString::from(s))
+        .map(std::ffi::OsString::from)
         .collect();
     let args = parse_args(args).unwrap();
 

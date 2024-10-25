@@ -475,11 +475,11 @@ impl Apply for ContextLookup<'_> {
                         match_end,
                         lookups,
                     );
-                    return Some(());
+                    Some(())
                 } else {
                     ctx.buffer
                         .unsafe_to_concat(Some(ctx.buffer.idx), Some(match_end));
-                    return None;
+                    None
                 }
             }
         }
@@ -556,7 +556,7 @@ impl WouldApply for ChainedContextLookup<'_> {
                 ..
             } => {
                 (!ctx.zero_context
-                    || (backtrack_coverages.len() == 0 && lookahead_coverages.len() == 0))
+                    || (backtrack_coverages.is_empty() && lookahead_coverages.is_empty()))
                     && (ctx.glyphs.len() == usize::from(input_coverages.len()) + 1
                         && input_coverages
                             .into_iter()
@@ -712,7 +712,7 @@ trait ChainRuleExt {
 
 impl ChainRuleExt for ChainedSequenceRule<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool {
-        (!ctx.zero_context || (self.backtrack.len() == 0 && self.lookahead.len() == 0))
+        (!ctx.zero_context || (self.backtrack.is_empty() && self.lookahead.is_empty()))
             && (ctx.glyphs.len() == usize::from(self.input.len()) + 1
                 && self
                     .input
@@ -981,7 +981,7 @@ fn apply_lookup(
 }
 
 /// Value represents glyph class.
-fn match_class<'a>(class_def: ClassDefinition<'a>) -> impl Fn(GlyphId, u16) -> bool + 'a {
+fn match_class(class_def: ClassDefinition<'_>) -> impl Fn(GlyphId, u16) -> bool + '_ {
     move |glyph, value| class_def.get(glyph) == value
 }
 

@@ -49,16 +49,16 @@ pub mod glyph_flag {
     /// line-break position, in the following way:
     ///
     /// 1. Iterate back from the line-break
-    /// position until the first cluster
-    /// start position that is NOT unsafe-to-concat,
+    ///    position until the first cluster
+    ///    start position that is NOT unsafe-to-concat,
     /// 2. shape the segment from there till the
-    /// end of line, 3. check whether the resulting
-    /// glyph-run also is clear of the unsafe-to-concat
-    /// at its start-of-text position; if it is, just
-    /// splice it into place and the line is shaped;
-    /// If not, move on to a position further back that
-    /// is clear of unsafe-to-concat and retry from
-    /// there, and repeat.
+    ///    end of line, 3. check whether the resulting
+    ///    glyph-run also is clear of the unsafe-to-concat
+    ///    at its start-of-text position; if it is, just
+    ///    splice it into place and the line is shaped;
+    ///    If not, move on to a position further back that
+    ///    is clear of unsafe-to-concat and retry from
+    ///    there, and repeat.
     ///
     /// At the start of next line a similar
     /// algorithm can be implemented.
@@ -87,7 +87,7 @@ pub mod glyph_flag {
     ///
     /// The UNSAFE_TO_BREAK flag will always imply this flag.
     /// To use this flag, you must enable the buffer flag
-    ///	PRODUCE_UNSAFE_TO_CONCAT during shaping, otherwise
+    /// PRODUCE_UNSAFE_TO_CONCAT during shaping, otherwise
     /// the buffer flag will not be reliably produced.
     pub const UNSAFE_TO_CONCAT: u32 = 0x00000002;
 
@@ -845,7 +845,7 @@ impl hb_buffer_t {
         let not_mask = !mask;
         value &= mask;
 
-        if cluster_start == 0 && cluster_end == core::u32::MAX {
+        if cluster_start == 0 && cluster_end == u32::MAX {
             for info in &mut self.info[..self.len] {
                 info.mask = (info.mask & not_mask) | value;
             }
@@ -1103,7 +1103,7 @@ impl hb_buffer_t {
             } else {
                 let mut cluster = self._infos_find_min_cluster(&self.info, self.idx, end, None);
                 cluster = self._infos_find_min_cluster(
-                    &self.out_info(),
+                    self.out_info(),
                     start,
                     self.out_len,
                     Some(cluster),
@@ -1325,7 +1325,7 @@ impl hb_buffer_t {
         end: usize,
         cluster: Option<u32>,
     ) -> u32 {
-        let mut cluster = cluster.unwrap_or(core::u32::MAX);
+        let mut cluster = cluster.unwrap_or(u32::MAX);
 
         if start == end {
             return cluster;

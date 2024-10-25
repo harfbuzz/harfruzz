@@ -65,7 +65,7 @@ impl Apply for MarkToLigatureAdjustment<'_> {
         // can directly use the component index.  If not, we attach the mark
         // glyph to the last component of the ligature.
         let lig_id = _hb_glyph_info_get_lig_id(&buffer.info[idx]);
-        let mark_id = _hb_glyph_info_get_lig_id(&buffer.cur(0));
+        let mark_id = _hb_glyph_info_get_lig_id(buffer.cur(0));
         let mark_comp = u16::from(_hb_glyph_info_get_lig_comp(buffer.cur(0)));
         let matches = lig_id != 0 && lig_id == mark_id && mark_comp > 0;
         let comp_index = if matches {

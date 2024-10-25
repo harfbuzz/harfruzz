@@ -298,23 +298,19 @@ impl GeneralCategoryExt for hb_unicode_general_category_t {
     }
 
     fn is_mark(&self) -> bool {
-        match *self {
+        matches!(*self, 
             hb_unicode_general_category_t::SpacingMark |
             hb_unicode_general_category_t::EnclosingMark |
-            hb_unicode_general_category_t::NonspacingMark => true,
-            _ => false,
-        }
+            hb_unicode_general_category_t::NonspacingMark)
     }
 
     fn is_letter(&self) -> bool {
-        match *self {
+        matches!(*self, 
             hb_unicode_general_category_t::LowercaseLetter |
             hb_unicode_general_category_t::ModifierLetter |
             hb_unicode_general_category_t::OtherLetter |
             hb_unicode_general_category_t::TitlecaseLetter |
-            hb_unicode_general_category_t::UppercaseLetter => true,
-            _ => false,
-        }
+            hb_unicode_general_category_t::UppercaseLetter)
     }
 }
 
@@ -497,7 +493,7 @@ impl CharExt for char {
     }
 
     fn general_category(self) -> hb_unicode_general_category_t {
-        unicode_properties::general_category::UnicodeGeneralCategory::general_category(self).into()
+        unicode_properties::general_category::UnicodeGeneralCategory::general_category(self)
     }
 
     fn space_fallback(self) -> hb_unicode_funcs_t::space_t {

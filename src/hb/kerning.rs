@@ -175,7 +175,7 @@ fn apply_state_machine_kerning(
                 .class(buffer.info[buffer.idx].as_glyph())
                 .unwrap_or(1)
         } else {
-            apple_layout::class::END_OF_TEXT as u8
+            apple_layout::class::END_OF_TEXT
         };
 
         let entry = match state_table.entry(state, class) {
@@ -191,7 +191,8 @@ fn apply_state_machine_kerning(
         {
             // If there's no value and we're just epsilon-transitioning to state 0, safe to break.
             if entry.has_offset()
-                || !(entry.new_state == apple_layout::state::START_OF_TEXT && !entry.has_advance())
+                || entry.new_state != apple_layout::state::START_OF_TEXT
+                || entry.has_advance()
             {
                 buffer.unsafe_to_break_from_outbuffer(
                     Some(buffer.backtrack_len() - 1),

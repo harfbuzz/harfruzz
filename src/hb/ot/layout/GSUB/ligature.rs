@@ -54,7 +54,7 @@ impl Apply for Ligature<'_> {
                 total_component_count,
                 self.glyph,
             );
-            return Some(());
+            Some(())
         }
     }
 }

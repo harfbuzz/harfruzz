@@ -102,7 +102,7 @@ impl hb_aat_map_builder_t {
             let exposes_feature = feat
                 .names
                 .find(HB_AAT_LAYOUT_FEATURE_TYPE_CHARACTER_ALTERNATIVES as u16)
-                .map(|f| f.setting_names.len() != 0)
+                .map(|f| !f.setting_names.is_empty())
                 .unwrap_or(false);
 
             if !exposes_feature {
@@ -128,7 +128,7 @@ impl hb_aat_map_builder_t {
         let mut feature_name = feat.names.find(mapping.aat_feature_type as u16);
 
         match feature_name {
-            Some(feature) if feature.setting_names.len() != 0 => {}
+            Some(feature) if !feature.setting_names.is_empty() => {}
             _ => {
                 // Special case: Chain::compile_flags will fall back to the deprecated version of
                 // small-caps if necessary, so we need to check for that possibility.
@@ -145,7 +145,7 @@ impl hb_aat_map_builder_t {
         }
 
         match feature_name {
-            Some(feature_name) if feature_name.setting_names.len() != 0 => {
+            Some(feature_name) if !feature_name.setting_names.is_empty() => {
                 let setting = if feature.value != 0 {
                     mapping.selector_to_enable
                 } else {
@@ -210,7 +210,7 @@ impl hb_aat_map_builder_t {
                 self.range_first = last_index;
                 self.range_last = event.index.wrapping_sub(1);
 
-                if self.current_features.len() != 0 {
+                if !self.current_features.is_empty() {
                     self.current_features.sort();
                     let mut j = 0;
                     for i in 1..self.current_features.len() {

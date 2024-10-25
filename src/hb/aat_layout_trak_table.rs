@@ -85,9 +85,7 @@ impl TrackTableDataExt for ttf_parser::trak::TrackData<'_> {
             .position(|s| s.0 >= ptem)
             .unwrap_or(self.sizes.len() as usize - 1);
 
-        if idx > 0 {
-            idx -= 1;
-        }
+        idx = idx.saturating_sub(1);
 
         self.interpolate_at(idx as u16, ptem, &track)
             .map(|n| n.round() as i32)

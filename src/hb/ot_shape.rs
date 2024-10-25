@@ -173,7 +173,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
                 .enable_feature(hb_tag_t::from_bytes(b"vert"), F_GLOBAL_SEARCH, 1);
         }
 
-        if user_features.len() != 0 {
+        if !user_features.is_empty() {
             self.ot_map.is_simple = false;
         }
 
@@ -346,7 +346,7 @@ fn substitute_pre(ctx: &mut hb_ot_shape_context_t) {
     hb_ot_substitute_plan(ctx);
 
     if ctx.plan.apply_morx && ctx.plan.apply_gpos {
-        hb_aat_layout_remove_deleted_glyphs(&mut ctx.buffer);
+        hb_aat_layout_remove_deleted_glyphs(ctx.buffer);
     }
 }
 
@@ -612,7 +612,7 @@ fn set_unicode_props(buffer: &mut hb_buffer_t) {
         let info = &mut later[0];
         info.init_unicode_props(&mut buffer.scratch_flags);
 
-        let gen_cat = _hb_glyph_info_get_general_category(&info);
+        let gen_cat = _hb_glyph_info_get_general_category(info);
 
         if (rb_flag_unsafe(gen_cat.to_rb())
             & (rb_flag(RB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER)
@@ -858,7 +858,7 @@ fn zero_width_default_ignorables(buffer: &mut hb_buffer_t) {
 }
 
 fn deal_with_variation_selectors(buffer: &mut hb_buffer_t) {
-    if !(buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK != 0) {
+    if buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK == 0 {
         return;
     }
 
