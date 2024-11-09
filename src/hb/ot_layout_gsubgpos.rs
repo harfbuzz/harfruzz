@@ -482,7 +482,7 @@ pub(super) fn apply_lookup(
         //
         // It should be possible to construct tests for both of these cases.
 
-        end = (end as isize + delta) as _;
+        end = end.saturating_add_signed(delta);
         if end < match_positions[idx] {
             // End might end up being smaller than match_positions[idx] if the recursed
             // lookup ended up removing many items.
