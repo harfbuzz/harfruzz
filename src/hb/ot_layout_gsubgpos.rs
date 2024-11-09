@@ -170,6 +170,9 @@ pub fn match_lookahead(
     start_index: usize,
     end_index: &mut usize,
 ) -> bool {
+    // Function should always be called with a non-zero starting index
+    // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
+    assert!(start_index >= 1);
     let mut iter = skipping_iterator_t::new(ctx, start_index - 1, true);
     iter.set_glyph_data(0);
     iter.enable_matching(match_func);
@@ -977,7 +980,7 @@ fn apply_lookup(
         }
     }
 
-    ctx.buffer.move_to(end as usize);
+    ctx.buffer.move_to(end.try_into().unwrap());
 }
 
 /// Value represents glyph class.
@@ -1316,6 +1319,9 @@ pub fn ligate_input(
                 if this_comp == 0 {
                     this_comp = last_num_comps;
                 }
+                // Avoid the potential for a wrap-around bug when subtracting from an unsigned integer
+                // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
+                assert!(comps_so_far >= last_num_comps);
                 let new_lig_comp = comps_so_far - last_num_comps + this_comp.min(last_num_comps);
                 _hb_glyph_info_set_lig_props_for_mark(cur, lig_id, new_lig_comp);
             }
@@ -1344,6 +1350,9 @@ pub fn ligate_input(
                 break;
             }
 
+            // Avoid the potential for a wrap-around bug when subtracting from an unsigned integer
+            // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
+            assert!(comps_so_far >= last_num_comps);
             let new_lig_comp = comps_so_far - last_num_comps + this_comp.min(last_num_comps);
             _hb_glyph_info_set_lig_props_for_mark(info, lig_id, new_lig_comp)
         }
