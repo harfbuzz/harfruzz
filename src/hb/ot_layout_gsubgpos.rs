@@ -312,9 +312,9 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
     }
 
     pub fn prev(&mut self, unsafe_from: Option<&mut usize>) -> bool {
-        let stop = 0;
+        let stop: usize = 0;
 
-        while self.buf_idx > stop as usize {
+        while self.buf_idx > stop {
             self.buf_idx -= 1;
             let info = &self.ctx.buffer.out_info()[self.buf_idx];
 
@@ -858,7 +858,7 @@ fn apply_lookup(
 
     // All positions are distance from beginning of *output* buffer.
     // Adjust.
-    let mut end = {
+    let mut end: isize = {
         let backtrack_len = ctx.buffer.backtrack_len();
         let delta = backtrack_len as isize - ctx.buffer.idx as isize;
 
@@ -867,7 +867,7 @@ fn apply_lookup(
             match_positions[j] = (match_positions[j] as isize + delta) as _;
         }
 
-        backtrack_len + match_end - ctx.buffer.idx
+        backtrack_len as isize + match_end as isize - ctx.buffer.idx as isize
     };
 
     for record in lookups {
@@ -928,8 +928,8 @@ fn apply_lookup(
         //
         // It should be possible to construct tests for both of these cases.
 
-        end = end.saturating_add_signed(delta);
-        if end < match_positions[idx] {
+        end += delta;
+        if end < match_positions[idx] as isize {
             // End might end up being smaller than match_positions[idx] if the recursed
             // lookup ended up removing many items.
             // Just never rewind end beyond start of current position, since that is
@@ -938,8 +938,8 @@ fn apply_lookup(
             // https://bugs.chromium.org/p/chromium/issues/detail?id=659496
             // https://github.com/harfbuzz/harfbuzz/issues/1611
             //
-            delta += match_positions[idx] as isize - end as isize;
-            end = match_positions[idx];
+            delta += match_positions[idx] as isize - end;
+            end = match_positions[idx] as isize;
         }
 
         // next now is the position after the recursed lookup.
@@ -977,7 +977,7 @@ fn apply_lookup(
         }
     }
 
-    ctx.buffer.move_to(end);
+    ctx.buffer.move_to(end as usize);
 }
 
 /// Value represents glyph class.
