@@ -19,10 +19,10 @@ categories = ["text-processing"]
 exclude = ["benches/", "tests/"]
 
 [dependencies]
-bitflags = "2.4"
-bytemuck = { version = "1.5", features = ["extern_crate_alloc"] }
+bitflags = "2.9"
+bytemuck = { version = "1.22", features = ["extern_crate_alloc"] }
 core_maths = "0.1" # only for no_std builds
-smallvec = "1.6"
+smallvec = "1.14"
 unicode-bidi-mirroring = "0.4"
 unicode-ccc = "0.4"
 unicode-properties = { version = "0.1", default-features = false, features = ["general-category"] }
