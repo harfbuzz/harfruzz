@@ -31,31 +31,31 @@ const KHMER_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
     // These features are applied all at once, before reordering, constrained
     // to the syllable.
     (
-        hb_tag_t::from_bytes(b"pref"),
+        hb_tag_t::new(b"pref"),
         F_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"blwf"),
+        hb_tag_t::new(b"blwf"),
         F_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"abvf"),
+        hb_tag_t::new(b"abvf"),
         F_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"pstf"),
+        hb_tag_t::new(b"pstf"),
         F_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"cfar"),
+        hb_tag_t::new(b"cfar"),
         F_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     // Other features.
     // These features are applied all at once after clearing syllables.
-    (hb_tag_t::from_bytes(b"pres"), F_GLOBAL_MANUAL_JOINERS),
-    (hb_tag_t::from_bytes(b"abvs"), F_GLOBAL_MANUAL_JOINERS),
-    (hb_tag_t::from_bytes(b"blws"), F_GLOBAL_MANUAL_JOINERS),
-    (hb_tag_t::from_bytes(b"psts"), F_GLOBAL_MANUAL_JOINERS),
+    (hb_tag_t::new(b"pres"), F_GLOBAL_MANUAL_JOINERS),
+    (hb_tag_t::new(b"abvs"), F_GLOBAL_MANUAL_JOINERS),
+    (hb_tag_t::new(b"blws"), F_GLOBAL_MANUAL_JOINERS),
+    (hb_tag_t::new(b"psts"), F_GLOBAL_MANUAL_JOINERS),
 ];
 
 // Must be in the same order as the KHMER_FEATURES array.
@@ -111,10 +111,10 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // https://github.com/harfbuzz/harfbuzz/issues/974
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"locl"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"locl"), F_PER_SYLLABLE, 1);
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"ccmp"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"ccmp"), F_PER_SYLLABLE, 1);
 
     for feature in KHMER_FEATURES.iter().take(5) {
         planner.ot_map.add_feature(feature.0, feature.1, 1);
@@ -277,11 +277,11 @@ fn override_features(planner: &mut hb_ot_shape_planner_t) {
     // typographical correctness.", hence in overrides...
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"clig"), F_NONE, 1);
+        .enable_feature(hb_tag_t::new(b"clig"), F_NONE, 1);
 
     planner
         .ot_map
-        .disable_feature(hb_tag_t::from_bytes(b"liga"));
+        .disable_feature(hb_tag_t::new(b"liga"));
 }
 
 fn decompose(_: &hb_ot_shape_normalize_context_t, ab: char) -> Option<(char, char)> {

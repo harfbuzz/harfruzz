@@ -28,7 +28,7 @@ pub fn compile_flags(
             .is_ok()
     };
 
-    let chains = face.tables().morx.as_ref()?.chains;
+    let chains = face.aat_tables.morx.as_ref()?.chains;
     let chain_len = chains.into_iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
@@ -71,7 +71,7 @@ pub fn compile_flags(
 pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) -> Option<()> {
     c.buffer.unsafe_to_concat(None, None);
 
-    let chains = c.face.tables().morx.as_ref()?.chains;
+    let chains = c.face.aat_tables.morx.as_ref()?.chains;
     let chain_len = chains.into_iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
@@ -328,9 +328,7 @@ fn apply_subtable(kind: &morx::SubtableKind, ac: &mut hb_aat_apply_context_t) {
         morx::SubtableKind::Contextual(ref table) => {
             let mut c = ContextualCtx {
                 mark_set: false,
-                face_if_has_glyph_classes:
-                    matches!(ac.face.tables().gdef, Some(gdef) if gdef.has_glyph_classes())
-                        .then_some(ac.face),
+                face_if_has_glyph_classes: ac.face.ot_tables.has_glyph_classes().then_some(ac.face),
                 mark: 0,
                 table,
             };
@@ -348,9 +346,7 @@ fn apply_subtable(kind: &morx::SubtableKind, ac: &mut hb_aat_apply_context_t) {
         }
         morx::SubtableKind::NonContextual(ref lookup) => {
             let face_if_has_glyph_classes =
-                matches!(ac.face.tables().gdef, Some(gdef) if gdef.has_glyph_classes())
-                    .then_some(ac.face);
-
+                ac.face.ot_tables.has_glyph_classes().then_some(ac.face);
             let mut last_range = ac.range_flags.as_ref().and_then(|rf| {
                 if rf.len() > 1 {
                     rf.first().map(|_| 0usize)

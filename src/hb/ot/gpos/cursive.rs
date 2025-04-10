@@ -1,18 +1,20 @@
 use crate::hb::buffer::HB_BUFFER_SCRATCH_FLAG_HAS_GPOS_ATTACHMENT;
 use crate::hb::ot_layout_common::lookup_flags;
 use crate::hb::ot_layout_gpos_table::attach_type;
-use crate::hb::ot_layout_gpos_table::AnchorExt;
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{skipping_iterator_t, Apply};
 use crate::{Direction, GlyphPosition};
-use ttf_parser::gpos::CursiveAdjustment;
+use read_fonts::tables::gpos::CursivePosFormat1;
 
-impl Apply for CursiveAdjustment<'_> {
+impl Apply for CursivePosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let this = ctx.buffer.cur(0).as_glyph();
+        let this = ctx.buffer.cur(0).as_glyph().0;
 
-        let index_this = self.coverage.get(this)?;
-        let entry_this = self.sets.entry(index_this)?;
+        let coverage = self.coverage().ok()?;
+        let index_this = coverage.get(this)? as usize;
+        let records = self.entry_exit_record();
+        let offset_data = self.offset_data();
+        let entry_this = records.get(index_this)?.entry_anchor(offset_data)?.ok()?;
 
         let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
 
@@ -24,16 +26,19 @@ impl Apply for CursiveAdjustment<'_> {
         }
 
         let i = iter.index();
-        let prev = ctx.buffer.info[i].as_glyph();
-        let index_prev = self.coverage.get(prev)?;
-        let Some(exit_prev) = self.sets.exit(index_prev) else {
+        let prev = ctx.buffer.info[i].as_glyph().0;
+        let index_prev = coverage.get(prev)? as usize;
+        let Some(exit_prev) = records
+            .get(index_prev)
+            .and_then(|rec| rec.exit_anchor(offset_data).transpose().ok().flatten())
+        else {
             ctx.buffer
                 .unsafe_to_concat_from_outbuffer(Some(iter.index()), Some(ctx.buffer.idx + 1));
             return None;
         };
 
-        let (exit_x, exit_y) = exit_prev.get(ctx.face);
-        let (entry_x, entry_y) = entry_this.get(ctx.face);
+        let (exit_x, exit_y) = ctx.face.ot_tables.resolve_anchor(&exit_prev);
+        let (entry_x, entry_y) = ctx.face.ot_tables.resolve_anchor(&entry_this);
 
         let direction = ctx.buffer.direction;
         let j = ctx.buffer.idx;

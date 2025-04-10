@@ -121,47 +121,29 @@ const INDIC_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
     // These features are applied in order, one at a time, after initial_reordering,
     // constrained to the syllable.
     (
-        hb_tag_t::from_bytes(b"nukt"),
+        hb_tag_t::new(b"nukt"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"akhn"),
+        hb_tag_t::new(b"akhn"),
+        F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
+    ),
+    (hb_tag_t::new(b"rphf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (
+        hb_tag_t::new(b"rkrf"),
+        F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
+    ),
+    (hb_tag_t::new(b"pref"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"blwf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"abvf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"half"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"pstf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (
+        hb_tag_t::new(b"vatu"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"rphf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"rkrf"),
-        F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"pref"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"blwf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"abvf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"half"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"pstf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"vatu"),
-        F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"cjct"),
+        hb_tag_t::new(b"cjct"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     // Other features.
@@ -169,28 +151,25 @@ const INDIC_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
     // to the syllable.
     // Default Bengali font in Windows for example has intermixed
     // lookups for init,pres,abvs,blws features.
+    (hb_tag_t::new(b"init"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
     (
-        hb_tag_t::from_bytes(b"init"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::from_bytes(b"pres"),
+        hb_tag_t::new(b"pres"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"abvs"),
+        hb_tag_t::new(b"abvs"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"blws"),
+        hb_tag_t::new(b"blws"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"psts"),
+        hb_tag_t::new(b"psts"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
     (
-        hb_tag_t::from_bytes(b"haln"),
+        hb_tag_t::new(b"haln"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
 ];
@@ -422,10 +401,11 @@ impl IndicWouldSubstituteFeature {
                 zero_context: self.zero_context,
             };
             if face
+                .ot_tables
                 .gsub
                 .as_ref()
                 .and_then(|table| table.get_lookup(lookup.index))
-                .map_or(false, |lookup| lookup.would_apply(&ctx))
+                .map_or(false, |lookup| lookup.would_apply(face, &ctx) == Some(true))
             {
                 return true;
             }
@@ -460,7 +440,7 @@ impl IndicShapePlan {
             && plan
                 .ot_map
                 .chosen_script(TableIndex::GSUB)
-                .map_or(true, |tag| tag.to_bytes()[3] != b'2');
+                .map_or(true, |tag| tag.to_be_bytes()[3] != b'2');
 
         // Use zero-context would_substitute() matching for new-spec of the main
         // Indic scripts, and scripts with one spec only, but not for old-specs.
@@ -495,27 +475,27 @@ impl IndicShapePlan {
             // virama_glyph,
             rphf: IndicWouldSubstituteFeature::new(
                 &plan.ot_map,
-                hb_tag_t::from_bytes(b"rphf"),
+                hb_tag_t::new(b"rphf"),
                 zero_context,
             ),
             pref: IndicWouldSubstituteFeature::new(
                 &plan.ot_map,
-                hb_tag_t::from_bytes(b"pref"),
+                hb_tag_t::new(b"pref"),
                 zero_context,
             ),
             blwf: IndicWouldSubstituteFeature::new(
                 &plan.ot_map,
-                hb_tag_t::from_bytes(b"blwf"),
+                hb_tag_t::new(b"blwf"),
                 zero_context,
             ),
             pstf: IndicWouldSubstituteFeature::new(
                 &plan.ot_map,
-                hb_tag_t::from_bytes(b"pstf"),
+                hb_tag_t::new(b"pstf"),
                 zero_context,
             ),
             vatu: IndicWouldSubstituteFeature::new(
                 &plan.ot_map,
-                hb_tag_t::from_bytes(b"vatu"),
+                hb_tag_t::new(b"vatu"),
                 zero_context,
             ),
             mask_array,
@@ -600,12 +580,12 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
 
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"locl"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"locl"), F_PER_SYLLABLE, 1);
     // The Indic specs do not require ccmp, but we apply it here since if
     // there is a use of it, it's typically at the beginning.
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"ccmp"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"ccmp"), F_PER_SYLLABLE, 1);
 
     planner.ot_map.add_gsub_pause(Some(initial_reordering));
 
@@ -622,9 +602,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
 }
 
 fn override_features(planner: &mut hb_ot_shape_planner_t) {
-    planner
-        .ot_map
-        .disable_feature(hb_tag_t::from_bytes(b"liga"));
+    planner.ot_map.disable_feature(hb_tag_t::new(b"liga"));
     planner.ot_map.add_gsub_pause(Some(syllabic_clear_var)); // Don't need syllables anymore.
 }
 

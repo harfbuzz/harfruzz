@@ -3,7 +3,6 @@
 use core::ops::{Index, IndexMut};
 
 use super::buffer::*;
-use super::common::TagExt;
 use super::ot_layout_gsubgpos::{Apply, OT};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
@@ -15,18 +14,18 @@ pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
 
 pub fn hb_ot_layout_has_kerning(face: &hb_font_t) -> bool {
-    face.tables().kern.is_some()
+    face.aat_tables.kern.is_some()
 }
 
 pub fn hb_ot_layout_has_machine_kerning(face: &hb_font_t) -> bool {
-    match face.tables().kern {
+    match face.aat_tables.kern {
         Some(ref kern) => kern.subtables.into_iter().any(|s| s.has_state_machine),
         None => false,
     }
 }
 
 pub fn hb_ot_layout_has_cross_kerning(face: &hb_font_t) -> bool {
-    match face.tables().kern {
+    match face.aat_tables.kern {
         Some(ref kern) => kern.subtables.into_iter().any(|s| s.has_cross_stream),
         None => false,
     }
@@ -45,9 +44,7 @@ pub fn _hb_ot_layout_set_glyph_props(face: &hb_font_t, buffer: &mut hb_buffer_t)
 }
 
 pub fn hb_ot_layout_has_glyph_classes(face: &hb_font_t) -> bool {
-    face.tables()
-        .gdef
-        .map_or(false, |table| table.has_glyph_classes())
+    face.ot_tables.has_glyph_classes()
 }
 
 // get_gsubgpos_table
@@ -123,103 +120,6 @@ pub trait LayoutTableExt {
         lang_index: Option<LanguageIndex>,
         feature_tag: hb_tag_t,
     ) -> Option<FeatureIndex>;
-}
-
-impl LayoutTableExt for ttf_parser::opentype_layout::LayoutTable<'_> {
-    // hb_ot_layout_table_select_script
-    /// Returns true + index and tag of the first found script tag in the given GSUB or GPOS table
-    /// or false + index and tag if falling back to a default script.
-    fn select_script(&self, script_tags: &[hb_tag_t]) -> Option<(bool, ScriptIndex, hb_tag_t)> {
-        for &tag in script_tags {
-            if let Some(index) = self.scripts.index(tag) {
-                return Some((true, index, tag));
-            }
-        }
-
-        for &tag in &[
-            // try finding 'DFLT'
-            hb_tag_t::default_script(),
-            // try with 'dflt'; MS site has had typos and many fonts use it now :(
-            hb_tag_t::default_language(),
-            // try with 'latn'; some old fonts put their features there even though
-            // they're really trying to support Thai, for example :(
-            hb_tag_t::from_bytes(b"latn"),
-        ] {
-            if let Some(index) = self.scripts.index(tag) {
-                return Some((false, index, tag));
-            }
-        }
-
-        None
-    }
-
-    // hb_ot_layout_script_select_language
-    /// Returns the index of the first found language tag in the given GSUB or GPOS table,
-    /// underneath the specified script index.
-    fn select_script_language(
-        &self,
-        script_index: ScriptIndex,
-        lang_tags: &[hb_tag_t],
-    ) -> Option<LanguageIndex> {
-        let script = self.scripts.get(script_index)?;
-
-        for &tag in lang_tags {
-            if let Some(index) = script.languages.index(tag) {
-                return Some(index);
-            }
-        }
-
-        // try finding 'dflt'
-        if let Some(index) = script.languages.index(hb_tag_t::default_language()) {
-            return Some(index);
-        }
-
-        None
-    }
-
-    // hb_ot_layout_language_get_required_feature
-    /// Returns the index and tag of a required feature in the given GSUB or GPOS table,
-    /// underneath the specified script and language.
-    fn get_required_language_feature(
-        &self,
-        script_index: ScriptIndex,
-        lang_index: Option<LanguageIndex>,
-    ) -> Option<(FeatureIndex, hb_tag_t)> {
-        let script = self.scripts.get(script_index)?;
-        let sys = match lang_index {
-            Some(index) => script.languages.get(index)?,
-            None => script.default_language?,
-        };
-        let idx = sys.required_feature?;
-        let tag = self.features.get(idx)?.tag;
-        Some((idx, tag))
-    }
-
-    // hb_ot_layout_language_find_feature
-    /// Returns the index of a given feature tag in the given GSUB or GPOS table,
-    /// underneath the specified script and language.
-    fn find_language_feature(
-        &self,
-        script_index: ScriptIndex,
-        lang_index: Option<LanguageIndex>,
-        feature_tag: hb_tag_t,
-    ) -> Option<FeatureIndex> {
-        let script = self.scripts.get(script_index)?;
-        let sys = match lang_index {
-            Some(index) => script.languages.get(index)?,
-            None => script.default_language?,
-        };
-
-        for i in 0..sys.feature_indices.len() {
-            if let Some(index) = sys.feature_indices.get(i) {
-                if self.features.get(index).map(|v| v.tag) == Some(feature_tag) {
-                    return Some(index);
-                }
-            }
-        }
-
-        None
-    }
 }
 
 /// Called before substitution lookups are performed, to ensure that glyph

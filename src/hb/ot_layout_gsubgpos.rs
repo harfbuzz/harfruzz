@@ -1,7 +1,7 @@
 //! Matching of glyph patterns.
 
 use ttf_parser::opentype_layout::*;
-use ttf_parser::{GlyphId, LazyArray16};
+use ttf_parser::GlyphId;
 
 use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
@@ -11,6 +11,7 @@ use super::ot_layout::LayoutTable;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
+use read_fonts::tables::layout::SequenceLookupRecord;
 
 /// Value represents glyph id.
 pub fn match_glyph(glyph: GlyphId, value: u16) -> bool {
@@ -402,456 +403,12 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
     }
 }
 
-impl WouldApply for ContextLookup<'_> {
-    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
-        let glyph = ctx.glyphs[0];
-        match *self {
-            Self::Format1 { coverage, sets } => coverage
-                .get(glyph)
-                .and_then(|index| sets.get(index))
-                .map_or(false, |set| set.would_apply(ctx, &match_glyph)),
-            Self::Format2 { classes, sets, .. } => {
-                let class = classes.get(glyph);
-                sets.get(class)
-                    .map_or(false, |set| set.would_apply(ctx, &match_class(classes)))
-            }
-            Self::Format3 { coverages, .. } => {
-                ctx.glyphs.len() == usize::from(coverages.len()) + 1
-                    && coverages
-                        .into_iter()
-                        .enumerate()
-                        .all(|(i, coverage)| coverage.get(ctx.glyphs[i + 1]).is_some())
-            }
-        }
-    }
-}
-
-impl Apply for ContextLookup<'_> {
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = ctx.buffer.cur(0).as_glyph();
-        match *self {
-            Self::Format1 { coverage, sets } => {
-                coverage.get(glyph)?;
-                let set = coverage.get(glyph).and_then(|index| sets.get(index))?;
-                set.apply(ctx, &match_glyph)
-            }
-            Self::Format2 {
-                coverage,
-                classes,
-                sets,
-            } => {
-                coverage.get(glyph)?;
-                let class = classes.get(glyph);
-                let set = sets.get(class)?;
-                set.apply(ctx, &match_class(classes))
-            }
-            Self::Format3 {
-                coverage,
-                coverages,
-                lookups,
-            } => {
-                coverage.get(glyph)?;
-                let coverages_len = coverages.len();
-
-                let match_func = |glyph, index| {
-                    let coverage = coverages.get(index).unwrap();
-                    coverage.get(glyph).is_some()
-                };
-
-                let mut match_end = 0;
-                let mut match_positions = smallvec::SmallVec::from_elem(0, 4);
-
-                if match_input(
-                    ctx,
-                    coverages_len,
-                    &match_func,
-                    &mut match_end,
-                    &mut match_positions,
-                    None,
-                ) {
-                    ctx.buffer
-                        .unsafe_to_break(Some(ctx.buffer.idx), Some(match_end));
-                    apply_lookup(
-                        ctx,
-                        usize::from(coverages_len),
-                        &mut match_positions,
-                        match_end,
-                        lookups,
-                    );
-                    Some(())
-                } else {
-                    ctx.buffer
-                        .unsafe_to_concat(Some(ctx.buffer.idx), Some(match_end));
-                    None
-                }
-            }
-        }
-    }
-}
-
-trait SequenceRuleSetExt {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool;
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t, match_func: &match_func_t) -> Option<()>;
-}
-
-impl SequenceRuleSetExt for SequenceRuleSet<'_> {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool {
-        self.into_iter()
-            .any(|rule| rule.would_apply(ctx, match_func))
-    }
-
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t, match_func: &match_func_t) -> Option<()> {
-        if self
-            .into_iter()
-            .any(|rule| rule.apply(ctx, match_func).is_some())
-        {
-            Some(())
-        } else {
-            None
-        }
-    }
-}
-
-trait SequenceRuleExt {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool;
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t, match_func: &match_func_t) -> Option<()>;
-}
-
-impl SequenceRuleExt for SequenceRule<'_> {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool {
-        ctx.glyphs.len() == usize::from(self.input.len()) + 1
-            && self
-                .input
-                .into_iter()
-                .enumerate()
-                .all(|(i, value)| match_func(ctx.glyphs[i + 1], value))
-    }
-
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t, match_func: &match_func_t) -> Option<()> {
-        apply_context(ctx, self.input, match_func, self.lookups)
-
-        // TODO: Port optimized version from https://github.com/harfbuzz/harfbuzz/commit/645fabd10
-    }
-}
-
-impl WouldApply for ChainedContextLookup<'_> {
-    fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
-        let glyph_id = ctx.glyphs[0];
-        match *self {
-            Self::Format1 { coverage, sets } => coverage
-                .get(glyph_id)
-                .and_then(|index| sets.get(index))
-                .map_or(false, |set| set.would_apply(ctx, &match_glyph)),
-            Self::Format2 {
-                input_classes,
-                sets,
-                ..
-            } => {
-                let class = input_classes.get(glyph_id);
-                sets.get(class).map_or(false, |set| {
-                    set.would_apply(ctx, &match_class(input_classes))
-                })
-            }
-            Self::Format3 {
-                backtrack_coverages,
-                input_coverages,
-                lookahead_coverages,
-                ..
-            } => {
-                (!ctx.zero_context
-                    || (backtrack_coverages.is_empty() && lookahead_coverages.is_empty()))
-                    && (ctx.glyphs.len() == usize::from(input_coverages.len()) + 1
-                        && input_coverages
-                            .into_iter()
-                            .enumerate()
-                            .all(|(i, coverage)| coverage.contains(ctx.glyphs[i + 1])))
-            }
-        }
-    }
-}
-
-impl Apply for ChainedContextLookup<'_> {
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = ctx.buffer.cur(0).as_glyph();
-        match *self {
-            Self::Format1 { coverage, sets } => {
-                let index = coverage.get(glyph)?;
-                let set = sets.get(index)?;
-                set.apply(ctx, [&match_glyph, &match_glyph, &match_glyph])
-            }
-            Self::Format2 {
-                coverage,
-                backtrack_classes,
-                input_classes,
-                lookahead_classes,
-                sets,
-            } => {
-                coverage.get(glyph)?;
-                let class = input_classes.get(glyph);
-                let set = sets.get(class)?;
-                set.apply(
-                    ctx,
-                    [
-                        &match_class(backtrack_classes),
-                        &match_class(input_classes),
-                        &match_class(lookahead_classes),
-                    ],
-                )
-            }
-            Self::Format3 {
-                coverage,
-                backtrack_coverages,
-                input_coverages,
-                lookahead_coverages,
-                lookups,
-            } => {
-                coverage.get(glyph)?;
-
-                let back = |glyph, index| {
-                    let coverage = backtrack_coverages.get(index).unwrap();
-                    coverage.contains(glyph)
-                };
-
-                let ahead = |glyph, index| {
-                    let coverage = lookahead_coverages.get(index).unwrap();
-                    coverage.contains(glyph)
-                };
-
-                let input = |glyph, index| {
-                    let coverage = input_coverages.get(index).unwrap();
-                    coverage.contains(glyph)
-                };
-
-                let mut end_index = ctx.buffer.idx;
-                let mut match_end = 0;
-                let mut match_positions = smallvec::SmallVec::from_elem(0, 4);
-
-                let input_matches = match_input(
-                    ctx,
-                    input_coverages.len(),
-                    &input,
-                    &mut match_end,
-                    &mut match_positions,
-                    None,
-                );
-
-                if input_matches {
-                    end_index = match_end;
-                }
-
-                if !(input_matches
-                    && match_lookahead(
-                        ctx,
-                        lookahead_coverages.len(),
-                        &ahead,
-                        match_end,
-                        &mut end_index,
-                    ))
-                {
-                    ctx.buffer
-                        .unsafe_to_concat(Some(ctx.buffer.idx), Some(end_index));
-                    return None;
-                }
-
-                let mut start_index = ctx.buffer.out_len;
-
-                if !match_backtrack(ctx, backtrack_coverages.len(), &back, &mut start_index) {
-                    ctx.buffer
-                        .unsafe_to_concat_from_outbuffer(Some(start_index), Some(end_index));
-                    return None;
-                }
-
-                ctx.buffer
-                    .unsafe_to_break_from_outbuffer(Some(start_index), Some(end_index));
-                apply_lookup(
-                    ctx,
-                    usize::from(input_coverages.len()),
-                    &mut match_positions,
-                    match_end,
-                    lookups,
-                );
-
-                Some(())
-            }
-        }
-    }
-}
-
-trait ChainRuleSetExt {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool;
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t, match_funcs: [&match_func_t; 3])
-        -> Option<()>;
-}
-
-impl ChainRuleSetExt for ChainedSequenceRuleSet<'_> {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool {
-        self.into_iter()
-            .any(|rule| rule.would_apply(ctx, match_func))
-    }
-
-    fn apply(
-        &self,
-        ctx: &mut hb_ot_apply_context_t,
-        match_funcs: [&match_func_t; 3],
-    ) -> Option<()> {
-        if self
-            .into_iter()
-            .any(|rule| rule.apply(ctx, match_funcs).is_some())
-        {
-            Some(())
-        } else {
-            None
-        }
-
-        // TODO: Port optimized version from https://github.com/harfbuzz/harfbuzz/commit/77080f86f
-    }
-}
-
-trait ChainRuleExt {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool;
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t, match_funcs: [&match_func_t; 3])
-        -> Option<()>;
-}
-
-impl ChainRuleExt for ChainedSequenceRule<'_> {
-    fn would_apply(&self, ctx: &WouldApplyContext, match_func: &match_func_t) -> bool {
-        (!ctx.zero_context || (self.backtrack.is_empty() && self.lookahead.is_empty()))
-            && (ctx.glyphs.len() == usize::from(self.input.len()) + 1
-                && self
-                    .input
-                    .into_iter()
-                    .enumerate()
-                    .all(|(i, value)| match_func(ctx.glyphs[i + 1], value)))
-    }
-
-    fn apply(
-        &self,
-        ctx: &mut hb_ot_apply_context_t,
-        match_funcs: [&match_func_t; 3],
-    ) -> Option<()> {
-        apply_chain_context(
-            ctx,
-            self.backtrack,
-            self.input,
-            self.lookahead,
-            match_funcs,
-            self.lookups,
-        )
-    }
-}
-
-fn apply_context(
-    ctx: &mut hb_ot_apply_context_t,
-    input: LazyArray16<u16>,
-    match_func: &match_func_t,
-    lookups: LazyArray16<SequenceLookupRecord>,
-) -> Option<()> {
-    let match_func = |glyph, index| {
-        let value = input.get(index).unwrap();
-        match_func(glyph, value)
-    };
-
-    let mut match_end = 0;
-    let mut match_positions = smallvec::SmallVec::from_elem(0, 4);
-
-    if match_input(
-        ctx,
-        input.len(),
-        &match_func,
-        &mut match_end,
-        &mut match_positions,
-        None,
-    ) {
-        ctx.buffer
-            .unsafe_to_break(Some(ctx.buffer.idx), Some(match_end));
-        apply_lookup(
-            ctx,
-            usize::from(input.len()),
-            &mut match_positions,
-            match_end,
-            lookups,
-        );
-        return Some(());
-    }
-
-    None
-}
-
-fn apply_chain_context(
-    ctx: &mut hb_ot_apply_context_t,
-    backtrack: LazyArray16<u16>,
-    input: LazyArray16<u16>,
-    lookahead: LazyArray16<u16>,
-    match_funcs: [&match_func_t; 3],
-    lookups: LazyArray16<SequenceLookupRecord>,
-) -> Option<()> {
-    // NOTE: Whenever something in this method changes, we also need to
-    // change it in the `apply` implementation for ChainedContextLookup.
-    let f1 = |glyph, index| {
-        let value = backtrack.get(index).unwrap();
-        match_funcs[0](glyph, value)
-    };
-
-    let f2 = |glyph, index| {
-        let value = lookahead.get(index).unwrap();
-        match_funcs[2](glyph, value)
-    };
-
-    let f3 = |glyph, index| {
-        let value = input.get(index).unwrap();
-        match_funcs[1](glyph, value)
-    };
-
-    let mut end_index = ctx.buffer.idx;
-    let mut match_end = 0;
-    let mut match_positions = smallvec::SmallVec::from_elem(0, 4);
-
-    let input_matches = match_input(
-        ctx,
-        input.len(),
-        &f3,
-        &mut match_end,
-        &mut match_positions,
-        None,
-    );
-
-    if input_matches {
-        end_index = match_end;
-    }
-
-    if !(input_matches && match_lookahead(ctx, lookahead.len(), &f2, match_end, &mut end_index)) {
-        ctx.buffer
-            .unsafe_to_concat(Some(ctx.buffer.idx), Some(end_index));
-        return None;
-    }
-
-    let mut start_index = ctx.buffer.out_len;
-
-    if !match_backtrack(ctx, backtrack.len(), &f1, &mut start_index) {
-        ctx.buffer
-            .unsafe_to_concat_from_outbuffer(Some(start_index), Some(end_index));
-        return None;
-    }
-
-    ctx.buffer
-        .unsafe_to_break_from_outbuffer(Some(start_index), Some(end_index));
-    apply_lookup(
-        ctx,
-        usize::from(input.len()),
-        &mut match_positions,
-        match_end,
-        lookups,
-    );
-
-    Some(())
-}
-
-fn apply_lookup(
+pub(crate) fn apply_lookup(
     ctx: &mut hb_ot_apply_context_t,
     input_len: usize,
     match_positions: &mut smallvec::SmallVec<[usize; 4]>,
     match_end: usize,
-    lookups: LazyArray16<SequenceLookupRecord>,
+    lookups: &[SequenceLookupRecord],
 ) {
     let mut count = input_len + 1;
 
@@ -878,7 +435,7 @@ fn apply_lookup(
             break;
         }
 
-        let idx = usize::from(record.sequence_index);
+        let idx = usize::from(record.sequence_index.get());
         if idx >= count {
             continue;
         }
@@ -898,7 +455,7 @@ fn apply_lookup(
             break;
         }
 
-        if ctx.recurse(record.lookup_list_index).is_none() {
+        if ctx.recurse(record.lookup_list_index.get()).is_none() {
             continue;
         }
 
@@ -1006,6 +563,8 @@ pub struct WouldApplyContext<'a> {
 }
 
 pub mod OT {
+    use read_fonts::{tables::variations::ItemVariationStore, types::F2Dot14};
+
     use super::*;
     use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
 
@@ -1089,6 +648,7 @@ pub mod OT {
             let applied = match self.table_index {
                 TableIndex::GSUB => self
                     .face
+                    .ot_tables
                     .gsub
                     .as_ref()
                     .and_then(|table| table.get_lookup(sub_lookup_index))
@@ -1098,6 +658,7 @@ pub mod OT {
                     }),
                 TableIndex::GPOS => self
                     .face
+                    .ot_tables
                     .gpos
                     .as_ref()
                     .and_then(|table| table.get_lookup(sub_lookup_index))
@@ -1133,11 +694,10 @@ pub mod OT {
                     // TODO: harfbuzz uses a digest here to speed things up if HB_NO_GDEF_CACHE
                     // is enabled. But a bit harder to implement for us since it's taken care of by
                     // ttf-parser
-                    if let Some(table) = self.face.tables().gdef {
-                        return table.is_mark_glyph(info.as_glyph(), Some(set_index));
-                    } else {
-                        return false;
-                    }
+                    return self
+                        .face
+                        .ot_tables
+                        .is_mark_glyph(info.as_glyph().0 as u32, set_index);
                 }
 
                 // The second byte of match_props has the meaning
@@ -1180,11 +740,7 @@ pub mod OT {
                 props |= GlyphPropsFlags::MULTIPLIED.bits();
             }
 
-            let has_glyph_classes = self
-                .face
-                .tables()
-                .gdef
-                .map_or(false, |table| table.has_glyph_classes());
+            let has_glyph_classes = self.face.ot_tables.has_glyph_classes();
 
             if has_glyph_classes {
                 props &= GlyphPropsFlags::PRESERVE.bits();

@@ -107,20 +107,20 @@ pub mod category {
 // These features are applied all at once, before reordering,
 // constrained to the syllable.
 const BASIC_FEATURES: &[hb_tag_t] = &[
-    hb_tag_t::from_bytes(b"rkrf"),
-    hb_tag_t::from_bytes(b"abvf"),
-    hb_tag_t::from_bytes(b"blwf"),
-    hb_tag_t::from_bytes(b"half"),
-    hb_tag_t::from_bytes(b"pstf"),
-    hb_tag_t::from_bytes(b"vatu"),
-    hb_tag_t::from_bytes(b"cjct"),
+    hb_tag_t::new(b"rkrf"),
+    hb_tag_t::new(b"abvf"),
+    hb_tag_t::new(b"blwf"),
+    hb_tag_t::new(b"half"),
+    hb_tag_t::new(b"pstf"),
+    hb_tag_t::new(b"vatu"),
+    hb_tag_t::new(b"cjct"),
 ];
 
 const TOPOGRAPHICAL_FEATURES: &[hb_tag_t] = &[
-    hb_tag_t::from_bytes(b"isol"),
-    hb_tag_t::from_bytes(b"init"),
-    hb_tag_t::from_bytes(b"medi"),
-    hb_tag_t::from_bytes(b"fina"),
+    hb_tag_t::new(b"isol"),
+    hb_tag_t::new(b"init"),
+    hb_tag_t::new(b"medi"),
+    hb_tag_t::new(b"fina"),
 ];
 
 // Same order as use_topographical_features.
@@ -134,11 +134,11 @@ enum JoiningForm {
 
 // These features are applied all at once, after reordering and clearing syllables.
 const OTHER_FEATURES: &[hb_tag_t] = &[
-    hb_tag_t::from_bytes(b"abvs"),
-    hb_tag_t::from_bytes(b"blws"),
-    hb_tag_t::from_bytes(b"haln"),
-    hb_tag_t::from_bytes(b"pres"),
-    hb_tag_t::from_bytes(b"psts"),
+    hb_tag_t::new(b"abvs"),
+    hb_tag_t::new(b"blws"),
+    hb_tag_t::new(b"haln"),
+    hb_tag_t::new(b"pres"),
+    hb_tag_t::new(b"psts"),
 ];
 
 impl hb_glyph_info_t {
@@ -172,7 +172,7 @@ impl UniversalShapePlan {
         }
 
         UniversalShapePlan {
-            rphf_mask: plan.ot_map.get_1_mask(hb_tag_t::from_bytes(b"rphf")),
+            rphf_mask: plan.ot_map.get_1_mask(hb_tag_t::new(b"rphf")),
             arabic_plan,
         }
     }
@@ -185,15 +185,15 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // Default glyph pre-processing group
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"locl"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"locl"), F_PER_SYLLABLE, 1);
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"ccmp"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"ccmp"), F_PER_SYLLABLE, 1);
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"nukt"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"nukt"), F_PER_SYLLABLE, 1);
     planner.ot_map.enable_feature(
-        hb_tag_t::from_bytes(b"akhn"),
+        hb_tag_t::new(b"akhn"),
         F_MANUAL_ZWJ | F_PER_SYLLABLE,
         1,
     );
@@ -203,7 +203,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
         .ot_map
         .add_gsub_pause(Some(crate::hb::ot_layout::_hb_clear_substitution_flags));
     planner.ot_map.add_feature(
-        hb_tag_t::from_bytes(b"rphf"),
+        hb_tag_t::new(b"rphf"),
         F_MANUAL_ZWJ | F_PER_SYLLABLE,
         1,
     );
@@ -212,7 +212,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
         .ot_map
         .add_gsub_pause(Some(crate::hb::ot_layout::_hb_clear_substitution_flags));
     planner.ot_map.enable_feature(
-        hb_tag_t::from_bytes(b"pref"),
+        hb_tag_t::new(b"pref"),
         F_MANUAL_ZWJ | F_PER_SYLLABLE,
         1,
     );

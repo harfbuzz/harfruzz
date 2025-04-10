@@ -216,7 +216,7 @@ fn handle_variation_selector_cluster(
     while buffer.idx < end - 1 && buffer.successful {
         if buffer.cur(1).as_char().is_variation_selector() {
             if let Some(glyph_id) =
-                face.glyph_variation_index(buffer.cur(0).as_char(), buffer.cur(1).as_char())
+                face.get_nominal_variant_glyph(buffer.cur(0).as_char(), buffer.cur(1).as_char())
             {
                 buffer.cur_mut(0).set_glyph_index(u32::from(glyph_id.0));
                 let unicode = buffer.cur(0).glyph_id;

@@ -1,4 +1,4 @@
-use super::hb_tag_t;
+use super::{common::TagExt, hb_tag_t};
 
 pub struct TextParser<'a> {
     pos: usize,

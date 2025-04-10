@@ -68,17 +68,17 @@ fn get_joining_type(u: char, gc: hb_unicode_general_category_t) -> hb_arabic_joi
 }
 
 fn feature_is_syriac(tag: hb_tag_t) -> bool {
-    matches!(tag.to_bytes()[3], b'2' | b'3')
+    matches!(tag.to_be_bytes()[3], b'2' | b'3')
 }
 
 const ARABIC_FEATURES: &[hb_tag_t] = &[
-    hb_tag_t::from_bytes(b"isol"),
-    hb_tag_t::from_bytes(b"fina"),
-    hb_tag_t::from_bytes(b"fin2"),
-    hb_tag_t::from_bytes(b"fin3"),
-    hb_tag_t::from_bytes(b"medi"),
-    hb_tag_t::from_bytes(b"med2"),
-    hb_tag_t::from_bytes(b"init"),
+    hb_tag_t::new(b"isol"),
+    hb_tag_t::new(b"fina"),
+    hb_tag_t::new(b"fin2"),
+    hb_tag_t::new(b"fin3"),
+    hb_tag_t::new(b"medi"),
+    hb_tag_t::new(b"med2"),
+    hb_tag_t::new(b"init"),
 ];
 
 mod arabic_action_t {
@@ -204,15 +204,15 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
 
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"stch"), F_NONE, 1);
+        .enable_feature(hb_tag_t::new(b"stch"), F_NONE, 1);
     planner.ot_map.add_gsub_pause(Some(record_stch));
 
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"ccmp"), F_MANUAL_ZWJ, 1);
+        .enable_feature(hb_tag_t::new(b"ccmp"), F_MANUAL_ZWJ, 1);
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"locl"), F_MANUAL_ZWJ, 1);
+        .enable_feature(hb_tag_t::new(b"locl"), F_MANUAL_ZWJ, 1);
 
     planner.ot_map.add_gsub_pause(None);
 
@@ -230,7 +230,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // the main ligating features as MANUAL_ZWJ.
 
     planner.ot_map.enable_feature(
-        hb_tag_t::from_bytes(b"rlig"),
+        hb_tag_t::new(b"rlig"),
         F_MANUAL_ZWJ | F_HAS_FALLBACK,
         1,
     );
@@ -243,18 +243,18 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // See 98460779bae19e4d64d29461ff154b3527bf8420
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"calt"), F_MANUAL_ZWJ, 1);
+        .enable_feature(hb_tag_t::new(b"calt"), F_MANUAL_ZWJ, 1);
     /* https://github.com/harfbuzz/harfbuzz/issues/1573 */
-    if !planner.ot_map.has_feature(hb_tag_t::from_bytes(b"rclt")) {
+    if !planner.ot_map.has_feature(hb_tag_t::new(b"rclt")) {
         planner.ot_map.add_gsub_pause(None);
     }
 
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"liga"), F_MANUAL_ZWJ, 1);
+        .enable_feature(hb_tag_t::new(b"liga"), F_MANUAL_ZWJ, 1);
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"clig"), F_MANUAL_ZWJ, 1);
+        .enable_feature(hb_tag_t::new(b"clig"), F_MANUAL_ZWJ, 1);
 
     // The spec includes 'cswh'.  Earlier versions of Windows
     // used to enable this by default, but testing suggests
@@ -268,7 +268,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // planner.ot_map.enable_feature(feature::CONTEXTUAL_SWASH, F_MANUAL_ZWJ, 1);
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"mset"), F_MANUAL_ZWJ, 1);
+        .enable_feature(hb_tag_t::new(b"mset"), F_MANUAL_ZWJ, 1);
 }
 
 pub struct arabic_shape_plan_t {
@@ -281,7 +281,7 @@ pub struct arabic_shape_plan_t {
 }
 
 pub fn data_create_arabic(plan: &hb_ot_shape_plan_t) -> arabic_shape_plan_t {
-    let has_stch = plan.ot_map.get_1_mask(hb_tag_t::from_bytes(b"stch")) != 0;
+    let has_stch = plan.ot_map.get_1_mask(hb_tag_t::new(b"stch")) != 0;
 
     let mut mask_array = [0; ARABIC_FEATURES.len() + 1];
     for i in 0..ARABIC_FEATURES.len() {

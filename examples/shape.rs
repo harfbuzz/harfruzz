@@ -1,6 +1,9 @@
 use std::path::PathBuf;
 use std::str::FromStr;
 
+use harfruzz::ShaperFont;
+use read_fonts::{types::{F2Dot14, Fixed}, FontRef, TableProvider};
+
 const HELP: &str = "\
 USAGE:
     shape [OPTIONS] <FONT-FILE> [TEXT]
@@ -149,13 +152,16 @@ fn main() {
     }
 
     let font_data = std::fs::read(font_path).unwrap();
-    let mut face = harfruzz::Face::from_slice(&font_data, args.face_index).unwrap();
+    let font = FontRef::from_index(&font_data, args.face_index).unwrap();
+    let mut coords = vec![];
+    if let Ok(fvar) = font.fvar() {
+        coords.resize(fvar.axis_count() as usize, F2Dot14::default());
+        fvar.user_to_normalized(None, args.variations.iter().map(|var| (var.tag, Fixed::from_f64(var.value as f64))), &mut coords);
+    }
+    let shaper_font = ShaperFont::new(&font);
+    let mut face = shaper_font.shaper(&font, &coords);
 
     face.set_points_per_em(args.font_ptem);
-
-    if !args.variations.is_empty() {
-        face.set_variations(&args.variations);
-    }
 
     let text = if let Some(path) = args.text_file {
         std::fs::read_to_string(path).unwrap()

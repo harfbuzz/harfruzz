@@ -23,6 +23,7 @@ unicode-properties = { version = "0.1", default-features = false, features = ["g
 unicode-script = "0.5"
 wasmi = { version = "0.40", optional = true }
 log = "0.4"
+read-fonts = { version = "0.28.0", default-features = false }
 
 # TODO: remove entirely
 [dependencies.ttf-parser]
@@ -38,7 +39,7 @@ features = [
 
 [features]
 default = ["std"]
-std = ["ttf-parser/std"]
+std = ["ttf-parser/std", "read-fonts/std"]
 wasm-shaper = ["std", "dep:wasmi"]
 
 [dev-dependencies]

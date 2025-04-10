@@ -47,16 +47,16 @@ const MYANMAR_FEATURES: &[hb_tag_t] = &[
     // Basic features.
     // These features are applied in order, one at a time, after reordering,
     // constrained to the syllable.
-    hb_tag_t::from_bytes(b"rphf"),
-    hb_tag_t::from_bytes(b"pref"),
-    hb_tag_t::from_bytes(b"blwf"),
-    hb_tag_t::from_bytes(b"pstf"),
+    hb_tag_t::new(b"rphf"),
+    hb_tag_t::new(b"pref"),
+    hb_tag_t::new(b"blwf"),
+    hb_tag_t::new(b"pstf"),
     // Other features.
     // These features are applied all at once after clearing syllables.
-    hb_tag_t::from_bytes(b"pres"),
-    hb_tag_t::from_bytes(b"abvs"),
-    hb_tag_t::from_bytes(b"blws"),
-    hb_tag_t::from_bytes(b"psts"),
+    hb_tag_t::new(b"pres"),
+    hb_tag_t::new(b"abvs"),
+    hb_tag_t::new(b"blws"),
+    hb_tag_t::new(b"psts"),
 ];
 
 impl hb_glyph_info_t {
@@ -74,12 +74,12 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
 
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"locl"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"locl"), F_PER_SYLLABLE, 1);
     // The Indic specs do not require ccmp, but we apply it here since if
     // there is a use of it, it's typically at the beginning.
     planner
         .ot_map
-        .enable_feature(hb_tag_t::from_bytes(b"ccmp"), F_PER_SYLLABLE, 1);
+        .enable_feature(hb_tag_t::new(b"ccmp"), F_PER_SYLLABLE, 1);
 
     planner.ot_map.add_gsub_pause(Some(reorder_myanmar));
 

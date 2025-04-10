@@ -1,4 +1,5 @@
 use alloc::{string::String, vec::Vec};
+use read_fonts::types::GlyphId16;
 use core::cmp::min;
 use core::convert::TryFrom;
 use ttf_parser::GlyphId;
@@ -202,6 +203,17 @@ impl hb_glyph_info_t {
     pub(crate) fn as_glyph(&self) -> GlyphId {
         debug_assert!(self.glyph_id <= u32::from(u16::MAX));
         GlyphId(self.glyph_id as u16)
+    }
+
+    #[inline]
+    pub(crate) fn as_gid(&self) -> Option<read_fonts::types::GlyphId> {
+        Some(self.glyph_id.into())
+    }
+
+    #[inline]
+    pub(crate) fn as_gid16(&self) -> Option<GlyphId16> {
+        let gid: u16 = self.glyph_id.try_into().ok()?;
+        Some(gid.into())
     }
 
     // Var allocation: unicode_props

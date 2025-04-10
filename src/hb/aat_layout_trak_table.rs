@@ -13,7 +13,7 @@ pub fn apply(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer
         return None;
     }
 
-    let trak = face.tables().trak?;
+    let trak = face.aat_tables.trak?;
 
     if !buffer.have_positions {
         buffer.clear_positions();
