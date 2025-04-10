@@ -5,7 +5,7 @@ use ttf_parser::GlyphId;
 // harfbuzz.
 type mask_t = u64;
 
-pub trait hb_set_digest_ext: Clone {
+pub trait hb_set_digest_ext: Clone + Default {
     type A;
     // Instead of `init()`
     fn new() -> Self;
@@ -17,7 +17,7 @@ pub trait hb_set_digest_ext: Clone {
     fn may_have_glyph(&self, g: GlyphId) -> bool;
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default, Debug)]
 pub struct hb_set_digest_bits_pattern_t<const shift: u8> {
     mask: mask_t,
 }
@@ -112,7 +112,7 @@ impl<const shift: u8> hb_set_digest_ext for hb_set_digest_bits_pattern_t<shift> 
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Default, Debug)]
 pub struct hb_set_digest_combiner_t<head_t, tail_t>
 where
     head_t: hb_set_digest_ext,
