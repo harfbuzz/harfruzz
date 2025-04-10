@@ -8,7 +8,7 @@ use ttf_parser::GlyphId;
 use super::algs::*;
 use super::buffer::hb_buffer_t;
 use super::ot_layout::*;
-use super::ot_layout_gsubgpos::{WouldApply, WouldApplyContext};
+use super::ot_layout_gsubgpos::WouldApplyContext;
 use super::ot_map::*;
 use super::ot_shape::*;
 use super::ot_shape_normalize::*;

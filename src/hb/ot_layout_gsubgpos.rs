@@ -540,11 +540,6 @@ pub(crate) fn apply_lookup(
     ctx.buffer.move_to(end.try_into().unwrap());
 }
 
-/// Value represents glyph class.
-fn match_class(class_def: ClassDefinition<'_>) -> impl Fn(GlyphId, u16) -> bool + '_ {
-    move |glyph, value| class_def.get(glyph) == value
-}
-
 /// Find out whether a lookup would be applied.
 pub trait WouldApply {
     /// Whether the lookup would be applied.
@@ -563,8 +558,6 @@ pub struct WouldApplyContext<'a> {
 }
 
 pub mod OT {
-    use read_fonts::{tables::variations::ItemVariationStore, types::F2Dot14};
-
     use super::*;
     use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
 

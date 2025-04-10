@@ -106,7 +106,7 @@ pub mod glyph_flag {
 ///
 /// All positions are relative to the current point.
 #[repr(C)]
-#[derive(Clone, Copy, Default, Debug)]
+#[derive(Clone, Copy, Default, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct GlyphPosition {
     /// How much the line advances after drawing this glyph when setting text in
     /// horizontal direction.
@@ -122,9 +122,6 @@ pub struct GlyphPosition {
     pub y_offset: i32,
     pub(crate) var: u32,
 }
-
-unsafe impl bytemuck::Zeroable for GlyphPosition {}
-unsafe impl bytemuck::Pod for GlyphPosition {}
 
 impl GlyphPosition {
     #[inline]
@@ -158,7 +155,7 @@ impl GlyphPosition {
 
 /// A glyph info.
 #[repr(C)]
-#[derive(Clone, Copy, Default, Debug)]
+#[derive(Clone, Copy, Default, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct hb_glyph_info_t {
     // NOTE: Stores a Unicode codepoint before shaping and a glyph ID after.
     //       Just like harfbuzz, we are using the same variable for two purposes.
@@ -175,9 +172,6 @@ pub struct hb_glyph_info_t {
     pub(crate) var1: u32,
     pub(crate) var2: u32,
 }
-
-unsafe impl bytemuck::Zeroable for hb_glyph_info_t {}
-unsafe impl bytemuck::Pod for hb_glyph_info_t {}
 
 impl hb_glyph_info_t {
     /// Indicates that if input text is broken at the beginning of the cluster this glyph
@@ -203,11 +197,6 @@ impl hb_glyph_info_t {
     pub(crate) fn as_glyph(&self) -> GlyphId {
         debug_assert!(self.glyph_id <= u32::from(u16::MAX));
         GlyphId(self.glyph_id as u16)
-    }
-
-    #[inline]
-    pub(crate) fn as_gid(&self) -> Option<read_fonts::types::GlyphId> {
-        Some(self.glyph_id.into())
     }
 
     #[inline]

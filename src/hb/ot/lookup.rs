@@ -416,7 +416,7 @@ pub struct SubtableInfo {
 }
 
 impl SubtableInfo {
-    pub fn primary_coverage_table<'a>(
+    pub(crate) fn _primary_coverage_table<'a>(
         &self,
         table_data: &'a [u8],
     ) -> Result<CoverageTable<'a>, ReadError> {
@@ -425,8 +425,8 @@ impl SubtableInfo {
         CoverageTable::read(data)
     }
 
-    pub fn primary_coverage(&self, table_data: &[u8], glyph_id: GlyphId) -> Option<u16> {
-        let coverage = self.primary_coverage_table(table_data).ok()?;
+    pub(crate) fn _primary_coverage(&self, table_data: &[u8], glyph_id: GlyphId) -> Option<u16> {
+        let coverage = self._primary_coverage_table(table_data).ok()?;
         coverage.get(glyph_id)
     }
 

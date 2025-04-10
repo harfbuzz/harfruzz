@@ -1,52 +1,18 @@
 //! OpenType GPOS lookups.
 
-use super::lookup::{LookupCache, LookupInfo};
-use crate::{
-    hb::{ot_layout::TableIndex, ot_layout_gsubgpos::OT::hb_ot_apply_context_t},
-    GlyphPosition,
-};
+use crate::{hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t, GlyphPosition};
 use read_fonts::{
     tables::{
-        gpos::{AnchorTable, DeviceOrVariationIndex, Gpos, ValueRecord},
+        gpos::{DeviceOrVariationIndex, ValueRecord},
         variations::DeltaSetIndex,
     },
-    FontData, ReadError, TableProvider,
+    FontData, ReadError,
 };
 
 mod cursive;
 mod mark;
 mod pair;
 mod single;
-
-#[derive(Clone)]
-pub struct GposTable<'a> {
-    pub table: Gpos<'a>,
-    pub lookups: LookupCache,
-}
-
-impl<'a> GposTable<'a> {
-    pub fn try_new(font: &impl TableProvider<'a>) -> Option<Self> {
-        let table = font.gpos().ok()?;
-        let mut lookups = LookupCache::new();
-        lookups.create_all(&table);
-        Some(Self { table, lookups })
-    }
-}
-
-impl<'a> crate::hb::ot_layout::LayoutTable for GposTable<'a> {
-    const INDEX: TableIndex = TableIndex::GPOS;
-    const IN_PLACE: bool = true;
-
-    type Lookup = LookupInfo;
-
-    fn get_lookup(&self, index: ttf_parser::opentype_layout::LookupIndex) -> Option<&Self::Lookup> {
-        let lookup = self.lookups.get(index)?;
-        if lookup.subtables_count == 0 {
-            return None;
-        }
-        Some(lookup)
-    }
-}
 
 struct Value<'a> {
     record: ValueRecord,

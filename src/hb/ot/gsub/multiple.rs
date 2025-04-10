@@ -5,11 +5,7 @@ use crate::hb::ot_layout::{
 };
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext};
-<<<<<<<< HEAD:src/hb/ot/gsub/multiple.rs
 use read_fonts::tables::gsub::MultipleSubstFormat1;
-========
-use skrifa::raw::tables::gsub::MultipleSubstFormat1;
->>>>>>>> main:src/hb/fonta/ot/gsub/multiple.rs
 use ttf_parser::GlyphId;
 
 impl WouldApply for MultipleSubstFormat1<'_> {
@@ -17,22 +13,14 @@ impl WouldApply for MultipleSubstFormat1<'_> {
         ctx.glyphs.len() == 1
             && self
                 .coverage()
-<<<<<<<< HEAD:src/hb/ot/gsub/multiple.rs
                 .map(|cov| cov.get(ctx.glyphs[0].0).is_some())
-========
-                .map(|cov| cov.get(skrifa::GlyphId::from(ctx.glyphs[0].0)).is_some())
->>>>>>>> main:src/hb/fonta/ot/gsub/multiple.rs
                 .unwrap_or_default()
     }
 }
 
 impl Apply for MultipleSubstFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-<<<<<<<< HEAD:src/hb/ot/gsub/multiple.rs
         let gid = ctx.buffer.cur(0).as_glyph().0;
-========
-        let gid = ctx.buffer.cur(0).as_skrifa_glyph16();
->>>>>>>> main:src/hb/fonta/ot/gsub/multiple.rs
         let index = self.coverage().ok()?.get(gid)? as usize;
         let substs = self.sequences().get(index).ok()?.substitute_glyph_ids();
         match substs.len() {

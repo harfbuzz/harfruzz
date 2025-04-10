@@ -178,12 +178,6 @@ pub type hb_set_digest_t = hb_set_digest_combiner_t<
     >,
 >;
 
-impl Default for hb_set_digest_t {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 #[rustfmt::skip]
 #[cfg(test)]
 mod tests {

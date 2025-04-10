@@ -17,16 +17,20 @@ use super::ot::{LayoutTable, OtFontCache, OtTables};
 use super::ot_layout::TableIndex;
 use crate::Variation;
 
+/// Cached shaper state for a single font.
 pub struct ShaperFont {
     ot_cache: OtFontCache,
 }
 
 impl ShaperFont {
+    /// Creates new cached state for the given font.
     pub fn new(font: &FontRef) -> Self {
         let ot_cache = OtFontCache::new(font);
         Self { ot_cache }
     }
 
+    /// Creates a shaper instance for the given font and variation
+    /// coordinates.
     pub fn shaper<'a>(&'a self, font: &FontRef<'a>, coords: &'a [F2Dot14]) -> Shaper<'a> {
         let td_base = font.table_directory.offset_data().as_bytes().as_ptr();
         let face = if td_base != font.data.as_bytes().as_ptr() {
@@ -58,7 +62,6 @@ impl ShaperFont {
         let ot_tables = OtTables::new(font, &self.ot_cache, coords);
         let aat_tables = AatTables::new(font);
         hb_font_t {
-            font_ref: font.clone(),
             units_per_em,
             pixels_per_em: None,
             points_per_em: None,
@@ -71,13 +74,13 @@ impl ShaperFont {
     }
 }
 
+/// A shaper.
 pub type Shaper<'a> = hb_font_t<'a>;
 
 /// A font face handle.
 #[derive(Clone)]
 pub struct hb_font_t<'a> {
     pub(crate) ttfp_face: ttf_parser::Face<'a>,
-    pub(crate) font_ref: FontRef<'a>,
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
     pub(crate) points_per_em: Option<f32>,
@@ -344,7 +347,7 @@ impl<'a> hb_font_t<'a> {
     }
 }
 
-#[derive(Clone, Copy, Default)]
+#[derive(Clone, Copy, Default, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct hb_glyph_extents_t {
     pub x_bearing: i32,
@@ -352,9 +355,6 @@ pub struct hb_glyph_extents_t {
     pub width: i32,
     pub height: i32,
 }
-
-unsafe impl bytemuck::Zeroable for hb_glyph_extents_t {}
-unsafe impl bytemuck::Pod for hb_glyph_extents_t {}
 
 #[derive(Clone)]
 enum GlyphNames<'a> {
