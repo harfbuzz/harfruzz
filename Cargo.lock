@@ -164,6 +164,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "600e807b48ac55bad68a8cb75cc3c7739f139b9248f7e003e01e080f589b5288"
 dependencies = [
  "bytemuck",
+ "core_maths",
  "font-types",
 ]
 
