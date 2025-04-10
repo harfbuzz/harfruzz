@@ -1,7 +1,7 @@
 use alloc::{string::String, vec::Vec};
-use read_fonts::types::GlyphId16;
 use core::cmp::min;
 use core::convert::TryFrom;
+use read_fonts::types::GlyphId16;
 use ttf_parser::GlyphId;
 
 use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};

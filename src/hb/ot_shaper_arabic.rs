@@ -229,11 +229,9 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // however, it says a ZWJ should also mean "don't ligate".  So we run
     // the main ligating features as MANUAL_ZWJ.
 
-    planner.ot_map.enable_feature(
-        hb_tag_t::new(b"rlig"),
-        F_MANUAL_ZWJ | F_HAS_FALLBACK,
-        1,
-    );
+    planner
+        .ot_map
+        .enable_feature(hb_tag_t::new(b"rlig"), F_MANUAL_ZWJ | F_HAS_FALLBACK, 1);
 
     if planner.script == Some(script::ARABIC) {
         planner.ot_map.add_gsub_pause(Some(arabic_fallback_shape));

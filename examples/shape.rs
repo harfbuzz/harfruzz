@@ -2,7 +2,10 @@ use std::path::PathBuf;
 use std::str::FromStr;
 
 use harfruzz::ShaperFont;
-use read_fonts::{types::{F2Dot14, Fixed}, FontRef, TableProvider};
+use read_fonts::{
+    types::{F2Dot14, Fixed},
+    FontRef, TableProvider,
+};
 
 const HELP: &str = "\
 USAGE:
@@ -156,7 +159,13 @@ fn main() {
     let mut coords = vec![];
     if let Ok(fvar) = font.fvar() {
         coords.resize(fvar.axis_count() as usize, F2Dot14::default());
-        fvar.user_to_normalized(None, args.variations.iter().map(|var| (var.tag, Fixed::from_f64(var.value as f64))), &mut coords);
+        fvar.user_to_normalized(
+            None,
+            args.variations
+                .iter()
+                .map(|var| (var.tag, Fixed::from_f64(var.value as f64))),
+            &mut coords,
+        );
     }
     let shaper_font = ShaperFont::new(&font);
     let mut face = shaper_font.shaper(&font, &coords);

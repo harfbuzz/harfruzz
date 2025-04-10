@@ -51,8 +51,8 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         let script_fallback_mark_positioning = shaper.fallback_position;
 
         // https://github.com/harfbuzz/harfbuzz/issues/2124
-        let apply_morx =
-            face.aat_tables.morx.is_some() && (direction.is_horizontal() || face.ot_tables.gsub.is_none());
+        let apply_morx = face.aat_tables.morx.is_some()
+            && (direction.is_horizontal() || face.ot_tables.gsub.is_none());
 
         // https://github.com/harfbuzz/harfbuzz/issues/1528
         if apply_morx && shaper as *const _ != &DEFAULT_SHAPER as *const _ {
@@ -96,40 +96,29 @@ impl<'a> hb_ot_shape_planner_t<'a> {
 
         self.ot_map.is_simple = true;
 
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"rvrn"), empty, 1);
+        self.ot_map.enable_feature(hb_tag_t::new(b"rvrn"), empty, 1);
         self.ot_map.add_gsub_pause(None);
 
         match self.direction {
             Direction::LeftToRight => {
-                self.ot_map
-                    .enable_feature(hb_tag_t::new(b"ltra"), empty, 1);
-                self.ot_map
-                    .enable_feature(hb_tag_t::new(b"ltrm"), empty, 1);
+                self.ot_map.enable_feature(hb_tag_t::new(b"ltra"), empty, 1);
+                self.ot_map.enable_feature(hb_tag_t::new(b"ltrm"), empty, 1);
             }
             Direction::RightToLeft => {
-                self.ot_map
-                    .enable_feature(hb_tag_t::new(b"rtla"), empty, 1);
-                self.ot_map
-                    .add_feature(hb_tag_t::new(b"rtlm"), empty, 1);
+                self.ot_map.enable_feature(hb_tag_t::new(b"rtla"), empty, 1);
+                self.ot_map.add_feature(hb_tag_t::new(b"rtlm"), empty, 1);
             }
             _ => {}
         }
 
         // Automatic fractions.
-        self.ot_map
-            .add_feature(hb_tag_t::new(b"frac"), empty, 1);
-        self.ot_map
-            .add_feature(hb_tag_t::new(b"numr"), empty, 1);
-        self.ot_map
-            .add_feature(hb_tag_t::new(b"dnom"), empty, 1);
+        self.ot_map.add_feature(hb_tag_t::new(b"frac"), empty, 1);
+        self.ot_map.add_feature(hb_tag_t::new(b"numr"), empty, 1);
+        self.ot_map.add_feature(hb_tag_t::new(b"dnom"), empty, 1);
 
         // Random!
-        self.ot_map.enable_feature(
-            hb_tag_t::new(b"rand"),
-            F_RANDOM,
-            hb_ot_map_t::MAX_VALUE,
-        );
+        self.ot_map
+            .enable_feature(hb_tag_t::new(b"rand"), F_RANDOM, hb_ot_map_t::MAX_VALUE);
 
         // Tracking.  We enable dummy feature here just to allow disabling
         // AAT 'trak' table using features.
@@ -137,20 +126,16 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         self.ot_map
             .enable_feature(hb_tag_t::new(b"trak"), F_HAS_FALLBACK, 1);
 
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"Harf"), empty, 1); // Considered required.
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"HARF"), empty, 1); // Considered discretionary.
+        self.ot_map.enable_feature(hb_tag_t::new(b"Harf"), empty, 1); // Considered required.
+        self.ot_map.enable_feature(hb_tag_t::new(b"HARF"), empty, 1); // Considered discretionary.
 
         if let Some(func) = self.shaper.collect_features {
             self.ot_map.is_simple = false;
             func(self);
         }
 
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"Buzz"), empty, 1); // Considered required.
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"BUZZ"), empty, 1); // Considered discretionary.
+        self.ot_map.enable_feature(hb_tag_t::new(b"Buzz"), empty, 1); // Considered required.
+        self.ot_map.enable_feature(hb_tag_t::new(b"BUZZ"), empty, 1); // Considered discretionary.
 
         for &(tag, flags) in COMMON_FEATURES {
             self.ot_map.add_feature(tag, flags, 1);

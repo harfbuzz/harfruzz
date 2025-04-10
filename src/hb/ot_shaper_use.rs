@@ -192,30 +192,24 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     planner
         .ot_map
         .enable_feature(hb_tag_t::new(b"nukt"), F_PER_SYLLABLE, 1);
-    planner.ot_map.enable_feature(
-        hb_tag_t::new(b"akhn"),
-        F_MANUAL_ZWJ | F_PER_SYLLABLE,
-        1,
-    );
+    planner
+        .ot_map
+        .enable_feature(hb_tag_t::new(b"akhn"), F_MANUAL_ZWJ | F_PER_SYLLABLE, 1);
 
     // Reordering group
     planner
         .ot_map
         .add_gsub_pause(Some(crate::hb::ot_layout::_hb_clear_substitution_flags));
-    planner.ot_map.add_feature(
-        hb_tag_t::new(b"rphf"),
-        F_MANUAL_ZWJ | F_PER_SYLLABLE,
-        1,
-    );
+    planner
+        .ot_map
+        .add_feature(hb_tag_t::new(b"rphf"), F_MANUAL_ZWJ | F_PER_SYLLABLE, 1);
     planner.ot_map.add_gsub_pause(Some(record_rphf));
     planner
         .ot_map
         .add_gsub_pause(Some(crate::hb::ot_layout::_hb_clear_substitution_flags));
-    planner.ot_map.enable_feature(
-        hb_tag_t::new(b"pref"),
-        F_MANUAL_ZWJ | F_PER_SYLLABLE,
-        1,
-    );
+    planner
+        .ot_map
+        .enable_feature(hb_tag_t::new(b"pref"), F_MANUAL_ZWJ | F_PER_SYLLABLE, 1);
     planner.ot_map.add_gsub_pause(Some(record_pref));
 
     // Orthographic unit shaping group

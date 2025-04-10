@@ -1,5 +1,7 @@
 use read_fonts::{
-    tables::cmap::{Cmap, Cmap14, CmapSubtable, MapVariant, PlatformId}, types::GlyphId, FontRef, TableProvider
+    tables::cmap::{Cmap, Cmap14, CmapSubtable, MapVariant, PlatformId},
+    types::GlyphId,
+    FontRef, TableProvider,
 };
 
 // https://docs.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3

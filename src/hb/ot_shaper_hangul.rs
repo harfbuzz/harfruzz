@@ -39,9 +39,7 @@ fn override_features_hangul(planner: &mut hb_ot_shape_planner_t) {
     // Uniscribe does not apply 'calt' for Hangul, and certain fonts
     // (Noto Sans CJK, Source Sans Han, etc) apply all of jamo lookups
     // in calt, which is not desirable.
-    planner
-        .ot_map
-        .disable_feature(hb_tag_t::new(b"calt"));
+    planner.ot_map.disable_feature(hb_tag_t::new(b"calt"));
 }
 
 struct hangul_shape_plan_t {

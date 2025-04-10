@@ -56,10 +56,7 @@ impl Apply for MarkBasePosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let buffer = &ctx.buffer;
         let mark_glyph = ctx.buffer.cur(0).as_glyph();
-        let mark_index = self
-            .mark_coverage()
-            .ok()?
-            .get(mark_glyph.0)?;
+        let mark_index = self.mark_coverage().ok()?.get(mark_glyph.0)?;
 
         let base_coverage = self.base_coverage().ok()?;
 
@@ -81,9 +78,7 @@ impl Apply for MarkBasePosFormat1<'_> {
             if _match == match_t::MATCH {
                 // https://github.com/harfbuzz/harfbuzz/issues/4124
                 if !accept(buffer, j - 1)
-                    && !base_coverage
-                        .get(buffer.info[j - 1].as_glyph().0)
-                        .is_some()
+                    && !base_coverage.get(buffer.info[j - 1].as_glyph().0).is_some()
                 {
                     _match = match_t::SKIP;
                 }
@@ -152,10 +147,7 @@ impl Apply for MarkMarkPosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let buffer = &ctx.buffer;
         let mark1_glyph = ctx.buffer.cur(0).as_glyph().0;
-        let mark1_index = self
-            .mark1_coverage()
-            .ok()?
-            .get(mark1_glyph)?;
+        let mark1_index = self.mark1_coverage().ok()?.get(mark1_glyph)?;
 
         // Now we search backwards for a suitable mark glyph until a non-mark glyph
         let mut iter = skipping_iterator_t::new(ctx, buffer.idx, false);
@@ -197,10 +189,7 @@ impl Apply for MarkMarkPosFormat1<'_> {
         }
 
         let mark2_glyph = buffer.info[iter_idx].as_glyph().0;
-        let mark2_index = self
-            .mark2_coverage()
-            .ok()?
-            .get(mark2_glyph)?;
+        let mark2_index = self.mark2_coverage().ok()?.get(mark2_glyph)?;
 
         let mark1_array = self.mark1_array().ok()?;
         let mark1_record = mark1_array.mark_records().get(mark1_index as usize)?;

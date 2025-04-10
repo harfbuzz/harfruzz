@@ -136,8 +136,7 @@ impl hb_aat_map_builder_t {
                     && mapping.selector_to_enable
                         == HB_AAT_LAYOUT_FEATURE_SELECTOR_LOWER_CASE_SMALL_CAPS
                 {
-                    feature_name = feat
-                        .find(HB_AAT_LAYOUT_FEATURE_TYPE_LETTER_CASE as u16);
+                    feature_name = feat.find(HB_AAT_LAYOUT_FEATURE_TYPE_LETTER_CASE as u16);
                 }
             }
         }

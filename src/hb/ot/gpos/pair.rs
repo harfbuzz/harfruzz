@@ -104,7 +104,9 @@ fn find_second_glyph<'a>(
     while lo < hi {
         let mid = (lo + hi) / 2;
         let record_offset = set_offset + 2 + mid * record_size;
-        let glyph_id = base_data.read_at::<read_fonts::types::GlyphId16>(record_offset).ok()?;
+        let glyph_id = base_data
+            .read_at::<read_fonts::types::GlyphId16>(record_offset)
+            .ok()?;
         if glyph_id < second_glyph {
             lo = mid + 1
         } else if glyph_id > second_glyph {
