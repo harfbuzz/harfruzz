@@ -160,7 +160,6 @@ impl<'a> GlyphMetrics<'a> {
                 extents.y_min + (diff >> 1)
             }
         } else {
-            std::println!("here!");
             self.ascent as i32
         };
         Some(origin)
