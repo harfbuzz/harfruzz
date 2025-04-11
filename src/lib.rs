@@ -13,7 +13,7 @@ extern crate alloc;
 
 mod hb;
 
-pub use ttf_parser;
+pub use read_fonts::FontRef;
 
 pub use hb::buffer::hb_glyph_info_t as GlyphInfo;
 pub use hb::buffer::{GlyphBuffer, GlyphPosition, UnicodeBuffer};

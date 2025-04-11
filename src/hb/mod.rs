@@ -31,6 +31,8 @@ mod aat_map;
 mod charmap;
 pub mod common;
 pub mod face;
+mod glyph_metrics;
+mod glyph_names;
 mod kerning;
 mod machine_cursor;
 mod ot;
@@ -65,7 +67,6 @@ mod ot_shaper_use_machine;
 mod ot_shaper_use_table;
 mod aat_layout_common;
 mod ot_shaper_vowel_constraints;
-mod paint_extents;
 mod set_digest;
 pub mod shape;
 #[cfg(feature = "wasm-shaper")]

@@ -22,7 +22,7 @@ pub fn insert_dotted_circles(
     }
 
     let dottedcircle_glyph = match face.get_nominal_glyph(0x25CC) {
-        Some(g) => g.0 as u32,
+        Some(g) => g.to_u32(),
         None => return false,
     };
 

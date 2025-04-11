@@ -5,7 +5,7 @@ use read_fonts::tables::gpos::{SinglePosFormat1, SinglePosFormat2};
 
 impl Apply for SinglePosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = ctx.buffer.cur(0).as_glyph().0;
+        let glyph = ctx.buffer.cur(0).as_glyph();
         self.coverage().ok()?.get(glyph)?;
         let record = self.value_record();
         let value = Value {
@@ -20,7 +20,7 @@ impl Apply for SinglePosFormat1<'_> {
 
 impl Apply for SinglePosFormat2<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = ctx.buffer.cur(0).as_glyph().0;
+        let glyph = ctx.buffer.cur(0).as_glyph();
         let index = self.coverage().ok()?.get(glyph)? as usize;
         let record = self.value_records().get(index).ok()?;
         let value = Value {

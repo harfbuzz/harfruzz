@@ -6,9 +6,8 @@ use super::buffer::*;
 use super::ot_layout_gsubgpos::{Apply, OT};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
-use super::{hb_font_t, hb_glyph_info_t, hb_tag_t};
+use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
-use ttf_parser::opentype_layout::{FeatureIndex, LanguageIndex, LookupIndex, ScriptIndex};
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
@@ -87,7 +86,7 @@ pub trait LayoutTable {
     type Lookup: LayoutLookup;
 
     /// Get the lookup at the specified index.
-    fn get_lookup(&self, index: LookupIndex) -> Option<&Self::Lookup>;
+    fn get_lookup(&self, index: u16) -> Option<&Self::Lookup>;
 }
 
 /// A lookup in a layout table.
@@ -100,26 +99,6 @@ pub trait LayoutLookup: Apply {
 
     /// The digest of the lookup.
     fn digest(&self) -> &hb_set_digest_t;
-}
-
-pub trait LayoutTableExt {
-    fn select_script(&self, script_tags: &[hb_tag_t]) -> Option<(bool, ScriptIndex, hb_tag_t)>;
-    fn select_script_language(
-        &self,
-        script_index: ScriptIndex,
-        lang_tags: &[hb_tag_t],
-    ) -> Option<LanguageIndex>;
-    fn get_required_language_feature(
-        &self,
-        script_index: ScriptIndex,
-        lang_index: Option<LanguageIndex>,
-    ) -> Option<(FeatureIndex, hb_tag_t)>;
-    fn find_language_feature(
-        &self,
-        script_index: ScriptIndex,
-        lang_index: Option<LanguageIndex>,
-        feature_tag: hb_tag_t,
-    ) -> Option<FeatureIndex>;
 }
 
 /// Called before substitution lookups are performed, to ensure that glyph

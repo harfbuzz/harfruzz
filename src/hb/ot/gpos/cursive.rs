@@ -8,7 +8,7 @@ use read_fonts::tables::gpos::CursivePosFormat1;
 
 impl Apply for CursivePosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let this = ctx.buffer.cur(0).as_glyph().0;
+        let this = ctx.buffer.cur(0).as_glyph();
 
         let coverage = self.coverage().ok()?;
         let index_this = coverage.get(this)? as usize;
@@ -26,7 +26,7 @@ impl Apply for CursivePosFormat1<'_> {
         }
 
         let i = iter.index();
-        let prev = ctx.buffer.info[i].as_glyph().0;
+        let prev = ctx.buffer.info[i].as_glyph();
         let index_prev = coverage.get(prev)? as usize;
         let Some(exit_prev) = records
             .get(index_prev)

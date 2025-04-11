@@ -3,7 +3,7 @@ use core::cmp;
 use core::convert::TryFrom;
 use core::ops::Range;
 
-use ttf_parser::GlyphId;
+use read_fonts::types::GlyphId;
 
 use super::algs::*;
 use super::buffer::hb_buffer_t;
@@ -868,7 +868,7 @@ fn initial_reordering_consonant_syllable(
                 if indic_plan.config.reph_mode == RephMode::Explicit {
                     buffer.info[start + 2].as_glyph()
                 } else {
-                    GlyphId(0)
+                    GlyphId::NOTDEF
                 },
             ];
             if indic_plan
@@ -1377,7 +1377,7 @@ fn final_reordering_impl(
     let mut virama_glyph = None;
     if indic_plan.config.virama != 0 {
         if let Some(g) = face.get_nominal_glyph(indic_plan.config.virama) {
-            virama_glyph = Some(g.0 as u32);
+            virama_glyph = Some(g.to_u32());
         }
     }
 

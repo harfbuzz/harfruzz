@@ -3,15 +3,15 @@ use crate::hb::ot_layout_gsubgpos::{
     ligate_input, match_glyph, match_input, Apply, WouldApply, WouldApplyContext,
 };
 use read_fonts::tables::gsub::{Ligature, LigatureSet, LigatureSubstFormat1};
-use ttf_parser::GlyphId;
+use read_fonts::types::GlyphId;
 
 impl WouldApply for Ligature<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
         let components = self.component_glyph_ids();
         ctx.glyphs.len() == components.len() + 1
             && components
-                .into_iter()
-                .map(|comp| GlyphId(comp.get().to_u16()))
+                .iter()
+                .map(|comp| GlyphId::from(comp.get()))
                 .enumerate()
                 .all(|(i, comp)| ctx.glyphs[i + 1] == comp)
     }
@@ -23,12 +23,12 @@ impl Apply for Ligature<'_> {
         // as a "ligated" substitution.
         let components = self.component_glyph_ids();
         if components.is_empty() {
-            ctx.replace_glyph(GlyphId(self.ligature_glyph().to_u16()));
+            ctx.replace_glyph(self.ligature_glyph().into());
             Some(())
         } else {
             let f = |glyph, index| {
-                let value = GlyphId(components.get(index as usize).unwrap().get().to_u16());
-                match_glyph(glyph, value.0)
+                let value = components.get(index as usize).unwrap().get().to_u16();
+                match_glyph(glyph, value)
             };
 
             let mut match_end = 0;
@@ -47,16 +47,16 @@ impl Apply for Ligature<'_> {
                     .unsafe_to_concat(Some(ctx.buffer.idx), Some(match_end));
                 return None;
             }
-            let count = usize::from(components.len()) + 1;
+            let count = components.len() + 1;
             ligate_input(
                 ctx,
                 count,
                 &match_positions,
                 match_end,
                 total_component_count,
-                GlyphId(self.ligature_glyph().to_u16()),
+                self.ligature_glyph().into(),
             );
-            return Some(());
+            Some(())
         }
     }
 }
@@ -85,7 +85,7 @@ impl WouldApply for LigatureSubstFormat1<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
         self.coverage()
             .ok()
-            .and_then(|coverage| coverage.get(ctx.glyphs[0].0))
+            .and_then(|coverage| coverage.get(ctx.glyphs[0]))
             .and_then(|index| self.ligature_sets().get(index as usize).ok())
             .map_or(false, |set| set.would_apply(ctx))
     }
@@ -96,7 +96,7 @@ impl Apply for LigatureSubstFormat1<'_> {
         let glyph = ctx.buffer.cur(0).as_glyph();
         self.coverage()
             .ok()
-            .and_then(|coverage| coverage.get(glyph.0))
+            .and_then(|coverage| coverage.get(glyph))
             .and_then(|index| self.ligature_sets().get(index as usize).ok())
             .and_then(|set| set.apply(ctx))
     }

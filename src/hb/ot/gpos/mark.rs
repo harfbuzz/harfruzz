@@ -56,7 +56,7 @@ impl Apply for MarkBasePosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let buffer = &ctx.buffer;
         let mark_glyph = ctx.buffer.cur(0).as_glyph();
-        let mark_index = self.mark_coverage().ok()?.get(mark_glyph.0)?;
+        let mark_index = self.mark_coverage().ok()?.get(mark_glyph)?;
 
         let base_coverage = self.base_coverage().ok()?;
 
@@ -78,7 +78,7 @@ impl Apply for MarkBasePosFormat1<'_> {
             if _match == match_t::MATCH {
                 // https://github.com/harfbuzz/harfbuzz/issues/4124
                 if !accept(buffer, j - 1)
-                    && !base_coverage.get(buffer.info[j - 1].as_glyph().0).is_some()
+                    && base_coverage.get(buffer.info[j - 1].as_glyph()).is_none()
                 {
                     _match = match_t::SKIP;
                 }
@@ -104,7 +104,7 @@ impl Apply for MarkBasePosFormat1<'_> {
         let info = &buffer.info;
 
         // Checking that matched glyph is actually a base glyph by GDEF is too strong; disabled
-        let base_glyph = info[idx as usize].as_glyph().0;
+        let base_glyph = info[idx as usize].as_glyph();
         let Some(base_index) = self.base_coverage().ok()?.get(base_glyph) else {
             ctx.buffer
                 .unsafe_to_concat_from_outbuffer(Some(idx as usize), Some(buffer.idx + 1));
@@ -146,7 +146,7 @@ fn accept(buffer: &hb_buffer_t, idx: usize) -> bool {
 impl Apply for MarkMarkPosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let buffer = &ctx.buffer;
-        let mark1_glyph = ctx.buffer.cur(0).as_glyph().0;
+        let mark1_glyph = ctx.buffer.cur(0).as_glyph();
         let mark1_index = self.mark1_coverage().ok()?.get(mark1_glyph)?;
 
         // Now we search backwards for a suitable mark glyph until a non-mark glyph
@@ -188,7 +188,7 @@ impl Apply for MarkMarkPosFormat1<'_> {
             return None;
         }
 
-        let mark2_glyph = buffer.info[iter_idx].as_glyph().0;
+        let mark2_glyph = buffer.info[iter_idx].as_glyph();
         let mark2_index = self.mark2_coverage().ok()?.get(mark2_glyph)?;
 
         let mark1_array = self.mark1_array().ok()?;
@@ -209,7 +209,7 @@ impl Apply for MarkMarkPosFormat1<'_> {
 impl Apply for MarkLigPosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let buffer = &ctx.buffer;
-        let mark_glyph = ctx.buffer.cur(0).as_glyph().0;
+        let mark_glyph = ctx.buffer.cur(0).as_glyph();
         let mark_index = self.mark_coverage().ok()?.get(mark_glyph)? as usize;
 
         // Due to borrowing rules, we have this piece of code before creating the
@@ -245,7 +245,7 @@ impl Apply for MarkLigPosFormat1<'_> {
 
         // Checking that matched glyph is actually a ligature by GDEF is too strong; disabled
 
-        let lig_glyph = buffer.info[idx].as_glyph().0;
+        let lig_glyph = buffer.info[idx].as_glyph();
         let Some(lig_index) = self.ligature_coverage().ok()?.get(lig_glyph) else {
             ctx.buffer
                 .unsafe_to_concat_from_outbuffer(Some(idx), Some(buffer.idx + 1));
@@ -271,7 +271,7 @@ impl Apply for MarkLigPosFormat1<'_> {
         // can directly use the component index.  If not, we attach the mark
         // glyph to the last component of the ligature.
         let lig_id = _hb_glyph_info_get_lig_id(&buffer.info[idx]);
-        let mark_id = _hb_glyph_info_get_lig_id(&buffer.cur(0));
+        let mark_id = _hb_glyph_info_get_lig_id(buffer.cur(0));
         let mark_comp = u16::from(_hb_glyph_info_get_lig_comp(buffer.cur(0)));
         let matches = lig_id != 0 && lig_id == mark_id && mark_comp > 0;
         let comp_index = if matches {
@@ -281,7 +281,7 @@ impl Apply for MarkLigPosFormat1<'_> {
         } - 1;
 
         let mark_array = self.mark_array().ok()?;
-        let mark_record = mark_array.mark_records().get(mark_index as usize)?;
+        let mark_record = mark_array.mark_records().get(mark_index)?;
         let mark_anchor = mark_record.mark_anchor(mark_array.offset_data()).ok()?;
 
         let base_record = lig_attach

@@ -95,7 +95,7 @@ fn compose_unicode(
 
 fn set_glyph(info: &mut hb_glyph_info_t, font: &hb_font_t) {
     if let Some(glyph_id) = font.get_nominal_glyph(info.glyph_id) {
-        info.set_glyph_index(u32::from(glyph_id.0));
+        info.set_glyph_index(u32::from(glyph_id));
     }
 }
 
@@ -139,7 +139,7 @@ fn decompose(ctx: &mut hb_ot_shape_normalize_context_t, shortest: bool, ab: hb_c
         let ret = decompose(ctx, shortest, a);
         if ret != 0 {
             if let Some(b_glyph) = b_glyph {
-                output_char(ctx.buffer, u32::from(b), u32::from(b_glyph.0));
+                output_char(ctx.buffer, u32::from(b), u32::from(b_glyph));
                 return ret + 1;
             }
             return ret;
@@ -148,9 +148,9 @@ fn decompose(ctx: &mut hb_ot_shape_normalize_context_t, shortest: bool, ab: hb_c
 
     if let Some(a_glyph) = a_glyph {
         // Output a and b.
-        output_char(ctx.buffer, u32::from(a), u32::from(a_glyph.0));
+        output_char(ctx.buffer, u32::from(a), u32::from(a_glyph));
         if let Some(b_glyph) = b_glyph {
-            output_char(ctx.buffer, u32::from(b), u32::from(b_glyph.0));
+            output_char(ctx.buffer, u32::from(b), u32::from(b_glyph));
             return 2;
         }
         return 1;
@@ -173,7 +173,7 @@ fn decompose_current_character(ctx: &mut hb_ot_shape_normalize_context_t, shorte
 
     // TODO: different to harfbuzz, sync
     if let Some(glyph) = glyph {
-        next_char(ctx.buffer, u32::from(glyph.0));
+        next_char(ctx.buffer, u32::from(glyph));
         return;
     }
 
@@ -184,7 +184,7 @@ fn decompose_current_character(ctx: &mut hb_ot_shape_normalize_context_t, shorte
 
             if let Some(space_glyph) = space_glyph {
                 _hb_glyph_info_set_unicode_space_fallback_type(ctx.buffer.cur_mut(0), space_type);
-                next_char(ctx.buffer, u32::from(space_glyph.0));
+                next_char(ctx.buffer, u32::from(space_glyph));
                 ctx.buffer.scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_SPACE_FALLBACK;
                 return;
             }
@@ -195,7 +195,7 @@ fn decompose_current_character(ctx: &mut hb_ot_shape_normalize_context_t, shorte
     // and not a space.  The space ones are handled already.  Handle this lone one.
     if u == '\u{2011}' {
         if let Some(other_glyph) = ctx.face.get_nominal_glyph(0x2010) {
-            next_char(ctx.buffer, u32::from(other_glyph.0));
+            next_char(ctx.buffer, u32::from(other_glyph));
             return;
         }
     }
@@ -218,7 +218,7 @@ fn handle_variation_selector_cluster(
             if let Some(glyph_id) =
                 face.get_nominal_variant_glyph(buffer.cur(0).as_char(), buffer.cur(1).as_char())
             {
-                buffer.cur_mut(0).set_glyph_index(u32::from(glyph_id.0));
+                buffer.cur_mut(0).set_glyph_index(u32::from(glyph_id));
                 let unicode = buffer.cur(0).glyph_id;
                 buffer.replace_glyphs(2, 1, &[unicode]);
             } else {
@@ -346,7 +346,7 @@ pub fn _hb_ot_shape_normalize(
                 while done < len {
                     let cur = buffer.cur_mut(done);
                     cur.set_glyph_index(match face.get_nominal_glyph(cur.glyph_id) {
-                        Some(glyph_id) => u32::from(glyph_id.0),
+                        Some(glyph_id) => u32::from(glyph_id),
                         None => break,
                     });
                     done += 1;
@@ -472,7 +472,7 @@ pub fn _hb_ot_shape_normalize(
                         let mut flags = buffer.scratch_flags;
                         let info = &mut buffer.out_info_mut()[starter];
                         info.glyph_id = u32::from(composed);
-                        info.set_glyph_index(u32::from(glyph_id.0));
+                        info.set_glyph_index(u32::from(glyph_id));
                         info.init_unicode_props(&mut flags);
                         buffer.scratch_flags = flags;
 

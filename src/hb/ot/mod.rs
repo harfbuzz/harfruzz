@@ -11,7 +11,7 @@ use read_fonts::{
         varc::{Condition, CoverageTable},
         variations::{DeltaSetIndex, ItemVariationStore},
     },
-    types::F2Dot14,
+    types::{F2Dot14, GlyphId},
     FontRef, ReadError, TableProvider,
 };
 
@@ -20,12 +20,12 @@ pub mod gpos;
 pub mod gsub;
 pub mod lookup;
 
-pub struct OtFontCache {
+pub struct OtCache {
     pub gsub: LookupCache,
     pub gpos: LookupCache,
 }
 
-impl OtFontCache {
+impl OtCache {
     pub fn new(font: &FontRef) -> Self {
         let gsub = font
             .gsub()
@@ -93,7 +93,7 @@ pub struct OtTables<'a> {
 }
 
 impl<'a> OtTables<'a> {
-    pub fn new(font: &FontRef<'a>, cache: &'a OtFontCache, coords: &'a [F2Dot14]) -> Self {
+    pub fn new(font: &FontRef<'a>, cache: &'a OtCache, coords: &'a [F2Dot14]) -> Self {
         let gsub = font.gsub().ok().map(|table| GsubTable {
             table,
             lookups: &cache.gsub,
@@ -208,22 +208,16 @@ impl<'a> LayoutTable<'a> {
         .flatten()
     }
 
-    fn script_index(&self, tag: hb_tag_t) -> Option<u16> {
-        self.script_list()?.index_for_tag(tag)
-    }
-
     fn script(&self, index: u16) -> Option<Script<'a>> {
-        let list = self.script_list()?;
-        list.get(index).ok().map(|script| script.element)
+        self.script_list()?
+            .get(index)
+            .ok()
+            .map(|script| script.element)
     }
 
     fn langsys_index(&self, script_index: u16, tag: hb_tag_t) -> Option<u16> {
         let script = self.script(script_index)?;
-        script
-            .lang_sys_records()
-            .binary_search_by_key(&tag, |rec| rec.lang_sys_tag())
-            .map(|index| index as u16)
-            .ok()
+        script.lang_sys_index_for_tag(tag)
     }
 
     fn langsys(&self, script_index: u16, langsys_index: Option<u16>) -> Option<LangSys<'a>> {
@@ -237,8 +231,10 @@ impl<'a> LayoutTable<'a> {
     }
 
     pub(crate) fn feature(&self, index: u16) -> Option<Feature<'a>> {
-        let list = self.feature_list()?;
-        list.get(index).ok().map(|feature| feature.element)
+        self.feature_list()?
+            .get(index)
+            .ok()
+            .map(|feature| feature.element)
     }
 
     fn feature_tag(&self, index: u16) -> Option<hb_tag_t> {
@@ -334,40 +330,23 @@ impl<'a> LayoutTable<'a> {
                 .unwrap_or_default(),
         }
     }
-}
 
-impl crate::hb::ot_layout::LayoutTableExt for LayoutTable<'_> {
     // hb_ot_layout_table_select_script
     /// Returns true + index and tag of the first found script tag in the given GSUB or GPOS table
     /// or false + index and tag if falling back to a default script.
-    fn select_script(&self, script_tags: &[hb_tag_t]) -> Option<(bool, u16, hb_tag_t)> {
-        for &tag in script_tags {
-            if let Some(index) = self.script_index(tag) {
-                return Some((true, index, tag));
-            }
-        }
-
-        for &tag in &[
-            // try finding 'DFLT'
-            hb_tag_t::default_script(),
-            // try with 'dflt'; MS site has had typos and many fonts use it now :(
-            hb_tag_t::default_language(),
-            // try with 'latn'; some old fonts put their features there even though
-            // they're really trying to support Thai, for example :(
-            hb_tag_t::new(b"latn"),
-        ] {
-            if let Some(index) = self.script_index(tag) {
-                return Some((false, index, tag));
-            }
-        }
-
-        None
+    pub(crate) fn select_script(&self, script_tags: &[hb_tag_t]) -> Option<(bool, u16, hb_tag_t)> {
+        let selected = self.script_list()?.select(script_tags)?;
+        Some((!selected.is_fallback, selected.index, selected.tag))
     }
 
     // hb_ot_layout_script_select_language
     /// Returns the index of the first found language tag in the given GSUB or GPOS table,
     /// underneath the specified script index.
-    fn select_script_language(&self, script_index: u16, lang_tags: &[hb_tag_t]) -> Option<u16> {
+    pub(crate) fn select_script_language(
+        &self,
+        script_index: u16,
+        lang_tags: &[hb_tag_t],
+    ) -> Option<u16> {
         for &tag in lang_tags {
             if let Some(index) = self.langsys_index(script_index, tag) {
                 return Some(index);
@@ -385,7 +364,7 @@ impl crate::hb::ot_layout::LayoutTableExt for LayoutTable<'_> {
     // hb_ot_layout_language_get_required_feature
     /// Returns the index and tag of a required feature in the given GSUB or GPOS table,
     /// underneath the specified script and language.
-    fn get_required_language_feature(
+    pub(crate) fn get_required_language_feature(
         &self,
         script_index: u16,
         lang_index: Option<u16>,
@@ -402,36 +381,30 @@ impl crate::hb::ot_layout::LayoutTableExt for LayoutTable<'_> {
     // hb_ot_layout_language_find_feature
     /// Returns the index of a given feature tag in the given GSUB or GPOS table,
     /// underneath the specified script and language.
-    fn find_language_feature(
+    pub(crate) fn find_language_feature(
         &self,
         script_index: u16,
         lang_index: Option<u16>,
         feature_tag: hb_tag_t,
     ) -> Option<u16> {
-        let sys = self.langsys(script_index, lang_index)?;
-        for index in sys.feature_indices() {
-            let index = index.get();
-            if self.feature_tag(index) == Some(feature_tag) {
-                return Some(index);
-            }
-        }
-        None
+        self.langsys(script_index, lang_index)?
+            .feature_index_for_tag(&self.feature_list()?, feature_tag)
     }
 }
 
-fn coverage_index(
-    coverage: Result<CoverageTable, ReadError>,
-    gid: crate::ttf_parser::GlyphId,
-) -> Option<u16> {
-    coverage.ok().and_then(|coverage| coverage.get(gid.0))
+fn coverage_index(coverage: Result<CoverageTable, ReadError>, gid: GlyphId) -> Option<u16> {
+    coverage.ok().and_then(|coverage| coverage.get(gid))
 }
 
-fn covered(coverage: Result<CoverageTable, ReadError>, gid: crate::ttf_parser::GlyphId) -> bool {
+fn covered(coverage: Result<CoverageTable, ReadError>, gid: GlyphId) -> bool {
     coverage_index(coverage, gid).is_some()
 }
 
-fn glyph_class(class_def: Result<ClassDef, ReadError>, gid: crate::ttf_parser::GlyphId) -> u16 {
+fn glyph_class(class_def: Result<ClassDef, ReadError>, gid: GlyphId) -> u16 {
+    let Ok(gid16) = gid.try_into() else {
+        return 0;
+    };
     class_def
-        .map(|class_def| class_def.get(gid.0.into()))
+        .map(|class_def| class_def.get(gid16))
         .unwrap_or_default()
 }

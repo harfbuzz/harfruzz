@@ -1,4 +1,4 @@
-use ttf_parser::GlyphId;
+use read_fonts::types::GlyphId;
 
 use super::buffer::{hb_buffer_t, GlyphPosition};
 use super::face::hb_glyph_extents_t;

@@ -1,4 +1,5 @@
 use super::aat_layout::*;
+use super::aat_layout_common::ToTtfParserGid;
 use super::aat_map::{hb_aat_map_builder_t, hb_aat_map_t, range_flags_t};
 use super::buffer::{hb_buffer_t, UnicodeProps};
 use super::{hb_font_t, hb_glyph_info_t};
@@ -208,7 +209,9 @@ fn drive<T: FromData>(
         }
 
         let class = if ac.buffer.idx < ac.buffer.len {
-            machine.class(ac.buffer.cur(0).as_glyph()).unwrap_or(1)
+            machine
+                .class(ac.buffer.cur(0).as_glyph().ttfp_gid())
+                .unwrap_or(1)
         } else {
             u16::from(apple_layout::class::END_OF_TEXT)
         };
@@ -382,10 +385,10 @@ fn apply_subtable(kind: &morx::SubtableKind, ac: &mut hb_aat_apply_context_t) {
                 }
 
                 let info = &mut ac.buffer.info[info];
-                if let Some(replacement) = lookup.value(info.as_glyph()) {
+                if let Some(replacement) = lookup.value(info.as_glyph().ttfp_gid()) {
                     info.glyph_id = u32::from(replacement);
                     if let Some(face) = face_if_has_glyph_classes {
-                        info.set_glyph_props(face.glyph_props(GlyphId(replacement)));
+                        info.set_glyph_props(face.glyph_props(replacement.into()));
                     }
                 }
             }
@@ -568,7 +571,7 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
 
         if entry.extra.mark_index != 0xFFFF {
             let lookup = self.table.lookup(u32::from(entry.extra.mark_index))?;
-            replacement = lookup.value(buffer.info[self.mark].as_glyph());
+            replacement = lookup.value(buffer.info[self.mark].as_glyph().ttfp_gid());
         }
 
         if let Some(replacement) = replacement {
@@ -576,7 +579,7 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
             buffer.info[self.mark].glyph_id = u32::from(replacement);
 
             if let Some(face) = self.face_if_has_glyph_classes {
-                buffer.info[self.mark].set_glyph_props(face.glyph_props(GlyphId(replacement)));
+                buffer.info[self.mark].set_glyph_props(face.glyph_props(replacement.into()));
             }
         }
 
@@ -584,14 +587,14 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
         let idx = buffer.idx.min(buffer.len - 1);
         if entry.extra.current_index != 0xFFFF {
             let lookup = self.table.lookup(u32::from(entry.extra.current_index))?;
-            replacement = lookup.value(buffer.info[idx].as_glyph());
+            replacement = lookup.value(buffer.info[idx].as_glyph().ttfp_gid());
         }
 
         if let Some(replacement) = replacement {
             buffer.info[idx].glyph_id = u32::from(replacement);
 
             if let Some(face) = self.face_if_has_glyph_classes {
-                buffer.info[self.mark].set_glyph_props(face.glyph_props(GlyphId(replacement)));
+                buffer.info[self.mark].set_glyph_props(face.glyph_props(replacement.into()));
             }
         }
 

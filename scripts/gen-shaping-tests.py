@@ -57,6 +57,11 @@ IGNORE_TEST_CASES = [
     # Requires support in ttf-parser (https://github.com/harfbuzz/ttf-parser/pull/185)
     "colr_014",
     "colr_021",
+
+    # We ignore extents for COLRv1 in a "forward looking shaper"
+    # (see https://github.com/harfbuzz/harfruzz/pull/4#issuecomment-2252964385)
+    "color_fonts_001",
+    "color_fonts_002",
 ]
 
 

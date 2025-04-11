@@ -901,7 +901,7 @@ fn hide_default_ignorables(buffer: &mut hb_buffer_t, face: &hb_font_t) {
                 let len = buffer.len;
                 for info in &mut buffer.info[..len] {
                     if _hb_glyph_info_is_default_ignorable(info) {
-                        info.glyph_id = u32::from(invisible.0);
+                        info.glyph_id = invisible.to_u32();
                     }
                 }
                 return;

@@ -140,9 +140,6 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
     let shaper_font = ShaperFont::new(&font);
     let mut face = shaper_font.shaper(&font, &coords);
 
-    if !coords.is_empty() {
-        face.set_variations(&variations);
-    }
     face.set_points_per_em(args.font_ptem);
 
     let mut buffer = harfruzz::UnicodeBuffer::new();

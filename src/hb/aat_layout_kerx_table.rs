@@ -1,5 +1,6 @@
 use core::convert::TryFrom;
 
+use super::aat_layout_common::ToTtfParserGid;
 use super::buffer::*;
 use super::hb_font_t;
 use super::ot_layout::TableIndex;
@@ -163,9 +164,9 @@ fn apply_simple_kerning(
         let j = iter.index();
 
         let info = &ctx.buffer.info;
-        let kern = subtable
-            .glyphs_kerning(info[i].as_glyph(), info[j].as_glyph())
-            .unwrap_or(0);
+        let a = ttf_parser::GlyphId(info[i].as_glyph().to_u32() as _);
+        let b = ttf_parser::GlyphId(info[j].as_glyph().to_u32() as _);
+        let kern = subtable.glyphs_kerning(a, b).unwrap_or(0);
         let kern = i32::from(kern);
 
         let pos = &mut ctx.buffer.pos;
@@ -233,7 +234,7 @@ fn apply_state_machine_kerning<T, E>(
     loop {
         let class = if buffer.idx < buffer.len {
             state_table
-                .class(buffer.info[buffer.idx].as_glyph())
+                .class(buffer.info[buffer.idx].as_glyph().ttfp_gid())
                 .unwrap_or(1)
         } else {
             u16::from(apple_layout::class::END_OF_TEXT)
@@ -429,7 +430,7 @@ impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
 
                 let mark_idx = buffer.info[self.mark].as_glyph();
                 let mark_anchor = ankr_table
-                    .anchor_points(mark_idx.0.into())
+                    .anchor_points(mark_idx)
                     .ok()
                     .and_then(|list| list.get(usize::from(point.0)))
                     .map(|point| (point.x(), point.y()))
@@ -437,7 +438,7 @@ impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
 
                 let curr_idx = buffer.cur(0).as_glyph();
                 let curr_anchor = ankr_table
-                    .anchor_points(curr_idx.0.into())
+                    .anchor_points(curr_idx)
                     .ok()
                     .and_then(|list| list.get(usize::from(point.1)))
                     .map(|point| (point.x(), point.y()))

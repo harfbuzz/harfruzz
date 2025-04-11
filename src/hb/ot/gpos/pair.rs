@@ -1,13 +1,14 @@
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{skipping_iterator_t, Apply};
 use read_fonts::tables::gpos::{PairPosFormat1, PairPosFormat2, PairValueRecord};
+use read_fonts::types::GlyphId;
 use read_fonts::FontData;
 
 use super::Value;
 
 impl Apply for PairPosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let first_glyph = ctx.buffer.cur(0).as_glyph().0;
+        let first_glyph = ctx.buffer.cur(0).as_glyph();
         let first_glyph_coverage_index = self.coverage().ok()?.get(first_glyph)?;
 
         let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
@@ -20,7 +21,7 @@ impl Apply for PairPosFormat1<'_> {
         }
 
         let second_glyph_index = iter.index();
-        let second_glyph = ctx.buffer.info[second_glyph_index].as_glyph().0;
+        let second_glyph = ctx.buffer.info[second_glyph_index].as_glyph();
 
         let finish = |ctx: &mut hb_ot_apply_context_t, iter_index: &mut usize, has_record2| {
             if has_record2 {
@@ -90,9 +91,8 @@ impl Apply for PairPosFormat1<'_> {
 fn find_second_glyph<'a>(
     pair_pos: &PairPosFormat1<'a>,
     set_index: usize,
-    second_glyph: u16,
+    second_glyph: GlyphId,
 ) -> Option<(PairValueRecord, FontData<'a>)> {
-    let second_glyph = read_fonts::types::GlyphId16::new(second_glyph);
     let set_offset = pair_pos.pair_set_offsets().get(set_index)?.get().to_u32() as usize;
     let format1 = pair_pos.value_format1();
     let format2 = pair_pos.value_format2();
@@ -121,7 +121,7 @@ fn find_second_glyph<'a>(
 
 impl Apply for PairPosFormat2<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let first_glyph = ctx.buffer.cur(0).as_glyph().0;
+        let first_glyph = ctx.buffer.cur(0).as_glyph();
         self.coverage().ok()?.get(first_glyph)?;
 
         let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
@@ -134,7 +134,7 @@ impl Apply for PairPosFormat2<'_> {
         }
 
         let second_glyph_index = iter.index();
-        let second_glyph = ctx.buffer.info[second_glyph_index].as_glyph().0;
+        let second_glyph = ctx.buffer.info[second_glyph_index].as_glyph();
 
         let finish = |ctx: &mut hb_ot_apply_context_t, iter_index: &mut usize, has_record2| {
             if has_record2 {
@@ -176,8 +176,8 @@ impl Apply for PairPosFormat2<'_> {
                 success(ctx, iter_index, flag1, flag2, has_record2)
             };
 
-        let class1 = self.class_def1().ok()?.get(first_glyph.into());
-        let class2 = self.class_def2().ok()?.get(second_glyph.into());
+        let class1 = super::super::glyph_class(self.class_def1(), first_glyph);
+        let class2 = super::super::glyph_class(self.class_def2(), second_glyph);
 
         let data = self.offset_data();
         match self
@@ -202,7 +202,7 @@ impl Apply for PairPosFormat2<'_> {
             _ => {
                 ctx.buffer
                     .unsafe_to_concat(Some(ctx.buffer.idx), Some(iter.index() + 1));
-                return None;
+                None
             }
         }
     }

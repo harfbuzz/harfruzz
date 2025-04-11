@@ -120,7 +120,7 @@ impl LookupCache {
     pub fn get(&self, index: u16) -> Option<&LookupInfo> {
         let entry = self.lookups.get(index as usize)?;
         match entry.state {
-            LookupState::Ready => Some(&entry),
+            LookupState::Ready => Some(entry),
             _ => None,
         }
     }
@@ -230,15 +230,12 @@ fn add_coverage_to_digest(coverage: &CoverageTable, digest: &mut hb_set_digest_t
     match coverage {
         CoverageTable::Format1(table) => {
             for glyph in table.glyph_array() {
-                digest.add(ttf_parser::GlyphId(glyph.get().to_u32() as _));
+                digest.add(glyph.get().into());
             }
         }
         CoverageTable::Format2(table) => {
             for range in table.range_records() {
-                let first = range.start_glyph_id().to_u32();
-                let last = range.end_glyph_id().to_u32();
-                let [first, last] = [first, last].map(|gid| ttf_parser::GlyphId(gid as _));
-                digest.add_range(first, last);
+                digest.add_range(range.start_glyph_id().into(), range.end_glyph_id().into());
             }
         }
     }

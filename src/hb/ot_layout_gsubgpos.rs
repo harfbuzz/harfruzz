@@ -1,8 +1,5 @@
 //! Matching of glyph patterns.
 
-use ttf_parser::opentype_layout::*;
-use ttf_parser::GlyphId;
-
 use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
 use super::hb_font_t;
@@ -12,10 +9,11 @@ use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
 use read_fonts::tables::layout::SequenceLookupRecord;
+use read_fonts::types::GlyphId;
 
 /// Value represents glyph id.
 pub fn match_glyph(glyph: GlyphId, value: u16) -> bool {
-    glyph == GlyphId(value)
+    glyph.to_u32() == value as u32
 }
 
 pub fn match_input(
@@ -567,7 +565,7 @@ pub mod OT {
         pub buffer: &'a mut hb_buffer_t,
         lookup_mask: hb_mask_t,
         pub per_syllable: bool,
-        pub lookup_index: LookupIndex,
+        pub lookup_index: u16,
         pub lookup_props: u32,
         pub nesting_level_left: usize,
         pub auto_zwnj: bool,
@@ -621,7 +619,7 @@ pub mod OT {
             self.lookup_mask
         }
 
-        pub fn recurse(&mut self, sub_lookup_index: LookupIndex) -> Option<()> {
+        pub fn recurse(&mut self, sub_lookup_index: u16) -> Option<()> {
             if self.nesting_level_left == 0 {
                 self.buffer.shaping_failed = true;
                 return None;
@@ -690,7 +688,7 @@ pub mod OT {
                     return self
                         .face
                         .ot_tables
-                        .is_mark_glyph(info.as_glyph().0 as u32, set_index);
+                        .is_mark_glyph(info.as_glyph().to_u32(), set_index);
                 }
 
                 // The second byte of match_props has the meaning
@@ -748,12 +746,12 @@ pub mod OT {
 
         pub fn replace_glyph(&mut self, glyph_id: GlyphId) {
             self.set_glyph_class(glyph_id, GlyphPropsFlags::empty(), false, false);
-            self.buffer.replace_glyph(u32::from(glyph_id.0));
+            self.buffer.replace_glyph(u32::from(glyph_id));
         }
 
         pub fn replace_glyph_inplace(&mut self, glyph_id: GlyphId) {
             self.set_glyph_class(glyph_id, GlyphPropsFlags::empty(), false, false);
-            self.buffer.cur_mut(0).glyph_id = u32::from(glyph_id.0);
+            self.buffer.cur_mut(0).glyph_id = u32::from(glyph_id);
         }
 
         pub fn replace_glyph_with_ligature(
@@ -762,7 +760,7 @@ pub mod OT {
             class_guess: GlyphPropsFlags,
         ) {
             self.set_glyph_class(glyph_id, class_guess, true, false);
-            self.buffer.replace_glyph(u32::from(glyph_id.0));
+            self.buffer.replace_glyph(u32::from(glyph_id));
         }
 
         pub fn output_glyph_for_component(
@@ -771,7 +769,7 @@ pub mod OT {
             class_guess: GlyphPropsFlags,
         ) {
             self.set_glyph_class(glyph_id, class_guess, false, true);
-            self.buffer.output_glyph(u32::from(glyph_id.0));
+            self.buffer.output_glyph(u32::from(glyph_id));
         }
     }
 }

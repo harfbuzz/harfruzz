@@ -1721,30 +1721,6 @@ fn cluster_004() {
 }
 
 #[test]
-fn color_fonts_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/in-house/ee39587d13b2afa5499cc79e45780aa79293bbd4.ttf",
-            "\u{1F42F}",
-            "--show-extents",
-        ),
-        "gid1=0+2963<0,2179,2963,-2789>"
-    );
-}
-
-#[test]
-fn color_fonts_002() {
-    assert_eq!(
-        shape(
-            "tests/fonts/in-house/fcbaa518d3cce441ed37ae3b1fed6a19e9b54efd.ttf",
-            "\u{1F600}",
-            "--show-extents",
-        ),
-        "gid4=0+2550<0,1898,2555,-2405>"
-    );
-}
-
-#[test]
 fn context_matching_001() {
     assert_eq!(
         shape(

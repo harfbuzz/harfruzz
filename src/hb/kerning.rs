@@ -1,3 +1,4 @@
+use super::aat_layout_common::ToTtfParserGid;
 use ttf_parser::{apple_layout, kern, GlyphId};
 
 use super::buffer::*;
@@ -172,7 +173,7 @@ fn apply_state_machine_kerning(
     loop {
         let class = if buffer.idx < buffer.len {
             state_table
-                .class(buffer.info[buffer.idx].as_glyph())
+                .class(buffer.info[buffer.idx].as_glyph().ttfp_gid())
                 .unwrap_or(1)
         } else {
             apple_layout::class::END_OF_TEXT

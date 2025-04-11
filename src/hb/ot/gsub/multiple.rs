@@ -6,21 +6,20 @@ use crate::hb::ot_layout::{
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext};
 use read_fonts::tables::gsub::MultipleSubstFormat1;
-use ttf_parser::GlyphId;
 
 impl WouldApply for MultipleSubstFormat1<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
         ctx.glyphs.len() == 1
             && self
                 .coverage()
-                .map(|cov| cov.get(ctx.glyphs[0].0).is_some())
+                .map(|cov| cov.get(ctx.glyphs[0]).is_some())
                 .unwrap_or_default()
     }
 }
 
 impl Apply for MultipleSubstFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let gid = ctx.buffer.cur(0).as_glyph().0;
+        let gid = ctx.buffer.cur(0).as_glyph();
         let index = self.coverage().ok()?.get(gid)? as usize;
         let substs = self.sequences().get(index).ok()?.substitute_glyph_ids();
         match substs.len() {
@@ -30,7 +29,7 @@ impl Apply for MultipleSubstFormat1<'_> {
 
             // Special-case to make it in-place and not consider this
             // as a "multiplied" substitution.
-            1 => ctx.replace_glyph(GlyphId(substs.get(0)?.get().to_u16())),
+            1 => ctx.replace_glyph(substs.first()?.get().into()),
 
             _ => {
                 let class = if _hb_glyph_info_is_ligature(ctx.buffer.cur(0)) {
@@ -40,8 +39,8 @@ impl Apply for MultipleSubstFormat1<'_> {
                 };
                 let lig_id = _hb_glyph_info_get_lig_id(ctx.buffer.cur(0));
 
-                for (i, subst) in substs.into_iter().enumerate() {
-                    let subst = GlyphId(subst.get().to_u16());
+                for (i, subst) in substs.iter().enumerate() {
+                    let subst = subst.get().into();
                     // If is attached to a ligature, don't disturb that.
                     // https://github.com/harfbuzz/harfbuzz/issues/3069
                     if lig_id == 0 {

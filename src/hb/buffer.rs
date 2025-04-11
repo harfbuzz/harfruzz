@@ -1,8 +1,7 @@
 use alloc::{string::String, vec::Vec};
 use core::cmp::min;
 use core::convert::TryFrom;
-use read_fonts::types::GlyphId16;
-use ttf_parser::GlyphId;
+use read_fonts::types::{GlyphId, GlyphId16};
 
 use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};
 use super::face::hb_glyph_extents_t;
@@ -195,8 +194,7 @@ impl hb_glyph_info_t {
 
     #[inline]
     pub(crate) fn as_glyph(&self) -> GlyphId {
-        debug_assert!(self.glyph_id <= u32::from(u16::MAX));
-        GlyphId(self.glyph_id as u16)
+        GlyphId::new(self.glyph_id)
     }
 
     #[inline]
@@ -479,7 +477,7 @@ impl hb_buffer_t {
 
     pub fn digest(&self) -> hb_set_digest_t {
         let mut digest = hb_set_digest_t::new();
-        digest.add_array(self.info.iter().map(|i| GlyphId(i.glyph_id as u16)));
+        digest.add_array(self.info.iter().map(|i| GlyphId::new(i.glyph_id)));
         digest
     }
 
@@ -1782,9 +1780,10 @@ impl GlyphBuffer {
         let pos = self.glyph_positions();
         let mut x = 0;
         let mut y = 0;
+        let names = face.glyph_names();
         for (info, pos) in info.iter().zip(pos) {
             if !flags.contains(SerializeFlags::NO_GLYPH_NAMES) {
-                match face.glyph_name(info.as_glyph()) {
+                match names.get(info.as_glyph().to_u32()) {
                     Some(name) => s.push_str(name),
                     None => write!(&mut s, "gid{}", info.glyph_id)?,
                 }

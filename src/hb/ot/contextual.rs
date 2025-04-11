@@ -4,12 +4,12 @@ use crate::hb::ot_layout_gsubgpos::{
     apply_lookup, match_backtrack, match_func_t, match_glyph, match_input, match_lookahead, Apply,
     WouldApply, WouldApplyContext,
 };
+use read_fonts::tables::gsub::ClassDef;
 use read_fonts::tables::layout::{
     ChainedSequenceContextFormat1, ChainedSequenceContextFormat2, ChainedSequenceContextFormat3,
     SequenceContextFormat1, SequenceContextFormat2, SequenceContextFormat3, SequenceLookupRecord,
 };
-use read_fonts::types::BigEndian;
-use ttf_parser::GlyphId;
+use read_fonts::types::{BigEndian, GlyphId};
 
 impl WouldApply for SequenceContextFormat1<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
@@ -42,7 +42,7 @@ impl Apply for SequenceContextFormat1<'_> {
         &self,
         ctx: &mut crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t,
     ) -> Option<()> {
-        let glyph = read_fonts::types::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let glyph = ctx.buffer.cur(0).as_glyph();
         let index = self.coverage().ok()?.get(glyph)? as usize;
         let set = self.seq_rule_sets().get(index)?.ok()?;
         for rule in set.seq_rules().iter().filter_map(|rule| rule.ok()) {
@@ -109,7 +109,7 @@ impl Apply for SequenceContextFormat2<'_> {
 impl WouldApply for SequenceContextFormat3<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
         let coverages = self.coverages();
-        ctx.glyphs.len() == usize::from(coverages.len()) + 1
+        ctx.glyphs.len() == coverages.len() + 1
             && coverages
                 .iter()
                 .enumerate()
@@ -122,13 +122,13 @@ impl Apply for SequenceContextFormat3<'_> {
         &self,
         ctx: &mut crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t,
     ) -> Option<()> {
-        let glyph = read_fonts::types::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let glyph = ctx.buffer.cur(0).as_glyph();
         let input_coverages = self.coverages();
         input_coverages.get(0).ok()?.get(glyph)?;
         let input = |glyph: GlyphId, index: u16| {
             input_coverages
                 .get(index as usize + 1)
-                .map(|cov| cov.get(read_fonts::types::GlyphId::from(glyph.0)).is_some())
+                .map(|cov| cov.get(glyph).is_some())
                 .unwrap_or_default()
         };
         let mut match_end = 0;
@@ -190,7 +190,7 @@ impl WouldApply for ChainedSequenceContextFormat1<'_> {
 
 impl Apply for ChainedSequenceContextFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = read_fonts::types::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let glyph = ctx.buffer.cur(0).as_glyph();
         let index = self.coverage().ok()?.get(glyph)? as usize;
         let set = self.chained_seq_rule_sets().get(index)?.ok()?;
         for rule in set.chained_seq_rules().iter().filter_map(|rule| rule.ok()) {
@@ -244,6 +244,13 @@ impl WouldApply for ChainedSequenceContextFormat2<'_> {
     }
 }
 
+fn get_class(class_def: &ClassDef, gid: GlyphId) -> u16 {
+    let Ok(gid16) = gid.try_into() else {
+        return 0;
+    };
+    class_def.get(gid16)
+}
+
 /// Value represents glyph class.
 fn match_class<'a>(
     class_def: &'a Option<read_fonts::tables::layout::ClassDef<'a>>,
@@ -251,7 +258,7 @@ fn match_class<'a>(
     |glyph, value| {
         class_def
             .as_ref()
-            .map(|class_def| class_def.get(read_fonts::types::GlyphId16::new(glyph.0)) == value)
+            .map(|class_def| get_class(class_def, glyph) == value)
             .unwrap_or(false)
     }
 }
@@ -298,15 +305,12 @@ impl WouldApply for ChainedSequenceContextFormat3<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
         let input_coverages = self.input_coverages();
         (!ctx.zero_context
-            || (self.backtrack_coverage_offsets().len() == 0
-                && self.lookahead_coverage_offsets().len() == 0))
+            || (self.backtrack_coverage_offsets().is_empty()
+                && self.lookahead_coverage_offsets().is_empty()))
             && (ctx.glyphs.len() == input_coverages.len() + 1
                 && input_coverages.iter().enumerate().all(|(i, coverage)| {
                     coverage
-                        .map(|cov| {
-                            cov.get(read_fonts::types::GlyphId::from(ctx.glyphs[i + 1].0))
-                                .is_some()
-                        })
+                        .map(|cov| cov.get(ctx.glyphs[i + 1]).is_some())
                         .unwrap_or(false)
                 }))
     }
@@ -314,7 +318,7 @@ impl WouldApply for ChainedSequenceContextFormat3<'_> {
 
 impl Apply for ChainedSequenceContextFormat3<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
-        let glyph = read_fonts::types::GlyphId::from(ctx.buffer.cur(0).as_glyph().0);
+        let glyph = ctx.buffer.cur(0).as_glyph();
 
         let input_coverages = self.input_coverages();
         input_coverages.get(0).ok()?.get(glyph)?;
@@ -325,21 +329,21 @@ impl Apply for ChainedSequenceContextFormat3<'_> {
         let back = |glyph: GlyphId, index: u16| {
             backtrack_coverages
                 .get(index as usize)
-                .map(|cov| cov.get(read_fonts::types::GlyphId::from(glyph.0)).is_some())
+                .map(|cov| cov.get(glyph).is_some())
                 .unwrap_or_default()
         };
 
         let ahead = |glyph: GlyphId, index: u16| {
             lookahead_coverages
                 .get(index as usize)
-                .map(|cov| cov.get(read_fonts::types::GlyphId::from(glyph.0)).is_some())
+                .map(|cov| cov.get(glyph).is_some())
                 .unwrap_or_default()
         };
 
         let input = |glyph: GlyphId, index: u16| {
             input_coverages
                 .get(index as usize + 1)
-                .map(|cov| cov.get(read_fonts::types::GlyphId::from(glyph.0)).is_some())
+                .map(|cov| cov.get(glyph).is_some())
                 .unwrap_or_default()
         };
 
@@ -441,13 +445,7 @@ fn apply_context<T: ToU16>(
     ) {
         ctx.buffer
             .unsafe_to_break(Some(ctx.buffer.idx), Some(match_end));
-        apply_lookup(
-            ctx,
-            usize::from(input.len()),
-            &mut match_positions,
-            match_end,
-            lookups,
-        );
+        apply_lookup(ctx, input.len(), &mut match_positions, match_end, lookups);
         return Some(());
     }
 
@@ -514,13 +512,7 @@ fn apply_chain_context<T: ToU16>(
 
     ctx.buffer
         .unsafe_to_break_from_outbuffer(Some(start_index), Some(end_index));
-    apply_lookup(
-        ctx,
-        usize::from(input.len()),
-        &mut match_positions,
-        match_end,
-        lookups,
-    );
+    apply_lookup(ctx, input.len(), &mut match_positions, match_end, lookups);
 
     Some(())
 }
