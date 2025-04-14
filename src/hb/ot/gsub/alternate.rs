@@ -1,7 +1,6 @@
 use crate::hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t;
 use crate::hb::ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext};
-use skrifa::raw::tables::gsub::{AlternateSet, AlternateSubstFormat1};
-use ttf_parser::GlyphId;
+use read_fonts::tables::gsub::{AlternateSet, AlternateSubstFormat1};
 
 impl Apply for AlternateSet<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
@@ -26,7 +25,7 @@ impl Apply for AlternateSet<'_> {
         }
 
         let idx = u16::try_from(alt_index).ok()?.checked_sub(1)?;
-        ctx.replace_glyph(GlyphId(alternates.get(idx as usize)?.get().to_u16()));
+        ctx.replace_glyph(alternates.get(idx as usize)?.get().into());
 
         Some(())
     }
@@ -37,7 +36,7 @@ impl WouldApply for AlternateSubstFormat1<'_> {
         ctx.glyphs.len() == 1
             && self
                 .coverage()
-                .map(|cov| cov.get(skrifa::GlyphId::from(ctx.glyphs[0].0)).is_some())
+                .map(|cov| cov.get(ctx.glyphs[0]).is_some())
                 .unwrap_or_default()
     }
 }
@@ -45,7 +44,7 @@ impl WouldApply for AlternateSubstFormat1<'_> {
 impl Apply for AlternateSubstFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let glyph = ctx.buffer.cur(0).as_glyph();
-        let index = self.coverage().ok()?.get(skrifa::GlyphId::from(glyph.0))?;
+        let index = self.coverage().ok()?.get(glyph)?;
         let set = self.alternate_sets().get(index as usize).ok()?;
         set.apply(ctx)
     }

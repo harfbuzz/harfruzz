@@ -25,8 +25,7 @@ The following conformance issues need to be fixed:
 * harfruzz does not yet fully pass the harfbuzz shaping or fuzzing tests
 * Malformed fonts will cause an error
    * HarfBuzz uses fallback/dummy shaper in this case
-* No Arabic fallback shaper
-   * This requires the ability to build lookups on the fly. In HarfBuzz (C++) this requires serialization code that is associated with subsetting.
+* No Arabic fallback shaper (requires subsetting)
 * `avar2` as well as other parts of the boring-expansion-spec are not supported yet.
 
 ## Major changes
@@ -99,8 +98,11 @@ All of this is a lot of work, so contributions are more than welcome.
 
 ## Safety
 
-Unsafe code is forbidden by a `#![forbid(unsafe_code)]` attribute in the root
-of the library.
+The library is completely safe.
+
+We do have one `unsafe` to cast between two POD structures, which is perfectly safe.
+But except that, there are no `unsafe` in this library and in most of its dependencies
+(excluding `bytemuck`).
 
 ## Alternatives
 
@@ -117,4 +119,4 @@ of the library.
 
 `harfruzz` is licensed under the **MIT** license.
 
-`harfbuzz` is [licensed](https://github.com/harfbuzz/harfbuzz/blob/master/COPYING) under the **Old MIT**
+`harfbuzz` is [licensed](https://github.com/harfbuzz/harfbuzz/blob/main/COPYING) under the **Old MIT**

@@ -3,30 +3,28 @@
 use core::ops::{Index, IndexMut};
 
 use super::buffer::*;
-use super::common::TagExt;
 use super::ot_layout_gsubgpos::{Apply, OT};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
-use super::{hb_font_t, hb_glyph_info_t, hb_tag_t};
+use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
-use ttf_parser::opentype_layout::{FeatureIndex, LanguageIndex, LookupIndex, ScriptIndex};
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
 
 pub fn hb_ot_layout_has_kerning(face: &hb_font_t) -> bool {
-    face.tables().kern.is_some()
+    face.aat_tables.kern.is_some()
 }
 
 pub fn hb_ot_layout_has_machine_kerning(face: &hb_font_t) -> bool {
-    match face.tables().kern {
+    match face.aat_tables.kern {
         Some(ref kern) => kern.subtables.into_iter().any(|s| s.has_state_machine),
         None => false,
     }
 }
 
 pub fn hb_ot_layout_has_cross_kerning(face: &hb_font_t) -> bool {
-    match face.tables().kern {
+    match face.aat_tables.kern {
         Some(ref kern) => kern.subtables.into_iter().any(|s| s.has_cross_stream),
         None => false,
     }
@@ -45,9 +43,7 @@ pub fn _hb_ot_layout_set_glyph_props(face: &hb_font_t, buffer: &mut hb_buffer_t)
 }
 
 pub fn hb_ot_layout_has_glyph_classes(face: &hb_font_t) -> bool {
-    face.tables()
-        .gdef
-        .map_or(false, |table| table.has_glyph_classes())
+    face.ot_tables.has_glyph_classes()
 }
 
 // get_gsubgpos_table
@@ -90,7 +86,7 @@ pub trait LayoutTable {
     type Lookup: LayoutLookup;
 
     /// Get the lookup at the specified index.
-    fn get_lookup(&self, index: LookupIndex) -> Option<&Self::Lookup>;
+    fn get_lookup(&self, index: u16) -> Option<&Self::Lookup>;
 }
 
 /// A lookup in a layout table.
@@ -103,26 +99,6 @@ pub trait LayoutLookup: Apply {
 
     /// The digest of the lookup.
     fn digest(&self) -> &hb_set_digest_t;
-}
-
-pub trait LayoutTableExt {
-    fn select_script(&self, script_tags: &[hb_tag_t]) -> Option<(bool, ScriptIndex, hb_tag_t)>;
-    fn select_script_language(
-        &self,
-        script_index: ScriptIndex,
-        lang_tags: &[hb_tag_t],
-    ) -> Option<LanguageIndex>;
-    fn get_required_language_feature(
-        &self,
-        script_index: ScriptIndex,
-        lang_index: Option<LanguageIndex>,
-    ) -> Option<(FeatureIndex, hb_tag_t)>;
-    fn find_language_feature(
-        &self,
-        script_index: ScriptIndex,
-        lang_index: Option<LanguageIndex>,
-        feature_tag: hb_tag_t,
-    ) -> Option<FeatureIndex>;
 }
 
 /// Called before substitution lookups are performed, to ensure that glyph
@@ -233,12 +209,12 @@ fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> b
 
 /* Design:
  * unicode_props() is a two-byte number.  The low byte includes:
- * - General_Category: 5 bits.
+ * - Modified General_Category: 5 bits.
  * - A bit each for:
  *   * Is it Default_Ignorable(); we have a modified Default_Ignorable().
  *   * Whether it's one of the four Mongolian Free Variation Selectors,
  *     CGJ, or other characters that are hidden but should not be ignored
- *     like most other Default_Ignorable()s do during matching.
+ *     like most other Default_Ignorable()s do during GSUB matching.
  *   * Whether it's a grapheme continuation.
  *
  * The high-byte has different meanings, switched by the Gen-Cat:
@@ -246,6 +222,11 @@ fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> b
  * - For Cf: whether it's ZWJ, ZWNJ, or something else.
  * - For Ws: index of which space character this is, if space fallback
  *   is needed, ie. we don't set this by default, only if asked to.
+ *
+ * Above I said "modified" General_Category. This is because we need to
+ * remember Variation Selectors, and we don't have bits left. So we
+ * change their Gen_Cat from Mn to Cf, and use a bit of the high byte to
+ * remember them.
  */
 
 //  enum hb_unicode_props_flags_t {
@@ -391,18 +372,40 @@ pub(crate) fn _hb_glyph_info_get_unicode_space_fallback_type(
 }
 
 #[inline]
+pub(crate) fn _hb_glyph_info_is_variation_selector(info: &hb_glyph_info_t) -> bool {
+    let a = _hb_glyph_info_get_general_category(info) == hb_unicode_general_category_t::Format;
+    let b = (info.unicode_props() & UnicodeProps::CF_VS.bits()) != 0;
+    a && b
+}
+
+#[inline]
+pub(crate) fn _hb_glyph_info_set_variation_selector(info: &mut hb_glyph_info_t, customize: bool) {
+    if customize {
+        _hb_glyph_info_set_general_category(info, hb_unicode_general_category_t::Format);
+        info.set_unicode_props(info.unicode_props() | UnicodeProps::CF_VS.bits())
+    } else {
+        // Reset to their original condition
+        _hb_glyph_info_set_general_category(info, hb_unicode_general_category_t::NonspacingMark);
+    }
+}
+
+#[inline]
 pub(crate) fn _hb_glyph_info_is_default_ignorable(info: &hb_glyph_info_t) -> bool {
     let n = info.unicode_props() & UnicodeProps::IGNORABLE.bits();
     n != 0 && !_hb_glyph_info_substituted(info)
 }
 
-//   static inline bool
-//   _hb_glyph_info_is_default_ignorable_and_not_hidden (const hb_glyph_info_t *info)
-//   {
-//     return ((info->unicode_props() & (UPROPS_MASK_IGNORABLE|UPROPS_MASK_HIDDEN))
-//         == UPROPS_MASK_IGNORABLE) &&
-//        !_hb_glyph_info_substituted (info);
-//   }
+#[inline]
+pub(crate) fn _hb_glyph_info_clear_default_ignorable(info: &mut hb_glyph_info_t) {
+    let mut n = info.unicode_props();
+    n &= !UnicodeProps::IGNORABLE.bits();
+    info.set_unicode_props(n);
+}
+
+#[inline]
+pub(crate) fn _hb_glyph_info_is_hidden(info: &hb_glyph_info_t) -> bool {
+    (info.unicode_props() & UnicodeProps::HIDDEN.bits()) != 0
+}
 
 //   static inline void
 //   _hb_glyph_info_unhide (hb_glyph_info_t *info)

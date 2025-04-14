@@ -2,6 +2,7 @@
 name = "harfruzz"
 version = "0.0.1"
 edition = "2021"
+rust-version = "1.65.0"
 description = "A complete harfbuzz shaping algorithm port to Rust."
 documentation = "https://docs.rs/harfruzz/"
 readme = "README.md"
@@ -12,23 +13,21 @@ categories = ["text-processing"]
 exclude = ["benches/", "tests/"]
 
 [dependencies]
-bitflags = "2.4.1"
-bytemuck = { version = "1.5", features = ["extern_crate_alloc", "derive"] }
-core_maths = "0.1.0" # only for no_std builds
-smallvec = "1.6"
-unicode-bidi-mirroring = "0.3.0"
-unicode-ccc = "0.3.0"
-unicode-properties = { version = "0.1.0", default-features = false, features = ["general-category"] }
-unicode-script = "0.5.2"
-
-skrifa = "0.20"  # TODO: read-fonts instead
-wasmi = { version = "0.34.0", optional = true }
-log = "0.4.22"
+bitflags = "2.9"
+bytemuck = { version = "1.22", features = ["extern_crate_alloc"] }
+core_maths = "0.1" # only for no_std builds
+smallvec = "1.14"
+unicode-bidi-mirroring = "0.4"
+unicode-ccc = "0.4"
+unicode-properties = { version = "0.1", default-features = false, features = ["general-category"] }
+unicode-script = "0.5"
+wasmi = { version = "0.40", optional = true }
+log = "0.4"
+read-fonts = { version = "0.28.0", default-features = false, features = ["libm"] }
 
 # TODO: remove entirely
 [dependencies.ttf-parser]
-git = "https://github.com/RazrFalcon/ttf-parser"
-rev = "85c1ff2"
+version = "0.25"
 default-features = false
 features = [
     "opentype-layout",
@@ -40,7 +39,7 @@ features = [
 
 [features]
 default = ["std"]
-std = ["ttf-parser/std"]
+std = ["ttf-parser/std", "read-fonts/std"]
 wasm-shaper = ["std", "dep:wasmi"]
 
 [dev-dependencies]

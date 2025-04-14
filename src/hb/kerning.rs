@@ -1,3 +1,4 @@
+use super::aat_layout_common::ToTtfParserGid;
 use ttf_parser::{apple_layout, kern, GlyphId};
 
 use super::buffer::*;
@@ -9,7 +10,7 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::{hb_font_t, hb_mask_t};
 
 pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
-    let subtables = match face.tables().kern {
+    let subtables = match face.aat_tables.kern {
         Some(table) => table.subtables,
         None => return,
     };
@@ -172,10 +173,10 @@ fn apply_state_machine_kerning(
     loop {
         let class = if buffer.idx < buffer.len {
             state_table
-                .class(buffer.info[buffer.idx].as_glyph())
+                .class(buffer.info[buffer.idx].as_glyph().ttfp_gid())
                 .unwrap_or(1)
         } else {
-            apple_layout::class::END_OF_TEXT as u8
+            apple_layout::class::END_OF_TEXT
         };
 
         let entry = match state_table.entry(state, class) {
@@ -191,7 +192,8 @@ fn apply_state_machine_kerning(
         {
             // If there's no value and we're just epsilon-transitioning to state 0, safe to break.
             if entry.has_offset()
-                || !(entry.new_state == apple_layout::state::START_OF_TEXT && !entry.has_advance())
+                || entry.new_state != apple_layout::state::START_OF_TEXT
+                || entry.has_advance()
             {
                 buffer.unsafe_to_break_from_outbuffer(
                     Some(buffer.backtrack_len() - 1),

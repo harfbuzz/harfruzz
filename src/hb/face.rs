@@ -1,52 +1,66 @@
-use bytemuck::{Pod, Zeroable};
 #[cfg(not(feature = "std"))]
 use core_maths::CoreFloat;
+use read_fonts::types::{F2Dot14, GlyphId};
+use read_fonts::{FontRef, TableProvider};
 
-use crate::hb::paint_extents::hb_paint_extents_context_t;
-use ttf_parser::gdef::GlyphClass;
-use ttf_parser::{GlyphId, RgbaColor};
-
+use super::aat::AatTables;
 use super::buffer::GlyphPropsFlags;
-use super::fonta;
-use super::common::TagExt;
+use super::charmap::Charmap;
+use super::glyph_metrics::GlyphMetrics;
+use super::glyph_names::GlyphNames;
+use super::ot::{LayoutTable, OtCache, OtTables};
 use super::ot_layout::TableIndex;
-use crate::Variation;
+
+/// Cached shaper state for a single font.
+pub struct ShaperFont {
+    ot_cache: OtCache,
+}
+
+impl ShaperFont {
+    /// Creates new cached state for the given font.
+    pub fn new(font: &FontRef) -> Self {
+        let ot_cache = OtCache::new(font);
+        Self { ot_cache }
+    }
+
+    /// Creates a shaper instance for the given font and variation
+    /// coordinates.
+    pub fn shaper<'a>(&'a self, font: &FontRef<'a>, coords: &'a [F2Dot14]) -> Shaper<'a> {
+        let units_per_em = font.head().map(|head| head.units_per_em()).unwrap_or(1000);
+        let charmap = Charmap::new(font);
+        let glyph_metrics = GlyphMetrics::new(font);
+        let ot_tables = OtTables::new(font, &self.ot_cache, coords);
+        let aat_tables = AatTables::new(font);
+        hb_font_t {
+            font: font.clone(),
+            units_per_em,
+            pixels_per_em: None,
+            points_per_em: None,
+            charmap,
+            glyph_metrics,
+            ot_tables,
+            aat_tables,
+        }
+    }
+}
+
+/// A shaper.
+pub type Shaper<'a> = hb_font_t<'a>;
 
 /// A font face handle.
 #[derive(Clone)]
 pub struct hb_font_t<'a> {
-    pub(crate) ttfp_face: ttf_parser::Face<'a>,
-    pub(crate) font: fonta::Font<'a>,
+    pub(crate) font: FontRef<'a>,
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
     pub(crate) points_per_em: Option<f32>,
-}
-
-impl<'a> core::ops::Deref for hb_font_t<'a> {
-    type Target = ttf_parser::Face<'a>;
-
-    #[inline]
-    fn deref(&self) -> &Self::Target {
-        &self.ttfp_face
-    }
+    charmap: Charmap<'a>,
+    glyph_metrics: GlyphMetrics<'a>,
+    pub(crate) ot_tables: OtTables<'a>,
+    pub(crate) aat_tables: AatTables<'a>,
 }
 
 impl<'a> hb_font_t<'a> {
-    /// Creates a new `Face` from data.
-    ///
-    /// Data will be referenced, not owned.
-    pub fn from_slice(data: &'a [u8], face_index: u32) -> Option<Self> {
-        let face = ttf_parser::Face::parse(data, face_index).ok()?;
-        let font = fonta::Font::new(data, face_index)?;
-        Some(hb_font_t {
-            font,
-            units_per_em: face.units_per_em(),
-            pixels_per_em: None,
-            points_per_em: None,
-            ttfp_face: face,
-        })
-    }
-
     // TODO: remove
     /// Returns face’s units per EM.
     #[inline]
@@ -79,70 +93,29 @@ impl<'a> hb_font_t<'a> {
         self.points_per_em = ptem;
     }
 
-    /// Sets font variations.
-    pub fn set_variations(&mut self, variations: &[Variation]) {
-        for variation in variations {
-            self.ttfp_face.set_variation(ttf_parser::Tag(variation.tag.as_u32()), variation.value);
-        }
-        self.font.set_coords(self.ttfp_face.variation_coordinates());
-    }
-
     pub(crate) fn has_glyph(&self, c: u32) -> bool {
         self.get_nominal_glyph(c).is_some()
     }
 
     pub(crate) fn get_nominal_glyph(&self, c: u32) -> Option<GlyphId> {
-        self.font
-            .nominal_glyph(c)
-            .map(|gid| GlyphId(gid.to_u32() as u16)) // TODO: remove as u16 when fully on read-fonts GlyphId
+        self.charmap.map(c)
     }
 
-    pub(crate) fn glyph_variation_index(&self, c: char, vs: char) -> Option<GlyphId> {
-        self.font
-            .nominal_variant_glyph(c as u32, vs as u32)
-            .map(|gid| GlyphId(gid.to_u32() as u16)) // TODO: remove as u16 when fully on read-fonts GlyphId
+    pub(crate) fn get_nominal_variant_glyph(&self, c: char, vs: char) -> Option<GlyphId> {
+        self.charmap.map_variant(c as u32, vs as u32)
     }
 
     pub(crate) fn glyph_h_advance(&self, glyph: GlyphId) -> i32 {
-        self.glyph_advance(glyph, false) as i32
+        self.glyph_metrics
+            .advance_width(glyph, self.ot_tables.coords)
+            .unwrap_or_default()
     }
 
     pub(crate) fn glyph_v_advance(&self, glyph: GlyphId) -> i32 {
-        -(self.glyph_advance(glyph, true) as i32)
-    }
-
-    fn glyph_advance(&self, glyph: GlyphId, is_vertical: bool) -> u32 {
-        let face = &self.ttfp_face;
-        if face.is_variable()
-            && face.has_non_default_variation_coordinates()
-            && face.tables().hvar.is_none()
-            && face.tables().vvar.is_none()
-            && face.glyph_phantom_points(glyph).is_none()
-        {
-            return match face.glyph_bounding_box(glyph) {
-                Some(bbox) => {
-                    (if is_vertical {
-                        bbox.y_max + bbox.y_min
-                    } else {
-                        bbox.x_max + bbox.x_min
-                    }) as u32
-                }
-                None => 0,
-            };
-        }
-
-        if is_vertical {
-            if face.tables().vmtx.is_some() {
-                return face.glyph_ver_advance(glyph).unwrap_or(0) as u32;
-            } else {
-                // TODO: Original code calls `h_extents_with_fallback`
-                return (face.ascender() - face.descender()) as u32;
-            }
-        } else if !is_vertical && face.tables().hmtx.is_some() {
-            face.glyph_hor_advance(glyph).unwrap_or(0) as u32
-        } else {
-            face.units_per_em() as u32
-        }
+        -self
+            .glyph_metrics
+            .advance_height(glyph, self.ot_tables.coords)
+            .unwrap_or(self.units_per_em as i32)
     }
 
     pub(crate) fn glyph_h_origin(&self, glyph: GlyphId) -> i32 {
@@ -150,40 +123,9 @@ impl<'a> hb_font_t<'a> {
     }
 
     pub(crate) fn glyph_v_origin(&self, glyph: GlyphId) -> i32 {
-        match self.ttfp_face.glyph_y_origin(glyph) {
-            Some(y) => i32::from(y),
-            None => {
-                let mut extents = hb_glyph_extents_t::default();
-                if self.glyph_extents(glyph, &mut extents) {
-                    if self.ttfp_face.tables().vmtx.is_some() {
-                        extents.y_bearing + self.glyph_side_bearing(glyph, true)
-                    } else {
-                        let advance = self.ttfp_face.ascender() - self.ttfp_face.descender();
-                        let diff = advance as i32 - -extents.height;
-                        return extents.y_bearing + (diff >> 1);
-                    }
-                } else {
-                    // TODO: Original code calls `h_extents_with_fallback`
-                    self.ttfp_face.ascender() as i32
-                }
-            }
-        }
-    }
-
-    pub(crate) fn glyph_side_bearing(&self, glyph: GlyphId, is_vertical: bool) -> i32 {
-        let face = &self.ttfp_face;
-        if face.is_variable() && face.tables().hvar.is_none() && face.tables().vvar.is_none() {
-            return match face.glyph_bounding_box(glyph) {
-                Some(bbox) => (if is_vertical { bbox.x_min } else { bbox.y_min }) as i32,
-                None => 0,
-            };
-        }
-
-        if is_vertical {
-            face.glyph_ver_side_bearing(glyph).unwrap_or(0) as i32
-        } else {
-            face.glyph_hor_side_bearing(glyph).unwrap_or(0) as i32
-        }
+        self.glyph_metrics
+            .v_origin(glyph, self.ot_tables.coords)
+            .unwrap_or_default()
     }
 
     pub(crate) fn glyph_extents(
@@ -191,133 +133,55 @@ impl<'a> hb_font_t<'a> {
         glyph: GlyphId,
         glyph_extents: &mut hb_glyph_extents_t,
     ) -> bool {
-        let pixels_per_em = match self.pixels_per_em {
-            Some(ppem) => ppem.0,
-            None => core::u16::MAX,
-        };
-
-        if let Some(img) = self.ttfp_face.glyph_raster_image(glyph, pixels_per_em) {
-            // HarfBuzz also supports only PNG.
-            if img.format == ttf_parser::RasterImageFormat::PNG {
-                let scale = self.units_per_em as f32 / img.pixels_per_em as f32;
-                glyph_extents.x_bearing = (f32::from(img.x) * scale).round() as i32;
-                glyph_extents.y_bearing =
-                    ((f32::from(img.y) + f32::from(img.height)) * scale).round() as i32;
-                glyph_extents.width = (f32::from(img.width) * scale).round() as i32;
-                glyph_extents.height = (-f32::from(img.height) * scale).round() as i32;
-                return true;
-            }
-        // TODO: Add tests for this. We should use all glyphs from
-        // https://github.com/googlefonts/color-fonts/blob/main/fonts/test_glyphs-glyf_colr_1_no_cliplist.ttf
-        // and test their output against harfbuzz.
-        } else if let Some(colr) = self.ttfp_face.tables().colr {
-            if colr.is_simple() {
-                return false;
-            }
-
-            if let Some(clip_box) = colr.clip_box(glyph, self.variation_coordinates()) {
-                // Floor
-                glyph_extents.x_bearing = (clip_box.x_min).round() as i32;
-                glyph_extents.y_bearing = (clip_box.y_max).round() as i32;
-                glyph_extents.width = (clip_box.x_max - clip_box.x_min).round() as i32;
-                glyph_extents.height = (clip_box.y_min - clip_box.y_max).round() as i32;
-                return true;
-            }
-
-            let mut extents_data = hb_paint_extents_context_t::new(&self.ttfp_face);
-            let ret = colr
-                .paint(
-                    glyph,
-                    0,
-                    &mut extents_data,
-                    self.variation_coordinates(),
-                    RgbaColor::new(0, 0, 0, 0),
-                )
-                .is_some();
-
-            let e = extents_data.get_extents();
-            if e.is_void() {
-                glyph_extents.x_bearing = 0;
-                glyph_extents.y_bearing = 0;
-                glyph_extents.width = 0;
-                glyph_extents.height = 0;
-            } else {
-                glyph_extents.x_bearing = e.x_min as i32;
-                glyph_extents.y_bearing = e.y_max as i32;
-                glyph_extents.width = (e.x_max - e.x_min) as i32;
-                glyph_extents.height = (e.y_min - e.y_max) as i32;
-            }
-
-            return ret;
+        if let Some(extents) = self.glyph_metrics.extents(glyph, self.ot_tables.coords) {
+            glyph_extents.x_bearing = extents.x_min;
+            glyph_extents.y_bearing = extents.y_max;
+            glyph_extents.width = extents.x_max - extents.x_min;
+            glyph_extents.height = extents.y_min - extents.y_max;
+            true
+        } else {
+            false
         }
-
-        let mut bbox = None;
-
-        if let Some(glyf) = self.ttfp_face.tables().glyf {
-            bbox = glyf.bbox(glyph);
-        }
-
-        // See https://github.com/RazrFalcon/harfruzz/pull/98#issuecomment-1948430785
-        if self.ttfp_face.tables().glyf.is_some() && bbox.is_none() {
-            // Empty glyph; zero extents.
-            return true;
-        }
-
-        let Some(bbox) = bbox else {
-            return false;
-        };
-
-        glyph_extents.x_bearing = i32::from(bbox.x_min);
-        glyph_extents.y_bearing = i32::from(bbox.y_max);
-        glyph_extents.width = i32::from(bbox.width());
-        glyph_extents.height = i32::from(bbox.y_min - bbox.y_max);
-
-        return true;
     }
 
-    pub(crate) fn glyph_name(&self, glyph: GlyphId) -> Option<&str> {
-        self.ttfp_face.glyph_name(glyph)
+    pub(crate) fn glyph_names(&self) -> GlyphNames<'a> {
+        GlyphNames::new(&self.font)
     }
 
     pub(crate) fn glyph_props(&self, glyph: GlyphId) -> u16 {
-        let table = match self.tables().gdef {
-            Some(v) => v,
-            None => return 0,
-        };
-
-        match table.glyph_class(glyph) {
-            Some(GlyphClass::Base) => GlyphPropsFlags::BASE_GLYPH.bits(),
-            Some(GlyphClass::Ligature) => GlyphPropsFlags::LIGATURE.bits(),
-            Some(GlyphClass::Mark) => {
-                let class = table.glyph_mark_attachment_class(glyph);
+        let glyph = glyph.to_u32();
+        match self.ot_tables.glyph_class(glyph) {
+            1 => GlyphPropsFlags::BASE_GLYPH.bits(),
+            2 => GlyphPropsFlags::LIGATURE.bits(),
+            3 => {
+                let class = self.ot_tables.glyph_mark_attachment_class(glyph);
                 (class << 8) | GlyphPropsFlags::MARK.bits()
             }
             _ => 0,
         }
     }
 
-    pub(crate) fn layout_table(
-        &self,
-        table_index: TableIndex,
-    ) -> Option<fonta::ot::LayoutTable<'a>> {
+    pub(crate) fn layout_table(&self, table_index: TableIndex) -> Option<LayoutTable<'a>> {
         match table_index {
-            TableIndex::GSUB => Some(fonta::ot::LayoutTable::Gsub(
-                self.font.ot.gsub.as_ref()?.table.clone(),
-            )),
-            TableIndex::GPOS => Some(fonta::ot::LayoutTable::Gpos(
-                self.font.ot.gpos.as_ref()?.table.clone(),
-            )),
+            TableIndex::GSUB => self
+                .ot_tables
+                .gsub
+                .as_ref()
+                .map(|table| LayoutTable::Gsub(table.table.clone())),
+            TableIndex::GPOS => self
+                .ot_tables
+                .gpos
+                .as_ref()
+                .map(|table| LayoutTable::Gpos(table.table.clone())),
         }
     }
 
-    pub(crate) fn layout_tables(
-        &self,
-    ) -> impl Iterator<Item = (TableIndex, fonta::ot::LayoutTable<'a>)> + '_ {
-        TableIndex::iter().filter_map(move |idx| Some((idx, self.layout_table(idx)?)))
+    pub(crate) fn layout_tables(&self) -> impl Iterator<Item = (TableIndex, LayoutTable<'a>)> + '_ {
+        TableIndex::iter().filter_map(move |idx| self.layout_table(idx).map(|table| (idx, table)))
     }
 }
 
-#[derive(Clone, Copy, Default, Zeroable, Pod)]
+#[derive(Clone, Copy, Default, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct hb_glyph_extents_t {
     pub x_bearing: i32,

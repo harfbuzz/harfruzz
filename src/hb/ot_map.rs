@@ -1,18 +1,11 @@
 use alloc::vec::Vec;
 use core::cmp::Ordering;
 use core::ops::Range;
-use ttf_parser::FromData;
-
-pub type FeatureIndex = u16;
-pub type LanguageIndex = u16;
-pub type LookupIndex = u16;
-pub type ScriptIndex = u16;
-pub type VariationIndex = u32;
 
 use super::buffer::{glyph_flag, hb_buffer_t};
-use super::ot_layout::{LayoutTableExt, TableIndex};
-use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::common::TagExt;
+use super::ot_layout::TableIndex;
+use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::{hb_font_t, hb_mask_t, hb_tag_t, tag, Language, Script};
 
 pub struct hb_ot_map_t {
@@ -28,7 +21,7 @@ pub struct hb_ot_map_t {
 pub struct feature_map_t {
     tag: hb_tag_t,
     // GSUB/GPOS
-    index: [Option<FeatureIndex>; 2],
+    index: [Option<u16>; 2],
     stage: [usize; 2],
     shift: u32,
     mask: hb_mask_t,
@@ -54,7 +47,7 @@ impl PartialOrd for feature_map_t {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct lookup_map_t {
-    pub index: LookupIndex,
+    pub index: u16,
     // TODO: to bitflags
     pub auto_zwnj: bool,
     pub auto_zwj: bool,
@@ -110,11 +103,7 @@ impl hb_ot_map_t {
     }
 
     #[inline]
-    pub fn get_feature_index(
-        &self,
-        table_index: TableIndex,
-        feature_tag: hb_tag_t,
-    ) -> Option<FeatureIndex> {
+    pub fn get_feature_index(&self, table_index: TableIndex, feature_tag: hb_tag_t) -> Option<u16> {
         self.features
             .binary_search_by_key(&feature_tag, |f| f.tag)
             .ok()
@@ -178,9 +167,9 @@ pub const F_PER_SYLLABLE: u32 = 0x0040; /* Contain lookup application to within 
 pub struct hb_ot_map_builder_t<'a> {
     face: &'a hb_font_t<'a>,
     found_script: [bool; 2],
-    script_index: [Option<ScriptIndex>; 2],
+    script_index: [Option<u16>; 2],
     chosen_script: [Option<hb_tag_t>; 2],
-    lang_index: [Option<LanguageIndex>; 2],
+    lang_index: [Option<u16>; 2],
     current_stage: [usize; 2],
     feature_infos: Vec<feature_info_t>,
     stages: [Vec<stage_info_t>; 2],
@@ -206,7 +195,7 @@ struct stage_info_t {
     pause_func: Option<pause_func_t>,
 }
 
-const GLOBAL_BIT_SHIFT: u32 = 8 * u32::SIZE as u32 - 1;
+const GLOBAL_BIT_SHIFT: u32 = 8 * core::mem::size_of::<u32>() as u32 - 1;
 const GLOBAL_BIT_MASK: hb_mask_t = 1 << GLOBAL_BIT_SHIFT;
 
 impl<'a> hb_ot_map_builder_t<'a> {
@@ -483,7 +472,7 @@ impl<'a> hb_ot_map_builder_t<'a> {
     fn collect_lookup_stages(
         &self,
         map_features: &[feature_map_t],
-        required_feature_index: [Option<FeatureIndex>; 2],
+        required_feature_index: [Option<u16>; 2],
         required_feature_stage: [usize; 2],
     ) -> ([Vec<lookup_map_t>; 2], [Vec<StageMap>; 2]) {
         let mut map_lookups = [Vec::new(), Vec::new()];
@@ -494,11 +483,10 @@ impl<'a> hb_ot_map_builder_t<'a> {
             let mut stage_index = 0;
             let mut last_lookup = 0;
 
-            let coords = &self.face.font.coords;
             let variation_index = self
                 .face
                 .layout_table(table_index)
-                .and_then(|t| t.feature_variation_index(coords));
+                .and_then(|t| t.feature_variation_index(self.face.ot_tables.coords));
 
             for stage in 0..self.current_stage[table_index] {
                 if let Some(feature_index) = required_feature_index[table_index] {
@@ -579,8 +567,8 @@ impl<'a> hb_ot_map_builder_t<'a> {
         &self,
         lookups: &mut Vec<lookup_map_t>,
         table_index: TableIndex,
-        feature_index: FeatureIndex,
-        variation_index: Option<VariationIndex>,
+        feature_index: u16,
+        variation_index: Option<u32>,
         mask: hb_mask_t,
         auto_zwnj: bool,
         auto_zwj: bool,

@@ -6,7 +6,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.20.1] - 2024-10-12
+### Changed
+- Update canonical repository location
+- Address Clippy lints
+
 ### Fixed
+- Track HarfBuzz's signed/unsigned integer types to avoid overflows
+
+## [0.20.0] - 2024-10-04
+### Changed
+- Bump `ttf-parser`.
+
+### Fixed
+- Variations handling for fonts with `avar` table that has multiple axes.
+  Thanks to [@maxmelander](https://github.com/maxmelander).
+
+## [0.19.0] - 2024-10-01
+- Sync with HarfBuzz 10.0.1.
+  Thanks to [@LaurenzV](https://github.com/LaurenzV).
+
+### Fixed
+- RTL text handling.
+  Thanks to [@LaurenzV](https://github.com/LaurenzV).
+
+## [0.18.0] - 2024-08-10
+### Added
+- WASM shapers support.
+  Thanks to [@asibahi](https://github.com/asibahi).
+- Some performance improvements.
+  Thanks to [@LaurenzV](https://github.com/LaurenzV).
+
+### Fixed
+- Multiple bugs.
+  Thanks to [@LaurenzV](https://github.com/LaurenzV).
+- `kerx` table parsing in some Apple fonts.
 - Allow `hb_buffer_t::serial` to overflow/wrap-around instead of panicking.
 
 ## [0.17.0] - 2024-07-02
@@ -221,26 +255,30 @@ At this point, this is just a simple Rust bindings to a stripped down harfbuzz.
   Embedded harfbuzz relies only on internal TrueType implementation.
 - Most of the non-shaping harfbuzz API.
 
-[Unreleased]: https://github.com/RazrFalcon/rustybuzz/compare/v0.17.0...HEAD
-[0.17.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.16.0...v0.17.0
-[0.16.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.15.0...v0.16.0
-[0.15.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.14.1...v0.15.0
-[0.14.1]: https://github.com/RazrFalcon/rustybuzz/compare/v0.14.0...v0.14.1
-[0.14.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.13.0...v0.14.0
-[0.13.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.12.1...v0.13.0
-[0.12.1]: https://github.com/RazrFalcon/rustybuzz/compare/v0.12.0...v0.12.1
-[0.12.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.11.0...v0.12.0
-[0.11.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.10.0...v0.11.0
-[0.10.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.9.0...v0.10.0
-[0.9.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.8.0...v0.9.0
-[0.8.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.7.0...v0.8.0
-[0.7.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.6.0...v0.7.0
-[0.6.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.5.3...v0.6.0
-[0.5.3]: https://github.com/RazrFalcon/rustybuzz/compare/v0.5.2...v0.5.3
-[0.5.2]: https://github.com/RazrFalcon/rustybuzz/compare/v0.5.1...v0.5.2
-[0.5.1]: https://github.com/RazrFalcon/rustybuzz/compare/v0.5.0...v0.5.1
-[0.5.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/RazrFalcon/rustybuzz/compare/v0.1.1...v0.2.0
-[0.1.1]: https://github.com/RazrFalcon/rustybuzz/compare/v0.1.0...v0.1.1
+[Unreleased]: https://github.com/harfbuzz/rustybuzz/compare/v0.20.1...HEAD
+[0.20.1]: https://github.com/harfbuzz/rustybuzz/compare/v0.20.0...v0.20.1
+[0.20.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.19.0...v0.20.0
+[0.19.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.18.0...v0.19.0
+[0.18.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.17.0...v0.18.0
+[0.17.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.16.0...v0.17.0
+[0.16.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.15.0...v0.16.0
+[0.15.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.14.1...v0.15.0
+[0.14.1]: https://github.com/harfbuzz/rustybuzz/compare/v0.14.0...v0.14.1
+[0.14.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.13.0...v0.14.0
+[0.13.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.12.1...v0.13.0
+[0.12.1]: https://github.com/harfbuzz/rustybuzz/compare/v0.12.0...v0.12.1
+[0.12.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.11.0...v0.12.0
+[0.11.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.10.0...v0.11.0
+[0.10.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.9.0...v0.10.0
+[0.9.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.8.0...v0.9.0
+[0.8.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.6.0...v0.7.0
+[0.6.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.5.3...v0.6.0
+[0.5.3]: https://github.com/harfbuzz/rustybuzz/compare/v0.5.2...v0.5.3
+[0.5.2]: https://github.com/harfbuzz/rustybuzz/compare/v0.5.1...v0.5.2
+[0.5.1]: https://github.com/harfbuzz/rustybuzz/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/harfbuzz/rustybuzz/compare/v0.1.1...v0.2.0
+[0.1.1]: https://github.com/harfbuzz/rustybuzz/compare/v0.1.0...v0.1.1

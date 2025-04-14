@@ -1,4 +1,4 @@
-use ttf_parser::GlyphId;
+use read_fonts::types::GlyphId;
 
 use super::buffer::{hb_buffer_t, GlyphPosition};
 use super::face::hb_glyph_extents_t;
@@ -271,7 +271,7 @@ fn position_around_base(
     // Use horizontal advance for horizontal positioning.
     // Generally a better idea. Also works for zero-ink glyphs. See:
     // https://github.com/harfbuzz/harfbuzz/issues/1532
-    base_extents.width = face.glyph_h_advance(base_glyph) as i32;
+    base_extents.width = face.glyph_h_advance(base_glyph);
 
     let lig_id = _hb_glyph_info_get_lig_id(base_info) as u32;
     let num_lig_components = _hb_glyph_info_get_lig_num_comps(base_info) as i32;
@@ -422,7 +422,7 @@ pub fn _hb_ot_shape_fallback_spaces(
     let len = buffer.len;
     let horizontal = buffer.direction.is_horizontal();
     for (info, pos) in buffer.info[..len].iter().zip(&mut buffer.pos[..len]) {
-        if _hb_glyph_info_is_unicode_space(&info) && !_hb_glyph_info_ligated(info) {
+        if _hb_glyph_info_is_unicode_space(info) && !_hb_glyph_info_ligated(info) {
             let space_type = _hb_glyph_info_get_unicode_space_fallback_type(info);
             match space_type {
                 t::SPACE_EM
@@ -454,7 +454,7 @@ pub fn _hb_ot_shape_fallback_spaces(
                     for u in '0'..='9' {
                         if let Some(glyph) = face.get_nominal_glyph(u as u32) {
                             if horizontal {
-                                pos.x_advance = face.glyph_h_advance(glyph) as i32;
+                                pos.x_advance = face.glyph_h_advance(glyph);
                             } else {
                                 pos.y_advance = face.glyph_v_advance(glyph);
                             }
@@ -470,7 +470,7 @@ pub fn _hb_ot_shape_fallback_spaces(
 
                     if let Some(glyph) = punct {
                         if horizontal {
-                            pos.x_advance = face.glyph_h_advance(glyph) as i32;
+                            pos.x_advance = face.glyph_h_advance(glyph);
                         } else {
                             pos.y_advance = face.glyph_v_advance(glyph);
                         }

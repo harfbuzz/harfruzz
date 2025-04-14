@@ -13,7 +13,7 @@ pub fn apply(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer
         return None;
     }
 
-    let trak = face.tables().trak?;
+    let trak = face.aat_tables.trak?;
 
     if !buffer.have_positions {
         buffer.clear_positions();
@@ -85,9 +85,7 @@ impl TrackTableDataExt for ttf_parser::trak::TrackData<'_> {
             .position(|s| s.0 >= ptem)
             .unwrap_or(self.sizes.len() as usize - 1);
 
-        if idx > 0 {
-            idx -= 1;
-        }
+        idx = idx.saturating_sub(1);
 
         self.interpolate_at(idx as u16, ptem, &track)
             .map(|n| n.round() as i32)

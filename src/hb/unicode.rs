@@ -257,7 +257,7 @@ impl GeneralCategoryExt for hb_unicode_general_category_t {
             hb_unicode_general_category_t::Surrogate => hb_gc::RB_UNICODE_GENERAL_CATEGORY_SURROGATE,
             hb_unicode_general_category_t::TitlecaseLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER,
             hb_unicode_general_category_t::Unassigned => hb_gc::RB_UNICODE_GENERAL_CATEGORY_UNASSIGNED,
-            hb_unicode_general_category_t::UppercaseLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER,
+            hb_unicode_general_category_t::UppercaseLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER
         }
     }
 
@@ -293,28 +293,24 @@ impl GeneralCategoryExt for hb_unicode_general_category_t {
             hb_gc::RB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER => hb_unicode_general_category_t::TitlecaseLetter,
             hb_gc::RB_UNICODE_GENERAL_CATEGORY_UNASSIGNED => hb_unicode_general_category_t::Unassigned,
             hb_gc::RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER => hb_unicode_general_category_t::UppercaseLetter,
-            _ => unreachable!(),
+            _ => unreachable!()
         }
     }
 
     fn is_mark(&self) -> bool {
-        match *self {
+        matches!(*self, 
             hb_unicode_general_category_t::SpacingMark |
             hb_unicode_general_category_t::EnclosingMark |
-            hb_unicode_general_category_t::NonspacingMark => true,
-            _ => false,
-        }
+            hb_unicode_general_category_t::NonspacingMark)
     }
 
     fn is_letter(&self) -> bool {
-        match *self {
+        matches!(*self, 
             hb_unicode_general_category_t::LowercaseLetter |
             hb_unicode_general_category_t::ModifierLetter |
             hb_unicode_general_category_t::OtherLetter |
             hb_unicode_general_category_t::TitlecaseLetter |
-            hb_unicode_general_category_t::UppercaseLetter => true,
-            _ => false,
-        }
+            hb_unicode_general_category_t::UppercaseLetter)
     }
 }
 
@@ -840,11 +836,11 @@ pub fn decompose_hangul(ab: char) -> Option<(char, char)> {
 mod tests {
     #[test]
     fn check_unicode_version() {
-        assert_eq!(unicode_bidi_mirroring::UNICODE_VERSION, (15, 1, 0));
-        assert_eq!(unicode_ccc::UNICODE_VERSION, (15, 0, 0));
-        assert_eq!(unicode_properties::UNICODE_VERSION, (15, 1, 0));
-        assert_eq!(unicode_script::UNICODE_VERSION, (15, 1, 0));
-        assert_eq!(crate::hb::unicode_norm::UNICODE_VERSION, (15, 0, 0));
+        assert_eq!(unicode_bidi_mirroring::UNICODE_VERSION, (16, 0, 0));
+        assert_eq!(unicode_ccc::UNICODE_VERSION, (16, 0, 0));
+        assert_eq!(unicode_properties::UNICODE_VERSION, (16, 0, 0));
+        assert_eq!(unicode_script::UNICODE_VERSION, (16, 0, 0));
+        assert_eq!(crate::hb::unicode_norm::UNICODE_VERSION, (16, 0, 0));
     }
 }
 

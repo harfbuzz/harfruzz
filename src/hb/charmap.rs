@@ -1,19 +1,8 @@
-use super::ot;
-use alloc::vec::Vec;
-use skrifa::{
-    charmap::MapVariant,
-    instance::NormalizedCoord,
-    raw::{
-        tables::{
-            cmap::{Cmap, Cmap14, CmapSubtable, PlatformId},
-            gpos::{AnchorTable, DeviceOrVariationIndex},
-            variations::{DeltaSetIndex, ItemVariationStore},
-        },
-        ReadError, TableProvider,
-    },
-    GlyphId,
+use read_fonts::{
+    tables::cmap::{Cmap, Cmap14, CmapSubtable, MapVariant, PlatformId},
+    types::GlyphId,
+    FontRef, TableProvider,
 };
-use ttf_parser::NormalizedCoordinate;
 
 // https://docs.microsoft.com/en-us/typography/opentype/spec/cmap#windows-platform-platform-id--3
 const WINDOWS_SYMBOL_ENCODING: u16 = 0;
@@ -30,66 +19,36 @@ const UNICODE_2_0_FULL_ENCODING: u16 = 4;
 //const UNICODE_VARIATION_ENCODING: u16 = 5;
 const UNICODE_FULL_ENCODING: u16 = 6;
 
-#[derive(Clone)]
-pub struct Font<'a> {
-    pub charmap: Charmap<'a>,
-    pub ot: ot::LayoutTables<'a>,
-    pub coords: Vec<NormalizedCoord>,
-    pub ivs: Option<ItemVariationStore<'a>>,
+#[derive(Clone, Default)]
+pub struct Charmap<'a> {
+    subtable: Option<(PlatformId, u16, CmapSubtable<'a>)>,
+    vs_subtable: Option<Cmap14<'a>>,
 }
 
-impl<'a> Font<'a> {
-    pub fn new(data: &'a [u8], font_index: u32) -> Option<Self> {
-        let font = skrifa::FontRef::from_index(data, font_index).ok()?;
-        let charmap = Charmap::new(&font);
-        let ot = ot::LayoutTables::new(&font);
-        Some(Self {
-            charmap,
-            ot,
-            coords: Vec::new(),
-            ivs: None,
-        })
-    }
-
-    pub(crate) fn set_coords(&mut self, coords: &[NormalizedCoordinate]) {
-        self.coords.clear();
-        if !coords.is_empty() && !coords.iter().all(|coord| coord.get() == 0) {
-            self.coords.extend(
-                coords
-                    .iter()
-                    .map(|coord| NormalizedCoord::from_bits(coord.get())),
-            );            
-            let ivs = self.ivs.take().or_else(|| self.ot.item_variation_store());
-            self.ivs = ivs;
-        } else {
-            self.ivs = None;
-        }
-    }
-
-    pub(super) fn resolve_anchor(&self, anchor: &AnchorTable) -> (i32, i32) {
-        let mut x = anchor.x_coordinate() as i32;
-        let mut y = anchor.y_coordinate() as i32;
-        if let Some(ivs) = self.ivs.as_ref() {
-            let delta = |val: Option<Result<DeviceOrVariationIndex<'_>, ReadError>>| match val {
-                Some(Ok(DeviceOrVariationIndex::VariationIndex(varix))) => ivs
-                    .compute_delta(
-                        DeltaSetIndex {
-                            outer: varix.delta_set_outer_index(),
-                            inner: varix.delta_set_inner_index(),
-                        },
-                        &self.coords,
-                    )
-                    .unwrap_or_default(),
-                _ => 0,
+impl<'a> Charmap<'a> {
+    pub fn new(font: &FontRef<'a>) -> Self {
+        if let Ok(cmap) = font.cmap() {
+            let subtable = find_best_cmap_subtable(&cmap);
+            let offset_data = cmap.offset_data();
+            let vs_subtable = cmap
+                .encoding_records()
+                .iter()
+                .filter_map(|record| record.subtable(offset_data).ok())
+                .filter_map(|subtable| match subtable {
+                    CmapSubtable::Format14(table) => Some(table),
+                    _ => None,
+                })
+                .next();
+            return Self {
+                subtable,
+                vs_subtable,
             };
-            x += delta(anchor.x_device());
-            y += delta(anchor.y_device());
         }
-        (x, y)
+        Self::default()
     }
 
-    pub fn nominal_glyph(&self, mut c: u32) -> Option<GlyphId> {
-        let subtable = self.charmap.subtable.as_ref()?;
+    pub fn map(&self, mut c: u32) -> Option<GlyphId> {
+        let subtable = self.subtable.as_ref()?;
         if subtable.0 == PlatformId::Macintosh && c > 0x7F {
             c = unicode_to_macroman(c);
         }
@@ -126,46 +85,17 @@ impl<'a> Font<'a> {
             // Windows seems to do, and that's hinted about at:
             // https://docs.microsoft.com/en-us/typography/opentype/spec/recom
             // under "Non-Standard (Symbol) Fonts".
-            return self.nominal_glyph(0xF000 + c);
+            return self.map(0xF000 + c);
         }
         result
     }
 
-    pub fn nominal_variant_glyph(&self, c: u32, vs: u32) -> Option<GlyphId> {
-        let subtable = self.charmap.vs_subtable.as_ref()?;
+    pub fn map_variant(&self, c: u32, vs: u32) -> Option<GlyphId> {
+        let subtable = self.vs_subtable.as_ref()?;
         match subtable.map_variant(c, vs)? {
-            MapVariant::UseDefault => self.nominal_glyph(c),
+            MapVariant::UseDefault => self.map(c),
             MapVariant::Variant(gid) => Some(gid),
         }
-    }
-}
-
-#[derive(Clone, Default)]
-pub struct Charmap<'a> {
-    subtable: Option<(PlatformId, u16, CmapSubtable<'a>)>,
-    vs_subtable: Option<Cmap14<'a>>,
-}
-
-impl<'a> Charmap<'a> {
-    fn new(font: &impl TableProvider<'a>) -> Self {
-        if let Ok(cmap) = font.cmap() {
-            let subtable = find_best_cmap_subtable(&cmap);
-            let offset_data = cmap.offset_data();
-            let vs_subtable = cmap
-                .encoding_records()
-                .iter()
-                .filter_map(|record| record.subtable(offset_data).ok())
-                .filter_map(|subtable| match subtable {
-                    CmapSubtable::Format14(table) => Some(table),
-                    _ => None,
-                })
-                .next();
-            return Self {
-                subtable,
-                vs_subtable,
-            };
-        }
-        Self::default()
     }
 }
 
@@ -237,5 +167,5 @@ fn unicode_to_macroman(c: u32) -> u32 {
     let Some(index) = UNICODE_TO_MACROMAN.iter().position(|m| *m == u) else {
         return 0;
     };
-    (0x7F + index) as u32
+    (0x80 + index) as u32
 }

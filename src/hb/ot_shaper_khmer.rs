@@ -30,26 +30,11 @@ const KHMER_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
     // Basic features.
     // These features are applied all at once, before reordering, constrained
     // to the syllable.
-    (
-        hb_tag_t::new(b"pref"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"blwf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"abvf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"pstf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"cfar"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
+    (hb_tag_t::new(b"pref"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"blwf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"abvf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"pstf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"cfar"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
     // Other features.
     // These features are applied all at once after clearing syllables.
     (hb_tag_t::new(b"pres"), F_GLOBAL_MANUAL_JOINERS),
@@ -279,9 +264,7 @@ fn override_features(planner: &mut hb_ot_shape_planner_t) {
         .ot_map
         .enable_feature(hb_tag_t::new(b"clig"), F_NONE, 1);
 
-    planner
-        .ot_map
-        .disable_feature(hb_tag_t::new(b"liga"));
+    planner.ot_map.disable_feature(hb_tag_t::new(b"liga"));
 }
 
 fn decompose(_: &hb_ot_shape_normalize_context_t, ab: char) -> Option<(char, char)> {

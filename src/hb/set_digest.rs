@@ -1,4 +1,4 @@
-use ttf_parser::GlyphId;
+use read_fonts::types::GlyphId;
 
 // To make things easier, we don't have the generic parameter mask_t,
 // and assume we always use u64, since this is what is also used in
@@ -32,7 +32,8 @@ impl<const shift: u8> hb_set_digest_bits_pattern_t<shift> {
     }
 
     fn mask_for(g: GlyphId) -> mask_t {
-        1 << ((g.0 as mask_t >> shift) & (hb_set_digest_bits_pattern_t::<shift>::mask_bits() - 1))
+        1 << ((g.to_u32() as mask_t >> shift)
+            & (hb_set_digest_bits_pattern_t::<shift>::mask_bits() - 1))
     }
 
     const fn num_bits() -> usize {
@@ -90,7 +91,7 @@ impl<const shift: u8> hb_set_digest_ext for hb_set_digest_bits_pattern_t<shift> 
             return false;
         }
 
-        if (b.0 as mask_t >> shift) - (a.0 as mask_t >> shift)
+        if (b.to_u32() as mask_t >> shift) - (a.to_u32() as mask_t >> shift)
             >= hb_set_digest_bits_pattern_t::<shift>::mask_bits() - 1
         {
             self.mask = mask_t::MAX;
@@ -187,59 +188,59 @@ mod tests {
     fn test_single() {
         let mut set = hb_set_digest_t::new();
 
-        set.add(GlyphId(2));
-        assert!(set.may_have_glyph(GlyphId(2)))
+        set.add(GlyphId::new(2));
+        assert!(set.may_have_glyph(GlyphId::new(2)))
     }
 
     #[test]
     fn test_multiple_1() {
         let mut set = hb_set_digest_t::new();
 
-        set.add(GlyphId(2));
-        set.add(GlyphId(10));
-        set.add(GlyphId(300));
-        set.add(GlyphId(255));
-        assert!(set.may_have_glyph(GlyphId(2)));
-        assert!(set.may_have_glyph(GlyphId(300)));
-        assert!(set.may_have_glyph(GlyphId(10)));
-        assert!(set.may_have_glyph(GlyphId(255)));
+        set.add(GlyphId::new(2));
+        set.add(GlyphId::new(10));
+        set.add(GlyphId::new(300));
+        set.add(GlyphId::new(255));
+        assert!(set.may_have_glyph(GlyphId::new(2)));
+        assert!(set.may_have_glyph(GlyphId::new(300)));
+        assert!(set.may_have_glyph(GlyphId::new(10)));
+        assert!(set.may_have_glyph(GlyphId::new(255)));
     }
 
     #[test]
     fn test_multiple_2() {
         let mut set = hb_set_digest_t::new();
 
-        set.add(GlyphId(245));
-        set.add(GlyphId(1060));
-        set.add(GlyphId(300));
-        set.add(GlyphId(599));
-        assert!(set.may_have_glyph(GlyphId(245)));
-        assert!(set.may_have_glyph(GlyphId(1060)));
-        assert!(set.may_have_glyph(GlyphId(300)));
-        assert!(set.may_have_glyph(GlyphId(599)));
+        set.add(GlyphId::new(245));
+        set.add(GlyphId::new(1060));
+        set.add(GlyphId::new(300));
+        set.add(GlyphId::new(599));
+        assert!(set.may_have_glyph(GlyphId::new(245)));
+        assert!(set.may_have_glyph(GlyphId::new(1060)));
+        assert!(set.may_have_glyph(GlyphId::new(300)));
+        assert!(set.may_have_glyph(GlyphId::new(599)));
     }
 
     #[test]
     fn test_range_1() {
         let mut set = hb_set_digest_t::new();
 
-        set.add_range(GlyphId(10), GlyphId(12));
-        assert!(set.may_have_glyph(GlyphId(10)));
-        assert!(set.may_have_glyph(GlyphId(11)));
-        assert!(set.may_have_glyph(GlyphId(12)));
+        set.add_range(GlyphId::new(10), GlyphId::new(12));
+        assert!(set.may_have_glyph(GlyphId::new(10)));
+        assert!(set.may_have_glyph(GlyphId::new(11)));
+        assert!(set.may_have_glyph(GlyphId::new(12)));
     }
 
     #[test]
     fn test_range_2() {
         let mut set = hb_set_digest_t::new();
 
-        set.add_range(GlyphId(15), GlyphId(20));
-        assert!(set.may_have_glyph(GlyphId(15)));
-        assert!(set.may_have_glyph(GlyphId(16)));
-        assert!(set.may_have_glyph(GlyphId(17)));
-        assert!(set.may_have_glyph(GlyphId(18)));
-        assert!(set.may_have_glyph(GlyphId(19)));
-        assert!(set.may_have_glyph(GlyphId(20)));
+        set.add_range(GlyphId::new(15), GlyphId::new(20));
+        assert!(set.may_have_glyph(GlyphId::new(15)));
+        assert!(set.may_have_glyph(GlyphId::new(16)));
+        assert!(set.may_have_glyph(GlyphId::new(17)));
+        assert!(set.may_have_glyph(GlyphId::new(18)));
+        assert!(set.may_have_glyph(GlyphId::new(19)));
+        assert!(set.may_have_glyph(GlyphId::new(20)));
     }
 
     #[test]
@@ -247,26 +248,26 @@ mod tests {
         let mut set = hb_set_digest_t::new();
 
         for i in 170..=239 {
-            set.add(GlyphId(i));
+            set.add(GlyphId::new(i));
         }
-        assert!(set.may_have_glyph(GlyphId(200)));
+        assert!(set.may_have_glyph(GlyphId::new(200)));
     }
 
     #[test]
     fn test_complex() {
         let mut set = hb_set_digest_t::new();
 
-        set.add_range(GlyphId(5670), GlyphId(5675));
-        set.add(GlyphId(3));
-        set.add(GlyphId(8769));
-        set.add(GlyphId(10000));
-        set.add_range(GlyphId(3456), GlyphId(3460));
-        assert!(set.may_have_glyph(GlyphId(5670)));
-        assert!(set.may_have_glyph(GlyphId(5675)));
-        assert!(set.may_have_glyph(GlyphId(3)));
-        assert!(set.may_have_glyph(GlyphId(8769)));
-        assert!(set.may_have_glyph(GlyphId(10000)));
-        assert!(set.may_have_glyph(GlyphId(3456)));
-        assert!(set.may_have_glyph(GlyphId(3460)));
+        set.add_range(GlyphId::new(5670), GlyphId::new(5675));
+        set.add(GlyphId::new(3));
+        set.add(GlyphId::new(8769));
+        set.add(GlyphId::new(10000));
+        set.add_range(GlyphId::new(3456), GlyphId::new(3460));
+        assert!(set.may_have_glyph(GlyphId::new(5670)));
+        assert!(set.may_have_glyph(GlyphId::new(5675)));
+        assert!(set.may_have_glyph(GlyphId::new(3)));
+        assert!(set.may_have_glyph(GlyphId::new(8769)));
+        assert!(set.may_have_glyph(GlyphId::new(10000)));
+        assert!(set.may_have_glyph(GlyphId::new(3456)));
+        assert!(set.may_have_glyph(GlyphId::new(3460)));
     }
 }

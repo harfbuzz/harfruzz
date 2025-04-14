@@ -1,52 +1,18 @@
 //! OpenType GPOS lookups.
 
-use super::{LookupCache, LookupInfo};
-use crate::{
-    hb::{ot_layout::TableIndex, ot_layout_gsubgpos::OT::hb_ot_apply_context_t},
-    GlyphPosition,
-};
-use skrifa::raw::{
+use crate::{hb::ot_layout_gsubgpos::OT::hb_ot_apply_context_t, GlyphPosition};
+use read_fonts::{
     tables::{
-        gpos::{DeviceOrVariationIndex, Gpos, ValueRecord},
+        gpos::{DeviceOrVariationIndex, ValueRecord},
         variations::DeltaSetIndex,
     },
-    FontData, ReadError, TableProvider,
+    FontData, ReadError,
 };
 
 mod cursive;
 mod mark;
 mod pair;
 mod single;
-
-#[derive(Clone)]
-pub struct GposTable<'a> {
-    pub table: Gpos<'a>,
-    pub lookups: LookupCache,
-}
-
-impl<'a> GposTable<'a> {
-    pub fn try_new(font: &impl TableProvider<'a>) -> Option<Self> {
-        let table = font.gpos().ok()?;
-        let mut lookups = LookupCache::new();
-        lookups.create_all(&table);
-        Some(Self { table, lookups })
-    }
-}
-
-impl<'a> crate::hb::ot_layout::LayoutTable for GposTable<'a> {
-    const INDEX: TableIndex = TableIndex::GPOS;
-    const IN_PLACE: bool = true;
-
-    type Lookup = LookupInfo;
-
-    fn get_lookup(&self, index: ttf_parser::opentype_layout::LookupIndex) -> Option<&Self::Lookup> {
-        let lookup = self.lookups.get(index)?;
-        if lookup.subtables_count == 0 {
-            return None;
-        }
-        Some(lookup)
-    }
-}
 
 struct Value<'a> {
     record: ValueRecord,
@@ -107,10 +73,10 @@ impl Value<'_> {
             }
         }
 
-        if let Some(ivs) = ctx.face.font.ivs.as_ref() {
-            let coords = &ctx.face.font.coords;
+        if let Some(vs) = ctx.face.ot_tables.var_store.as_ref() {
+            let coords = ctx.face.ot_tables.coords;
             let delta = |val: Result<DeviceOrVariationIndex<'_>, ReadError>| match val {
-                Ok(DeviceOrVariationIndex::VariationIndex(varix)) => ivs
+                Ok(DeviceOrVariationIndex::VariationIndex(varix)) => vs
                     .compute_delta(
                         DeltaSetIndex {
                             outer: varix.delta_set_outer_index(),
@@ -123,7 +89,7 @@ impl Value<'_> {
             };
 
             let (ppem_x, ppem_y) = ctx.face.pixels_per_em().unwrap_or((0, 0));
-            let coords = ctx.face.ttfp_face.variation_coordinates().len();
+            let coords = coords.len();
             let use_x_device = ppem_x != 0 || coords != 0;
             let use_y_device = ppem_y != 0 || coords != 0;
 

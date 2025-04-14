@@ -1,7 +1,6 @@
 use core::convert::TryFrom;
 
-use ttf_parser::{ankr, apple_layout, kerx, FromData, GlyphId};
-
+use super::aat_layout_common::ToTtfParserGid;
 use super::buffer::*;
 use super::hb_font_t;
 use super::ot_layout::TableIndex;
@@ -9,6 +8,8 @@ use super::ot_layout_common::lookup_flags;
 use super::ot_layout_gpos_table::attach_type;
 use super::ot_layout_gsubgpos::{skipping_iterator_t, OT::hb_ot_apply_context_t};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
+use read_fonts::tables::ankr::Ankr;
+use ttf_parser::{apple_layout, kerx, FromData, GlyphId};
 
 // TODO: Use set_digest, similarly to how it's used in harfbuzz.
 
@@ -53,7 +54,7 @@ pub(crate) fn apply(
     buffer.unsafe_to_concat(None, None);
 
     let mut seen_cross_stream = false;
-    for subtable in face.tables().kerx?.subtables {
+    for subtable in face.aat_tables.kerx?.subtables {
         if subtable.variable {
             continue;
         }
@@ -110,7 +111,7 @@ pub(crate) fn apply(
                 let mut driver = Driver4 {
                     mark_set: false,
                     mark: 0,
-                    ankr_table: face.tables().ankr.clone(),
+                    ankr_table: face.aat_tables.ankr.clone(),
                 };
 
                 apply_state_machine_kerning(&subtable, sub, &mut driver, plan, buffer);
@@ -163,9 +164,9 @@ fn apply_simple_kerning(
         let j = iter.index();
 
         let info = &ctx.buffer.info;
-        let kern = subtable
-            .glyphs_kerning(info[i].as_glyph(), info[j].as_glyph())
-            .unwrap_or(0);
+        let a = ttf_parser::GlyphId(info[i].as_glyph().to_u32() as _);
+        let b = ttf_parser::GlyphId(info[j].as_glyph().to_u32() as _);
+        let kern = subtable.glyphs_kerning(a, b).unwrap_or(0);
         let kern = i32::from(kern);
 
         let pos = &mut ctx.buffer.pos;
@@ -233,7 +234,7 @@ fn apply_state_machine_kerning<T, E>(
     loop {
         let class = if buffer.idx < buffer.len {
             state_table
-                .class(buffer.info[buffer.idx].as_glyph())
+                .class(buffer.info[buffer.idx].as_glyph().ttfp_gid())
                 .unwrap_or(1)
         } else {
             u16::from(apple_layout::class::END_OF_TEXT)
@@ -248,8 +249,7 @@ fn apply_state_machine_kerning<T, E>(
         // go differently if we start from state 0 here.
         if state != START_OF_TEXT && buffer.backtrack_len() != 0 && buffer.idx < buffer.len {
             // If there's no value and we're just epsilon-transitioning to state 0, safe to break.
-            if entry.is_actionable() || !(entry.new_state == START_OF_TEXT && !entry.has_advance())
-            {
+            if entry.is_actionable() || entry.new_state != START_OF_TEXT || entry.has_advance() {
                 buffer.unsafe_to_break_from_outbuffer(
                     Some(buffer.backtrack_len() - 1),
                     Some(buffer.idx + 1),
@@ -411,7 +411,7 @@ impl StateTableDriver<kerx::Subtable1<'_>, kerx::EntryData> for Driver1 {
 struct Driver4<'a> {
     mark_set: bool,
     mark: usize,
-    ankr_table: Option<ankr::Table<'a>>,
+    ankr_table: Option<Ankr<'a>>,
 }
 
 impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
@@ -430,19 +430,23 @@ impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
 
                 let mark_idx = buffer.info[self.mark].as_glyph();
                 let mark_anchor = ankr_table
-                    .points(mark_idx)
-                    .and_then(|list| list.get(u32::from(point.0)))
+                    .anchor_points(mark_idx)
+                    .ok()
+                    .and_then(|list| list.get(usize::from(point.0)))
+                    .map(|point| (point.x(), point.y()))
                     .unwrap_or_default();
 
                 let curr_idx = buffer.cur(0).as_glyph();
                 let curr_anchor = ankr_table
-                    .points(curr_idx)
-                    .and_then(|list| list.get(u32::from(point.1)))
+                    .anchor_points(curr_idx)
+                    .ok()
+                    .and_then(|list| list.get(usize::from(point.1)))
+                    .map(|point| (point.x(), point.y()))
                     .unwrap_or_default();
 
                 let pos = buffer.cur_pos_mut();
-                pos.x_offset = i32::from(mark_anchor.x - curr_anchor.x);
-                pos.y_offset = i32::from(mark_anchor.y - curr_anchor.y);
+                pos.x_offset = i32::from(mark_anchor.0 - curr_anchor.0);
+                pos.y_offset = i32::from(mark_anchor.1 - curr_anchor.1);
             }
 
             buffer.cur_pos_mut().set_attach_type(attach_type::MARK);

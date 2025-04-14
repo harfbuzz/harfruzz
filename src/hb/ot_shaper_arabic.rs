@@ -229,11 +229,9 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     // however, it says a ZWJ should also mean "don't ligate".  So we run
     // the main ligating features as MANUAL_ZWJ.
 
-    planner.ot_map.enable_feature(
-        hb_tag_t::new(b"rlig"),
-        F_MANUAL_ZWJ | F_HAS_FALLBACK,
-        1,
-    );
+    planner
+        .ot_map
+        .enable_feature(hb_tag_t::new(b"rlig"), F_MANUAL_ZWJ | F_HAS_FALLBACK, 1);
 
     if planner.script == Some(script::ARABIC) {
         planner.ot_map.add_gsub_pause(Some(arabic_fallback_shape));
@@ -247,9 +245,6 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     /* https://github.com/harfbuzz/harfbuzz/issues/1573 */
     if !planner.ot_map.has_feature(hb_tag_t::new(b"rclt")) {
         planner.ot_map.add_gsub_pause(None);
-        planner
-            .ot_map
-            .enable_feature(hb_tag_t::new(b"rclt"), F_MANUAL_ZWJ, 1);
     }
 
     planner
@@ -495,7 +490,7 @@ fn apply_stch(face: &hb_font_t, buffer: &mut hb_buffer_t) {
             let end = i;
             while i != 0 && arabic_action_t::is_stch(buffer.info[i - 1].arabic_shaping_action()) {
                 i -= 1;
-                let width = face.glyph_h_advance(buffer.info[i].as_glyph()) as i32;
+                let width = face.glyph_h_advance(buffer.info[i].as_glyph());
 
                 if buffer.info[i].arabic_shaping_action() == arabic_action_t::STRETCHING_FIXED {
                     w_fixed += width;
@@ -546,7 +541,7 @@ fn apply_stch(face: &hb_font_t, buffer: &mut hb_buffer_t) {
                 buffer.unsafe_to_break(Some(context), Some(end));
                 let mut x_offset = w_remaining / 2;
                 for k in (start + 1..=end).rev() {
-                    let width = face.glyph_h_advance(buffer.info[k - 1].as_glyph()) as i32;
+                    let width = face.glyph_h_advance(buffer.info[k - 1].as_glyph());
 
                     let mut repeat = 1;
                     if buffer.info[k - 1].arabic_shaping_action()
@@ -587,10 +582,12 @@ fn apply_stch(face: &hb_font_t, buffer: &mut hb_buffer_t) {
         }
 
         if step == MEASURE {
-            buffer.ensure(buffer.len + extra_glyphs_needed);
+            if !buffer.ensure(buffer.len + extra_glyphs_needed) {
+                break;
+            }
         } else {
             debug_assert_eq!(j, 0);
-            buffer.set_len(new_len);
+            buffer.len = new_len;
         }
     }
 

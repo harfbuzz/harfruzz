@@ -1,8 +1,13 @@
-use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
+use crate::hb::{
+    hb_font_t,
+    ot_layout::LayoutLookup,
+    ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext, OT::hb_ot_apply_context_t},
+    set_digest::{hb_set_digest_ext, hb_set_digest_t},
+};
 
 use alloc::vec::Vec;
 use core::ops::Range;
-use skrifa::raw::{
+use read_fonts::{
     tables::{
         gpos::{
             CursivePosFormat1, Gpos, MarkBasePosFormat1, MarkLigPosFormat1, MarkMarkPosFormat1,
@@ -115,7 +120,7 @@ impl LookupCache {
     pub fn get(&self, index: u16) -> Option<&LookupInfo> {
         let entry = self.lookups.get(index as usize)?;
         match entry.state {
-            LookupState::Ready => Some(&entry),
+            LookupState::Ready => Some(entry),
             _ => None,
         }
     }
@@ -180,7 +185,7 @@ impl LookupCache {
                 coverage_offset: 0,
                 is_subst: data.is_subst,
                 lookup_type: subtable_kind as u8,
-                digest: Default::default(),
+                digest: hb_set_digest_t::new(),
             };
             let subtable = subtable_info.materialize(data.table_data.as_bytes())?;
             let (coverage, coverage_offset) = subtable.coverage_and_offset()?;
@@ -225,15 +230,12 @@ fn add_coverage_to_digest(coverage: &CoverageTable, digest: &mut hb_set_digest_t
     match coverage {
         CoverageTable::Format1(table) => {
             for glyph in table.glyph_array() {
-                digest.add(ttf_parser::GlyphId(glyph.get().to_u32() as _));
+                digest.add(glyph.get().into());
             }
         }
         CoverageTable::Format2(table) => {
             for range in table.range_records() {
-                let first = range.start_glyph_id().to_u32();
-                let last = range.end_glyph_id().to_u32();
-                let [first, last] = [first, last].map(|gid| ttf_parser::GlyphId(gid as _));
-                digest.add_range(first, last);
+                digest.add_range(range.start_glyph_id().into(), range.end_glyph_id().into());
             }
         }
     }
@@ -254,7 +256,7 @@ pub enum LookupState {
 }
 
 /// Cached information about a lookup.
-#[derive(Clone, Default, Debug)]
+#[derive(Clone, Default)]
 pub struct LookupInfo {
     /// Current state of this lookup info entry.
     pub state: LookupState,
@@ -280,8 +282,121 @@ impl LookupInfo {
     }
 }
 
+impl LayoutLookup for LookupInfo {
+    fn props(&self) -> u32 {
+        self.props
+    }
+
+    fn is_reverse(&self) -> bool {
+        self.is_reversed
+    }
+
+    fn digest(&self) -> &crate::hb::set_digest::hb_set_digest_t {
+        &self.digest
+    }
+}
+
+impl Apply for LookupInfo {
+    fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
+        let glyph = ctx.buffer.cur(0).as_glyph();
+        if !self.digest.may_have_glyph(glyph) {
+            return None;
+        }
+        let (table_data, lookups) = if self.is_subst {
+            let table = ctx.face.ot_tables.gsub.as_ref()?;
+            (table.table.offset_data().as_bytes(), &table.lookups)
+        } else {
+            let table = ctx.face.ot_tables.gpos.as_ref()?;
+            (table.table.offset_data().as_bytes(), &table.lookups)
+        };
+        let subtables = lookups.subtables(self)?;
+        for subtable_info in subtables {
+            if !subtable_info.digest.may_have_glyph(glyph) {
+                continue;
+            }
+            // if subtable_info
+            //     .primary_coverage(table_data, skrifa::GlyphId::from(glyph.0))
+            //     .is_none()
+            // {
+            //     continue;
+            // }
+            let Ok(subtable) = subtable_info.materialize(table_data) else {
+                continue;
+            };
+            let result = match subtable {
+                Subtable::SingleSubst1(subtable) => subtable.apply(ctx),
+                Subtable::SingleSubst2(subtable) => subtable.apply(ctx),
+                Subtable::MultipleSubst1(subtable) => subtable.apply(ctx),
+                Subtable::AlternateSubst1(subtable) => subtable.apply(ctx),
+                Subtable::LigatureSubst1(subtable) => subtable.apply(ctx),
+                Subtable::ReverseChainContext(subtable) => subtable.apply(ctx),
+                Subtable::SinglePos1(subtable) => subtable.apply(ctx),
+                Subtable::SinglePos2(subtable) => subtable.apply(ctx),
+                Subtable::PairPos1(subtable) => subtable.apply(ctx),
+                Subtable::PairPos2(subtable) => subtable.apply(ctx),
+                Subtable::CursivePos1(subtable) => subtable.apply(ctx),
+                Subtable::MarkBasePos1(subtable) => subtable.apply(ctx),
+                Subtable::MarkLigPos1(subtable) => subtable.apply(ctx),
+                Subtable::MarkMarkPos1(subtable) => subtable.apply(ctx),
+                Subtable::ContextFormat1(subtable) => subtable.apply(ctx),
+                Subtable::ContextFormat2(subtable) => subtable.apply(ctx),
+                Subtable::ContextFormat3(subtable) => subtable.apply(ctx),
+                Subtable::ChainedContextFormat1(subtable) => subtable.apply(ctx),
+                Subtable::ChainedContextFormat2(subtable) => subtable.apply(ctx),
+                Subtable::ChainedContextFormat3(subtable) => subtable.apply(ctx),
+            };
+            if result.is_some() {
+                return Some(());
+            }
+        }
+        None
+    }
+}
+
+impl LookupInfo {
+    pub fn would_apply(&self, face: &hb_font_t, ctx: &WouldApplyContext) -> Option<bool> {
+        let glyph = ctx.glyphs[0];
+        if !self.digest.may_have_glyph(glyph) {
+            return Some(false);
+        }
+        let (table_data, lookups) = if self.is_subst {
+            let table = face.ot_tables.gsub.as_ref()?;
+            (table.table.offset_data().as_bytes(), &table.lookups)
+        } else {
+            let table = face.ot_tables.gpos.as_ref()?;
+            (table.table.offset_data().as_bytes(), &table.lookups)
+        };
+        let subtables = lookups.subtables(self)?;
+        for subtable_info in subtables {
+            if !subtable_info.digest.may_have_glyph(glyph) {
+                continue;
+            }
+            let Ok(subtable) = subtable_info.materialize(table_data) else {
+                continue;
+            };
+            let result = match subtable {
+                Subtable::SingleSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::SingleSubst2(subtable) => subtable.would_apply(ctx),
+                Subtable::MultipleSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::AlternateSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::LigatureSubst1(subtable) => subtable.would_apply(ctx),
+                Subtable::ReverseChainContext(subtable) => subtable.would_apply(ctx),
+                Subtable::ContextFormat1(subtable) => subtable.would_apply(ctx),
+                Subtable::ContextFormat2(subtable) => subtable.would_apply(ctx),
+                Subtable::ContextFormat3(subtable) => subtable.would_apply(ctx),
+                Subtable::ChainedContextFormat1(subtable) => subtable.would_apply(ctx),
+                Subtable::ChainedContextFormat2(subtable) => subtable.would_apply(ctx),
+                Subtable::ChainedContextFormat3(subtable) => subtable.would_apply(ctx),
+                _ => false,
+            };
+            return Some(result);
+        }
+        None
+    }
+}
+
 /// Cached information about a subtable.
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct SubtableInfo {
     /// Byte offset to the subtable from the base of the GSUB or GPOS
     /// table.
@@ -298,7 +413,7 @@ pub struct SubtableInfo {
 }
 
 impl SubtableInfo {
-    pub fn primary_coverage_table<'a>(
+    pub(crate) fn _primary_coverage_table<'a>(
         &self,
         table_data: &'a [u8],
     ) -> Result<CoverageTable<'a>, ReadError> {
@@ -307,8 +422,8 @@ impl SubtableInfo {
         CoverageTable::read(data)
     }
 
-    pub fn primary_coverage(&self, table_data: &[u8], glyph_id: GlyphId) -> Option<u16> {
-        let coverage = self.primary_coverage_table(table_data).ok()?;
+    pub(crate) fn _primary_coverage(&self, table_data: &[u8], glyph_id: GlyphId) -> Option<u16> {
+        let coverage = self._primary_coverage_table(table_data).ok()?;
         coverage.get(glyph_id)
     }
 

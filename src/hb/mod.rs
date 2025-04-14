@@ -2,20 +2,40 @@
 #![allow(non_camel_case_types)]
 #![allow(non_upper_case_globals)]
 #![allow(non_snake_case)]
+#![allow(clippy::collapsible_if)]
+#![allow(clippy::collapsible_else_if)]
+#![allow(clippy::comparison_chain)]
+#![allow(clippy::needless_range_loop)]
+#![allow(clippy::non_canonical_partial_ord_impl)]
+#![allow(clippy::upper_case_acronyms)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::wildcard_in_or_patterns)]
+#![allow(clippy::identity_op)]
+#![allow(clippy::mut_range_bound)]
+#![allow(clippy::enum_variant_names)]
+#![allow(clippy::manual_range_patterns)]
+#![allow(clippy::type_complexity)]
+#![allow(clippy::wrong_self_convention)]
+#![allow(clippy::match_like_matches_macro)]
+#![allow(clippy::manual_range_contains)]
 
 mod algs;
-mod fonta;
 #[macro_use]
 pub mod buffer;
+mod aat;
 mod aat_layout;
 mod aat_layout_kerx_table;
 mod aat_layout_morx_table;
 mod aat_layout_trak_table;
 mod aat_map;
+mod charmap;
 pub mod common;
 pub mod face;
+mod glyph_metrics;
+mod glyph_names;
 mod kerning;
 mod machine_cursor;
+mod ot;
 mod ot_layout;
 mod ot_layout_common;
 mod ot_layout_gpos_table;
@@ -47,7 +67,6 @@ mod ot_shaper_use_machine;
 mod ot_shaper_use_table;
 mod aat_layout_common;
 mod ot_shaper_vowel_constraints;
-mod paint_extents;
 mod set_digest;
 pub mod shape;
 #[cfg(feature = "wasm-shaper")]
@@ -58,7 +77,7 @@ mod text_parser;
 mod unicode;
 mod unicode_norm;
 
-use skrifa::raw::types::Tag as hb_tag_t;
+use read_fonts::types::Tag as hb_tag_t;
 
 use self::buffer::hb_glyph_info_t;
 use self::face::hb_font_t;

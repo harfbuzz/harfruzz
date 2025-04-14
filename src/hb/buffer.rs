@@ -1,8 +1,7 @@
 use alloc::{string::String, vec::Vec};
-use bytemuck::{Pod, Zeroable};
 use core::cmp::min;
 use core::convert::TryFrom;
-use ttf_parser::GlyphId;
+use read_fonts::types::{GlyphId, GlyphId16};
 
 use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};
 use super::face::hb_glyph_extents_t;
@@ -50,16 +49,16 @@ pub mod glyph_flag {
     /// line-break position, in the following way:
     ///
     /// 1. Iterate back from the line-break
-    /// position until the first cluster
-    /// start position that is NOT unsafe-to-concat,
+    ///    position until the first cluster
+    ///    start position that is NOT unsafe-to-concat,
     /// 2. shape the segment from there till the
-    /// end of line, 3. check whether the resulting
-    /// glyph-run also is clear of the unsafe-to-concat
-    /// at its start-of-text position; if it is, just
-    /// splice it into place and the line is shaped;
-    /// If not, move on to a position further back that
-    /// is clear of unsafe-to-concat and retry from
-    /// there, and repeat.
+    ///    end of line, 3. check whether the resulting
+    ///    glyph-run also is clear of the unsafe-to-concat
+    ///    at its start-of-text position; if it is, just
+    ///    splice it into place and the line is shaped;
+    ///    If not, move on to a position further back that
+    ///    is clear of unsafe-to-concat and retry from
+    ///    there, and repeat.
     ///
     /// At the start of next line a similar
     /// algorithm can be implemented.
@@ -88,7 +87,7 @@ pub mod glyph_flag {
     ///
     /// The UNSAFE_TO_BREAK flag will always imply this flag.
     /// To use this flag, you must enable the buffer flag
-    ///	PRODUCE_UNSAFE_TO_CONCAT during shaping, otherwise
+    /// PRODUCE_UNSAFE_TO_CONCAT during shaping, otherwise
     /// the buffer flag will not be reliably produced.
     pub const UNSAFE_TO_CONCAT: u32 = 0x00000002;
 
@@ -106,7 +105,7 @@ pub mod glyph_flag {
 ///
 /// All positions are relative to the current point.
 #[repr(C)]
-#[derive(Clone, Copy, Default, Debug, Zeroable, Pod)]
+#[derive(Clone, Copy, Default, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct GlyphPosition {
     /// How much the line advances after drawing this glyph when setting text in
     /// horizontal direction.
@@ -155,7 +154,7 @@ impl GlyphPosition {
 
 /// A glyph info.
 #[repr(C)]
-#[derive(Clone, Copy, Default, Debug, Zeroable, Pod)]
+#[derive(Clone, Copy, Default, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct hb_glyph_info_t {
     // NOTE: Stores a Unicode codepoint before shaping and a glyph ID after.
     //       Just like harfbuzz, we are using the same variable for two purposes.
@@ -195,21 +194,13 @@ impl hb_glyph_info_t {
 
     #[inline]
     pub(crate) fn as_glyph(&self) -> GlyphId {
-        debug_assert!(self.glyph_id <= u32::from(u16::MAX));
-        GlyphId(self.glyph_id as u16)
-    }
-
-    // TODO: delete me and my bad u16 assumptions
-    #[inline]
-    pub(crate) fn as_skrifa_glyph(&self) -> skrifa::GlyphId {
-        debug_assert!(self.glyph_id <= u32::from(u16::MAX));
-        (self.glyph_id as u16).into()
+        GlyphId::new(self.glyph_id)
     }
 
     #[inline]
-    pub(crate) fn as_skrifa_glyph16(&self) -> skrifa::GlyphId16 {
-        debug_assert!(self.glyph_id <= u32::from(u16::MAX));
-        (self.glyph_id as u16).into()
+    pub(crate) fn as_gid16(&self) -> Option<GlyphId16> {
+        let gid: u16 = self.glyph_id.try_into().ok()?;
+        Some(gid.into())
     }
 
     // Var allocation: unicode_props
@@ -256,7 +247,7 @@ impl hb_glyph_info_t {
                     // https://github.com/harfbuzz/harfbuzz/issues/463
                     0xE0020..=0xE007F => props |= UnicodeProps::HIDDEN.bits(),
 
-                    // COMBINING GRAPHEME JOINER should not be skipped; at least some times.
+                    // COMBINING GRAPHEME JOINER should not be skipped during GSUB either.
                     // https://github.com/harfbuzz/harfbuzz/issues/554
                     0x034F => {
                         props |= UnicodeProps::HIDDEN.bits();
@@ -274,11 +265,6 @@ impl hb_glyph_info_t {
         }
 
         self.set_unicode_props(props);
-    }
-
-    #[inline]
-    pub(crate) fn is_hidden(&self) -> bool {
-        self.unicode_props() & UnicodeProps::HIDDEN.bits() != 0
     }
 
     #[inline]
@@ -349,6 +335,7 @@ pub struct hb_buffer_t {
     pub flags: BufferFlags,
     pub cluster_level: hb_buffer_cluster_level_t,
     pub invisible: Option<GlyphId>,
+    pub not_found_variation_selector: Option<u32>,
 
     // Buffer contents.
     pub direction: Direction,
@@ -406,6 +393,7 @@ impl hb_buffer_t {
             cluster_level: HB_BUFFER_CLUSTER_LEVEL_DEFAULT,
             invisible: None,
             scratch_flags: HB_BUFFER_SCRATCH_FLAG_DEFAULT,
+            not_found_variation_selector: None,
             max_len: Self::MAX_LEN_DEFAULT,
             max_ops: Self::MAX_OPS_DEFAULT,
             direction: Direction::Invalid,
@@ -489,7 +477,7 @@ impl hb_buffer_t {
 
     pub fn digest(&self) -> hb_set_digest_t {
         let mut digest = hb_set_digest_t::new();
-        digest.add_array(self.info.iter().map(|i| GlyphId(i.glyph_id as u16)));
+        digest.add_array(self.info.iter().map(|i| GlyphId::new(i.glyph_id)));
         digest
     }
 
@@ -518,6 +506,7 @@ impl hb_buffer_t {
         self.serial = 0;
         self.scratch_flags = HB_BUFFER_SCRATCH_FLAG_DEFAULT;
         self.cluster_level = HB_BUFFER_CLUSTER_LEVEL_DEFAULT;
+        self.not_found_variation_selector = None;
     }
 
     #[inline]
@@ -547,7 +536,9 @@ impl hb_buffer_t {
     }
 
     fn add(&mut self, codepoint: u32, cluster: u32) {
-        self.ensure(self.len + 1);
+        if !self.ensure(self.len + 1) {
+            return;
+        }
 
         let i = self.len;
         self.info[i] = hb_glyph_info_t {
@@ -590,8 +581,9 @@ impl hb_buffer_t {
         }
 
         let mut start = 0;
+        let mut i = 1;
 
-        for i in 1..self.len {
+        while i < self.len {
             if !group(&self.info[i - 1], &self.info[i]) {
                 if merge_clusters {
                     self.merge_clusters(start, i);
@@ -601,14 +593,16 @@ impl hb_buffer_t {
                 start = i;
             }
 
-            if merge_clusters {
-                self.merge_clusters(start, i);
-            }
-
-            self.reverse_range(start, i);
-
-            self.reverse();
+            i += 1;
         }
+
+        if merge_clusters {
+            self.merge_clusters(start, i);
+        }
+
+        self.reverse_range(start, i);
+
+        self.reverse();
     }
 
     pub fn group_end<F>(&self, mut start: usize, group: F) -> usize
@@ -850,7 +844,7 @@ impl hb_buffer_t {
         let not_mask = !mask;
         value &= mask;
 
-        if cluster_start == 0 && cluster_end == core::u32::MAX {
+        if cluster_start == 0 && cluster_end == u32::MAX {
             for info in &mut self.info[..self.len] {
                 info.mask = (info.mask & not_mask) | value;
             }
@@ -1108,7 +1102,7 @@ impl hb_buffer_t {
             } else {
                 let mut cluster = self._infos_find_min_cluster(&self.info, self.idx, end, None);
                 cluster = self._infos_find_min_cluster(
-                    &self.out_info(),
+                    self.out_info(),
                     start,
                     self.out_len,
                     Some(cluster),
@@ -1200,6 +1194,7 @@ impl hb_buffer_t {
         true
     }
 
+    #[must_use]
     pub fn ensure(&mut self, size: usize) -> bool {
         if size < self.len {
             return true;
@@ -1215,11 +1210,7 @@ impl hb_buffer_t {
         true
     }
 
-    pub fn set_len(&mut self, len: usize) {
-        self.ensure(len);
-        self.len = len;
-    }
-
+    #[must_use]
     fn make_room_for(&mut self, num_in: usize, num_out: usize) -> bool {
         if !self.ensure(self.out_len + num_out) {
             return false;
@@ -1239,7 +1230,9 @@ impl hb_buffer_t {
 
     fn shift_forward(&mut self, count: usize) {
         assert!(self.have_output);
-        self.ensure(self.len + count);
+        if !self.ensure(self.len + count) {
+            return;
+        }
 
         for i in (0..(self.len - self.idx)).rev() {
             self.info[self.idx + count + i] = self.info[self.idx + i];
@@ -1331,7 +1324,7 @@ impl hb_buffer_t {
         end: usize,
         cluster: Option<u32>,
     ) -> u32 {
-        let mut cluster = cluster.unwrap_or(core::u32::MAX);
+        let mut cluster = cluster.unwrap_or(u32::MAX);
 
         if start == end {
             return cluster;
@@ -1422,7 +1415,9 @@ impl hb_buffer_t {
     }
 
     fn push_str(&mut self, text: &str) {
-        self.ensure(self.len + text.chars().count());
+        if !self.ensure(self.len + text.chars().count()) {
+            return;
+        }
 
         for (i, c) in text.char_indices() {
             self.add(c as u32, i as u32);
@@ -1520,13 +1515,14 @@ bitflags::bitflags! {
     pub struct UnicodeProps: u16 {
         const GENERAL_CATEGORY  = 0x001F;
         const IGNORABLE         = 0x0020;
-        // MONGOLIAN FREE VARIATION SELECTOR 1..4, or TAG characters
+        // MONGOLIAN FREE VARIATION SELECTOR 1..4, or TAG characters, or CGJ sometimes
         const HIDDEN            = 0x0040;
         const CONTINUATION      = 0x0080;
 
         // If GEN_CAT=FORMAT, top byte masks:
         const CF_ZWJ            = 0x0100;
         const CF_ZWNJ           = 0x0200;
+        const CF_VS           = 0x0400;
     }
 }
 
@@ -1557,6 +1553,7 @@ pub const HB_BUFFER_SCRATCH_FLAG_HAS_GPOS_ATTACHMENT: u32 = 0x00000008;
 pub const HB_BUFFER_SCRATCH_FLAG_HAS_CGJ: u32 = 0x00000010;
 pub const HB_BUFFER_SCRATCH_FLAG_HAS_GLYPH_FLAGS: u32 = 0x00000020;
 pub const HB_BUFFER_SCRATCH_FLAG_HAS_BROKEN_SYLLABLE: u32 = 0x00000040;
+pub const HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK: u32 = 0x00000080;
 
 /* Reserved for shapers' internal use. */
 pub const HB_BUFFER_SCRATCH_FLAG_SHAPER0: u32 = 0x01000000;
@@ -1641,6 +1638,12 @@ impl UnicodeBuffer {
     #[inline]
     pub fn set_language(&mut self, lang: Language) {
         self.0.language = Some(lang);
+    }
+
+    /// Set the glyph value to replace not-found variation-selector characters with.
+    #[inline]
+    pub fn set_not_found_variation_selector_glyph(&mut self, glyph: u32) {
+        self.0.not_found_variation_selector = Some(glyph)
     }
 
     /// Get the buffer language.
@@ -1777,9 +1780,10 @@ impl GlyphBuffer {
         let pos = self.glyph_positions();
         let mut x = 0;
         let mut y = 0;
+        let names = face.glyph_names();
         for (info, pos) in info.iter().zip(pos) {
             if !flags.contains(SerializeFlags::NO_GLYPH_NAMES) {
-                match face.glyph_name(info.as_glyph()) {
+                match names.get(info.as_glyph().to_u32()) {
                     Some(name) => s.push_str(name),
                     None => write!(&mut s, "gid{}", info.glyph_id)?,
                 }

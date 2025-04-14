@@ -8,7 +8,11 @@ mod wasm;
 
 use std::str::FromStr;
 
-use harfruzz::BufferFlags;
+use harfruzz::{BufferFlags, ShaperFont};
+use read_fonts::{
+    types::{F2Dot14, Fixed},
+    FontRef, TableProvider,
+};
 
 struct Args {
     face_index: u32,
@@ -20,6 +24,7 @@ struct Args {
     #[allow(dead_code)]
     remove_default_ignorables: bool,
     unsafe_to_concat: bool,
+    not_found_variation_selector_glyph: Option<u32>,
     cluster_level: harfruzz::BufferClusterLevel,
     features: Vec<String>,
     pre_context: Option<String>,
@@ -48,6 +53,8 @@ fn parse_args(args: Vec<std::ffi::OsString>) -> Result<Args, pico_args::Error> {
         script: parser.opt_value_from_str("--script")?,
         remove_default_ignorables: parser.contains("--remove-default-ignorables"),
         unsafe_to_concat: parser.contains("--unsafe-to-concat"),
+        not_found_variation_selector_glyph: parser
+            .opt_value_from_str("--not-found-variation-selector-glyph")?,
         cluster_level: parser
             .opt_value_from_fn("--cluster-level", parse_cluster)?
             .unwrap_or_default(),
@@ -83,14 +90,14 @@ fn parse_cluster(s: &str) -> Result<harfruzz::BufferClusterLevel, String> {
         "0" => Ok(harfruzz::BufferClusterLevel::MonotoneGraphemes),
         "1" => Ok(harfruzz::BufferClusterLevel::MonotoneCharacters),
         "2" => Ok(harfruzz::BufferClusterLevel::Characters),
-        _ => Err(format!("invalid cluster level")),
+        _ => Err("invalid cluster level".to_string()),
     }
 }
 
 fn parse_unicodes(s: &str) -> Result<String, String> {
     s.split(',')
         .map(|s| {
-            let s = s.strip_prefix("U+").unwrap_or(&s);
+            let s = s.strip_prefix("U+").unwrap_or(s);
             let cp = u32::from_str_radix(s, 16).map_err(|e| format!("{e}"))?;
             char::from_u32(cp).ok_or_else(|| format!("{cp:X} is not a valid codepoint"))
         })
@@ -101,24 +108,39 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
     let args = options
         .split(' ')
         .filter(|s| !s.is_empty())
-        .map(|s| std::ffi::OsString::from(s))
+        .map(std::ffi::OsString::from)
         .collect();
     let args = parse_args(args).unwrap();
 
     let font_data =
         std::fs::read(font_path).unwrap_or_else(|e| panic!("Could not read {}: {}", font_path, e));
-    let mut face = harfruzz::Face::from_slice(&font_data, args.face_index).unwrap();
+    let font = FontRef::from_index(&font_data, args.face_index).unwrap();
+
+    let variations: Vec<_> = args
+        .variations
+        .iter()
+        .map(|s| harfruzz::Variation::from_str(s).unwrap())
+        .collect();
+
+    let mut coords = vec![];
+    if let Ok(fvar) = font.fvar() {
+        coords.resize(fvar.axis_count() as usize, F2Dot14::default());
+        fvar.user_to_normalized(
+            font.avar().ok().as_ref(),
+            variations
+                .iter()
+                .map(|var| (var.tag, Fixed::from_f64(var.value as f64))),
+            &mut coords,
+        );
+    }
+    if coords.iter().all(|coord| *coord == F2Dot14::ZERO) {
+        coords.clear();
+    }
+
+    let shaper_font = ShaperFont::new(&font);
+    let mut face = shaper_font.shaper(&font, &coords);
 
     face.set_points_per_em(args.font_ptem);
-
-    if !args.variations.is_empty() {
-        let variations: Vec<_> = args
-            .variations
-            .iter()
-            .map(|s| harfruzz::Variation::from_str(s).unwrap())
-            .collect();
-        face.set_variations(&variations);
-    }
 
     let mut buffer = harfruzz::UnicodeBuffer::new();
     if let Some(pre_context) = args.pre_context {
@@ -131,6 +153,10 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
 
     if let Some(d) = args.direction {
         buffer.set_direction(d);
+    }
+
+    if let Some(g) = args.not_found_variation_selector_glyph {
+        buffer.set_not_found_variation_selector_glyph(g);
     }
 
     if let Some(lang) = args.language {

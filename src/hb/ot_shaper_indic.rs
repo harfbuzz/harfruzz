@@ -3,7 +3,7 @@ use core::cmp;
 use core::convert::TryFrom;
 use core::ops::Range;
 
-use ttf_parser::GlyphId;
+use read_fonts::types::GlyphId;
 
 use super::algs::*;
 use super::buffer::hb_buffer_t;
@@ -128,34 +128,16 @@ const INDIC_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
         hb_tag_t::new(b"akhn"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
-    (
-        hb_tag_t::new(b"rphf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
+    (hb_tag_t::new(b"rphf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
     (
         hb_tag_t::new(b"rkrf"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
     ),
-    (
-        hb_tag_t::new(b"pref"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"blwf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"abvf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"half"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
-    (
-        hb_tag_t::new(b"pstf"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
+    (hb_tag_t::new(b"pref"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"blwf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"abvf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"half"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
+    (hb_tag_t::new(b"pstf"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
     (
         hb_tag_t::new(b"vatu"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
@@ -169,10 +151,7 @@ const INDIC_FEATURES: &[(hb_tag_t, hb_ot_map_feature_flags_t)] = &[
     // to the syllable.
     // Default Bengali font in Windows for example has intermixed
     // lookups for init,pres,abvs,blws features.
-    (
-        hb_tag_t::new(b"init"),
-        F_MANUAL_JOINERS | F_PER_SYLLABLE,
-    ),
+    (hb_tag_t::new(b"init"), F_MANUAL_JOINERS | F_PER_SYLLABLE),
     (
         hb_tag_t::new(b"pres"),
         F_GLOBAL_MANUAL_JOINERS | F_PER_SYLLABLE,
@@ -422,8 +401,7 @@ impl IndicWouldSubstituteFeature {
                 zero_context: self.zero_context,
             };
             if face
-                .font
-                .ot
+                .ot_tables
                 .gsub
                 .as_ref()
                 .and_then(|table| table.get_lookup(lookup.index))
@@ -624,9 +602,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
 }
 
 fn override_features(planner: &mut hb_ot_shape_planner_t) {
-    planner
-        .ot_map
-        .disable_feature(hb_tag_t::new(b"liga"));
+    planner.ot_map.disable_feature(hb_tag_t::new(b"liga"));
     planner.ot_map.add_gsub_pause(Some(syllabic_clear_var)); // Don't need syllables anymore.
 }
 
@@ -892,7 +868,7 @@ fn initial_reordering_consonant_syllable(
                 if indic_plan.config.reph_mode == RephMode::Explicit {
                     buffer.info[start + 2].as_glyph()
                 } else {
-                    GlyphId(0)
+                    GlyphId::NOTDEF
                 },
             ];
             if indic_plan
@@ -1131,7 +1107,7 @@ fn initial_reordering_consonant_syllable(
         for i in base + 1..end {
             if buffer.info[i].is_consonant() {
                 for j in last + 1..i {
-                    if (buffer.info[j].indic_position() as u8) < (ot_position_t::POS_SMVD as u8) {
+                    if buffer.info[j].indic_position() < ot_position_t::POS_SMVD {
                         let pos = buffer.info[i].indic_position();
                         buffer.info[j].set_indic_position(pos);
                     }
@@ -1154,7 +1130,7 @@ fn initial_reordering_consonant_syllable(
             buffer.info[i].set_syllable(u8::try_from(i - start).unwrap());
         }
 
-        buffer.info[start..end].sort_by(|a, b| a.indic_position().cmp(&b.indic_position()));
+        buffer.info[start..end].sort_by_key(|a| a.indic_position());
 
         // Find base again; also flip left-matra sequence.
         let mut first_left_mantra = end;
@@ -1401,7 +1377,7 @@ fn final_reordering_impl(
     let mut virama_glyph = None;
     if indic_plan.config.virama != 0 {
         if let Some(g) = face.get_nominal_glyph(indic_plan.config.virama) {
-            virama_glyph = Some(g.0 as u32);
+            virama_glyph = Some(g.to_u32());
         }
     }
 
@@ -1653,7 +1629,7 @@ fn final_reordering_impl(
             ^ _hb_glyph_info_ligated_and_didnt_multiply(&buffer.info[start])
     {
         let mut new_reph_pos;
-        loop {
+        'reph: {
             let reph_pos = indic_plan.config.reph_pos;
 
             // 1. If reph should be positioned after post-base consonant forms,
@@ -1681,7 +1657,7 @@ fn final_reordering_impl(
                             new_reph_pos += 1;
                         }
 
-                        break;
+                        break 'reph;
                     }
                 }
 
@@ -1691,14 +1667,14 @@ fn final_reordering_impl(
                 if reph_pos == RephPosition::AfterMain {
                     new_reph_pos = base;
                     while new_reph_pos + 1 < end
-                        && buffer.info[new_reph_pos + 1].indic_position() as u8
-                            <= ot_position_t::POS_AFTER_MAIN as u8
+                        && buffer.info[new_reph_pos + 1].indic_position()
+                            <= ot_position_t::POS_AFTER_MAIN
                     {
                         new_reph_pos += 1;
                     }
 
                     if new_reph_pos < end {
-                        break;
+                        break 'reph;
                     }
                 }
 
@@ -1721,7 +1697,7 @@ fn final_reordering_impl(
                     }
 
                     if new_reph_pos < end {
-                        break;
+                        break 'reph;
                     }
                 }
             }
@@ -1745,7 +1721,7 @@ fn final_reordering_impl(
                     new_reph_pos += 1;
                 }
 
-                break;
+                break 'reph;
             }
             // See https://github.com/harfbuzz/harfbuzz/issues/2298#issuecomment-615318654
 
@@ -1777,7 +1753,7 @@ fn final_reordering_impl(
                 }
             }
 
-            break;
+            break 'reph;
         }
 
         // Move

@@ -3,6 +3,44 @@
 use crate::shape;
 
 #[test]
+fn bugs_001() {
+    assert_eq!(
+        shape(
+            "tests/fonts/rb_custom/NotoSansCJK.subset1.otf",
+            "\u{4F60}\u{597D}\u{FF0C}",
+            "--direction rtl",
+        ),
+        "gid6=2+1000|\
+         gid3=1+1000|\
+         gid1=0+1000"
+    );
+}
+
+#[test]
+fn bugs_002() {
+    assert_eq!(
+        shape(
+            "tests/fonts/rb_custom/OpenSans.subset1.ttf",
+            "\u{0065}",
+            "--variations=wght=500,wdth=80",
+        ),
+        "gid0=0+1218"
+    );
+}
+
+#[test]
+fn bugs_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/rb_custom/NotoSansMalayalam.subset1.ttf",
+            "\u{0D38}\u{0D4D}\u{0D25}",
+            "",
+        ),
+        "gid7=0+1891"
+    );
+}
+
+#[test]
 fn fuzzer_001() {
     assert_eq!(
         shape(

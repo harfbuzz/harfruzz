@@ -51,8 +51,8 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         let script_fallback_mark_positioning = shaper.fallback_position;
 
         // https://github.com/harfbuzz/harfbuzz/issues/2124
-        let apply_morx =
-            face.tables().morx.is_some() && (direction.is_horizontal() || face.font.ot.gsub.is_none());
+        let apply_morx = face.aat_tables.morx.is_some()
+            && (direction.is_horizontal() || face.ot_tables.gsub.is_none());
 
         // https://github.com/harfbuzz/harfbuzz/issues/1528
         if apply_morx && shaper as *const _ != &DEFAULT_SHAPER as *const _ {
@@ -96,40 +96,29 @@ impl<'a> hb_ot_shape_planner_t<'a> {
 
         self.ot_map.is_simple = true;
 
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"rvrn"), empty, 1);
+        self.ot_map.enable_feature(hb_tag_t::new(b"rvrn"), empty, 1);
         self.ot_map.add_gsub_pause(None);
 
         match self.direction {
             Direction::LeftToRight => {
-                self.ot_map
-                    .enable_feature(hb_tag_t::new(b"ltra"), empty, 1);
-                self.ot_map
-                    .enable_feature(hb_tag_t::new(b"ltrm"), empty, 1);
+                self.ot_map.enable_feature(hb_tag_t::new(b"ltra"), empty, 1);
+                self.ot_map.enable_feature(hb_tag_t::new(b"ltrm"), empty, 1);
             }
             Direction::RightToLeft => {
-                self.ot_map
-                    .enable_feature(hb_tag_t::new(b"rtla"), empty, 1);
-                self.ot_map
-                    .add_feature(hb_tag_t::new(b"rtlm"), empty, 1);
+                self.ot_map.enable_feature(hb_tag_t::new(b"rtla"), empty, 1);
+                self.ot_map.add_feature(hb_tag_t::new(b"rtlm"), empty, 1);
             }
             _ => {}
         }
 
         // Automatic fractions.
-        self.ot_map
-            .add_feature(hb_tag_t::new(b"frac"), empty, 1);
-        self.ot_map
-            .add_feature(hb_tag_t::new(b"numr"), empty, 1);
-        self.ot_map
-            .add_feature(hb_tag_t::new(b"dnom"), empty, 1);
+        self.ot_map.add_feature(hb_tag_t::new(b"frac"), empty, 1);
+        self.ot_map.add_feature(hb_tag_t::new(b"numr"), empty, 1);
+        self.ot_map.add_feature(hb_tag_t::new(b"dnom"), empty, 1);
 
         // Random!
-        self.ot_map.enable_feature(
-            hb_tag_t::new(b"rand"),
-            F_RANDOM,
-            hb_ot_map_t::MAX_VALUE,
-        );
+        self.ot_map
+            .enable_feature(hb_tag_t::new(b"rand"), F_RANDOM, hb_ot_map_t::MAX_VALUE);
 
         // Tracking.  We enable dummy feature here just to allow disabling
         // AAT 'trak' table using features.
@@ -137,20 +126,16 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         self.ot_map
             .enable_feature(hb_tag_t::new(b"trak"), F_HAS_FALLBACK, 1);
 
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"Harf"), empty, 1); // Considered required.
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"HARF"), empty, 1); // Considered discretionary.
+        self.ot_map.enable_feature(hb_tag_t::new(b"Harf"), empty, 1); // Considered required.
+        self.ot_map.enable_feature(hb_tag_t::new(b"HARF"), empty, 1); // Considered discretionary.
 
         if let Some(func) = self.shaper.collect_features {
             self.ot_map.is_simple = false;
             func(self);
         }
 
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"Buzz"), empty, 1); // Considered required.
-        self.ot_map
-            .enable_feature(hb_tag_t::new(b"BUZZ"), empty, 1); // Considered discretionary.
+        self.ot_map.enable_feature(hb_tag_t::new(b"Buzz"), empty, 1); // Considered required.
+        self.ot_map.enable_feature(hb_tag_t::new(b"BUZZ"), empty, 1); // Considered discretionary.
 
         for &(tag, flags) in COMMON_FEATURES {
             self.ot_map.add_feature(tag, flags, 1);
@@ -173,7 +158,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
                 .enable_feature(hb_tag_t::new(b"vert"), F_GLOBAL_SEARCH, 1);
         }
 
-        if user_features.len() != 0 {
+        if !user_features.is_empty() {
             self.ot_map.is_simple = false;
         }
 
@@ -226,9 +211,9 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         let mut apply_kern = false;
 
         // Decide who does positioning. GPOS, kerx, kern, or fallback.
-        let has_kerx = self.face.tables().kerx.is_some();
-        let has_gsub = !apply_morx && self.face.tables().gsub.is_some();
-        let has_gpos = !disable_gpos && self.face.tables().gpos.is_some();
+        let has_kerx = self.face.aat_tables.kerx.is_some();
+        let has_gsub = !apply_morx && self.face.ot_tables.gsub.is_some();
+        let has_gpos = !disable_gpos && self.face.ot_tables.gpos.is_some();
 
         // Prefer GPOS over kerx if GSUB is present;
         // https://github.com/harfbuzz/harfbuzz/issues/3008
@@ -268,7 +253,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         }
 
         // Currently we always apply trak.
-        let apply_trak = requested_tracking && self.face.tables().trak.is_some();
+        let apply_trak = requested_tracking && self.face.aat_tables.trak.is_some();
 
         let mut plan = hb_ot_shape_plan_t {
             direction: self.direction,
@@ -346,7 +331,7 @@ fn substitute_pre(ctx: &mut hb_ot_shape_context_t) {
     hb_ot_substitute_plan(ctx);
 
     if ctx.plan.apply_morx && ctx.plan.apply_gpos {
-        hb_aat_layout_remove_deleted_glyphs(&mut ctx.buffer);
+        hb_aat_layout_remove_deleted_glyphs(ctx.buffer);
     }
 }
 
@@ -355,6 +340,7 @@ fn substitute_post(ctx: &mut hb_ot_shape_context_t) {
         aat_layout::hb_aat_layout_remove_deleted_glyphs(ctx.buffer);
     }
 
+    deal_with_variation_selectors(ctx.buffer);
     hide_default_ignorables(ctx.buffer, ctx.face);
 
     if let Some(func) = ctx.plan.shaper.postprocess_glyphs {
@@ -611,7 +597,7 @@ fn set_unicode_props(buffer: &mut hb_buffer_t) {
         let info = &mut later[0];
         info.init_unicode_props(&mut buffer.scratch_flags);
 
-        let gen_cat = _hb_glyph_info_get_general_category(&info);
+        let gen_cat = _hb_glyph_info_get_general_category(info);
 
         if (rb_flag_unsafe(gen_cat.to_rb())
             & (rb_flag(RB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER)
@@ -856,6 +842,33 @@ fn zero_width_default_ignorables(buffer: &mut hb_buffer_t) {
     }
 }
 
+fn deal_with_variation_selectors(buffer: &mut hb_buffer_t) {
+    if buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK == 0 {
+        return;
+    }
+
+    // Note: In harfbuzz, this is part of the condition above (with OR), so it needs to stay
+    // in sync.
+    let Some(nf) = buffer.not_found_variation_selector else {
+        return;
+    };
+
+    let count = buffer.len;
+    let info = &mut buffer.info;
+    let pos = &mut buffer.pos;
+
+    for i in 0..count {
+        if _hb_glyph_info_is_variation_selector(&info[i]) {
+            info[i].glyph_id = nf;
+            pos[i].x_advance = 0;
+            pos[i].y_advance = 0;
+            pos[i].x_offset = 0;
+            pos[i].y_offset = 0;
+            _hb_glyph_info_set_variation_selector(&mut info[i], false);
+        }
+    }
+}
+
 fn zero_mark_widths_by_gdef(buffer: &mut hb_buffer_t, adjust_offsets: bool) {
     let len = buffer.len;
     for (info, pos) in buffer.info[..len].iter().zip(&mut buffer.pos[..len]) {
@@ -888,7 +901,7 @@ fn hide_default_ignorables(buffer: &mut hb_buffer_t, face: &hb_font_t) {
                 let len = buffer.len;
                 for info in &mut buffer.info[..len] {
                     if _hb_glyph_info_is_default_ignorable(info) {
-                        info.glyph_id = u32::from(invisible.0);
+                        info.glyph_id = invisible.to_u32();
                     }
                 }
                 return;

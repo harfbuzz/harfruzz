@@ -1,9 +1,5 @@
 //! Matching of glyph patterns.
 
-use skrifa::raw::tables::layout::SequenceLookupRecord;
-use ttf_parser::opentype_layout::*;
-use ttf_parser::GlyphId;
-
 use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
 use super::hb_font_t;
@@ -12,10 +8,12 @@ use super::ot_layout::LayoutTable;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
+use read_fonts::tables::layout::SequenceLookupRecord;
+use read_fonts::types::GlyphId;
 
 /// Value represents glyph id.
 pub fn match_glyph(glyph: GlyphId, value: u16) -> bool {
-    glyph == GlyphId(value)
+    glyph.to_u32() == value as u32
 }
 
 pub fn match_input(
@@ -171,6 +169,9 @@ pub fn match_lookahead(
     start_index: usize,
     end_index: &mut usize,
 ) -> bool {
+    // Function should always be called with a non-zero starting index
+    // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
+    assert!(start_index >= 1);
     let mut iter = skipping_iterator_t::new(ctx, start_index - 1, true);
     iter.set_glyph_data(0);
     iter.enable_matching(match_func);
@@ -200,6 +201,7 @@ pub struct skipping_iterator_t<'a, 'b> {
     lookup_props: u32,
     ignore_zwnj: bool,
     ignore_zwj: bool,
+    ignore_hidden: bool,
     mask: hb_mask_t,
     syllable: u8,
     matching: Option<&'a match_func_t<'a>>,
@@ -242,6 +244,8 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
             ignore_zwnj: ctx.table_index == TableIndex::GPOS || (context_match && ctx.auto_zwnj),
             // Ignore ZWJ if we are matching context, or asked to.
             ignore_zwj: context_match || ctx.auto_zwj,
+            // Ignore hidden glyphs (like CGJ) during GPOS.
+            ignore_hidden: ctx.table_index == TableIndex::GPOS,
             mask: if context_match {
                 u32::MAX
             } else {
@@ -310,9 +314,9 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
     }
 
     pub fn prev(&mut self, unsafe_from: Option<&mut usize>) -> bool {
-        let stop = 0;
+        let stop: usize = 0;
 
-        while self.buf_idx > stop as usize {
+        while self.buf_idx > stop {
             self.buf_idx -= 1;
             let info = &self.ctx.buffer.out_info()[self.buf_idx];
 
@@ -386,9 +390,9 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
         }
 
         if _hb_glyph_info_is_default_ignorable(info)
-            && !info.is_hidden()
             && (self.ignore_zwnj || !_hb_glyph_info_is_zwnj(info))
             && (self.ignore_zwj || !_hb_glyph_info_is_zwj(info))
+            && (self.ignore_hidden || !_hb_glyph_info_is_hidden(info))
         {
             return may_skip_t::SKIP_MAYBE;
         }
@@ -397,7 +401,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
     }
 }
 
-pub(super) fn apply_lookup(
+pub(crate) fn apply_lookup(
     ctx: &mut hb_ot_apply_context_t,
     input_len: usize,
     match_positions: &mut smallvec::SmallVec<[usize; 4]>,
@@ -412,7 +416,7 @@ pub(super) fn apply_lookup(
 
     // All positions are distance from beginning of *output* buffer.
     // Adjust.
-    let mut end = {
+    let mut end: isize = {
         let backtrack_len = ctx.buffer.backtrack_len();
         let delta = backtrack_len as isize - ctx.buffer.idx as isize;
 
@@ -421,7 +425,7 @@ pub(super) fn apply_lookup(
             match_positions[j] = (match_positions[j] as isize + delta) as _;
         }
 
-        backtrack_len + match_end - ctx.buffer.idx
+        backtrack_len as isize + match_end as isize - ctx.buffer.idx as isize
     };
 
     for record in lookups {
@@ -482,8 +486,8 @@ pub(super) fn apply_lookup(
         //
         // It should be possible to construct tests for both of these cases.
 
-        end = (end as isize + delta) as _;
-        if end < match_positions[idx] {
+        end += delta;
+        if end < match_positions[idx] as isize {
             // End might end up being smaller than match_positions[idx] if the recursed
             // lookup ended up removing many items.
             // Just never rewind end beyond start of current position, since that is
@@ -492,8 +496,8 @@ pub(super) fn apply_lookup(
             // https://bugs.chromium.org/p/chromium/issues/detail?id=659496
             // https://github.com/harfbuzz/harfbuzz/issues/1611
             //
-            delta += match_positions[idx] as isize - end as isize;
-            end = match_positions[idx];
+            delta += match_positions[idx] as isize - end;
+            end = match_positions[idx] as isize;
         }
 
         // next now is the position after the recursed lookup.
@@ -531,7 +535,7 @@ pub(super) fn apply_lookup(
         }
     }
 
-    ctx.buffer.move_to(end);
+    ctx.buffer.move_to(end.try_into().unwrap());
 }
 
 /// Find out whether a lookup would be applied.
@@ -561,7 +565,7 @@ pub mod OT {
         pub buffer: &'a mut hb_buffer_t,
         lookup_mask: hb_mask_t,
         pub per_syllable: bool,
-        pub lookup_index: LookupIndex,
+        pub lookup_index: u16,
         pub lookup_props: u32,
         pub nesting_level_left: usize,
         pub auto_zwnj: bool,
@@ -615,7 +619,7 @@ pub mod OT {
             self.lookup_mask
         }
 
-        pub fn recurse(&mut self, sub_lookup_index: LookupIndex) -> Option<()> {
+        pub fn recurse(&mut self, sub_lookup_index: u16) -> Option<()> {
             if self.nesting_level_left == 0 {
                 self.buffer.shaping_failed = true;
                 return None;
@@ -633,36 +637,26 @@ pub mod OT {
 
             self.lookup_index = sub_lookup_index;
             let applied = match self.table_index {
-                TableIndex::GSUB => {
-                    if let Some(lookup) = self
-                        .face
-                        .font
-                        .ot
-                        .gsub
-                        .as_ref()
-                        .and_then(|gsub| gsub.get_lookup(sub_lookup_index))
-                    {
+                TableIndex::GSUB => self
+                    .face
+                    .ot_tables
+                    .gsub
+                    .as_ref()
+                    .and_then(|table| table.get_lookup(sub_lookup_index))
+                    .and_then(|lookup| {
                         self.lookup_props = lookup.props();
                         lookup.apply(self)
-                    } else {
-                        None
-                    }
-                }
-                TableIndex::GPOS => {
-                    if let Some(lookup) = self
-                        .face
-                        .font
-                        .ot
-                        .gpos
-                        .as_ref()
-                        .and_then(|gsub| gsub.get_lookup(sub_lookup_index))
-                    {
+                    }),
+                TableIndex::GPOS => self
+                    .face
+                    .ot_tables
+                    .gpos
+                    .as_ref()
+                    .and_then(|table| table.get_lookup(sub_lookup_index))
+                    .and_then(|lookup| {
                         self.lookup_props = lookup.props();
                         lookup.apply(self)
-                    } else {
-                        None
-                    }
-                }
+                    }),
             };
 
             self.lookup_props = saved_props;
@@ -691,11 +685,10 @@ pub mod OT {
                     // TODO: harfbuzz uses a digest here to speed things up if HB_NO_GDEF_CACHE
                     // is enabled. But a bit harder to implement for us since it's taken care of by
                     // ttf-parser
-                    if let Some(table) = self.face.tables().gdef {
-                        return table.is_mark_glyph(info.as_glyph(), Some(set_index));
-                    } else {
-                        return false;
-                    }
+                    return self
+                        .face
+                        .ot_tables
+                        .is_mark_glyph(info.as_glyph().to_u32(), set_index);
                 }
 
                 // The second byte of match_props has the meaning
@@ -738,11 +731,7 @@ pub mod OT {
                 props |= GlyphPropsFlags::MULTIPLIED.bits();
             }
 
-            let has_glyph_classes = self
-                .face
-                .tables()
-                .gdef
-                .map_or(false, |table| table.has_glyph_classes());
+            let has_glyph_classes = self.face.ot_tables.has_glyph_classes();
 
             if has_glyph_classes {
                 props &= GlyphPropsFlags::PRESERVE.bits();
@@ -757,12 +746,12 @@ pub mod OT {
 
         pub fn replace_glyph(&mut self, glyph_id: GlyphId) {
             self.set_glyph_class(glyph_id, GlyphPropsFlags::empty(), false, false);
-            self.buffer.replace_glyph(u32::from(glyph_id.0));
+            self.buffer.replace_glyph(u32::from(glyph_id));
         }
 
         pub fn replace_glyph_inplace(&mut self, glyph_id: GlyphId) {
             self.set_glyph_class(glyph_id, GlyphPropsFlags::empty(), false, false);
-            self.buffer.cur_mut(0).glyph_id = u32::from(glyph_id.0);
+            self.buffer.cur_mut(0).glyph_id = u32::from(glyph_id);
         }
 
         pub fn replace_glyph_with_ligature(
@@ -771,7 +760,7 @@ pub mod OT {
             class_guess: GlyphPropsFlags,
         ) {
             self.set_glyph_class(glyph_id, class_guess, true, false);
-            self.buffer.replace_glyph(u32::from(glyph_id.0));
+            self.buffer.replace_glyph(u32::from(glyph_id));
         }
 
         pub fn output_glyph_for_component(
@@ -780,7 +769,7 @@ pub mod OT {
             class_guess: GlyphPropsFlags,
         ) {
             self.set_glyph_class(glyph_id, class_guess, false, true);
-            self.buffer.output_glyph(u32::from(glyph_id.0));
+            self.buffer.output_glyph(u32::from(glyph_id));
         }
     }
 }
@@ -877,6 +866,9 @@ pub fn ligate_input(
                 if this_comp == 0 {
                     this_comp = last_num_comps;
                 }
+                // Avoid the potential for a wrap-around bug when subtracting from an unsigned integer
+                // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
+                assert!(comps_so_far >= last_num_comps);
                 let new_lig_comp = comps_so_far - last_num_comps + this_comp.min(last_num_comps);
                 _hb_glyph_info_set_lig_props_for_mark(cur, lig_id, new_lig_comp);
             }
@@ -905,6 +897,9 @@ pub fn ligate_input(
                 break;
             }
 
+            // Avoid the potential for a wrap-around bug when subtracting from an unsigned integer
+            // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
+            assert!(comps_so_far >= last_num_comps);
             let new_lig_comp = comps_so_far - last_num_comps + this_comp.min(last_num_comps);
             _hb_glyph_info_set_lig_props_for_mark(info, lig_id, new_lig_comp)
         }

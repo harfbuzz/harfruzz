@@ -1,37 +1,44 @@
 use std::path::PathBuf;
 use std::str::FromStr;
 
+use harfruzz::ShaperFont;
+use read_fonts::{
+    types::{F2Dot14, Fixed},
+    FontRef, TableProvider,
+};
+
 const HELP: &str = "\
 USAGE:
     shape [OPTIONS] <FONT-FILE> [TEXT]
 
 OPTIONS:
-    -h, --help                          Show help options
-        --version                       Show version number
-        --font-file PATH                Set font file-name
-        --face-index INDEX              Set face index [default: 0]
-        --font-ptem NUMBER              Set font point-size
-        --variations LIST               Set comma-separated list of font variations
-        --text TEXT                     Set input text
-        --text-file PATH                Set input text file
-    -u, --unicodes LIST                 Set comma-separated list of input Unicode codepoints
-                                        Examples: 'U+0056,U+0057'
-        --direction DIRECTION           Set text direction
-                                        [possible values: ltr, rtl, ttb, btt]
-        --language LANG                 Set text language [default: LC_CTYPE]
-        --script TAG                    Set text script as ISO-15924 tag
-        --utf8-clusters                 Use UTF-8 byte indices, not char indices
-        --cluster-level N               Cluster merging level [default: 0]
-                                        [possible values: 0, 1, 2]
-        --features LIST                 Set comma-separated list of font features
-        --no-glyph-names                Output glyph indices instead of names
-        --no-positions                  Do not output glyph positions
-        --no-advances                   Do not output glyph advances
-        --no-clusters                   Do not output cluster indices
-        --show-extents                  Output glyph extents
-        --show-flags                    Output glyph flags
-        --single-par                    Treat the input string as a single paragraph
-        --ned                           No Extra Data; Do not output clusters or advances
+    -h, --help                                  Show help options
+        --version                               Show version number
+        --font-file PATH                        Set font file-name
+        --face-index INDEX                      Set face index [default: 0]
+        --font-ptem NUMBER                      Set font point-size
+        --variations LIST                       Set comma-separated list of font variations
+        --text TEXT                             Set input text
+        --text-file PATH                        Set input text file
+    -u, --unicodes LIST                         Set comma-separated list of input Unicode codepoints
+                                                Examples: 'U+0056,U+0057'
+        --direction DIRECTION                   Set text direction
+                                                [possible values: ltr, rtl, ttb, btt]
+        --language LANG                         Set text language [default: LC_CTYPE]
+        --script TAG                            Set text script as ISO-15924 tag
+        --not-found-variation-selector-glyph N  Glyph value to replace not-found variation-selector characters with
+        --utf8-clusters                         Use UTF-8 byte indices, not char indices
+        --cluster-level N                       Cluster merging level [default: 0]
+                                                [possible values: 0, 1, 2]
+        --features LIST                         Set comma-separated list of font features
+        --no-glyph-names                        Output glyph indices instead of names
+        --no-positions                          Do not output glyph positions
+        --no-advances                           Do not output glyph advances
+        --no-clusters                           Do not output cluster indices
+        --show-extents                          Output glyph extents
+        --show-flags                            Output glyph flags
+        --single-par                            Treat the input string as a single paragraph
+        --ned                                   No Extra Data; Do not output clusters or advances
 
 ARGS:
     <FONT-FILE>                         A font file
@@ -51,6 +58,7 @@ struct Args {
     direction: Option<harfruzz::Direction>,
     language: harfruzz::Language,
     script: Option<harfruzz::Script>,
+    not_found_variation_selector_glyph: Option<u32>,
     utf8_clusters: bool,
     cluster_level: harfruzz::BufferClusterLevel,
     features: Vec<harfruzz::Feature>,
@@ -85,6 +93,8 @@ fn parse_args() -> Result<Args, pico_args::Error> {
             .unwrap_or(system_language()),
         script: args.opt_value_from_str("--script")?,
         utf8_clusters: args.contains("--utf8-clusters"),
+        not_found_variation_selector_glyph: args
+            .opt_value_from_str("--not-found-variation-selector-glyph")?,
         cluster_level: args
             .opt_value_from_fn("--cluster-level", parse_cluster)?
             .unwrap_or_default(),
@@ -145,13 +155,22 @@ fn main() {
     }
 
     let font_data = std::fs::read(font_path).unwrap();
-    let mut face = harfruzz::Face::from_slice(&font_data, args.face_index).unwrap();
+    let font = FontRef::from_index(&font_data, args.face_index).unwrap();
+    let mut coords = vec![];
+    if let Ok(fvar) = font.fvar() {
+        coords.resize(fvar.axis_count() as usize, F2Dot14::default());
+        fvar.user_to_normalized(
+            None,
+            args.variations
+                .iter()
+                .map(|var| (var.tag, Fixed::from_f64(var.value as f64))),
+            &mut coords,
+        );
+    }
+    let shaper_font = ShaperFont::new(&font);
+    let mut face = shaper_font.shaper(&font, &coords);
 
     face.set_points_per_em(args.font_ptem);
-
-    if !args.variations.is_empty() {
-        face.set_variations(&args.variations);
-    }
 
     let text = if let Some(path) = args.text_file {
         std::fs::read_to_string(path).unwrap()
@@ -192,6 +211,10 @@ fn main() {
 
         if !args.utf8_clusters {
             buffer.reset_clusters();
+        }
+
+        if let Some(g) = args.not_found_variation_selector_glyph {
+            buffer.set_not_found_variation_selector_glyph(g);
         }
 
         let glyph_buffer = harfruzz::shape(&face, &args.features, buffer);
@@ -242,7 +265,7 @@ fn parse_unicodes(s: &str) -> Result<String, String> {
 fn parse_features(s: &str) -> Result<Vec<harfruzz::Feature>, String> {
     let mut features = Vec::new();
     for f in s.split(',') {
-        features.push(harfruzz::Feature::from_str(&f)?);
+        features.push(harfruzz::Feature::from_str(f)?);
     }
 
     Ok(features)
@@ -262,7 +285,7 @@ fn parse_cluster(s: &str) -> Result<harfruzz::BufferClusterLevel, String> {
         "0" => Ok(harfruzz::BufferClusterLevel::MonotoneGraphemes),
         "1" => Ok(harfruzz::BufferClusterLevel::MonotoneCharacters),
         "2" => Ok(harfruzz::BufferClusterLevel::Characters),
-        _ => Err(format!("invalid cluster level")),
+        _ => Err("invalid cluster level".to_string()),
     }
 }
 
