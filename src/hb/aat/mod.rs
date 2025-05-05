@@ -1,12 +1,10 @@
 use core::num::NonZeroU16;
 use read_fonts::{
-    tables::{ankr::Ankr, feat::Feat},
+    tables::{ankr::Ankr, feat::Feat, kerx::Kerx},
     types::Tag,
     FontRef, TableProvider,
 };
-use ttf_parser::{
-    kern::Table as Kern, kerx::Table as Kerx, morx::Table as Morx, trak::Table as Trak,
-};
+use ttf_parser::{kern::Table as Kern, morx::Table as Morx, trak::Table as Trak};
 
 #[derive(Clone, Default)]
 pub struct AatTables<'a> {
@@ -35,9 +33,7 @@ impl<'a> AatTables<'a> {
             kern: font
                 .table_data(Tag::new(b"kern"))
                 .and_then(|data| Kern::parse(data.as_bytes())),
-            kerx: font
-                .table_data(Tag::new(b"kerx"))
-                .and_then(|data| Kerx::parse(num_glyphs, data.as_bytes())),
+            kerx: font.kerx().ok(),
             trak: font
                 .table_data(Tag::new(b"trak"))
                 .and_then(|data| Trak::parse(data.as_bytes())),

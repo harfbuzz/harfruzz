@@ -23,7 +23,7 @@ unicode-properties = { version = "0.1", default-features = false, features = ["g
 unicode-script = "0.5"
 wasmi = { version = "0.40", optional = true }
 log = "0.4"
-read-fonts = { version = "0.28.0", default-features = false, features = ["libm"] }
+read-fonts = { path = "../gfonts_fontations/read-fonts", default-features = false, features = ["libm"] }
 
 # TODO: remove entirely
 [dependencies.ttf-parser]
