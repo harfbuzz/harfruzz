@@ -1,8 +1,8 @@
 [package]
 name = "harfruzz"
-version = "0.0.1"
+version = "0.1.0"
 edition = "2021"
-rust-version = "1.65.0"
+rust-version = "1.75"  # should match https://github.com/googlefonts/fontations/blob/main/Cargo.toml
 description = "A complete harfbuzz shaping algorithm port to Rust."
 documentation = "https://docs.rs/harfruzz/"
 readme = "README.md"
