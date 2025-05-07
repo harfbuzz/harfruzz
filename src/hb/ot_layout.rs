@@ -7,7 +7,7 @@ use super::ot_layout_gsubgpos::{Apply, OT};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
 use super::{hb_font_t, hb_glyph_info_t};
-use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
+use crate::hb::set_digest::hb_set_digest_t;
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
@@ -123,7 +123,7 @@ pub fn apply_layout_table<T: LayoutTable>(
                     continue;
                 };
 
-                if lookup.digest().may_have(&ctx.digest) {
+                if lookup.digest().may_intersect(&ctx.digest) {
                     ctx.lookup_index = lookup_map.index;
                     ctx.set_lookup_mask(lookup_map.mask);
                     ctx.auto_zwj = lookup_map.auto_zwj;
