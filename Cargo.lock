@@ -64,8 +64,7 @@ checksum = "a0d2fde1f7b3d48b8395d5f2de76c18a528bd6a9cdde438df747bfcba3e05d6f"
 [[package]]
 name = "font-types"
 version = "0.8.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fa6a5e5a77b5f3f7f9e32879f484aa5b3632ddfbe568a16266c904a6f32cdaf"
+source = "git+https://github.com/googlefonts/fontations?branch=cmap-format-13#4ba610c164a91723be271b0f1c92c5482a5606a1"
 dependencies = [
  "bytemuck",
 ]
@@ -160,8 +159,7 @@ dependencies = [
 [[package]]
 name = "read-fonts"
 version = "0.28.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "600e807b48ac55bad68a8cb75cc3c7739f139b9248f7e003e01e080f589b5288"
+source = "git+https://github.com/googlefonts/fontations?branch=cmap-format-13#4ba610c164a91723be271b0f1c92c5482a5606a1"
 dependencies = [
  "bytemuck",
  "core_maths",
