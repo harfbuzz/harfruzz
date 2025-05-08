@@ -8767,6 +8767,21 @@ fn myanmar_syllable_001() {
 }
 
 #[test]
+fn myanmar_syllable_002() {
+    assert_eq!(
+        shape(
+            "tests/fonts/in-house/f4ba5a767ef56a40133844507efb98fee5635e71.ttf",
+            "\u{1000}\u{1032}\u{1038}\u{1069}",
+            "",
+        ),
+        "ka=0+1124|\
+         _ai=0@-27,20+0|\
+         visarga=0+346|\
+         tone1_wpk=0+423"
+    );
+}
+
+#[test]
 fn myanmar_zawgyi_001() {
     assert_eq!(
         shape(
