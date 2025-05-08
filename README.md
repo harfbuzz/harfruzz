@@ -11,7 +11,7 @@ Further context in https://github.com/googlefonts/fontations/issues/956.
 `rustybuzz` is a complete [harfbuzz](https://github.com/harfbuzz/harfbuzz)'s
 shaping algorithm port to Rust.
 
-Matches `harfbuzz` [v9.0.0](https://github.com/harfbuzz/harfbuzz/releases/tag/9.0.0).
+Matches `harfbuzz` [v10.1.0](https://github.com/harfbuzz/harfbuzz/releases/tag/10.1.0).
 
 ## Why?
 
