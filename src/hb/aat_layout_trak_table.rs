@@ -64,7 +64,7 @@ struct Tracker<'a> {
 
 impl<'a> Tracker<'a> {
     fn new(trak: &'a Trak<'a>, data: TrackData<'a>) -> Option<Self> {
-        let sizes = data.size_table(&trak).ok()?;
+        let sizes = data.size_table(trak.offset_data()).ok()?;
         let tracks = data.track_table();
         Some(Self {
             trak,
@@ -94,7 +94,7 @@ impl<'a> Tracker<'a> {
             idx,
             ptem,
             track
-                .per_size_values(self.trak, self.sizes.len() as u16)
+                .per_size_values(self.trak.offset_data(), self.sizes.len() as u16)
                 .ok()?,
         )
         .map(|n| n.round() as i32)
