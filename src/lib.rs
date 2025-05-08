@@ -13,7 +13,10 @@ extern crate alloc;
 
 mod hb;
 
-pub use read_fonts::FontRef;
+pub use read_fonts::{
+    types::{F2Dot14, Tag},
+    FontRef,
+};
 
 pub use hb::buffer::hb_glyph_info_t as GlyphInfo;
 pub use hb::buffer::{GlyphBuffer, GlyphPosition, UnicodeBuffer};
