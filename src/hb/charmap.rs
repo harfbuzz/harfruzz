@@ -73,6 +73,7 @@ impl<'a> Charmap<'a> {
             }
             CmapSubtable::Format4(table) => table.map_codepoint(c),
             CmapSubtable::Format12(table) => table.map_codepoint(c),
+            CmapSubtable::Format13(table) => table.map_codepoint(c),
             _ => None,
         };
         if result.is_none()
@@ -134,7 +135,8 @@ fn find_cmap_subtable<'a>(
                 | CmapSubtable::Format4(_)
                 | CmapSubtable::Format6(_)
                 | CmapSubtable::Format10(_)
-                | CmapSubtable::Format12(_) => return Some((platform_id, encoding_id, subtable)),
+                | CmapSubtable::Format12(_)
+                | CmapSubtable::Format13(_) => return Some((platform_id, encoding_id, subtable)),
                 _ => {}
             }
         }

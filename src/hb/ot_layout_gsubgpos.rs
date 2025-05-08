@@ -557,7 +557,7 @@ pub struct WouldApplyContext<'a> {
 
 pub mod OT {
     use super::*;
-    use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
+    use crate::hb::set_digest::hb_set_digest_t;
 
     pub struct hb_ot_apply_context_t<'a, 'b> {
         pub table_index: TableIndex,
