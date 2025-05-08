@@ -38,13 +38,19 @@ impl Apply for ReverseChainSingleSubstFormat1<'_> {
         let lookahead_coverages = self.lookahead_coverages();
 
         let f1 = |glyph: GlyphId, index| {
-            let value = backtrack_coverages.get(index as usize).unwrap();
-            value.get(glyph).is_some()
+            backtrack_coverages
+                .get(index as usize)
+                .ok()
+                .and_then(|coverage| coverage.get(glyph))
+                .is_some()
         };
 
         let f2 = |glyph: GlyphId, index| {
-            let value = lookahead_coverages.get(index as usize).unwrap();
-            value.get(glyph).is_some()
+            lookahead_coverages
+                .get(index as usize)
+                .ok()
+                .and_then(|coverage| coverage.get(glyph))
+                .is_some()
         };
 
         let mut start_index = 0;
