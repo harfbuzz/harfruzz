@@ -5,6 +5,8 @@ use crate::hb::ot_layout_gsubgpos::{
 use read_fonts::tables::gsub::{Ligature, LigatureSet, LigatureSubstFormat1};
 use read_fonts::types::GlyphId;
 
+// TODO HarfBuzz caches covereage ala PairPos1
+
 impl WouldApply for Ligature<'_> {
     fn would_apply(&self, ctx: &WouldApplyContext) -> bool {
         let components = self.component_glyph_ids();
