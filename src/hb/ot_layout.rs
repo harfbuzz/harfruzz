@@ -442,6 +442,8 @@ pub(crate) fn _hb_grapheme_group_func(_: &hb_glyph_info_t, b: &hb_glyph_info_t) 
 }
 
 pub fn _hb_ot_layout_reverse_graphemes(buffer: &mut hb_buffer_t) {
+    // MONOTONE_GRAPHEMES was already applied and is taken care of by _hb_grapheme_group_func.
+    // So we just check for MONOTONE_CHARACTERS here.
     buffer.reverse_groups(
         _hb_grapheme_group_func,
         buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS,

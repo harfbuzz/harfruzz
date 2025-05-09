@@ -15,6 +15,7 @@ use crate::hb::unicode::hb_gc::{
     RB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR, RB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER,
     RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER,
 };
+use crate::BufferClusterLevel;
 use crate::BufferFlags;
 use crate::{Direction, Feature, Language, Script};
 use read_fonts::TableProvider;
@@ -697,7 +698,7 @@ fn insert_dotted_circle(buffer: &mut hb_buffer_t, face: &hb_font_t) {
 
 fn form_clusters(buffer: &mut hb_buffer_t) {
     if buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_NON_ASCII != 0 {
-        if buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES {
+        if BufferClusterLevel::new(buffer.cluster_level).is_graphemes() {
             foreach_grapheme!(buffer, start, end, { buffer.merge_clusters(start, end) });
         } else {
             foreach_grapheme!(buffer, start, end, {

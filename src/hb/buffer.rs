@@ -328,6 +328,7 @@ pub type hb_buffer_cluster_level_t = u32;
 pub const HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES: u32 = 0;
 pub const HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS: u32 = 1;
 pub const HB_BUFFER_CLUSTER_LEVEL_CHARACTERS: u32 = 2;
+pub const HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES: u32 = 3;
 pub const HB_BUFFER_CLUSTER_LEVEL_DEFAULT: u32 = HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES;
 
 pub struct hb_buffer_t {
@@ -868,7 +869,7 @@ impl hb_buffer_t {
     }
 
     fn merge_clusters_impl(&mut self, mut start: usize, mut end: usize) {
-        if self.cluster_level == HB_BUFFER_CLUSTER_LEVEL_CHARACTERS {
+        if !BufferClusterLevel::new(self.cluster_level).is_monotone() {
             self.unsafe_to_break(Some(start), Some(end));
             return;
         }
@@ -908,7 +909,7 @@ impl hb_buffer_t {
     }
 
     pub fn merge_out_clusters(&mut self, mut start: usize, mut end: usize) {
-        if self.cluster_level == HB_BUFFER_CLUSTER_LEVEL_CHARACTERS {
+        if !BufferClusterLevel::new(self.cluster_level).is_monotone() {
             return;
         }
 
@@ -1678,6 +1679,7 @@ impl UnicodeBuffer {
             BufferClusterLevel::MonotoneGraphemes => HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES,
             BufferClusterLevel::MonotoneCharacters => HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS,
             BufferClusterLevel::Characters => HB_BUFFER_CLUSTER_LEVEL_CHARACTERS,
+            BufferClusterLevel::Graphemes => HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES,
         }
     }
 
@@ -1688,6 +1690,7 @@ impl UnicodeBuffer {
             HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES => BufferClusterLevel::MonotoneGraphemes,
             HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS => BufferClusterLevel::MonotoneCharacters,
             HB_BUFFER_CLUSTER_LEVEL_CHARACTERS => BufferClusterLevel::Characters,
+            HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES => BufferClusterLevel::Graphemes,
             _ => BufferClusterLevel::MonotoneGraphemes,
         }
     }
