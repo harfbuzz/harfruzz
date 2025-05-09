@@ -10,6 +10,9 @@ use ttf_parser::{apple_layout, morx, FromData, GlyphId, LazyArray32};
 
 // TODO: Use set_digest, similarly to how it's used in harfbuzz.
 
+// TODO: [morx] Blocklist dysfunctional morx table of AALMAGHRIBI.ttf font
+// HarfBuzz commit 1e629c35113e2460fd4a77b4fa9ae3ff6ec876ba
+
 // Chain::compile_flags in harfbuzz
 pub fn compile_flags(
     face: &hb_font_t,
