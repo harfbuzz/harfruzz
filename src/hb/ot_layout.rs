@@ -396,6 +396,11 @@ pub(crate) fn _hb_glyph_info_is_default_ignorable(info: &hb_glyph_info_t) -> boo
 }
 
 #[inline]
+pub(crate) fn _hb_glyph_info_set_default_ignorable(info: &mut hb_glyph_info_t) {
+    info.set_unicode_props(info.unicode_props() | UnicodeProps::IGNORABLE.bits());
+}
+
+#[inline]
 pub(crate) fn _hb_glyph_info_clear_default_ignorable(info: &mut hb_glyph_info_t) {
     let mut n = info.unicode_props();
     n &= !UnicodeProps::IGNORABLE.bits();
@@ -421,7 +426,7 @@ pub(crate) fn _hb_glyph_info_set_continuation(info: &mut hb_glyph_info_t) {
 }
 
 #[inline]
-pub(crate) fn _hb_glyph_info_reset_continuation(info: &mut hb_glyph_info_t) {
+pub(crate) fn _hb_glyph_info_clear_continuation(info: &mut hb_glyph_info_t) {
     let mut n = info.unicode_props();
     n &= !UnicodeProps::CONTINUATION.bits();
     info.set_unicode_props(n);

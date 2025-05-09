@@ -1,14 +1,22 @@
 use super::aat_layout::*;
 use super::aat_layout_common::ToTtfParserGid;
 use super::aat_map::{hb_aat_map_builder_t, hb_aat_map_t, range_flags_t};
-use super::buffer::{hb_buffer_t, UnicodeProps};
+use super::buffer::hb_buffer_t;
+use super::ot_layout::_hb_glyph_info_set_default_ignorable;
 use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
 use crate::hb::ot_layout::MAX_CONTEXT_LENGTH;
 use alloc::vec;
 use ttf_parser::{apple_layout, morx, FromData, GlyphId, LazyArray32};
 
-// TODO: Use set_digest, similarly to how it's used in harfbuzz.
+// TODO: Use class cache, similarly to how it's used in harfbuzz.
+// See https://github.com/harfbuzz/harfbuzz/pull/5031
+
+// TODO: [morx] Blocklist dysfunctional morx table of AALMAGHRIBI.ttf font
+// HarfBuzz commit 1e629c35113e2460fd4a77b4fa9ae3ff6ec876ba
+
+// TODO: [morx] Only collect glyphs that can initiate action in the machine
+// https://github.com/harfbuzz/harfbuzz/pull/5041
 
 // Chain::compile_flags in harfbuzz
 pub fn compile_flags(
@@ -79,13 +87,16 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
     for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
         c.range_flags = Some(chain_flags.as_mut_slice());
         for subtable in chain.subtables {
+            let coverage = subtable.coverage;
+
+            let subtable_flags = subtable.feature_flags;
             if let Some(range_flags) = c.range_flags.as_ref() {
-                if range_flags.len() == 1 && (subtable.feature_flags & range_flags[0].flags == 0) {
+                if range_flags.len() == 1 && (subtable_flags & range_flags[0].flags == 0) {
                     continue;
                 }
             }
 
-            c.subtable_flags = subtable.feature_flags;
+            c.subtable_flags = subtable_flags;
 
             if !subtable.coverage.is_all_directions()
                 && c.buffer.direction.is_vertical() != subtable.coverage.is_vertical()
@@ -120,10 +131,10 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
             //                   (the order opposite that of the characters, which
             //                   may be right-to-left or left-to-right).
 
-            let reverse = if subtable.coverage.is_logical() {
-                subtable.coverage.is_backwards()
+            let reverse = if coverage.is_logical() {
+                coverage.is_backwards()
             } else {
-                subtable.coverage.is_backwards() != c.buffer.direction.is_backward()
+                coverage.is_backwards() != c.buffer.direction.is_backward()
             };
 
             if reverse {
@@ -144,11 +155,7 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
 trait driver_context_t<T: FromData> {
     fn in_place(&self) -> bool;
     fn can_advance(&self, entry: &apple_layout::GenericStateEntry<T>) -> bool;
-    fn is_actionable(
-        &self,
-        entry: &apple_layout::GenericStateEntry<T>,
-        buffer: &hb_buffer_t,
-    ) -> bool;
+    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<T>) -> bool;
     fn transition(
         &mut self,
         entry: &apple_layout::GenericStateEntry<T>,
@@ -251,6 +258,7 @@ fn drive<T: FromData>(
         //
         //   https://github.com/harfbuzz/harfbuzz/issues/2860
 
+        // TODO HarfBuzz doesn't use this lambda; inlines the logic.
         let is_safe_to_break_extra = || {
             // 2c
             let wouldbe_entry = match machine.entry(START_OF_TEXT, class) {
@@ -259,7 +267,7 @@ fn drive<T: FromData>(
             };
 
             // 2c'
-            if c.is_actionable(&wouldbe_entry, ac.buffer) {
+            if c.is_actionable(&wouldbe_entry) {
                 return false;
             }
 
@@ -268,30 +276,28 @@ fn drive<T: FromData>(
                 && c.can_advance(&entry) == c.can_advance(&wouldbe_entry)
         };
 
-        let is_safe_to_break = || {
+        let is_safe_to_break =
             // 1
-            if c.is_actionable(&entry, ac.buffer) {
-                return false;
-            }
+            !c.is_actionable(&entry) &&
 
             // 2
-            let ok = state == START_OF_TEXT
+            (
+                state == START_OF_TEXT
                 || (!c.can_advance(&entry) && next_state == START_OF_TEXT)
-                || is_safe_to_break_extra();
-            if !ok {
-                return false;
-            }
+                || is_safe_to_break_extra()
+            ) &&
 
             // 3
-            let end_entry = match machine.entry(state, u16::from(apple_layout::class::END_OF_TEXT))
-            {
-                Some(v) => v,
-                None => return false,
-            };
-            !c.is_actionable(&end_entry, ac.buffer)
-        };
+            (
+                if let Some(end_entry) = machine.entry(state, u16::from(apple_layout::class::END_OF_TEXT)) {
+                    !c.is_actionable(&end_entry)
+                } else {
+                    false
+                }
+            )
+        ;
 
-        if !is_safe_to_break() && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {
+        if !is_safe_to_break && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {
             ac.buffer.unsafe_to_break_from_outbuffer(
                 Some(ac.buffer.backtrack_len() - 1),
                 Some(ac.buffer.idx + 1),
@@ -425,7 +431,7 @@ impl driver_context_t<()> for RearrangementCtx {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<()>, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<()>) -> bool {
         entry.flags & Self::VERB != 0 && self.start < self.end
     }
 
@@ -547,12 +553,7 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
     fn is_actionable(
         &self,
         entry: &apple_layout::GenericStateEntry<morx::ContextualEntryData>,
-        buffer: &hb_buffer_t,
     ) -> bool {
-        if buffer.idx == buffer.len && !self.mark_set {
-            return false;
-        }
-
         entry.extra.mark_index != 0xFFFF || entry.extra.current_index != 0xFFFF
     }
 
@@ -636,7 +637,6 @@ impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
     fn is_actionable(
         &self,
         entry: &apple_layout::GenericStateEntry<morx::InsertionEntryData>,
-        _: &hb_buffer_t,
     ) -> bool {
         (entry.flags & (Self::CURRENT_INSERT_COUNT | Self::MARKED_INSERT_COUNT) != 0)
             && (entry.extra.current_insert_index != 0xFFFF
@@ -767,7 +767,7 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<u16>, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<u16>) -> bool {
         entry.flags & Self::PERFORM_ACTION != 0
     }
 
@@ -853,10 +853,7 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
                         buffer.move_to(
                             self.match_positions[self.match_length % LIGATURE_MAX_MATCHES],
                         );
-                        let cur_unicode = buffer.cur(0).unicode_props();
-                        buffer
-                            .cur_mut(0)
-                            .set_unicode_props(cur_unicode | UnicodeProps::IGNORABLE.bits());
+                        _hb_glyph_info_set_default_ignorable(&mut buffer.cur_mut(0));
                         buffer.replace_glyph(0xFFFF);
                     }
 

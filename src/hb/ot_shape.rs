@@ -17,6 +17,7 @@ use crate::hb::unicode::hb_gc::{
 };
 use crate::BufferFlags;
 use crate::{Direction, Feature, Language, Script};
+use read_fonts::TableProvider;
 
 pub struct hb_ot_shape_planner_t<'a> {
     pub face: &'a hb_font_t<'a>,
@@ -191,8 +192,6 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         };
         let kern_mask = ot_map.get_mask(kern_tag).0;
         let requested_kerning = kern_mask != 0;
-        let trak_mask = ot_map.get_mask(hb_tag_t::new(b"trak")).0;
-        let requested_tracking = trak_mask != 0;
 
         let has_gpos_kern = ot_map
             .get_feature_index(TableIndex::GPOS, kern_tag)
@@ -252,8 +251,16 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             adjust_mark_positioning_when_zeroing = false;
         }
 
-        // Currently we always apply trak.
-        let apply_trak = requested_tracking && self.face.aat_tables.trak.is_some();
+        // According to Ned, trak is applied by default for "modern fonts", as detected by presence of STAT table.
+        // https://github.com/googlefonts/fontations/issues/1492
+        let apply_trak = self.face.font.trak().is_ok()
+            && self
+                .face
+                .font
+                .table_directory
+                .table_records()
+                .iter()
+                .any(|table| table.tag() == "STAT");
 
         let mut plan = hb_ot_shape_plan_t {
             direction: self.direction,
@@ -266,7 +273,6 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             dnom_mask,
             rtlm_mask,
             kern_mask,
-            trak_mask,
             requested_kerning,
             has_frac,
             has_vert,
