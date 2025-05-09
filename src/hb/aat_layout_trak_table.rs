@@ -5,6 +5,13 @@ use super::buffer::hb_buffer_t;
 use super::hb_font_t;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 
+// TODO: Port to latest HarfBuzz version; namely, interpolate between tracks,
+// and don't shift glyphs.
+// https://github.com/harfbuzz/harfbuzz/pull/5055
+
+// TODO: [trak] Remove support for disabling using pseudo-font-feature
+// HarfBuzz commit 1150d4bf12b963d8df32d9ec1cefa65b7bcb9750
+
 pub fn apply(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) -> Option<()> {
     let trak_mask = plan.trak_mask;
 
