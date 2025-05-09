@@ -11,7 +11,8 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use read_fonts::tables::ankr::Ankr;
 use ttf_parser::{apple_layout, kerx, FromData, GlyphId};
 
-// TODO: Use set_digest, similarly to how it's used in harfbuzz.
+// TODO: Use set_t, similarly to how it's used in harfbuzz.
+// HarfBuzz commit 9a4601b06b50cb0197c02203b6b19467ad4b4da8
 
 trait ExtendedStateTableExt<T: FromData + Copy> {
     fn class(&self, glyph_id: GlyphId) -> Option<u16>;
