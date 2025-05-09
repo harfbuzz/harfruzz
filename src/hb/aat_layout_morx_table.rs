@@ -255,6 +255,7 @@ fn drive<T: FromData>(
         //
         //   https://github.com/harfbuzz/harfbuzz/issues/2860
 
+        // TODO HarfBuzz doesn't use this lambda; inlines the logic.
         let is_safe_to_break_extra = || {
             // 2c
             let wouldbe_entry = match machine.entry(START_OF_TEXT, class) {
