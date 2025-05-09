@@ -83,13 +83,14 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
     for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
         c.range_flags = Some(chain_flags.as_mut_slice());
         for subtable in chain.subtables {
+            let subtable_flags = subtable.feature_flags;
             if let Some(range_flags) = c.range_flags.as_ref() {
-                if range_flags.len() == 1 && (subtable.feature_flags & range_flags[0].flags == 0) {
+                if range_flags.len() == 1 && (subtable_flags & range_flags[0].flags == 0) {
                     continue;
                 }
             }
 
-            c.subtable_flags = subtable.feature_flags;
+            c.subtable_flags = subtable_flags;
 
             if !subtable.coverage.is_all_directions()
                 && c.buffer.direction.is_vertical() != subtable.coverage.is_vertical()
