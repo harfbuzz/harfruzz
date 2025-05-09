@@ -3783,6 +3783,19 @@ fn indic_syllable_014() {
 }
 
 #[test]
+fn indic_syllable_015() {
+    assert_eq!(
+        shape(
+            "tests/fonts/in-house/65d1b9099cfb3191931d8d6112d7a03d979d579f.ttf",
+            "\u{00B2}\u{0B95}",
+            "",
+        ),
+        "uni00B2=0+500|\
+         uni0B95=1+500"
+    );
+}
+
+#[test]
 fn indic_vowel_letter_spoofing_001() {
     assert_eq!(
         shape(
@@ -8778,6 +8791,19 @@ fn myanmar_syllable_002() {
          _ai=0@-27,20+0|\
          visarga=0+346|\
          tone1_wpk=0+423"
+    );
+}
+
+#[test]
+fn myanmar_syllable_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/in-house/65d1b9099cfb3191931d8d6112d7a03d979d579f.ttf",
+            "\u{00B2}\u{1000}",
+            "",
+        ),
+        "uni00B2=0+500|\
+         uni1000=1+500"
     );
 }
 
@@ -15512,6 +15538,19 @@ fn use_syllable_026() {
         "u1140E=0+736|\
          u1142C_u11442=0+0|\
          u1145E=0+0"
+    );
+}
+
+#[test]
+fn use_syllable_027() {
+    assert_eq!(
+        shape(
+            "tests/fonts/in-house/65d1b9099cfb3191931d8d6112d7a03d979d579f.ttf",
+            "\u{00B2}\u{11315}",
+            "",
+        ),
+        "uni00B2=0+500|\
+         u11315=1+500"
     );
 }
 
