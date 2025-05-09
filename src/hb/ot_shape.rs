@@ -17,6 +17,7 @@ use crate::hb::unicode::hb_gc::{
 };
 use crate::BufferFlags;
 use crate::{Direction, Feature, Language, Script};
+use read_fonts::TableProvider;
 
 pub struct hb_ot_shape_planner_t<'a> {
     pub face: &'a hb_font_t<'a>,
@@ -251,9 +252,8 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         }
 
         // According to Ned, trak is applied by default for "modern fonts", as detected by presence of STAT table.
-        // TODO: Add STAT table check.
         // https://github.com/googlefonts/fontations/issues/1492
-        let apply_trak = self.face.aat_tables.trak.is_some()
+        let apply_trak = self.face.font.trak().is_ok()
             && self
                 .face
                 .font
