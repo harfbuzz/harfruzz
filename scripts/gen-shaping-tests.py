@@ -62,6 +62,7 @@ IGNORE_TEST_CASES = [
     # (see https://github.com/harfbuzz/harfruzz/pull/4#issuecomment-2252964385)
     "color_fonts_001",
     "color_fonts_002",
+    "color_fonts_003",
 ]
 
 
@@ -112,7 +113,13 @@ def prune_test_options(options):
 def convert_test_file(
     root_dir, hb_shape_exe, tests_name, file_name, idx, data, fonts, custom
 ):
+    if data.startswith("@"):
+        return ""  # Directive; ignore.
+
     fontfile, options, unicodes, glyphs_expected = data.split(";")
+
+    if glyphs_expected == "*":
+        return ""
 
     # MacOS tests contain hashes, remove them.
     if "@" in fontfile:

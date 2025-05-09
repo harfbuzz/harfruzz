@@ -35,7 +35,7 @@ fn aat_morx_002() {
 }
 
 #[test]
-fn aat_trak_001() {
+fn aat_trak_002() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -49,7 +49,7 @@ fn aat_trak_001() {
 }
 
 #[test]
-fn aat_trak_002() {
+fn aat_trak_003() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -63,7 +63,7 @@ fn aat_trak_002() {
 }
 
 #[test]
-fn aat_trak_003() {
+fn aat_trak_004() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -77,7 +77,7 @@ fn aat_trak_003() {
 }
 
 #[test]
-fn aat_trak_004() {
+fn aat_trak_005() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -91,7 +91,7 @@ fn aat_trak_004() {
 }
 
 #[test]
-fn aat_trak_005() {
+fn aat_trak_006() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -105,7 +105,7 @@ fn aat_trak_005() {
 }
 
 #[test]
-fn aat_trak_006() {
+fn aat_trak_007() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -119,7 +119,7 @@ fn aat_trak_006() {
 }
 
 #[test]
-fn aat_trak_007() {
+fn aat_trak_008() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -133,7 +133,7 @@ fn aat_trak_007() {
 }
 
 #[test]
-fn aat_trak_008() {
+fn aat_trak_009() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/TRAK.ttf",
@@ -1612,7 +1612,7 @@ fn cluster_001() {
         shape(
             "tests/fonts/in-house/4fac3929fc3332834e93673780ec0fe94342d193.ttf",
             "\u{0078}\u{030A}\u{0058}\u{030A}",
-            "--cluster-level=2",
+            "--cluster-level=3",
         ),
         "gid2=0+1083|\
          gid3=1@-1132,-8+0|\
@@ -1623,6 +1623,21 @@ fn cluster_001() {
 
 #[test]
 fn cluster_002() {
+    assert_eq!(
+        shape(
+            "tests/fonts/in-house/4fac3929fc3332834e93673780ec0fe94342d193.ttf",
+            "\u{0078}\u{030A}\u{0058}\u{030A}",
+            "--cluster-level=2",
+        ),
+        "gid2=0+1083|\
+         gid3=1@-1132,-8+0|\
+         gid1=2+1200|\
+         gid3=3@-1190,349+0"
+    );
+}
+
+#[test]
+fn cluster_003() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/43ef465752be9af900745f72fe29cb853a1401a5.ttf",
@@ -1642,7 +1657,7 @@ fn cluster_002() {
 }
 
 #[test]
-fn cluster_003() {
+fn cluster_004() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/6f36d056bad6d478fc0bf7397bd52dc3bd197d5f.ttf",
@@ -1661,7 +1676,7 @@ fn cluster_003() {
 }
 
 #[test]
-fn cluster_004() {
+fn cluster_005() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/fd07ea46e4d8368ada1776208c07fd596f727852.ttf",
@@ -17103,7 +17118,7 @@ fn use_017() {
 }
 
 #[test]
-fn variation_selectors_001() {
+fn variation_selectors_002() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/bbc24004e776f348a0f72287d24b0124867ee750.ttf",
@@ -17116,7 +17131,7 @@ fn variation_selectors_001() {
 }
 
 #[test]
-fn variation_selectors_002() {
+fn variation_selectors_003() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/bbc24004e776f348a0f72287d24b0124867ee750.ttf",
@@ -18330,7 +18345,7 @@ fn variations_rvrn_100() {
 }
 
 #[test]
-fn variations_001() {
+fn variations_002() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/HBTest-VF.ttf",
@@ -18342,7 +18357,7 @@ fn variations_001() {
 }
 
 #[test]
-fn variations_002() {
+fn variations_003() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/HBTest-VF.ttf",
@@ -18354,7 +18369,7 @@ fn variations_002() {
 }
 
 #[test]
-fn variations_003() {
+fn variations_004() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/ab40c89624a6104e5d0a2308e448a989302f515b.ttf",
@@ -18366,7 +18381,7 @@ fn variations_003() {
 }
 
 #[test]
-fn variations_004() {
+fn variations_005() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/ab40c89624a6104e5d0a2308e448a989302f515b.ttf",
@@ -18378,7 +18393,7 @@ fn variations_004() {
 }
 
 #[test]
-fn variations_005() {
+fn variations_006() {
     assert_eq!(
         shape(
             "tests/fonts/in-house/e8691822f6a705e3e9fb48a0405c645b1a036590.ttf",
