@@ -83,6 +83,8 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
     for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
         c.range_flags = Some(chain_flags.as_mut_slice());
         for subtable in chain.subtables {
+            let coverage = subtable.coverage;
+
             let subtable_flags = subtable.feature_flags;
             if let Some(range_flags) = c.range_flags.as_ref() {
                 if range_flags.len() == 1 && (subtable_flags & range_flags[0].flags == 0) {
@@ -125,10 +127,10 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
             //                   (the order opposite that of the characters, which
             //                   may be right-to-left or left-to-right).
 
-            let reverse = if subtable.coverage.is_logical() {
-                subtable.coverage.is_backwards()
+            let reverse = if coverage.is_logical() {
+                coverage.is_backwards()
             } else {
-                subtable.coverage.is_backwards() != c.buffer.direction.is_backward()
+                coverage.is_backwards() != c.buffer.direction.is_backward()
             };
 
             if reverse {
