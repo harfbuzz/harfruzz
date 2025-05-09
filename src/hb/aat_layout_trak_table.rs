@@ -8,10 +8,12 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 pub fn apply(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) -> Option<()> {
     let trak_mask = plan.trak_mask;
 
-    let ptem = face.points_per_em?;
-    if ptem <= 0.0 {
-        return None;
-    }
+    let ptem = if face.points_per_em.is_some() {
+        face.points_per_em.unwrap() as f32
+    } else {
+        /* https://developer.apple.com/documentation/coretext/1508745-ctfontcreatewithgraphicsfont */
+        12.0
+    };
 
     let trak = face.aat_tables.trak?;
 
