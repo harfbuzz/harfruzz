@@ -191,8 +191,6 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         };
         let kern_mask = ot_map.get_mask(kern_tag).0;
         let requested_kerning = kern_mask != 0;
-        let trak_mask = ot_map.get_mask(hb_tag_t::new(b"trak")).0;
-        let requested_tracking = trak_mask != 0;
 
         let has_gpos_kern = ot_map
             .get_feature_index(TableIndex::GPOS, kern_tag)
@@ -255,7 +253,14 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         // According to Ned, trak is applied by default for "modern fonts", as detected by presence of STAT table.
         // TODO: Add STAT table check.
         // https://github.com/googlefonts/fontations/issues/1492
-        let apply_trak = requested_tracking && self.face.aat_tables.trak.is_some(); // && has-STAT-table
+        let apply_trak = self.face.aat_tables.trak.is_some()
+            && self
+                .face
+                .font
+                .table_directory
+                .table_records()
+                .iter()
+                .any(|table| table.tag() == "STAT");
 
         let mut plan = hb_ot_shape_plan_t {
             direction: self.direction,
@@ -268,7 +273,6 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             dnom_mask,
             rtlm_mask,
             kern_mask,
-            trak_mask,
             requested_kerning,
             has_frac,
             has_vert,
