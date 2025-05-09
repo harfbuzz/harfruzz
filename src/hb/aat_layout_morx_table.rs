@@ -8,7 +8,8 @@ use crate::hb::ot_layout::MAX_CONTEXT_LENGTH;
 use alloc::vec;
 use ttf_parser::{apple_layout, morx, FromData, GlyphId, LazyArray32};
 
-// TODO: Use set_digest, similarly to how it's used in harfbuzz.
+// TODO: Use class cache, similarly to how it's used in harfbuzz.
+// See https://github.com/harfbuzz/harfbuzz/pull/5031
 
 // TODO: [morx] Blocklist dysfunctional morx table of AALMAGHRIBI.ttf font
 // HarfBuzz commit 1e629c35113e2460fd4a77b4fa9ae3ff6ec876ba
