@@ -272,30 +272,28 @@ fn drive<T: FromData>(
                 && c.can_advance(&entry) == c.can_advance(&wouldbe_entry)
         };
 
-        let is_safe_to_break = || {
+        let is_safe_to_break =
             // 1
-            if c.is_actionable(&entry, ac.buffer) {
-                return false;
-            }
+            !c.is_actionable(&entry, ac.buffer) &&
 
             // 2
-            let ok = state == START_OF_TEXT
+            (
+                state == START_OF_TEXT
                 || (!c.can_advance(&entry) && next_state == START_OF_TEXT)
-                || is_safe_to_break_extra();
-            if !ok {
-                return false;
-            }
+                || is_safe_to_break_extra()
+            ) &&
 
             // 3
-            let end_entry = match machine.entry(state, u16::from(apple_layout::class::END_OF_TEXT))
-            {
-                Some(v) => v,
-                None => return false,
-            };
-            !c.is_actionable(&end_entry, ac.buffer)
-        };
+            (
+                if let Some(end_entry) = machine.entry(state, u16::from(apple_layout::class::END_OF_TEXT)) {
+                    !c.is_actionable(&end_entry, ac.buffer)
+                } else {
+                    false
+                }
+            )
+        ;
 
-        if !is_safe_to_break() && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {
+        if !is_safe_to_break && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {
             ac.buffer.unsafe_to_break_from_outbuffer(
                 Some(ac.buffer.backtrack_len() - 1),
                 Some(ac.buffer.idx + 1),
