@@ -143,10 +143,11 @@ main := |*
 	sakot_terminated_cluster ZWNJ?		=> { found_syllable!(SyllableType::SakotTerminatedCluster); };
 	standard_cluster ZWNJ?			=> { found_syllable!(SyllableType::StandardCluster); };
 	number_joiner_terminated_cluster ZWNJ?	=> { found_syllable!(SyllableType::NumberJoinerTerminatedCluster); };
-	numeral_cluster ZWNJ?				=> { found_syllable!(SyllableType::NumeralCluster); };
-	symbol_cluster ZWNJ?				=> { found_syllable!(SyllableType::SymbolCluster); };
-	hieroglyph_cluster ZWNJ?			=> { found_syllable! (SyllableType::HieroglyphCluster); };
-	broken_cluster ZWNJ?				=> { found_syllable!(SyllableType::BrokenCluster); buffer.scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_BROKEN_SYLLABLE; };
+	numeral_cluster ZWNJ?			=> { found_syllable!(SyllableType::NumeralCluster); };
+	symbol_cluster ZWNJ?			=> { found_syllable!(SyllableType::SymbolCluster); };
+	hieroglyph_cluster ZWNJ?		=> { found_syllable! (SyllableType::HieroglyphCluster); };
+	FMPst* ZWNJ?				=> { found_syllable!(SyllableType::NonCluster); };
+	broken_cluster ZWNJ?			=> { found_syllable!(SyllableType::BrokenCluster); buffer.scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_BROKEN_SYLLABLE; };
 	other					=> { found_syllable!(SyllableType::NonCluster); };
 *|;
 

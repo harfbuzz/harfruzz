@@ -26,7 +26,8 @@ use OT_PT    as _OT_PT;         /*   8 chars; PT */
 use OT_Ra    as _OT_R;          /*  14 chars; Ra */
 use OT_Repha as _OT_Rf;         /*   1 chars; Repha */
 use OT_Robatic as _OT_Rt;         /*   3 chars; Robatic */
-use OT_SM    as _OT_SM;         /*  56 chars; SM */
+use OT_SM    as _OT_SM;         /*  50 chars; SM */
+use OT_SMPst as _OT_SP;         /*   6 chars; SMPst */
 use OT_Symbol as _OT_S;          /*  22 chars; Symbol */
 use OT_V     as _OT_V;          /* 172 chars; V */
 use OT_VAbv  as _OT_VA;         /*  18 chars; VAbv */
@@ -69,7 +70,7 @@ const TABLE: &[(SyllabicCategory, MatraCategory)] = &[
 
   /* Latin-1 Supplement */
 
-  /* 00B0 */ (_OT_X,_POS_X), (_OT_X,_POS_X),(_OT_SM,_POS_SM),(_OT_SM,_POS_SM), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
+  /* 00B0 */ (_OT_X,_POS_X), (_OT_X,_POS_X),(_OT_SP,_POS_SM),(_OT_SP,_POS_SM), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
   /* 00B8 */ (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
   /* 00C0 */ (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
   /* 00C8 */ (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
@@ -304,9 +305,9 @@ const TABLE: &[(SyllabicCategory, MatraCategory)] = &[
 
   /* Superscripts and Subscripts */
 
-  /* 2070 */ (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),(_OT_SM,_POS_SM), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
+  /* 2070 */ (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),(_OT_SP,_POS_SM), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
   /* 2078 */ (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
-  /* 2080 */ (_OT_X,_POS_X), (_OT_X,_POS_X),(_OT_SM,_POS_SM),(_OT_SM,_POS_SM),(_OT_SM,_POS_SM), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
+  /* 2080 */ (_OT_X,_POS_X), (_OT_X,_POS_X),(_OT_SP,_POS_SM),(_OT_SP,_POS_SM),(_OT_SP,_POS_SM), (_OT_X,_POS_X), (_OT_X,_POS_X), (_OT_X,_POS_X),
 
   /* Geometric Shapes */
 

@@ -83,6 +83,8 @@ pub mod ot_category_t {
     pub const OT_VS: u8 = 40; // Variation selectors
     pub const OT_ML: u8 = 41; // Consonant medials
 
+    pub const OT_SMPst: u8 = 57; // Syllable Medial Post-base
+
     // This one doesn't exist in ot_category_t in harfbuzz, only in
     // the Myanmar machine. However, in Rust we unfortunately can't export
     // inside the Ragel file, so we have to define it here as well. Needs to
