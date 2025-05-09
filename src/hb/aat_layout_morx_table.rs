@@ -151,11 +151,7 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
 trait driver_context_t<T: FromData> {
     fn in_place(&self) -> bool;
     fn can_advance(&self, entry: &apple_layout::GenericStateEntry<T>) -> bool;
-    fn is_actionable(
-        &self,
-        entry: &apple_layout::GenericStateEntry<T>,
-        buffer: &hb_buffer_t,
-    ) -> bool;
+    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<T>) -> bool;
     fn transition(
         &mut self,
         entry: &apple_layout::GenericStateEntry<T>,
@@ -267,7 +263,7 @@ fn drive<T: FromData>(
             };
 
             // 2c'
-            if c.is_actionable(&wouldbe_entry, ac.buffer) {
+            if c.is_actionable(&wouldbe_entry) {
                 return false;
             }
 
@@ -278,7 +274,7 @@ fn drive<T: FromData>(
 
         let is_safe_to_break =
             // 1
-            !c.is_actionable(&entry, ac.buffer) &&
+            !c.is_actionable(&entry) &&
 
             // 2
             (
@@ -290,7 +286,7 @@ fn drive<T: FromData>(
             // 3
             (
                 if let Some(end_entry) = machine.entry(state, u16::from(apple_layout::class::END_OF_TEXT)) {
-                    !c.is_actionable(&end_entry, ac.buffer)
+                    !c.is_actionable(&end_entry)
                 } else {
                     false
                 }
@@ -431,7 +427,7 @@ impl driver_context_t<()> for RearrangementCtx {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<()>, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<()>) -> bool {
         entry.flags & Self::VERB != 0 && self.start < self.end
     }
 
@@ -553,12 +549,7 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
     fn is_actionable(
         &self,
         entry: &apple_layout::GenericStateEntry<morx::ContextualEntryData>,
-        buffer: &hb_buffer_t,
     ) -> bool {
-        if buffer.idx == buffer.len && !self.mark_set {
-            return false;
-        }
-
         entry.extra.mark_index != 0xFFFF || entry.extra.current_index != 0xFFFF
     }
 
@@ -642,7 +633,6 @@ impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
     fn is_actionable(
         &self,
         entry: &apple_layout::GenericStateEntry<morx::InsertionEntryData>,
-        _: &hb_buffer_t,
     ) -> bool {
         (entry.flags & (Self::CURRENT_INSERT_COUNT | Self::MARKED_INSERT_COUNT) != 0)
             && (entry.extra.current_insert_index != 0xFFFF
@@ -773,7 +763,7 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<u16>, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<u16>) -> bool {
         entry.flags & Self::PERFORM_ACTION != 0
     }
 
