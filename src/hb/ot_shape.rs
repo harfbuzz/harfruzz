@@ -252,8 +252,10 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             adjust_mark_positioning_when_zeroing = false;
         }
 
-        // Currently we always apply trak.
-        let apply_trak = requested_tracking && self.face.aat_tables.trak.is_some();
+        // According to Ned, trak is applied by default for "modern fonts", as detected by presence of STAT table.
+        // TODO: Add STAT table check.
+        // https://github.com/googlefonts/fontations/issues/1492
+        let apply_trak = requested_tracking && self.face.aat_tables.trak.is_some(); // && has-STAT-table
 
         let mut plan = hb_ot_shape_plan_t {
             direction: self.direction,
