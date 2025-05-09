@@ -1,7 +1,8 @@
 use super::aat_layout::*;
 use super::aat_layout_common::ToTtfParserGid;
 use super::aat_map::{hb_aat_map_builder_t, hb_aat_map_t, range_flags_t};
-use super::buffer::{hb_buffer_t, UnicodeProps};
+use super::buffer::hb_buffer_t;
+use super::ot_layout::_hb_glyph_info_set_default_ignorable;
 use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
 use crate::hb::ot_layout::MAX_CONTEXT_LENGTH;
@@ -852,10 +853,7 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
                         buffer.move_to(
                             self.match_positions[self.match_length % LIGATURE_MAX_MATCHES],
                         );
-                        let cur_unicode = buffer.cur(0).unicode_props();
-                        buffer
-                            .cur_mut(0)
-                            .set_unicode_props(cur_unicode | UnicodeProps::IGNORABLE.bits());
+                        _hb_glyph_info_set_default_ignorable(&mut buffer.cur_mut(0));
                         buffer.replace_glyph(0xFFFF);
                     }
 
