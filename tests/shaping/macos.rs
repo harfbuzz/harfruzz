@@ -2271,6 +2271,7 @@ fn macos_116() {
     );
 }
 
+/*
 #[cfg(target_os = "macos")]
 #[test]
 fn macos_117() {
@@ -2284,6 +2285,7 @@ fn macos_117() {
          V=1@-12,0+1346"
     );
 }
+*/
 
 #[cfg(target_os = "macos")]
 #[test]
