@@ -490,7 +490,9 @@ pub(crate) fn _hb_glyph_info_is_aat_deleted(info: &hb_glyph_info_t) -> bool {
 #[inline]
 pub(crate) fn _hb_glyph_info_set_aat_deleted(info: &mut hb_glyph_info_t) {
     _hb_glyph_info_set_general_category(info, hb_unicode_general_category_t::Format);
-    info.set_unicode_props(info.unicode_props() | UnicodeProps::CF_AAT_DELETED.bits());
+    info.set_unicode_props(
+        info.unicode_props() | UnicodeProps::CF_AAT_DELETED.bits() | UnicodeProps::HIDDEN.bits(),
+    );
 }
 
 //   /* lig_props: aka lig_id / lig_comp
