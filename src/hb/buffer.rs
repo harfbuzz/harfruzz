@@ -1068,6 +1068,12 @@ impl hb_buffer_t {
         interior: Option<bool>,
         from_out_buffer: Option<bool>,
     ) {
+        if start.is_some() && end.is_some() {
+            if end.unwrap().wrapping_sub(start.unwrap()) > 255 {
+                return;
+            }
+        }
+
         let start = start.unwrap_or(0);
         let end = min(end.unwrap_or(self.len), self.len);
         let interior = interior.unwrap_or(false);
