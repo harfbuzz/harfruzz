@@ -198,7 +198,8 @@ pub type match_func_t<'a> = dyn Fn(GlyphId, u16) -> bool + 'a;
 // when needed, and we do not have the `reset` and `init` methods that exist in harfbuzz. This makes
 // backporting related changes very hard, but it seems unavoidable, unfortunately.
 pub struct skipping_iterator_t<'a, 'b> {
-    ctx: &'a hb_ot_apply_context_t<'a, 'b>,
+    buffer: &'a hb_buffer_t,
+    face: &'a hb_font_t<'b>,
     lookup_props: u32,
     ignore_zwnj: bool,
     ignore_zwj: bool,
@@ -239,7 +240,8 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
         context_match: bool,
     ) -> Self {
         skipping_iterator_t {
-            ctx,
+            buffer: ctx.buffer,
+            face: ctx.face,
             lookup_props: ctx.lookup_props,
             // Ignore ZWNJ if we are matching GPOS, or matching GSUB context and asked to.
             ignore_zwnj: ctx.table_index == TableIndex::GPOS || (context_match && ctx.auto_zwnj),
@@ -289,7 +291,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
 
         while (self.buf_idx as i32) < stop {
             self.buf_idx += 1;
-            let info = &self.ctx.buffer.info[self.buf_idx];
+            let info = &self.buffer.info[self.buf_idx];
 
             match self.match_(info) {
                 match_t::MATCH => {
@@ -319,7 +321,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
 
         while self.buf_idx > stop {
             self.buf_idx -= 1;
-            let info = &self.ctx.buffer.out_info()[self.buf_idx];
+            let info = &self.buffer.out_info()[self.buf_idx];
 
             match self.match_(info) {
                 match_t::MATCH => {
@@ -386,7 +388,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
     }
 
     fn may_skip(&self, info: &hb_glyph_info_t) -> may_skip_t {
-        if !check_glyph_property(self.ctx.face, info, self.lookup_props) {
+        if !check_glyph_property(self.face, info, self.lookup_props) {
             return may_skip_t::SKIP_YES;
         }
 
