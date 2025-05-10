@@ -2,12 +2,12 @@
 
 use core::ops::{Index, IndexMut};
 
-use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use super::buffer::*;
 use super::ot_layout_gsubgpos::{Apply, OT};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
 use super::{hb_font_t, hb_glyph_info_t};
+use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use crate::hb::set_digest::hb_set_digest_t;
 
 pub const MAX_NESTING_LEVEL: usize = 64;

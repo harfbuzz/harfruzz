@@ -1,6 +1,5 @@
 //! Matching of glyph patterns.
 
-use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
 use super::hb_font_t;
@@ -9,6 +8,7 @@ use super::ot_layout::LayoutTable;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
+use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use read_fonts::tables::layout::SequenceLookupRecord;
 use read_fonts::types::GlyphId;
 
@@ -63,7 +63,8 @@ pub fn match_input(
         match_positions.resize(count, 0);
     }
 
-    let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
+    let mut iter = skipping_iterator_t::new(ctx, false);
+    iter.reset(ctx.buffer.idx);
     iter.set_glyph_data(0);
     iter.enable_matching(match_func);
 
@@ -147,7 +148,8 @@ pub fn match_backtrack(
     match_func: &match_func_t,
     match_start: &mut usize,
 ) -> bool {
-    let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.backtrack_len(), true);
+    let mut iter = skipping_iterator_t::new(ctx, true);
+    iter.reset(ctx.buffer.backtrack_len());
     iter.set_glyph_data(0);
     iter.enable_matching(match_func);
 
@@ -173,7 +175,8 @@ pub fn match_lookahead(
     // Function should always be called with a non-zero starting index
     // c.f. https://github.com/harfbuzz/rustybuzz/issues/142
     assert!(start_index >= 1);
-    let mut iter = skipping_iterator_t::new(ctx, start_index - 1, true);
+    let mut iter = skipping_iterator_t::new(ctx, true);
+    iter.reset(start_index - 1);
     iter.set_glyph_data(0);
     iter.enable_matching(match_func);
 
@@ -239,9 +242,9 @@ impl<'a> Default for matcher_t<'a> {
 }
 
 impl<'a> matcher_t<'a> {
-
     fn may_match(&self, info: &hb_glyph_info_t, glyph_data: u16) -> may_match_t {
-        if (info.mask & self.mask) == 0 || (self.per_syllable && self.syllable != 0 && self.syllable != info.syllable())
+        if (info.mask & self.mask) == 0
+            || (self.per_syllable && self.syllable != 0 && self.syllable != info.syllable())
         {
             return may_match_t::MATCH_NO;
         }
@@ -284,23 +287,20 @@ pub struct skipping_iterator_t<'a, 'b> {
 }
 
 impl<'a, 'b> skipping_iterator_t<'a, 'b> {
-    pub fn new(
-        ctx: &'a hb_ot_apply_context_t<'a, 'b>,
-        start_buf_index: usize,
-        context_match: bool,
-    ) -> Self {
+    pub fn new(ctx: &'a hb_ot_apply_context_t<'a, 'b>, context_match: bool) -> Self {
         skipping_iterator_t {
             buffer: ctx.buffer,
             face: ctx.face,
             glyph_data: 0,
             buf_len: ctx.buffer.len,
-            buf_idx: start_buf_index,
+            buf_idx: 0,
 
             matcher: matcher_t {
                 matching: None,
                 lookup_props: ctx.lookup_props,
                 // Ignore ZWNJ if we are matching GPOS, or matching GSUB context and asked to.
-                ignore_zwnj: ctx.table_index == TableIndex::GPOS || (context_match && ctx.auto_zwnj),
+                ignore_zwnj: ctx.table_index == TableIndex::GPOS
+                    || (context_match && ctx.auto_zwnj),
                 // Ignore ZWJ if we are matching context, or asked to.
                 ignore_zwj: context_match || ctx.auto_zwj,
                 // Ignore hidden glyphs (like CGJ) during GPOS.
@@ -312,11 +312,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
                 },
                 /* Per syllable matching is only for GSUB. */
                 per_syllable: ctx.table_index == TableIndex::GSUB && ctx.per_syllable,
-                syllable: if ctx.buffer.idx == start_buf_index {
-                    ctx.buffer.cur(0).syllable()
-                } else {
-                    0
-                },
+                syllable: 0,
             },
         }
     }
@@ -401,6 +397,21 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
         }
 
         false
+    }
+
+    pub fn reset(&mut self, start_index: usize) {
+        self.buf_idx = start_index;
+        self.buf_len = self.buffer.len;
+        self.matcher.syllable = if self.buf_idx == self.buffer.idx {
+            self.buffer.cur(0).syllable()
+        } else {
+            0
+        };
+    }
+
+    pub fn reset_fast(&mut self, start_index: usize) {
+        // Doesn't set end or syllable. Used by GPOS which doesn't care / change.
+        self.buf_idx = start_index;
     }
 
     fn may_skip(&self, info: &hb_glyph_info_t) -> may_skip_t {
@@ -588,7 +599,11 @@ pub mod OT {
     use super::*;
     use crate::hb::set_digest::hb_set_digest_t;
 
-    pub fn check_glyph_property(face: &hb_font_t, info: &hb_glyph_info_t, match_props: u32) -> bool {
+    pub fn check_glyph_property(
+        face: &hb_font_t,
+        info: &hb_glyph_info_t,
+        match_props: u32,
+    ) -> bool {
         let glyph_props = info.glyph_props();
 
         // Lookup flags are lower 16-bit of match props.
