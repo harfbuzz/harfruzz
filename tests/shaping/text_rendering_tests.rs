@@ -1726,6 +1726,15 @@ fn gsub_2_012() {
 }
 
 #[test]
+fn gsub_3_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestGSUBThree.ttf",
+        "\u{006C}\u{006F}\u{006C}",
+        "",
+    );
+}
+
+#[test]
 fn gvar_1_002() {
     assert_eq!(
         shape(
@@ -3070,6 +3079,16 @@ fn morx_14_002() {
 }
 
 #[test]
+fn morx_14_003() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXFourteen.ttf",
+        "\u{0041}\u{0042}\u{0042}\u{0042}\u{0043}\u{0043}\u{0043}\u{0044}\u{0044}\u{0044}\
+             \u{0042}\u{0043}\u{0044}\u{0043}\u{0045}",
+        "",
+    );
+}
+
+#[test]
 fn morx_16_002() {
     assert_eq!(
         shape(
@@ -3738,6 +3757,15 @@ fn morx_23_002() {
          E@1112,0|\
          E@1668,0|\
          E@2224,0"
+    );
+}
+
+#[test]
+fn morx_24_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXTwentyfour.ttf",
+        "\u{0041}\u{0042}\u{0043}\u{0044}\u{0045}",
+        "",
     );
 }
 
@@ -4830,6 +4858,15 @@ fn morx_33_004() {
 }
 
 #[test]
+fn morx_34_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXThirtyfour.ttf",
+        "\u{0068}\u{0061}",
+        "",
+    );
+}
+
+#[test]
 fn morx_35_002() {
     assert_eq!(
         shape(
@@ -4858,6 +4895,15 @@ fn morx_35_003() {
          C@1851,0|\
          E@2447,0|\
          Y@3003,0"
+    );
+}
+
+#[test]
+fn morx_36_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXThirtysix.ttf",
+        "\u{0041}",
+        "",
     );
 }
 
@@ -5404,6 +5450,24 @@ fn morx_41_003() {
             "--ned --remove-default-ignorables",
         ),
         "b_c"
+    );
+}
+
+#[test]
+fn morx_41_004() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
+        "\u{0063}\u{0063}",
+        "",
+    );
+}
+
+#[test]
+fn morx_41_005() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
+        "\u{0061}\u{0062}\u{0063}\u{0063}",
+        "",
     );
 }
 
