@@ -3,7 +3,7 @@
 use crate::shape;
 
 #[test]
-fn classdef1_001() {
+fn classdef1_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef1_font4.otf",
@@ -19,7 +19,7 @@ fn classdef1_001() {
 }
 
 #[test]
-fn classdef1_empty_001() {
+fn classdef1_empty_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef1_font2.otf",
@@ -35,7 +35,7 @@ fn classdef1_empty_001() {
 }
 
 #[test]
-fn classdef1_multiple_001() {
+fn classdef1_multiple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef1_font3.otf",
@@ -67,7 +67,7 @@ fn classdef1_multiple_001() {
 }
 
 #[test]
-fn classdef1_single_001() {
+fn classdef1_single_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font1.otf",
@@ -83,7 +83,7 @@ fn classdef1_single_001() {
 }
 
 #[test]
-fn classdef2_001() {
+fn classdef2_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font4.otf",
@@ -99,7 +99,7 @@ fn classdef2_001() {
 }
 
 #[test]
-fn classdef2_empty_001() {
+fn classdef2_empty_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font2.otf",
@@ -115,7 +115,7 @@ fn classdef2_empty_001() {
 }
 
 #[test]
-fn classdef2_multiple_001() {
+fn classdef2_multiple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font3.otf",
@@ -147,7 +147,7 @@ fn classdef2_multiple_001() {
 }
 
 #[test]
-fn classdef2_single_001() {
+fn classdef2_single_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font1.otf",
@@ -163,7 +163,7 @@ fn classdef2_single_001() {
 }
 
 #[test]
-fn cmap0_001() {
+fn cmap0_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap0_font1.otf",
@@ -182,7 +182,7 @@ fn cmap0_001() {
 }
 
 #[test]
-fn cmap10_001() {
+fn cmap10_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap10_font1.otf",
@@ -201,7 +201,7 @@ fn cmap10_001() {
 }
 
 #[test]
-fn cmap10_002() {
+fn cmap10_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap10_font2.otf",
@@ -220,7 +220,7 @@ fn cmap10_002() {
 }
 
 #[test]
-fn cmap12_001() {
+fn cmap12_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap12_font1.otf",
@@ -244,7 +244,7 @@ fn cmap12_001() {
 }
 
 #[test]
-fn cmap4_001() {
+fn cmap4_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap4_font1.otf",
@@ -269,7 +269,7 @@ fn cmap4_001() {
 }
 
 #[test]
-fn cmap4_002() {
+fn cmap4_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap4_font2.otf",
@@ -294,7 +294,7 @@ fn cmap4_002() {
 }
 
 #[test]
-fn cmap4_003() {
+fn cmap4_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap4_font3.otf",
@@ -319,7 +319,7 @@ fn cmap4_003() {
 }
 
 #[test]
-fn cmap4_004() {
+fn cmap4_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap4_font4.otf",
@@ -337,7 +337,7 @@ fn cmap4_004() {
 }
 
 #[test]
-fn cmap4_005() {
+fn cmap4_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap4_font4.otf",
@@ -356,7 +356,7 @@ fn cmap4_005() {
 }
 
 #[test]
-fn cmap6_001() {
+fn cmap6_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap6_font1.otf",
@@ -375,7 +375,7 @@ fn cmap6_001() {
 }
 
 #[test]
-fn cmap6_002() {
+fn cmap6_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap6_font2.otf",
@@ -394,7 +394,7 @@ fn cmap6_002() {
 }
 
 #[test]
-fn gpos1_1_lookupflag_001() {
+fn gpos1_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_1_lookupflag_f1.otf",
@@ -410,7 +410,7 @@ fn gpos1_1_lookupflag_001() {
 }
 
 #[test]
-fn gpos1_1_simple_001() {
+fn gpos1_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_1_simple_f1.otf",
@@ -426,7 +426,7 @@ fn gpos1_1_simple_001() {
 }
 
 #[test]
-fn gpos1_1_simple_002() {
+fn gpos1_1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_1_simple_f2.otf",
@@ -442,7 +442,7 @@ fn gpos1_1_simple_002() {
 }
 
 #[test]
-fn gpos1_1_simple_003() {
+fn gpos1_1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_1_simple_f3.otf",
@@ -458,7 +458,7 @@ fn gpos1_1_simple_003() {
 }
 
 #[test]
-fn gpos1_2_001() {
+fn gpos1_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_2_font1.otf",
@@ -474,7 +474,7 @@ fn gpos1_2_001() {
 }
 
 #[test]
-fn gpos1_2_lookupflag_001() {
+fn gpos1_2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_2_font2.otf",
@@ -490,7 +490,7 @@ fn gpos1_2_lookupflag_001() {
 }
 
 #[test]
-fn gpos2_1_001() {
+fn gpos2_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_font6.otf",
@@ -508,7 +508,7 @@ fn gpos2_1_001() {
 }
 
 #[test]
-fn gpos2_1_002() {
+fn gpos2_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_font7.otf",
@@ -529,7 +529,7 @@ fn gpos2_1_002() {
 }
 
 #[test]
-fn gpos2_1_lookupflag_001() {
+fn gpos2_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_lookupflag_f1.otf",
@@ -548,7 +548,7 @@ fn gpos2_1_lookupflag_001() {
 }
 
 #[test]
-fn gpos2_1_lookupflag_002() {
+fn gpos2_1_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_lookupflag_f2.otf",
@@ -567,7 +567,7 @@ fn gpos2_1_lookupflag_002() {
 }
 
 #[test]
-fn gpos2_1_next_glyph_001() {
+fn gpos2_1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_next_glyph_f1.otf",
@@ -582,7 +582,7 @@ fn gpos2_1_next_glyph_001() {
 }
 
 #[test]
-fn gpos2_1_next_glyph_002() {
+fn gpos2_1_next_glyph_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_next_glyph_f2.otf",
@@ -597,7 +597,7 @@ fn gpos2_1_next_glyph_002() {
 }
 
 #[test]
-fn gpos2_1_simple_001() {
+fn gpos2_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_simple_f1.otf",
@@ -614,7 +614,7 @@ fn gpos2_1_simple_001() {
 }
 
 #[test]
-fn gpos2_1_simple_002() {
+fn gpos2_1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_simple_f1.otf",
@@ -627,7 +627,7 @@ fn gpos2_1_simple_002() {
 }
 
 #[test]
-fn gpos2_2_001() {
+fn gpos2_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_2_font1.otf",
@@ -644,7 +644,7 @@ fn gpos2_2_001() {
 }
 
 #[test]
-fn gpos2_2_002() {
+fn gpos2_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_2_font2.otf",
@@ -663,7 +663,7 @@ fn gpos2_2_002() {
 }
 
 #[test]
-fn gpos2_2_003() {
+fn gpos2_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_2_font3.otf",
@@ -682,7 +682,7 @@ fn gpos2_2_003() {
 }
 
 #[test]
-fn gpos2_2_004() {
+fn gpos2_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_2_font4.otf",
@@ -697,7 +697,7 @@ fn gpos2_2_004() {
 }
 
 #[test]
-fn gpos2_2_005() {
+fn gpos2_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_2_font5.otf",
@@ -712,7 +712,7 @@ fn gpos2_2_005() {
 }
 
 #[test]
-fn gpos3_001() {
+fn gpos3_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font1.otf",
@@ -728,7 +728,7 @@ fn gpos3_001() {
 }
 
 #[test]
-fn gpos3_002() {
+fn gpos3_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
@@ -743,7 +743,7 @@ fn gpos3_002() {
 }
 
 #[test]
-fn gpos3_003() {
+fn gpos3_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
@@ -758,7 +758,7 @@ fn gpos3_003() {
 }
 
 #[test]
-fn gpos3_004() {
+fn gpos3_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
@@ -773,7 +773,7 @@ fn gpos3_004() {
 }
 
 #[test]
-fn gpos3_005() {
+fn gpos3_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
@@ -786,7 +786,7 @@ fn gpos3_005() {
 }
 
 #[test]
-fn gpos3_006() {
+fn gpos3_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
@@ -802,7 +802,7 @@ fn gpos3_006() {
 }
 
 #[test]
-fn gpos4_lookupflag_001() {
+fn gpos4_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_lookupflag_f1.otf",
@@ -818,7 +818,7 @@ fn gpos4_lookupflag_001() {
 }
 
 #[test]
-fn gpos4_lookupflag_002() {
+fn gpos4_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_lookupflag_f2.otf",
@@ -833,7 +833,7 @@ fn gpos4_lookupflag_002() {
 }
 
 #[test]
-fn gpos4_simple_001() {
+fn gpos4_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_simple_1.otf",
@@ -848,7 +848,7 @@ fn gpos4_simple_001() {
 }
 
 #[test]
-fn gpos4_simple_002() {
+fn gpos4_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_simple_1.otf",
@@ -863,7 +863,7 @@ fn gpos4_simple_002() {
 }
 
 #[test]
-fn gpos4_simple_003() {
+fn gpos4_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_simple_1.otf",
@@ -878,7 +878,7 @@ fn gpos4_simple_003() {
 }
 
 #[test]
-fn gpos5_001() {
+fn gpos5_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos5_font1.otf",
@@ -893,7 +893,7 @@ fn gpos5_001() {
 }
 
 #[test]
-fn gpos5_002() {
+fn gpos5_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos5_font1.otf",
@@ -908,7 +908,7 @@ fn gpos5_002() {
 }
 
 #[test]
-fn gpos6_001() {
+fn gpos6_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos6_font1.otf",
@@ -923,7 +923,7 @@ fn gpos6_001() {
 }
 
 #[test]
-fn gpos6_002() {
+fn gpos6_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos6_font1.otf",
@@ -938,7 +938,7 @@ fn gpos6_002() {
 }
 
 #[test]
-fn gpos7_1_001() {
+fn gpos7_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos7_1_font1.otf",
@@ -954,7 +954,7 @@ fn gpos7_1_001() {
 }
 
 #[test]
-fn gpos7_1_002() {
+fn gpos7_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos7_1_font1.otf",
@@ -971,7 +971,7 @@ fn gpos7_1_002() {
 }
 
 #[test]
-fn gpos9_001() {
+fn gpos9_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos9_font1.otf",
@@ -987,7 +987,7 @@ fn gpos9_001() {
 }
 
 #[test]
-fn gpos9_002() {
+fn gpos9_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos9_font2.otf",
@@ -1004,7 +1004,7 @@ fn gpos9_002() {
 }
 
 #[test]
-fn gpos_chaining1_boundary_001() {
+fn gpos_chaining1_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_boundary_f1.otf",
@@ -1021,7 +1021,7 @@ fn gpos_chaining1_boundary_001() {
 }
 
 #[test]
-fn gpos_chaining1_boundary_002() {
+fn gpos_chaining1_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_boundary_f2.otf",
@@ -1038,7 +1038,7 @@ fn gpos_chaining1_boundary_002() {
 }
 
 #[test]
-fn gpos_chaining1_boundary_003() {
+fn gpos_chaining1_boundary_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_boundary_f3.otf",
@@ -1055,7 +1055,7 @@ fn gpos_chaining1_boundary_003() {
 }
 
 #[test]
-fn gpos_chaining1_boundary_004() {
+fn gpos_chaining1_boundary_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_boundary_f4.otf",
@@ -1072,7 +1072,7 @@ fn gpos_chaining1_boundary_004() {
 }
 
 #[test]
-fn gpos_chaining1_lookupflag_001() {
+fn gpos_chaining1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_lookupflag_f1.otf",
@@ -1100,7 +1100,7 @@ fn gpos_chaining1_lookupflag_001() {
 }
 
 #[test]
-fn gpos_chaining1_multiple_subrules_001() {
+fn gpos_chaining1_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_multiple_subrules_f1.otf",
@@ -1124,7 +1124,7 @@ fn gpos_chaining1_multiple_subrules_001() {
 }
 
 #[test]
-fn gpos_chaining1_multiple_subrules_002() {
+fn gpos_chaining1_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_multiple_subrules_f2.otf",
@@ -1148,7 +1148,7 @@ fn gpos_chaining1_multiple_subrules_002() {
 }
 
 #[test]
-fn gpos_chaining1_next_glyph_001() {
+fn gpos_chaining1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_next_glyph_f1.otf",
@@ -1165,7 +1165,7 @@ fn gpos_chaining1_next_glyph_001() {
 }
 
 #[test]
-fn gpos_chaining1_simple_001() {
+fn gpos_chaining1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f1.otf",
@@ -1182,7 +1182,7 @@ fn gpos_chaining1_simple_001() {
 }
 
 #[test]
-fn gpos_chaining1_simple_002() {
+fn gpos_chaining1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1202,7 +1202,7 @@ fn gpos_chaining1_simple_002() {
 }
 
 #[test]
-fn gpos_chaining1_simple_003() {
+fn gpos_chaining1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1222,7 +1222,7 @@ fn gpos_chaining1_simple_003() {
 }
 
 #[test]
-fn gpos_chaining1_simple_004() {
+fn gpos_chaining1_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1240,7 +1240,7 @@ fn gpos_chaining1_simple_004() {
 }
 
 #[test]
-fn gpos_chaining1_simple_005() {
+fn gpos_chaining1_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1257,7 +1257,7 @@ fn gpos_chaining1_simple_005() {
 }
 
 #[test]
-fn gpos_chaining1_simple_006() {
+fn gpos_chaining1_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1277,7 +1277,7 @@ fn gpos_chaining1_simple_006() {
 }
 
 #[test]
-fn gpos_chaining1_simple_007() {
+fn gpos_chaining1_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1295,7 +1295,7 @@ fn gpos_chaining1_simple_007() {
 }
 
 #[test]
-fn gpos_chaining1_simple_008() {
+fn gpos_chaining1_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1312,7 +1312,7 @@ fn gpos_chaining1_simple_008() {
 }
 
 #[test]
-fn gpos_chaining1_simple_009() {
+fn gpos_chaining1_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1332,7 +1332,7 @@ fn gpos_chaining1_simple_009() {
 }
 
 #[test]
-fn gpos_chaining1_simple_010() {
+fn gpos_chaining1_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1348,7 +1348,7 @@ fn gpos_chaining1_simple_010() {
 }
 
 #[test]
-fn gpos_chaining1_simple_011() {
+fn gpos_chaining1_simple_012() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
@@ -1363,7 +1363,7 @@ fn gpos_chaining1_simple_011() {
 }
 
 #[test]
-fn gpos_chaining1_successive_001() {
+fn gpos_chaining1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_successive_f1.otf",
@@ -1382,7 +1382,7 @@ fn gpos_chaining1_successive_001() {
 }
 
 #[test]
-fn gpos_chaining2_boundary_001() {
+fn gpos_chaining2_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_boundary_f1.otf",
@@ -1399,7 +1399,7 @@ fn gpos_chaining2_boundary_001() {
 }
 
 #[test]
-fn gpos_chaining2_boundary_002() {
+fn gpos_chaining2_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_boundary_f2.otf",
@@ -1416,7 +1416,7 @@ fn gpos_chaining2_boundary_002() {
 }
 
 #[test]
-fn gpos_chaining2_boundary_003() {
+fn gpos_chaining2_boundary_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_boundary_f3.otf",
@@ -1433,7 +1433,7 @@ fn gpos_chaining2_boundary_003() {
 }
 
 #[test]
-fn gpos_chaining2_boundary_004() {
+fn gpos_chaining2_boundary_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_boundary_f4.otf",
@@ -1450,7 +1450,7 @@ fn gpos_chaining2_boundary_004() {
 }
 
 #[test]
-fn gpos_chaining2_lookupflag_001() {
+fn gpos_chaining2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_lookupflag_f1.otf",
@@ -1478,7 +1478,7 @@ fn gpos_chaining2_lookupflag_001() {
 }
 
 #[test]
-fn gpos_chaining2_multiple_subrules_001() {
+fn gpos_chaining2_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_multiple_subrules_f1.otf",
@@ -1502,7 +1502,7 @@ fn gpos_chaining2_multiple_subrules_001() {
 }
 
 #[test]
-fn gpos_chaining2_multiple_subrules_002() {
+fn gpos_chaining2_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_multiple_subrules_f2.otf",
@@ -1526,7 +1526,7 @@ fn gpos_chaining2_multiple_subrules_002() {
 }
 
 #[test]
-fn gpos_chaining2_next_glyph_001() {
+fn gpos_chaining2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_next_glyph_f1.otf",
@@ -1543,7 +1543,7 @@ fn gpos_chaining2_next_glyph_001() {
 }
 
 #[test]
-fn gpos_chaining2_simple_001() {
+fn gpos_chaining2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f1.otf",
@@ -1560,7 +1560,7 @@ fn gpos_chaining2_simple_001() {
 }
 
 #[test]
-fn gpos_chaining2_simple_002() {
+fn gpos_chaining2_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1580,7 +1580,7 @@ fn gpos_chaining2_simple_002() {
 }
 
 #[test]
-fn gpos_chaining2_simple_003() {
+fn gpos_chaining2_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1600,7 +1600,7 @@ fn gpos_chaining2_simple_003() {
 }
 
 #[test]
-fn gpos_chaining2_simple_004() {
+fn gpos_chaining2_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1618,7 +1618,7 @@ fn gpos_chaining2_simple_004() {
 }
 
 #[test]
-fn gpos_chaining2_simple_005() {
+fn gpos_chaining2_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1635,7 +1635,7 @@ fn gpos_chaining2_simple_005() {
 }
 
 #[test]
-fn gpos_chaining2_simple_006() {
+fn gpos_chaining2_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1655,7 +1655,7 @@ fn gpos_chaining2_simple_006() {
 }
 
 #[test]
-fn gpos_chaining2_simple_007() {
+fn gpos_chaining2_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1673,7 +1673,7 @@ fn gpos_chaining2_simple_007() {
 }
 
 #[test]
-fn gpos_chaining2_simple_008() {
+fn gpos_chaining2_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1690,7 +1690,7 @@ fn gpos_chaining2_simple_008() {
 }
 
 #[test]
-fn gpos_chaining2_simple_009() {
+fn gpos_chaining2_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1710,7 +1710,7 @@ fn gpos_chaining2_simple_009() {
 }
 
 #[test]
-fn gpos_chaining2_simple_010() {
+fn gpos_chaining2_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1726,7 +1726,7 @@ fn gpos_chaining2_simple_010() {
 }
 
 #[test]
-fn gpos_chaining2_simple_011() {
+fn gpos_chaining2_simple_012() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
@@ -1741,7 +1741,7 @@ fn gpos_chaining2_simple_011() {
 }
 
 #[test]
-fn gpos_chaining2_successive_001() {
+fn gpos_chaining2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_successive_f1.otf",
@@ -1760,7 +1760,7 @@ fn gpos_chaining2_successive_001() {
 }
 
 #[test]
-fn gpos_chaining3_boundary_001() {
+fn gpos_chaining3_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_boundary_f1.otf",
@@ -1777,7 +1777,7 @@ fn gpos_chaining3_boundary_001() {
 }
 
 #[test]
-fn gpos_chaining3_boundary_002() {
+fn gpos_chaining3_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_boundary_f2.otf",
@@ -1794,7 +1794,7 @@ fn gpos_chaining3_boundary_002() {
 }
 
 #[test]
-fn gpos_chaining3_boundary_003() {
+fn gpos_chaining3_boundary_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_boundary_f3.otf",
@@ -1811,7 +1811,7 @@ fn gpos_chaining3_boundary_003() {
 }
 
 #[test]
-fn gpos_chaining3_boundary_004() {
+fn gpos_chaining3_boundary_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_boundary_f4.otf",
@@ -1828,7 +1828,7 @@ fn gpos_chaining3_boundary_004() {
 }
 
 #[test]
-fn gpos_chaining3_lookupflag_001() {
+fn gpos_chaining3_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_lookupflag_f1.otf",
@@ -1856,7 +1856,7 @@ fn gpos_chaining3_lookupflag_001() {
 }
 
 #[test]
-fn gpos_chaining3_next_glyph_001() {
+fn gpos_chaining3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_next_glyph_f1.otf",
@@ -1875,7 +1875,7 @@ fn gpos_chaining3_next_glyph_001() {
 }
 
 #[test]
-fn gpos_chaining3_simple_001() {
+fn gpos_chaining3_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f1.otf",
@@ -1892,7 +1892,7 @@ fn gpos_chaining3_simple_001() {
 }
 
 #[test]
-fn gpos_chaining3_simple_002() {
+fn gpos_chaining3_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -1912,7 +1912,7 @@ fn gpos_chaining3_simple_002() {
 }
 
 #[test]
-fn gpos_chaining3_simple_003() {
+fn gpos_chaining3_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -1932,7 +1932,7 @@ fn gpos_chaining3_simple_003() {
 }
 
 #[test]
-fn gpos_chaining3_simple_004() {
+fn gpos_chaining3_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -1950,7 +1950,7 @@ fn gpos_chaining3_simple_004() {
 }
 
 #[test]
-fn gpos_chaining3_simple_005() {
+fn gpos_chaining3_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -1967,7 +1967,7 @@ fn gpos_chaining3_simple_005() {
 }
 
 #[test]
-fn gpos_chaining3_simple_006() {
+fn gpos_chaining3_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -1987,7 +1987,7 @@ fn gpos_chaining3_simple_006() {
 }
 
 #[test]
-fn gpos_chaining3_simple_007() {
+fn gpos_chaining3_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -2005,7 +2005,7 @@ fn gpos_chaining3_simple_007() {
 }
 
 #[test]
-fn gpos_chaining3_simple_008() {
+fn gpos_chaining3_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -2022,7 +2022,7 @@ fn gpos_chaining3_simple_008() {
 }
 
 #[test]
-fn gpos_chaining3_simple_009() {
+fn gpos_chaining3_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -2042,7 +2042,7 @@ fn gpos_chaining3_simple_009() {
 }
 
 #[test]
-fn gpos_chaining3_simple_010() {
+fn gpos_chaining3_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -2058,7 +2058,7 @@ fn gpos_chaining3_simple_010() {
 }
 
 #[test]
-fn gpos_chaining3_simple_011() {
+fn gpos_chaining3_simple_012() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
@@ -2073,7 +2073,7 @@ fn gpos_chaining3_simple_011() {
 }
 
 #[test]
-fn gpos_chaining3_successive_001() {
+fn gpos_chaining3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_successive_f1.otf",
@@ -2092,7 +2092,7 @@ fn gpos_chaining3_successive_001() {
 }
 
 #[test]
-fn gpos_context1_boundary_001() {
+fn gpos_context1_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_boundary_f1.otf",
@@ -2110,7 +2110,7 @@ fn gpos_context1_boundary_001() {
 }
 
 #[test]
-fn gpos_context1_boundary_002() {
+fn gpos_context1_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_boundary_f2.otf",
@@ -2128,7 +2128,7 @@ fn gpos_context1_boundary_002() {
 }
 
 #[test]
-fn gpos_context1_expansion_001() {
+fn gpos_context1_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_expansion_f1.otf",
@@ -2144,7 +2144,7 @@ fn gpos_context1_expansion_001() {
 }
 
 #[test]
-fn gpos_context1_lookupflag_001() {
+fn gpos_context1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_lookupflag_f1.otf",
@@ -2163,7 +2163,7 @@ fn gpos_context1_lookupflag_001() {
 }
 
 #[test]
-fn gpos_context1_lookupflag_002() {
+fn gpos_context1_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_lookupflag_f2.otf",
@@ -2182,7 +2182,7 @@ fn gpos_context1_lookupflag_002() {
 }
 
 #[test]
-fn gpos_context1_multiple_subrules_001() {
+fn gpos_context1_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_multiple_subrules_f1.otf",
@@ -2201,7 +2201,7 @@ fn gpos_context1_multiple_subrules_001() {
 }
 
 #[test]
-fn gpos_context1_multiple_subrules_002() {
+fn gpos_context1_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_multiple_subrules_f2.otf",
@@ -2220,7 +2220,7 @@ fn gpos_context1_multiple_subrules_002() {
 }
 
 #[test]
-fn gpos_context1_next_glyph_001() {
+fn gpos_context1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_next_glyph_f1.otf",
@@ -2238,7 +2238,7 @@ fn gpos_context1_next_glyph_001() {
 }
 
 #[test]
-fn gpos_context1_simple_001() {
+fn gpos_context1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_simple_f1.otf",
@@ -2254,7 +2254,7 @@ fn gpos_context1_simple_001() {
 }
 
 #[test]
-fn gpos_context1_simple_002() {
+fn gpos_context1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_simple_f1.otf",
@@ -2271,7 +2271,7 @@ fn gpos_context1_simple_002() {
 }
 
 #[test]
-fn gpos_context1_simple_003() {
+fn gpos_context1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_simple_f2.otf",
@@ -2289,7 +2289,7 @@ fn gpos_context1_simple_003() {
 }
 
 #[test]
-fn gpos_context1_successive_001() {
+fn gpos_context1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_successive_f1.otf",
@@ -2306,7 +2306,7 @@ fn gpos_context1_successive_001() {
 }
 
 #[test]
-fn gpos_context2_boundary_001() {
+fn gpos_context2_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_boundary_f1.otf",
@@ -2324,7 +2324,7 @@ fn gpos_context2_boundary_001() {
 }
 
 #[test]
-fn gpos_context2_boundary_002() {
+fn gpos_context2_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_boundary_f2.otf",
@@ -2342,7 +2342,7 @@ fn gpos_context2_boundary_002() {
 }
 
 #[test]
-fn gpos_context2_classes_001() {
+fn gpos_context2_classes_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_classes_f1.otf",
@@ -2369,7 +2369,7 @@ fn gpos_context2_classes_001() {
 }
 
 #[test]
-fn gpos_context2_classes_002() {
+fn gpos_context2_classes_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_classes_f2.otf",
@@ -2396,7 +2396,7 @@ fn gpos_context2_classes_002() {
 }
 
 #[test]
-fn gpos_context2_expansion_001() {
+fn gpos_context2_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_expansion_f1.otf",
@@ -2412,7 +2412,7 @@ fn gpos_context2_expansion_001() {
 }
 
 #[test]
-fn gpos_context2_lookupflag_001() {
+fn gpos_context2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_lookupflag_f1.otf",
@@ -2431,7 +2431,7 @@ fn gpos_context2_lookupflag_001() {
 }
 
 #[test]
-fn gpos_context2_lookupflag_002() {
+fn gpos_context2_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_lookupflag_f2.otf",
@@ -2450,7 +2450,7 @@ fn gpos_context2_lookupflag_002() {
 }
 
 #[test]
-fn gpos_context2_multiple_subrules_001() {
+fn gpos_context2_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_multiple_subrules_f1.otf",
@@ -2469,7 +2469,7 @@ fn gpos_context2_multiple_subrules_001() {
 }
 
 #[test]
-fn gpos_context2_multiple_subrules_002() {
+fn gpos_context2_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_multiple_subrules_f2.otf",
@@ -2488,7 +2488,7 @@ fn gpos_context2_multiple_subrules_002() {
 }
 
 #[test]
-fn gpos_context2_next_glyph_001() {
+fn gpos_context2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_next_glyph_f1.otf",
@@ -2506,7 +2506,7 @@ fn gpos_context2_next_glyph_001() {
 }
 
 #[test]
-fn gpos_context2_simple_001() {
+fn gpos_context2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_simple_f1.otf",
@@ -2522,7 +2522,7 @@ fn gpos_context2_simple_001() {
 }
 
 #[test]
-fn gpos_context2_simple_002() {
+fn gpos_context2_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_simple_f1.otf",
@@ -2539,7 +2539,7 @@ fn gpos_context2_simple_002() {
 }
 
 #[test]
-fn gpos_context2_simple_003() {
+fn gpos_context2_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_simple_f2.otf",
@@ -2557,7 +2557,7 @@ fn gpos_context2_simple_003() {
 }
 
 #[test]
-fn gpos_context2_successive_001() {
+fn gpos_context2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_successive_f1.otf",
@@ -2574,7 +2574,7 @@ fn gpos_context2_successive_001() {
 }
 
 #[test]
-fn gpos_context3_boundary_001() {
+fn gpos_context3_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_boundary_f1.otf",
@@ -2592,7 +2592,7 @@ fn gpos_context3_boundary_001() {
 }
 
 #[test]
-fn gpos_context3_boundary_002() {
+fn gpos_context3_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_boundary_f2.otf",
@@ -2610,7 +2610,7 @@ fn gpos_context3_boundary_002() {
 }
 
 #[test]
-fn gpos_context3_lookupflag_001() {
+fn gpos_context3_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_lookupflag_f1.otf",
@@ -2629,7 +2629,7 @@ fn gpos_context3_lookupflag_001() {
 }
 
 #[test]
-fn gpos_context3_lookupflag_002() {
+fn gpos_context3_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_lookupflag_f2.otf",
@@ -2648,7 +2648,7 @@ fn gpos_context3_lookupflag_002() {
 }
 
 #[test]
-fn gpos_context3_next_glyph_001() {
+fn gpos_context3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_next_glyph_f1.otf",
@@ -2666,7 +2666,7 @@ fn gpos_context3_next_glyph_001() {
 }
 
 #[test]
-fn gpos_context3_simple_001() {
+fn gpos_context3_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_simple_f1.otf",
@@ -2682,7 +2682,7 @@ fn gpos_context3_simple_001() {
 }
 
 #[test]
-fn gpos_context3_simple_002() {
+fn gpos_context3_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_simple_f1.otf",
@@ -2703,7 +2703,7 @@ fn gpos_context3_simple_002() {
 }
 
 #[test]
-fn gpos_context3_successive_001() {
+fn gpos_context3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_successive_f1.otf",
@@ -2720,7 +2720,7 @@ fn gpos_context3_successive_001() {
 }
 
 #[test]
-fn gsub1_1_lookupflag_001() {
+fn gsub1_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_1_lookupflag_f1.otf",
@@ -2736,7 +2736,7 @@ fn gsub1_1_lookupflag_001() {
 }
 
 #[test]
-fn gsub1_1_modulo_001() {
+fn gsub1_1_modulo_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_1_modulo_f1.otf",
@@ -2755,7 +2755,7 @@ fn gsub1_1_modulo_001() {
 }
 
 #[test]
-fn gsub1_1_simple_001() {
+fn gsub1_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_1_simple_f1.otf",
@@ -2771,7 +2771,7 @@ fn gsub1_1_simple_001() {
 }
 
 #[test]
-fn gsub1_2_lookupflag_001() {
+fn gsub1_2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_2_lookupflag_f1.otf",
@@ -2787,7 +2787,7 @@ fn gsub1_2_lookupflag_001() {
 }
 
 #[test]
-fn gsub1_2_simple_001() {
+fn gsub1_2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_2_simple_f1.otf",
@@ -2803,7 +2803,7 @@ fn gsub1_2_simple_001() {
 }
 
 #[test]
-fn gsub2_1_lookupflag_001() {
+fn gsub2_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_lookupflag_f1.otf",
@@ -2819,7 +2819,7 @@ fn gsub2_1_lookupflag_001() {
 }
 
 #[test]
-fn gsub2_1_multiple_sequences_001() {
+fn gsub2_1_multiple_sequences_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_multiple_sequences_f1.otf",
@@ -2836,7 +2836,7 @@ fn gsub2_1_multiple_sequences_001() {
 }
 
 #[test]
-fn gsub2_1_simple_001() {
+fn gsub2_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_simple_f1.otf",
@@ -2852,7 +2852,7 @@ fn gsub2_1_simple_001() {
 }
 
 #[test]
-fn gsub2_1_simple_002() {
+fn gsub2_1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_simple_f1.otf",
@@ -2871,7 +2871,7 @@ fn gsub2_1_simple_002() {
 }
 
 #[test]
-fn gsub3_1_lookupflag_001() {
+fn gsub3_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub3_1_lookupflag_f1.otf",
@@ -2891,7 +2891,7 @@ fn gsub3_1_lookupflag_001() {
 }
 
 #[test]
-fn gsub3_1_multiple_001() {
+fn gsub3_1_multiple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub3_1_multiple_f1.otf",
@@ -2912,7 +2912,7 @@ fn gsub3_1_multiple_001() {
 }
 
 #[test]
-fn gsub3_1_simple_001() {
+fn gsub3_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub3_1_simple_f1.otf",
@@ -2937,7 +2937,7 @@ fn gsub3_1_simple_001() {
 }
 
 #[test]
-fn gsub4_1_lookupflag_001() {
+fn gsub4_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_lookupflag_f1.otf",
@@ -2961,7 +2961,7 @@ fn gsub4_1_lookupflag_001() {
 }
 
 #[test]
-fn gsub4_1_multiple_ligatures_001() {
+fn gsub4_1_multiple_ligatures_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_multiple_ligatures_f1.otf",
@@ -2978,7 +2978,7 @@ fn gsub4_1_multiple_ligatures_001() {
 }
 
 #[test]
-fn gsub4_1_multiple_ligatures_002() {
+fn gsub4_1_multiple_ligatures_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_multiple_ligatures_f2.otf",
@@ -2996,7 +2996,7 @@ fn gsub4_1_multiple_ligatures_002() {
 }
 
 #[test]
-fn gsub4_1_multiple_ligsets_001() {
+fn gsub4_1_multiple_ligsets_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_multiple_ligsets_f1.otf",
@@ -3012,7 +3012,7 @@ fn gsub4_1_multiple_ligsets_001() {
 }
 
 #[test]
-fn gsub4_1_simple_001() {
+fn gsub4_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_simple_f1.otf",
@@ -3030,7 +3030,7 @@ fn gsub4_1_simple_001() {
 }
 
 #[test]
-fn gsub7_001() {
+fn gsub7_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub7_font1.otf",
@@ -3046,7 +3046,7 @@ fn gsub7_001() {
 }
 
 #[test]
-fn gsub7_002() {
+fn gsub7_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub7_font2.otf",
@@ -3062,7 +3062,7 @@ fn gsub7_002() {
 }
 
 #[test]
-fn gsub_chaining1_boundary_001() {
+fn gsub_chaining1_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_boundary_f1.otf",
@@ -3079,7 +3079,7 @@ fn gsub_chaining1_boundary_001() {
 }
 
 #[test]
-fn gsub_chaining1_boundary_002() {
+fn gsub_chaining1_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_boundary_f2.otf",
@@ -3096,7 +3096,7 @@ fn gsub_chaining1_boundary_002() {
 }
 
 #[test]
-fn gsub_chaining1_boundary_003() {
+fn gsub_chaining1_boundary_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_boundary_f3.otf",
@@ -3113,7 +3113,7 @@ fn gsub_chaining1_boundary_003() {
 }
 
 #[test]
-fn gsub_chaining1_boundary_004() {
+fn gsub_chaining1_boundary_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_boundary_f4.otf",
@@ -3130,7 +3130,7 @@ fn gsub_chaining1_boundary_004() {
 }
 
 #[test]
-fn gsub_chaining1_lookupflag_001() {
+fn gsub_chaining1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_lookupflag_f1.otf",
@@ -3158,7 +3158,7 @@ fn gsub_chaining1_lookupflag_001() {
 }
 
 #[test]
-fn gsub_chaining1_multiple_subrules_001() {
+fn gsub_chaining1_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_multiple_subrules_f1.otf",
@@ -3182,7 +3182,7 @@ fn gsub_chaining1_multiple_subrules_001() {
 }
 
 #[test]
-fn gsub_chaining1_multiple_subrules_002() {
+fn gsub_chaining1_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_multiple_subrules_f2.otf",
@@ -3206,7 +3206,7 @@ fn gsub_chaining1_multiple_subrules_002() {
 }
 
 #[test]
-fn gsub_chaining1_next_glyph_001() {
+fn gsub_chaining1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_next_glyph_f1.otf",
@@ -3223,7 +3223,7 @@ fn gsub_chaining1_next_glyph_001() {
 }
 
 #[test]
-fn gsub_chaining1_simple_001() {
+fn gsub_chaining1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f1.otf",
@@ -3240,7 +3240,7 @@ fn gsub_chaining1_simple_001() {
 }
 
 #[test]
-fn gsub_chaining1_simple_002() {
+fn gsub_chaining1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3260,7 +3260,7 @@ fn gsub_chaining1_simple_002() {
 }
 
 #[test]
-fn gsub_chaining1_simple_003() {
+fn gsub_chaining1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3280,7 +3280,7 @@ fn gsub_chaining1_simple_003() {
 }
 
 #[test]
-fn gsub_chaining1_simple_004() {
+fn gsub_chaining1_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3298,7 +3298,7 @@ fn gsub_chaining1_simple_004() {
 }
 
 #[test]
-fn gsub_chaining1_simple_005() {
+fn gsub_chaining1_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3315,7 +3315,7 @@ fn gsub_chaining1_simple_005() {
 }
 
 #[test]
-fn gsub_chaining1_simple_006() {
+fn gsub_chaining1_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3335,7 +3335,7 @@ fn gsub_chaining1_simple_006() {
 }
 
 #[test]
-fn gsub_chaining1_simple_007() {
+fn gsub_chaining1_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3353,7 +3353,7 @@ fn gsub_chaining1_simple_007() {
 }
 
 #[test]
-fn gsub_chaining1_simple_008() {
+fn gsub_chaining1_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3370,7 +3370,7 @@ fn gsub_chaining1_simple_008() {
 }
 
 #[test]
-fn gsub_chaining1_simple_009() {
+fn gsub_chaining1_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3390,7 +3390,7 @@ fn gsub_chaining1_simple_009() {
 }
 
 #[test]
-fn gsub_chaining1_simple_010() {
+fn gsub_chaining1_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3406,7 +3406,7 @@ fn gsub_chaining1_simple_010() {
 }
 
 #[test]
-fn gsub_chaining1_simple_011() {
+fn gsub_chaining1_simple_012() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
@@ -3421,7 +3421,7 @@ fn gsub_chaining1_simple_011() {
 }
 
 #[test]
-fn gsub_chaining1_successive_001() {
+fn gsub_chaining1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_successive_f1.otf",
@@ -3439,7 +3439,7 @@ fn gsub_chaining1_successive_001() {
 }
 
 #[test]
-fn gsub_chaining2_boundary_001() {
+fn gsub_chaining2_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_boundary_f1.otf",
@@ -3456,7 +3456,7 @@ fn gsub_chaining2_boundary_001() {
 }
 
 #[test]
-fn gsub_chaining2_boundary_002() {
+fn gsub_chaining2_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_boundary_f2.otf",
@@ -3473,7 +3473,7 @@ fn gsub_chaining2_boundary_002() {
 }
 
 #[test]
-fn gsub_chaining2_boundary_003() {
+fn gsub_chaining2_boundary_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_boundary_f3.otf",
@@ -3490,7 +3490,7 @@ fn gsub_chaining2_boundary_003() {
 }
 
 #[test]
-fn gsub_chaining2_boundary_004() {
+fn gsub_chaining2_boundary_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_boundary_f4.otf",
@@ -3507,7 +3507,7 @@ fn gsub_chaining2_boundary_004() {
 }
 
 #[test]
-fn gsub_chaining2_lookupflag_001() {
+fn gsub_chaining2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_lookupflag_f1.otf",
@@ -3535,7 +3535,7 @@ fn gsub_chaining2_lookupflag_001() {
 }
 
 #[test]
-fn gsub_chaining2_multiple_subrules_001() {
+fn gsub_chaining2_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_multiple_subrules_f1.otf",
@@ -3559,7 +3559,7 @@ fn gsub_chaining2_multiple_subrules_001() {
 }
 
 #[test]
-fn gsub_chaining2_multiple_subrules_002() {
+fn gsub_chaining2_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_multiple_subrules_f2.otf",
@@ -3583,7 +3583,7 @@ fn gsub_chaining2_multiple_subrules_002() {
 }
 
 #[test]
-fn gsub_chaining2_next_glyph_001() {
+fn gsub_chaining2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_next_glyph_f1.otf",
@@ -3600,7 +3600,7 @@ fn gsub_chaining2_next_glyph_001() {
 }
 
 #[test]
-fn gsub_chaining2_simple_001() {
+fn gsub_chaining2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f1.otf",
@@ -3617,7 +3617,7 @@ fn gsub_chaining2_simple_001() {
 }
 
 #[test]
-fn gsub_chaining2_simple_002() {
+fn gsub_chaining2_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3637,7 +3637,7 @@ fn gsub_chaining2_simple_002() {
 }
 
 #[test]
-fn gsub_chaining2_simple_003() {
+fn gsub_chaining2_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3657,7 +3657,7 @@ fn gsub_chaining2_simple_003() {
 }
 
 #[test]
-fn gsub_chaining2_simple_004() {
+fn gsub_chaining2_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3675,7 +3675,7 @@ fn gsub_chaining2_simple_004() {
 }
 
 #[test]
-fn gsub_chaining2_simple_005() {
+fn gsub_chaining2_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3692,7 +3692,7 @@ fn gsub_chaining2_simple_005() {
 }
 
 #[test]
-fn gsub_chaining2_simple_006() {
+fn gsub_chaining2_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3712,7 +3712,7 @@ fn gsub_chaining2_simple_006() {
 }
 
 #[test]
-fn gsub_chaining2_simple_007() {
+fn gsub_chaining2_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3730,7 +3730,7 @@ fn gsub_chaining2_simple_007() {
 }
 
 #[test]
-fn gsub_chaining2_simple_008() {
+fn gsub_chaining2_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3747,7 +3747,7 @@ fn gsub_chaining2_simple_008() {
 }
 
 #[test]
-fn gsub_chaining2_simple_009() {
+fn gsub_chaining2_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3767,7 +3767,7 @@ fn gsub_chaining2_simple_009() {
 }
 
 #[test]
-fn gsub_chaining2_simple_010() {
+fn gsub_chaining2_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3783,7 +3783,7 @@ fn gsub_chaining2_simple_010() {
 }
 
 #[test]
-fn gsub_chaining2_simple_011() {
+fn gsub_chaining2_simple_012() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
@@ -3798,7 +3798,7 @@ fn gsub_chaining2_simple_011() {
 }
 
 #[test]
-fn gsub_chaining2_successive_001() {
+fn gsub_chaining2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_successive_f1.otf",
@@ -3816,7 +3816,7 @@ fn gsub_chaining2_successive_001() {
 }
 
 #[test]
-fn gsub_chaining3_boundary_001() {
+fn gsub_chaining3_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_boundary_f1.otf",
@@ -3833,7 +3833,7 @@ fn gsub_chaining3_boundary_001() {
 }
 
 #[test]
-fn gsub_chaining3_boundary_002() {
+fn gsub_chaining3_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_boundary_f2.otf",
@@ -3850,7 +3850,7 @@ fn gsub_chaining3_boundary_002() {
 }
 
 #[test]
-fn gsub_chaining3_boundary_003() {
+fn gsub_chaining3_boundary_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_boundary_f3.otf",
@@ -3867,7 +3867,7 @@ fn gsub_chaining3_boundary_003() {
 }
 
 #[test]
-fn gsub_chaining3_boundary_004() {
+fn gsub_chaining3_boundary_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_boundary_f4.otf",
@@ -3884,7 +3884,7 @@ fn gsub_chaining3_boundary_004() {
 }
 
 #[test]
-fn gsub_chaining3_lookupflag_001() {
+fn gsub_chaining3_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_lookupflag_f1.otf",
@@ -3912,7 +3912,7 @@ fn gsub_chaining3_lookupflag_001() {
 }
 
 #[test]
-fn gsub_chaining3_next_glyph_001() {
+fn gsub_chaining3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_next_glyph_f1.otf",
@@ -3931,7 +3931,7 @@ fn gsub_chaining3_next_glyph_001() {
 }
 
 #[test]
-fn gsub_chaining3_simple_001() {
+fn gsub_chaining3_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f1.otf",
@@ -3948,7 +3948,7 @@ fn gsub_chaining3_simple_001() {
 }
 
 #[test]
-fn gsub_chaining3_simple_002() {
+fn gsub_chaining3_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -3968,7 +3968,7 @@ fn gsub_chaining3_simple_002() {
 }
 
 #[test]
-fn gsub_chaining3_simple_003() {
+fn gsub_chaining3_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -3988,7 +3988,7 @@ fn gsub_chaining3_simple_003() {
 }
 
 #[test]
-fn gsub_chaining3_simple_004() {
+fn gsub_chaining3_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4006,7 +4006,7 @@ fn gsub_chaining3_simple_004() {
 }
 
 #[test]
-fn gsub_chaining3_simple_005() {
+fn gsub_chaining3_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4023,7 +4023,7 @@ fn gsub_chaining3_simple_005() {
 }
 
 #[test]
-fn gsub_chaining3_simple_006() {
+fn gsub_chaining3_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4043,7 +4043,7 @@ fn gsub_chaining3_simple_006() {
 }
 
 #[test]
-fn gsub_chaining3_simple_007() {
+fn gsub_chaining3_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4061,7 +4061,7 @@ fn gsub_chaining3_simple_007() {
 }
 
 #[test]
-fn gsub_chaining3_simple_008() {
+fn gsub_chaining3_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4078,7 +4078,7 @@ fn gsub_chaining3_simple_008() {
 }
 
 #[test]
-fn gsub_chaining3_simple_009() {
+fn gsub_chaining3_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4098,7 +4098,7 @@ fn gsub_chaining3_simple_009() {
 }
 
 #[test]
-fn gsub_chaining3_simple_010() {
+fn gsub_chaining3_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4114,7 +4114,7 @@ fn gsub_chaining3_simple_010() {
 }
 
 #[test]
-fn gsub_chaining3_simple_011() {
+fn gsub_chaining3_simple_012() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
@@ -4129,7 +4129,7 @@ fn gsub_chaining3_simple_011() {
 }
 
 #[test]
-fn gsub_chaining3_successive_001() {
+fn gsub_chaining3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_successive_f1.otf",
@@ -4147,7 +4147,7 @@ fn gsub_chaining3_successive_001() {
 }
 
 #[test]
-fn gsub_context1_boundary_001() {
+fn gsub_context1_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_boundary_f1.otf",
@@ -4165,7 +4165,7 @@ fn gsub_context1_boundary_001() {
 }
 
 #[test]
-fn gsub_context1_boundary_002() {
+fn gsub_context1_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_boundary_f2.otf",
@@ -4183,7 +4183,7 @@ fn gsub_context1_boundary_002() {
 }
 
 #[test]
-fn gsub_context1_expansion_001() {
+fn gsub_context1_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_expansion_f1.otf",
@@ -4201,7 +4201,7 @@ fn gsub_context1_expansion_001() {
 }
 
 #[test]
-fn gsub_context1_lookupflag_001() {
+fn gsub_context1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_lookupflag_f1.otf",
@@ -4220,7 +4220,7 @@ fn gsub_context1_lookupflag_001() {
 }
 
 #[test]
-fn gsub_context1_lookupflag_002() {
+fn gsub_context1_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_lookupflag_f2.otf",
@@ -4238,7 +4238,7 @@ fn gsub_context1_lookupflag_002() {
 }
 
 #[test]
-fn gsub_context1_multiple_subrules_001() {
+fn gsub_context1_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_multiple_subrules_f1.otf",
@@ -4257,7 +4257,7 @@ fn gsub_context1_multiple_subrules_001() {
 }
 
 #[test]
-fn gsub_context1_multiple_subrules_002() {
+fn gsub_context1_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_multiple_subrules_f2.otf",
@@ -4276,7 +4276,7 @@ fn gsub_context1_multiple_subrules_002() {
 }
 
 #[test]
-fn gsub_context1_next_glyph_001() {
+fn gsub_context1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_next_glyph_f1.otf",
@@ -4294,7 +4294,7 @@ fn gsub_context1_next_glyph_001() {
 }
 
 #[test]
-fn gsub_context1_simple_001() {
+fn gsub_context1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_simple_f1.otf",
@@ -4310,7 +4310,7 @@ fn gsub_context1_simple_001() {
 }
 
 #[test]
-fn gsub_context1_simple_002() {
+fn gsub_context1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_simple_f1.otf",
@@ -4327,7 +4327,7 @@ fn gsub_context1_simple_002() {
 }
 
 #[test]
-fn gsub_context1_simple_003() {
+fn gsub_context1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_simple_f2.otf",
@@ -4345,7 +4345,7 @@ fn gsub_context1_simple_003() {
 }
 
 #[test]
-fn gsub_context1_successive_001() {
+fn gsub_context1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_successive_f1.otf",
@@ -4361,7 +4361,7 @@ fn gsub_context1_successive_001() {
 }
 
 #[test]
-fn gsub_context2_boundary_001() {
+fn gsub_context2_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_boundary_f1.otf",
@@ -4379,7 +4379,7 @@ fn gsub_context2_boundary_001() {
 }
 
 #[test]
-fn gsub_context2_boundary_002() {
+fn gsub_context2_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_boundary_f2.otf",
@@ -4397,7 +4397,7 @@ fn gsub_context2_boundary_002() {
 }
 
 #[test]
-fn gsub_context2_classes_001() {
+fn gsub_context2_classes_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_classes_f1.otf",
@@ -4424,7 +4424,7 @@ fn gsub_context2_classes_001() {
 }
 
 #[test]
-fn gsub_context2_classes_002() {
+fn gsub_context2_classes_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_classes_f2.otf",
@@ -4451,7 +4451,7 @@ fn gsub_context2_classes_002() {
 }
 
 #[test]
-fn gsub_context2_expansion_001() {
+fn gsub_context2_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_expansion_f1.otf",
@@ -4469,7 +4469,7 @@ fn gsub_context2_expansion_001() {
 }
 
 #[test]
-fn gsub_context2_lookupflag_001() {
+fn gsub_context2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_lookupflag_f1.otf",
@@ -4488,7 +4488,7 @@ fn gsub_context2_lookupflag_001() {
 }
 
 #[test]
-fn gsub_context2_lookupflag_002() {
+fn gsub_context2_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_lookupflag_f2.otf",
@@ -4506,7 +4506,7 @@ fn gsub_context2_lookupflag_002() {
 }
 
 #[test]
-fn gsub_context2_multiple_subrules_001() {
+fn gsub_context2_multiple_subrules_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_multiple_subrules_f1.otf",
@@ -4525,7 +4525,7 @@ fn gsub_context2_multiple_subrules_001() {
 }
 
 #[test]
-fn gsub_context2_multiple_subrules_002() {
+fn gsub_context2_multiple_subrules_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_multiple_subrules_f2.otf",
@@ -4544,7 +4544,7 @@ fn gsub_context2_multiple_subrules_002() {
 }
 
 #[test]
-fn gsub_context2_next_glyph_001() {
+fn gsub_context2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_next_glyph_f1.otf",
@@ -4562,7 +4562,7 @@ fn gsub_context2_next_glyph_001() {
 }
 
 #[test]
-fn gsub_context2_simple_001() {
+fn gsub_context2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_simple_f1.otf",
@@ -4578,7 +4578,7 @@ fn gsub_context2_simple_001() {
 }
 
 #[test]
-fn gsub_context2_simple_002() {
+fn gsub_context2_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_simple_f1.otf",
@@ -4595,7 +4595,7 @@ fn gsub_context2_simple_002() {
 }
 
 #[test]
-fn gsub_context2_simple_003() {
+fn gsub_context2_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_simple_f2.otf",
@@ -4613,7 +4613,7 @@ fn gsub_context2_simple_003() {
 }
 
 #[test]
-fn gsub_context2_successive_001() {
+fn gsub_context2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_successive_f1.otf",
@@ -4629,7 +4629,7 @@ fn gsub_context2_successive_001() {
 }
 
 #[test]
-fn gsub_context3_boundary_001() {
+fn gsub_context3_boundary_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_boundary_f1.otf",
@@ -4647,7 +4647,7 @@ fn gsub_context3_boundary_001() {
 }
 
 #[test]
-fn gsub_context3_boundary_002() {
+fn gsub_context3_boundary_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_boundary_f2.otf",
@@ -4665,7 +4665,7 @@ fn gsub_context3_boundary_002() {
 }
 
 #[test]
-fn gsub_context3_lookupflag_001() {
+fn gsub_context3_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_lookupflag_f1.otf",
@@ -4684,7 +4684,7 @@ fn gsub_context3_lookupflag_001() {
 }
 
 #[test]
-fn gsub_context3_lookupflag_002() {
+fn gsub_context3_lookupflag_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_lookupflag_f2.otf",
@@ -4702,7 +4702,7 @@ fn gsub_context3_lookupflag_002() {
 }
 
 #[test]
-fn gsub_context3_next_glyph_001() {
+fn gsub_context3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_next_glyph_f1.otf",
@@ -4720,7 +4720,7 @@ fn gsub_context3_next_glyph_001() {
 }
 
 #[test]
-fn gsub_context3_simple_001() {
+fn gsub_context3_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_simple_f1.otf",
@@ -4736,7 +4736,7 @@ fn gsub_context3_simple_001() {
 }
 
 #[test]
-fn gsub_context3_simple_002() {
+fn gsub_context3_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_simple_f1.otf",
@@ -4757,7 +4757,7 @@ fn gsub_context3_simple_002() {
 }
 
 #[test]
-fn gsub_context3_successive_001() {
+fn gsub_context3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_successive_f1.otf",
@@ -4773,7 +4773,7 @@ fn gsub_context3_successive_001() {
 }
 
 #[test]
-fn lookupflag_ignore_attach_001() {
+fn lookupflag_ignore_attach_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
@@ -4787,7 +4787,7 @@ fn lookupflag_ignore_attach_001() {
 }
 
 #[test]
-fn lookupflag_ignore_attach_002() {
+fn lookupflag_ignore_attach_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
@@ -4805,7 +4805,7 @@ fn lookupflag_ignore_attach_002() {
 }
 
 #[test]
-fn lookupflag_ignore_attach_003() {
+fn lookupflag_ignore_attach_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
@@ -4824,7 +4824,7 @@ fn lookupflag_ignore_attach_003() {
 }
 
 #[test]
-fn lookupflag_ignore_attach_004() {
+fn lookupflag_ignore_attach_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
@@ -4843,7 +4843,7 @@ fn lookupflag_ignore_attach_004() {
 }
 
 #[test]
-fn lookupflag_ignore_attach_005() {
+fn lookupflag_ignore_attach_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
@@ -4862,7 +4862,7 @@ fn lookupflag_ignore_attach_005() {
 }
 
 #[test]
-fn lookupflag_ignore_base_001() {
+fn lookupflag_ignore_base_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_base_f1.otf",
@@ -4876,7 +4876,7 @@ fn lookupflag_ignore_base_001() {
 }
 
 #[test]
-fn lookupflag_ignore_base_002() {
+fn lookupflag_ignore_base_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_base_f1.otf",
@@ -4893,7 +4893,7 @@ fn lookupflag_ignore_base_002() {
 }
 
 #[test]
-fn lookupflag_ignore_combination_001() {
+fn lookupflag_ignore_combination_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
@@ -4908,7 +4908,7 @@ fn lookupflag_ignore_combination_001() {
 }
 
 #[test]
-fn lookupflag_ignore_combination_002() {
+fn lookupflag_ignore_combination_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
@@ -4926,7 +4926,7 @@ fn lookupflag_ignore_combination_002() {
 }
 
 #[test]
-fn lookupflag_ignore_combination_003() {
+fn lookupflag_ignore_combination_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
@@ -4946,7 +4946,7 @@ fn lookupflag_ignore_combination_003() {
 }
 
 #[test]
-fn lookupflag_ignore_ligatures_001() {
+fn lookupflag_ignore_ligatures_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
@@ -4963,7 +4963,7 @@ fn lookupflag_ignore_ligatures_001() {
 }
 
 #[test]
-fn lookupflag_ignore_ligatures_002() {
+fn lookupflag_ignore_ligatures_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
@@ -4982,7 +4982,7 @@ fn lookupflag_ignore_ligatures_002() {
 }
 
 #[test]
-fn lookupflag_ignore_ligatures_003() {
+fn lookupflag_ignore_ligatures_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
@@ -5001,7 +5001,7 @@ fn lookupflag_ignore_ligatures_003() {
 }
 
 #[test]
-fn lookupflag_ignore_marks_001() {
+fn lookupflag_ignore_marks_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_marks_f1.otf",
