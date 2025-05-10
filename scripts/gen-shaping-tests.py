@@ -168,7 +168,6 @@ def convert_test_file(
         glyphs_expected = glyphs_expected.strip()[
             1:-1
         ]  # remove leading and trailing whitespaces and `[..]`
-        glyphs_expected = glyphs_expected.replace("|", "|\\\n         ")
 
     options_rs = options
     options_rs = options_rs.replace('"', '\\"')
