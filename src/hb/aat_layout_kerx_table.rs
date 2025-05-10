@@ -14,6 +14,9 @@ use ttf_parser::{apple_layout, kerx, FromData, GlyphId};
 // TODO: Use set_t, similarly to how it's used in harfbuzz.
 // HarfBuzz commit 9a4601b06b50cb0197c02203b6b19467ad4b4da8
 
+// TODO: Use a machine class cache.
+// HarfBuzz commit 83e0944f0f6cfbb46b63e2627e6ee076f4bfd489
+
 trait ExtendedStateTableExt<T: FromData + Copy> {
     fn class(&self, glyph_id: GlyphId) -> Option<u16>;
     fn entry(&self, state: u16, class: u16) -> Option<apple_layout::GenericStateEntry<T>>;

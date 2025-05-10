@@ -3,7 +3,7 @@
 use crate::shape;
 
 #[test]
-fn avar_1_001() {
+fn avar_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -15,7 +15,7 @@ fn avar_1_001() {
 }
 
 #[test]
-fn avar_1_002() {
+fn avar_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -27,7 +27,7 @@ fn avar_1_002() {
 }
 
 #[test]
-fn avar_1_003() {
+fn avar_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -39,7 +39,7 @@ fn avar_1_003() {
 }
 
 #[test]
-fn avar_1_004() {
+fn avar_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -51,7 +51,7 @@ fn avar_1_004() {
 }
 
 #[test]
-fn avar_1_005() {
+fn avar_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -63,7 +63,7 @@ fn avar_1_005() {
 }
 
 #[test]
-fn avar_1_006() {
+fn avar_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -75,7 +75,7 @@ fn avar_1_006() {
 }
 
 #[test]
-fn avar_1_007() {
+fn avar_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -87,7 +87,7 @@ fn avar_1_007() {
 }
 
 #[test]
-fn avar_1_008() {
+fn avar_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -99,7 +99,7 @@ fn avar_1_008() {
 }
 
 #[test]
-fn avar_1_009() {
+fn avar_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -111,7 +111,7 @@ fn avar_1_009() {
 }
 
 #[test]
-fn avar_1_010() {
+fn avar_1_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -123,7 +123,7 @@ fn avar_1_010() {
 }
 
 #[test]
-fn avar_1_011() {
+fn avar_1_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -135,7 +135,7 @@ fn avar_1_011() {
 }
 
 #[test]
-fn avar_1_012() {
+fn avar_1_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -147,7 +147,7 @@ fn avar_1_012() {
 }
 
 #[test]
-fn avar_1_013() {
+fn avar_1_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -159,7 +159,7 @@ fn avar_1_013() {
 }
 
 #[test]
-fn avar_1_014() {
+fn avar_1_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -171,7 +171,7 @@ fn avar_1_014() {
 }
 
 #[test]
-fn avar_1_015() {
+fn avar_1_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -183,7 +183,7 @@ fn avar_1_015() {
 }
 
 #[test]
-fn avar_1_016() {
+fn avar_1_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -195,7 +195,7 @@ fn avar_1_016() {
 }
 
 #[test]
-fn avar_1_017() {
+fn avar_1_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestAVAR.ttf",
@@ -207,7 +207,7 @@ fn avar_1_017() {
 }
 
 #[test]
-fn cff_1_001() {
+fn cff_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -219,7 +219,7 @@ fn cff_1_001() {
 }
 
 #[test]
-fn cff_1_002() {
+fn cff_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -231,7 +231,7 @@ fn cff_1_002() {
 }
 
 #[test]
-fn cff_1_003() {
+fn cff_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -243,7 +243,7 @@ fn cff_1_003() {
 }
 
 #[test]
-fn cff_1_004() {
+fn cff_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -255,7 +255,7 @@ fn cff_1_004() {
 }
 
 #[test]
-fn cff_1_005() {
+fn cff_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -267,7 +267,7 @@ fn cff_1_005() {
 }
 
 #[test]
-fn cff_1_006() {
+fn cff_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -279,7 +279,7 @@ fn cff_1_006() {
 }
 
 #[test]
-fn cff_1_007() {
+fn cff_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -291,7 +291,7 @@ fn cff_1_007() {
 }
 
 #[test]
-fn cff_1_008() {
+fn cff_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -303,7 +303,7 @@ fn cff_1_008() {
 }
 
 #[test]
-fn cff_1_009() {
+fn cff_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -315,7 +315,7 @@ fn cff_1_009() {
 }
 
 #[test]
-fn cff_1_010() {
+fn cff_1_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -327,7 +327,7 @@ fn cff_1_010() {
 }
 
 #[test]
-fn cff_1_011() {
+fn cff_1_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -339,7 +339,7 @@ fn cff_1_011() {
 }
 
 #[test]
-fn cff_1_012() {
+fn cff_1_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -351,7 +351,7 @@ fn cff_1_012() {
 }
 
 #[test]
-fn cff_1_013() {
+fn cff_1_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest257.otf",
@@ -363,7 +363,7 @@ fn cff_1_013() {
 }
 
 #[test]
-fn cff_2_001() {
+fn cff_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -375,7 +375,7 @@ fn cff_2_001() {
 }
 
 #[test]
-fn cff_2_002() {
+fn cff_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -387,7 +387,7 @@ fn cff_2_002() {
 }
 
 #[test]
-fn cff_2_003() {
+fn cff_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -399,7 +399,7 @@ fn cff_2_003() {
 }
 
 #[test]
-fn cff_2_004() {
+fn cff_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -411,7 +411,7 @@ fn cff_2_004() {
 }
 
 #[test]
-fn cff_2_005() {
+fn cff_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -423,7 +423,7 @@ fn cff_2_005() {
 }
 
 #[test]
-fn cff_2_006() {
+fn cff_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -435,7 +435,7 @@ fn cff_2_006() {
 }
 
 #[test]
-fn cff_2_007() {
+fn cff_2_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -447,7 +447,7 @@ fn cff_2_007() {
 }
 
 #[test]
-fn cff_2_008() {
+fn cff_2_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -459,7 +459,7 @@ fn cff_2_008() {
 }
 
 #[test]
-fn cff_2_009() {
+fn cff_2_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -471,7 +471,7 @@ fn cff_2_009() {
 }
 
 #[test]
-fn cff_2_010() {
+fn cff_2_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -483,7 +483,7 @@ fn cff_2_010() {
 }
 
 #[test]
-fn cff_2_011() {
+fn cff_2_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -495,7 +495,7 @@ fn cff_2_011() {
 }
 
 #[test]
-fn cff_2_012() {
+fn cff_2_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -507,7 +507,7 @@ fn cff_2_012() {
 }
 
 #[test]
-fn cff_2_013() {
+fn cff_2_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/FDArrayTest65535.otf",
@@ -519,7 +519,31 @@ fn cff_2_013() {
 }
 
 #[test]
-fn cff2_1_001() {
+fn cff_3_002() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestCFFThree.otf",
+            "\u{00C0}",
+            "--ned --remove-default-ignorables",
+        ),
+        "Agrave"
+    );
+}
+
+#[test]
+fn cff_3_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestCFFThree.otf",
+            "\u{00DC}",
+            "--ned --remove-default-ignorables",
+        ),
+        "Udieresis"
+    );
+}
+
+#[test]
+fn cff2_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -531,7 +555,7 @@ fn cff2_1_001() {
 }
 
 #[test]
-fn cff2_1_002() {
+fn cff2_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -543,7 +567,7 @@ fn cff2_1_002() {
 }
 
 #[test]
-fn cff2_1_003() {
+fn cff2_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -555,7 +579,7 @@ fn cff2_1_003() {
 }
 
 #[test]
-fn cff2_1_004() {
+fn cff2_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -567,7 +591,7 @@ fn cff2_1_004() {
 }
 
 #[test]
-fn cff2_1_005() {
+fn cff2_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -579,7 +603,7 @@ fn cff2_1_005() {
 }
 
 #[test]
-fn cff2_1_006() {
+fn cff2_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -591,7 +615,7 @@ fn cff2_1_006() {
 }
 
 #[test]
-fn cff2_1_007() {
+fn cff2_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -603,7 +627,7 @@ fn cff2_1_007() {
 }
 
 #[test]
-fn cff2_1_008() {
+fn cff2_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -615,7 +639,7 @@ fn cff2_1_008() {
 }
 
 #[test]
-fn cff2_1_009() {
+fn cff2_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/AdobeVFPrototype-Subset.otf",
@@ -627,7 +651,7 @@ fn cff2_1_009() {
 }
 
 #[test]
-fn cmap_1_001() {
+fn cmap_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAP14.otf",
@@ -639,7 +663,7 @@ fn cmap_1_001() {
 }
 
 #[test]
-fn cmap_1_002() {
+fn cmap_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAP14.otf",
@@ -651,7 +675,7 @@ fn cmap_1_002() {
 }
 
 #[test]
-fn cmap_1_003() {
+fn cmap_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAP14.otf",
@@ -663,7 +687,7 @@ fn cmap_1_003() {
 }
 
 #[test]
-fn cmap_1_004() {
+fn cmap_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAP14.otf",
@@ -675,7 +699,7 @@ fn cmap_1_004() {
 }
 
 #[test]
-fn cmap_2_001() {
+fn cmap_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAP14.otf",
@@ -687,7 +711,7 @@ fn cmap_2_001() {
 }
 
 #[test]
-fn cmap_2_002() {
+fn cmap_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAP14.otf",
@@ -699,7 +723,7 @@ fn cmap_2_002() {
 }
 
 #[test]
-fn cmap_3_001() {
+fn cmap_3_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -711,7 +735,7 @@ fn cmap_3_001() {
 }
 
 #[test]
-fn cmap_3_002() {
+fn cmap_3_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -723,7 +747,7 @@ fn cmap_3_002() {
 }
 
 #[test]
-fn cmap_3_003() {
+fn cmap_3_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -735,7 +759,7 @@ fn cmap_3_003() {
 }
 
 #[test]
-fn cmap_3_004() {
+fn cmap_3_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -747,7 +771,7 @@ fn cmap_3_004() {
 }
 
 #[test]
-fn cmap_3_005() {
+fn cmap_3_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -759,7 +783,7 @@ fn cmap_3_005() {
 }
 
 #[test]
-fn cmap_3_006() {
+fn cmap_3_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -771,7 +795,7 @@ fn cmap_3_006() {
 }
 
 #[test]
-fn cmap_3_007() {
+fn cmap_3_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -783,7 +807,7 @@ fn cmap_3_007() {
 }
 
 #[test]
-fn cmap_3_008() {
+fn cmap_3_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -795,7 +819,7 @@ fn cmap_3_008() {
 }
 
 #[test]
-fn cmap_3_009() {
+fn cmap_3_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -807,7 +831,7 @@ fn cmap_3_009() {
 }
 
 #[test]
-fn cmap_3_010() {
+fn cmap_3_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -819,7 +843,7 @@ fn cmap_3_010() {
 }
 
 #[test]
-fn cmap_3_011() {
+fn cmap_3_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -831,7 +855,7 @@ fn cmap_3_011() {
 }
 
 #[test]
-fn cmap_3_012() {
+fn cmap_3_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -843,7 +867,7 @@ fn cmap_3_012() {
 }
 
 #[test]
-fn cmap_3_013() {
+fn cmap_3_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -855,7 +879,7 @@ fn cmap_3_013() {
 }
 
 #[test]
-fn cmap_3_014() {
+fn cmap_3_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -867,7 +891,7 @@ fn cmap_3_014() {
 }
 
 #[test]
-fn cmap_3_015() {
+fn cmap_3_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -879,7 +903,7 @@ fn cmap_3_015() {
 }
 
 #[test]
-fn cmap_3_016() {
+fn cmap_3_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -891,7 +915,7 @@ fn cmap_3_016() {
 }
 
 #[test]
-fn cmap_3_017() {
+fn cmap_3_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -903,7 +927,7 @@ fn cmap_3_017() {
 }
 
 #[test]
-fn cmap_3_018() {
+fn cmap_3_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -915,7 +939,7 @@ fn cmap_3_018() {
 }
 
 #[test]
-fn cmap_3_019() {
+fn cmap_3_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -927,7 +951,7 @@ fn cmap_3_019() {
 }
 
 #[test]
-fn cmap_3_020() {
+fn cmap_3_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCMAPMacTurkish.ttf",
@@ -939,16 +963,50 @@ fn cmap_3_020() {
 }
 
 #[test]
-fn cvar_1_001() {
+fn cmap_4_002() {
     assert_eq!(
         shape(
-            "tests/fonts/text-rendering-tests/TestCVARGVARTwo.ttf",
-            "\u{0068}\u{006F}\u{006E}",
-            "--ned --remove-default-ignorables --variations=wght=28,wdth=100,opsz=72",
+            "tests/fonts/text-rendering-tests/TestCMAP13.ttf",
+            "\u{0055}",
+            "--ned --remove-default-ignorables",
         ),
-        "uni0068|\
-         uni006F@595,0|\
-         uni006E@1126,0"
+        "lastresortlatin"
+    );
+}
+
+#[test]
+fn cmap_4_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestCMAP13.ttf",
+            "\u{13EF}",
+            "--ned --remove-default-ignorables",
+        ),
+        "lastresortcherokee"
+    );
+}
+
+#[test]
+fn cmap_4_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestCMAP13.ttf",
+            "\u{1203C}",
+            "--ned --remove-default-ignorables",
+        ),
+        "lastresortcuneiform"
+    );
+}
+
+#[test]
+fn cmap_4_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestCMAP13.ttf",
+            "\u{1FA00}",
+            "--ned --remove-default-ignorables",
+        ),
+        "lastresortchesssymbols"
     );
 }
 
@@ -958,6 +1016,20 @@ fn cvar_1_002() {
         shape(
             "tests/fonts/text-rendering-tests/TestCVARGVARTwo.ttf",
             "\u{0068}\u{006F}\u{006E}",
+            "--ned --remove-default-ignorables --variations=wght=28,wdth=100,opsz=72",
+        ),
+        "uni0068|\
+         uni006F@595,0|\
+         uni006E@1126,0"
+    );
+}
+
+#[test]
+fn cvar_1_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestCVARGVARTwo.ttf",
+            "\u{0068}\u{006F}\u{006E}",
             "--ned --remove-default-ignorables --variations=wght=94,wdth=100,opsz=72",
         ),
         "uni0068|\
@@ -967,7 +1039,7 @@ fn cvar_1_002() {
 }
 
 #[test]
-fn cvar_1_003() {
+fn cvar_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCVARGVARTwo.ttf",
@@ -981,7 +1053,7 @@ fn cvar_1_003() {
 }
 
 #[test]
-fn cvar_2_001() {
+fn cvar_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCVARGVAROne.ttf",
@@ -995,7 +1067,7 @@ fn cvar_2_001() {
 }
 
 #[test]
-fn cvar_2_002() {
+fn cvar_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCVARGVAROne.ttf",
@@ -1009,7 +1081,7 @@ fn cvar_2_002() {
 }
 
 #[test]
-fn cvar_2_003() {
+fn cvar_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestCVARGVAROne.ttf",
@@ -1023,7 +1095,7 @@ fn cvar_2_003() {
 }
 
 #[test]
-fn glyf_1_001() {
+fn glyf_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGLYFOne.ttf",
@@ -1035,7 +1107,7 @@ fn glyf_1_001() {
 }
 
 #[test]
-fn gpos_1_001() {
+fn gpos_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1048,7 +1120,7 @@ fn gpos_1_001() {
 }
 
 #[test]
-fn gpos_1_002() {
+fn gpos_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1061,7 +1133,7 @@ fn gpos_1_002() {
 }
 
 #[test]
-fn gpos_1_003() {
+fn gpos_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1074,7 +1146,7 @@ fn gpos_1_003() {
 }
 
 #[test]
-fn gpos_1_004() {
+fn gpos_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1087,7 +1159,7 @@ fn gpos_1_004() {
 }
 
 #[test]
-fn gpos_1_005() {
+fn gpos_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1100,7 +1172,7 @@ fn gpos_1_005() {
 }
 
 #[test]
-fn gpos_1_006() {
+fn gpos_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1113,7 +1185,7 @@ fn gpos_1_006() {
 }
 
 #[test]
-fn gpos_1_007() {
+fn gpos_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1126,7 +1198,7 @@ fn gpos_1_007() {
 }
 
 #[test]
-fn gpos_1_008() {
+fn gpos_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1139,7 +1211,7 @@ fn gpos_1_008() {
 }
 
 #[test]
-fn gpos_1_009() {
+fn gpos_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1152,7 +1224,7 @@ fn gpos_1_009() {
 }
 
 #[test]
-fn gpos_1_010() {
+fn gpos_1_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1165,7 +1237,7 @@ fn gpos_1_010() {
 }
 
 #[test]
-fn gpos_1_011() {
+fn gpos_1_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1178,7 +1250,7 @@ fn gpos_1_011() {
 }
 
 #[test]
-fn gpos_1_012() {
+fn gpos_1_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1191,7 +1263,7 @@ fn gpos_1_012() {
 }
 
 #[test]
-fn gpos_1_013() {
+fn gpos_1_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1204,7 +1276,7 @@ fn gpos_1_013() {
 }
 
 #[test]
-fn gpos_1_014() {
+fn gpos_1_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1217,7 +1289,7 @@ fn gpos_1_014() {
 }
 
 #[test]
-fn gpos_1_015() {
+fn gpos_1_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1230,7 +1302,7 @@ fn gpos_1_015() {
 }
 
 #[test]
-fn gpos_1_016() {
+fn gpos_1_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1243,7 +1315,7 @@ fn gpos_1_016() {
 }
 
 #[test]
-fn gpos_1_017() {
+fn gpos_1_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1256,7 +1328,7 @@ fn gpos_1_017() {
 }
 
 #[test]
-fn gpos_1_018() {
+fn gpos_1_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1269,7 +1341,7 @@ fn gpos_1_018() {
 }
 
 #[test]
-fn gpos_1_019() {
+fn gpos_1_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSOne.ttf",
@@ -1282,7 +1354,7 @@ fn gpos_1_019() {
 }
 
 #[test]
-fn gpos_2_001() {
+fn gpos_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSTwo.otf",
@@ -1294,7 +1366,7 @@ fn gpos_2_001() {
 }
 
 #[test]
-fn gpos_2_002() {
+fn gpos_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSTwo.otf",
@@ -1306,7 +1378,7 @@ fn gpos_2_002() {
 }
 
 #[test]
-fn gpos_2_003() {
+fn gpos_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSTwo.otf",
@@ -1319,7 +1391,7 @@ fn gpos_2_003() {
 }
 
 #[test]
-fn gpos_3_001() {
+fn gpos_3_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1331,7 +1403,7 @@ fn gpos_3_001() {
 }
 
 #[test]
-fn gpos_3_002() {
+fn gpos_3_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1344,7 +1416,7 @@ fn gpos_3_002() {
 }
 
 #[test]
-fn gpos_3_003() {
+fn gpos_3_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1357,7 +1429,7 @@ fn gpos_3_003() {
 }
 
 #[test]
-fn gpos_3_004() {
+fn gpos_3_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1370,7 +1442,7 @@ fn gpos_3_004() {
 }
 
 #[test]
-fn gpos_4_001() {
+fn gpos_4_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSThree.ttf",
@@ -1384,7 +1456,7 @@ fn gpos_4_001() {
 }
 
 #[test]
-fn gpos_4_002() {
+fn gpos_4_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSThree.ttf",
@@ -1398,7 +1470,7 @@ fn gpos_4_002() {
 }
 
 #[test]
-fn gpos_4_003() {
+fn gpos_4_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSThree.ttf",
@@ -1412,7 +1484,7 @@ fn gpos_4_003() {
 }
 
 #[test]
-fn gpos_4_004() {
+fn gpos_4_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSThree.ttf",
@@ -1427,7 +1499,7 @@ fn gpos_4_004() {
 }
 
 #[test]
-fn gpos_5_001() {
+fn gpos_5_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSFour.ttf",
@@ -1440,7 +1512,7 @@ fn gpos_5_001() {
 }
 
 #[test]
-fn gpos_5_002() {
+fn gpos_5_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSFour.ttf",
@@ -1453,7 +1525,7 @@ fn gpos_5_002() {
 }
 
 #[test]
-fn gpos_5_003() {
+fn gpos_5_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSFour.ttf",
@@ -1466,7 +1538,7 @@ fn gpos_5_003() {
 }
 
 #[test]
-fn gpos_5_004() {
+fn gpos_5_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSFour.ttf",
@@ -1479,7 +1551,7 @@ fn gpos_5_004() {
 }
 
 #[test]
-fn gpos_5_005() {
+fn gpos_5_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGPOSFour.ttf",
@@ -1492,7 +1564,7 @@ fn gpos_5_005() {
 }
 
 #[test]
-fn gsub_1_001() {
+fn gsub_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGSUBOne.otf",
@@ -1506,7 +1578,7 @@ fn gsub_1_001() {
 }
 
 #[test]
-fn gsub_2_001() {
+fn gsub_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1518,7 +1590,7 @@ fn gsub_2_001() {
 }
 
 #[test]
-fn gsub_2_002() {
+fn gsub_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1530,7 +1602,7 @@ fn gsub_2_002() {
 }
 
 #[test]
-fn gsub_2_003() {
+fn gsub_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1542,7 +1614,7 @@ fn gsub_2_003() {
 }
 
 #[test]
-fn gsub_2_004() {
+fn gsub_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1554,7 +1626,7 @@ fn gsub_2_004() {
 }
 
 #[test]
-fn gsub_2_005() {
+fn gsub_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1567,7 +1639,7 @@ fn gsub_2_005() {
 }
 
 #[test]
-fn gsub_2_006() {
+fn gsub_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1580,7 +1652,7 @@ fn gsub_2_006() {
 }
 
 #[test]
-fn gsub_2_007() {
+fn gsub_2_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1592,7 +1664,7 @@ fn gsub_2_007() {
 }
 
 #[test]
-fn gsub_2_008() {
+fn gsub_2_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1606,7 +1678,7 @@ fn gsub_2_008() {
 }
 
 #[test]
-fn gsub_2_009() {
+fn gsub_2_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1622,7 +1694,7 @@ fn gsub_2_009() {
 }
 
 #[test]
-fn gsub_2_010() {
+fn gsub_2_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1638,7 +1710,7 @@ fn gsub_2_010() {
 }
 
 #[test]
-fn gsub_2_011() {
+fn gsub_2_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeEthi.ttf",
@@ -1654,2026 +1726,11 @@ fn gsub_2_011() {
 }
 
 #[test]
-fn gsub_3_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestGSUBThree.ttf",
-            "\u{006C}\u{006F}\u{006C}",
-            "",
-        ),
-        "l=0+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=1+258|\
-         o=1+605|\
-         l=2+258"
-    );
-}
-
-#[test]
-fn gvar_1_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
-            "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=300",
-        ),
-        "gid2"
+fn gsub_3_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestGSUBThree.ttf",
+        "\u{006C}\u{006F}\u{006C}",
+        "",
     );
 }
 
@@ -3683,7 +1740,7 @@ fn gvar_1_002() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=350",
+            "--ned --remove-default-ignorables --variations=wght=300",
         ),
         "gid2"
     );
@@ -3695,7 +1752,7 @@ fn gvar_1_003() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=400",
+            "--ned --remove-default-ignorables --variations=wght=350",
         ),
         "gid2"
     );
@@ -3707,7 +1764,7 @@ fn gvar_1_004() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=450",
+            "--ned --remove-default-ignorables --variations=wght=400",
         ),
         "gid2"
     );
@@ -3719,7 +1776,7 @@ fn gvar_1_005() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=500",
+            "--ned --remove-default-ignorables --variations=wght=450",
         ),
         "gid2"
     );
@@ -3731,7 +1788,7 @@ fn gvar_1_006() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=550",
+            "--ned --remove-default-ignorables --variations=wght=500",
         ),
         "gid2"
     );
@@ -3743,7 +1800,7 @@ fn gvar_1_007() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=600",
+            "--ned --remove-default-ignorables --variations=wght=550",
         ),
         "gid2"
     );
@@ -3755,7 +1812,7 @@ fn gvar_1_008() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=650",
+            "--ned --remove-default-ignorables --variations=wght=600",
         ),
         "gid2"
     );
@@ -3767,19 +1824,19 @@ fn gvar_1_009() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=700",
+            "--ned --remove-default-ignorables --variations=wght=650",
         ),
         "gid2"
     );
 }
 
 #[test]
-fn gvar_2_001() {
+fn gvar_1_010() {
     assert_eq!(
         shape(
-            "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
+            "tests/fonts/text-rendering-tests/TestGVAROne.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=300",
+            "--ned --remove-default-ignorables --variations=wght=700",
         ),
         "gid2"
     );
@@ -3791,7 +1848,7 @@ fn gvar_2_002() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=350",
+            "--ned --remove-default-ignorables --variations=wght=300",
         ),
         "gid2"
     );
@@ -3803,7 +1860,7 @@ fn gvar_2_003() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=400",
+            "--ned --remove-default-ignorables --variations=wght=350",
         ),
         "gid2"
     );
@@ -3815,7 +1872,7 @@ fn gvar_2_004() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=450",
+            "--ned --remove-default-ignorables --variations=wght=400",
         ),
         "gid2"
     );
@@ -3827,7 +1884,7 @@ fn gvar_2_005() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=500",
+            "--ned --remove-default-ignorables --variations=wght=450",
         ),
         "gid2"
     );
@@ -3839,7 +1896,7 @@ fn gvar_2_006() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=550",
+            "--ned --remove-default-ignorables --variations=wght=500",
         ),
         "gid2"
     );
@@ -3851,7 +1908,7 @@ fn gvar_2_007() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=600",
+            "--ned --remove-default-ignorables --variations=wght=550",
         ),
         "gid2"
     );
@@ -3863,7 +1920,7 @@ fn gvar_2_008() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=650",
+            "--ned --remove-default-ignorables --variations=wght=600",
         ),
         "gid2"
     );
@@ -3875,19 +1932,19 @@ fn gvar_2_009() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=700",
+            "--ned --remove-default-ignorables --variations=wght=650",
         ),
         "gid2"
     );
 }
 
 #[test]
-fn gvar_3_001() {
+fn gvar_2_010() {
     assert_eq!(
         shape(
-            "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
+            "tests/fonts/text-rendering-tests/TestGVARTwo.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=300",
+            "--ned --remove-default-ignorables --variations=wght=700",
         ),
         "gid2"
     );
@@ -3899,7 +1956,7 @@ fn gvar_3_002() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=350",
+            "--ned --remove-default-ignorables --variations=wght=300",
         ),
         "gid2"
     );
@@ -3911,7 +1968,7 @@ fn gvar_3_003() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=400",
+            "--ned --remove-default-ignorables --variations=wght=350",
         ),
         "gid2"
     );
@@ -3923,7 +1980,7 @@ fn gvar_3_004() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=450",
+            "--ned --remove-default-ignorables --variations=wght=400",
         ),
         "gid2"
     );
@@ -3935,7 +1992,7 @@ fn gvar_3_005() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=500",
+            "--ned --remove-default-ignorables --variations=wght=450",
         ),
         "gid2"
     );
@@ -3947,7 +2004,7 @@ fn gvar_3_006() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=550",
+            "--ned --remove-default-ignorables --variations=wght=500",
         ),
         "gid2"
     );
@@ -3959,7 +2016,7 @@ fn gvar_3_007() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=600",
+            "--ned --remove-default-ignorables --variations=wght=550",
         ),
         "gid2"
     );
@@ -3971,7 +2028,7 @@ fn gvar_3_008() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
-            "--ned --remove-default-ignorables --variations=wght=650",
+            "--ned --remove-default-ignorables --variations=wght=600",
         ),
         "gid2"
     );
@@ -3983,6 +2040,18 @@ fn gvar_3_009() {
         shape(
             "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
             "\u{5F4C}",
+            "--ned --remove-default-ignorables --variations=wght=650",
+        ),
+        "gid2"
+    );
+}
+
+#[test]
+fn gvar_3_010() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestGVARThree.ttf",
+            "\u{5F4C}",
             "--ned --remove-default-ignorables --variations=wght=700",
         ),
         "gid2"
@@ -3990,7 +2059,7 @@ fn gvar_3_009() {
 }
 
 #[test]
-fn gvar_4_001() {
+fn gvar_4_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4002,7 +2071,7 @@ fn gvar_4_001() {
 }
 
 #[test]
-fn gvar_4_002() {
+fn gvar_4_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4014,7 +2083,7 @@ fn gvar_4_002() {
 }
 
 #[test]
-fn gvar_4_003() {
+fn gvar_4_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4026,7 +2095,7 @@ fn gvar_4_003() {
 }
 
 #[test]
-fn gvar_4_004() {
+fn gvar_4_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4038,7 +2107,7 @@ fn gvar_4_004() {
 }
 
 #[test]
-fn gvar_4_005() {
+fn gvar_4_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4050,7 +2119,7 @@ fn gvar_4_005() {
 }
 
 #[test]
-fn gvar_4_006() {
+fn gvar_4_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4062,7 +2131,7 @@ fn gvar_4_006() {
 }
 
 #[test]
-fn gvar_4_007() {
+fn gvar_4_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4074,7 +2143,7 @@ fn gvar_4_007() {
 }
 
 #[test]
-fn gvar_4_008() {
+fn gvar_4_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4086,7 +2155,7 @@ fn gvar_4_008() {
 }
 
 #[test]
-fn gvar_4_009() {
+fn gvar_4_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4098,7 +2167,7 @@ fn gvar_4_009() {
 }
 
 #[test]
-fn gvar_4_010() {
+fn gvar_4_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4110,7 +2179,7 @@ fn gvar_4_010() {
 }
 
 #[test]
-fn gvar_4_011() {
+fn gvar_4_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4122,7 +2191,7 @@ fn gvar_4_011() {
 }
 
 #[test]
-fn gvar_5_001() {
+fn gvar_5_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4134,7 +2203,7 @@ fn gvar_5_001() {
 }
 
 #[test]
-fn gvar_5_002() {
+fn gvar_5_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4146,7 +2215,7 @@ fn gvar_5_002() {
 }
 
 #[test]
-fn gvar_5_003() {
+fn gvar_5_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4158,7 +2227,7 @@ fn gvar_5_003() {
 }
 
 #[test]
-fn gvar_5_004() {
+fn gvar_5_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4170,7 +2239,7 @@ fn gvar_5_004() {
 }
 
 #[test]
-fn gvar_5_005() {
+fn gvar_5_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4182,7 +2251,7 @@ fn gvar_5_005() {
 }
 
 #[test]
-fn gvar_5_006() {
+fn gvar_5_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4194,7 +2263,7 @@ fn gvar_5_006() {
 }
 
 #[test]
-fn gvar_5_007() {
+fn gvar_5_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4206,7 +2275,7 @@ fn gvar_5_007() {
 }
 
 #[test]
-fn gvar_5_008() {
+fn gvar_5_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4218,7 +2287,7 @@ fn gvar_5_008() {
 }
 
 #[test]
-fn gvar_5_009() {
+fn gvar_5_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4230,7 +2299,7 @@ fn gvar_5_009() {
 }
 
 #[test]
-fn gvar_5_010() {
+fn gvar_5_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4242,7 +2311,7 @@ fn gvar_5_010() {
 }
 
 #[test]
-fn gvar_5_011() {
+fn gvar_5_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4254,7 +2323,7 @@ fn gvar_5_011() {
 }
 
 #[test]
-fn gvar_6_001() {
+fn gvar_6_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4266,7 +2335,7 @@ fn gvar_6_001() {
 }
 
 #[test]
-fn gvar_6_002() {
+fn gvar_6_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4278,7 +2347,7 @@ fn gvar_6_002() {
 }
 
 #[test]
-fn gvar_6_003() {
+fn gvar_6_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4290,7 +2359,7 @@ fn gvar_6_003() {
 }
 
 #[test]
-fn gvar_6_004() {
+fn gvar_6_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4302,7 +2371,7 @@ fn gvar_6_004() {
 }
 
 #[test]
-fn gvar_6_005() {
+fn gvar_6_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4314,7 +2383,7 @@ fn gvar_6_005() {
 }
 
 #[test]
-fn gvar_6_006() {
+fn gvar_6_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4326,7 +2395,7 @@ fn gvar_6_006() {
 }
 
 #[test]
-fn gvar_6_007() {
+fn gvar_6_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4338,7 +2407,7 @@ fn gvar_6_007() {
 }
 
 #[test]
-fn gvar_6_008() {
+fn gvar_6_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4350,7 +2419,7 @@ fn gvar_6_008() {
 }
 
 #[test]
-fn gvar_6_009() {
+fn gvar_6_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4362,7 +2431,7 @@ fn gvar_6_009() {
 }
 
 #[test]
-fn gvar_6_010() {
+fn gvar_6_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4374,7 +2443,7 @@ fn gvar_6_010() {
 }
 
 #[test]
-fn gvar_6_011() {
+fn gvar_6_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/Zycon.ttf",
@@ -4386,7 +2455,7 @@ fn gvar_6_011() {
 }
 
 #[test]
-fn gvar_7_001() {
+fn gvar_7_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4400,7 +2469,7 @@ fn gvar_7_001() {
 }
 
 #[test]
-fn gvar_7_002() {
+fn gvar_7_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4414,7 +2483,7 @@ fn gvar_7_002() {
 }
 
 #[test]
-fn gvar_7_003() {
+fn gvar_7_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4428,7 +2497,7 @@ fn gvar_7_003() {
 }
 
 #[test]
-fn gvar_7_004() {
+fn gvar_7_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4442,7 +2511,7 @@ fn gvar_7_004() {
 }
 
 #[test]
-fn gvar_7_005() {
+fn gvar_7_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4456,7 +2525,7 @@ fn gvar_7_005() {
 }
 
 #[test]
-fn gvar_7_006() {
+fn gvar_7_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4470,7 +2539,7 @@ fn gvar_7_006() {
 }
 
 #[test]
-fn gvar_7_007() {
+fn gvar_7_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARFour.ttf",
@@ -4484,7 +2553,7 @@ fn gvar_7_007() {
 }
 
 #[test]
-fn gvar_8_001() {
+fn gvar_8_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVAREight.ttf",
@@ -4496,7 +2565,7 @@ fn gvar_8_001() {
 }
 
 #[test]
-fn gvar_8_002() {
+fn gvar_8_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVAREight.ttf",
@@ -4508,7 +2577,7 @@ fn gvar_8_002() {
 }
 
 #[test]
-fn gvar_8_003() {
+fn gvar_8_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVAREight.ttf",
@@ -4520,7 +2589,7 @@ fn gvar_8_003() {
 }
 
 #[test]
-fn gvar_8_004() {
+fn gvar_8_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVAREight.ttf",
@@ -4532,7 +2601,7 @@ fn gvar_8_004() {
 }
 
 #[test]
-fn gvar_8_005() {
+fn gvar_8_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVAREight.ttf",
@@ -4544,7 +2613,7 @@ fn gvar_8_005() {
 }
 
 #[test]
-fn gvar_8_006() {
+fn gvar_8_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVAREight.ttf",
@@ -4556,7 +2625,7 @@ fn gvar_8_006() {
 }
 
 #[test]
-fn gvar_9_001() {
+fn gvar_9_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4568,7 +2637,7 @@ fn gvar_9_001() {
 }
 
 #[test]
-fn gvar_9_002() {
+fn gvar_9_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4580,7 +2649,7 @@ fn gvar_9_002() {
 }
 
 #[test]
-fn gvar_9_003() {
+fn gvar_9_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4592,7 +2661,7 @@ fn gvar_9_003() {
 }
 
 #[test]
-fn gvar_9_004() {
+fn gvar_9_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4604,7 +2673,7 @@ fn gvar_9_004() {
 }
 
 #[test]
-fn gvar_9_005() {
+fn gvar_9_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4616,7 +2685,7 @@ fn gvar_9_005() {
 }
 
 #[test]
-fn gvar_9_006() {
+fn gvar_9_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4628,7 +2697,7 @@ fn gvar_9_006() {
 }
 
 #[test]
-fn gvar_9_007() {
+fn gvar_9_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4640,7 +2709,7 @@ fn gvar_9_007() {
 }
 
 #[test]
-fn gvar_9_008() {
+fn gvar_9_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4652,7 +2721,7 @@ fn gvar_9_008() {
 }
 
 #[test]
-fn gvar_9_009() {
+fn gvar_9_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4664,7 +2733,7 @@ fn gvar_9_009() {
 }
 
 #[test]
-fn gvar_9_010() {
+fn gvar_9_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestGVARNine.ttf",
@@ -4676,7 +2745,7 @@ fn gvar_9_010() {
 }
 
 #[test]
-fn hvar_1_001() {
+fn hvar_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVAROne.otf",
@@ -4690,7 +2759,7 @@ fn hvar_1_001() {
 }
 
 #[test]
-fn hvar_1_002() {
+fn hvar_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVAROne.otf",
@@ -4704,7 +2773,7 @@ fn hvar_1_002() {
 }
 
 #[test]
-fn hvar_1_003() {
+fn hvar_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVAROne.otf",
@@ -4718,7 +2787,7 @@ fn hvar_1_003() {
 }
 
 #[test]
-fn hvar_1_004() {
+fn hvar_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVAROne.otf",
@@ -4732,7 +2801,7 @@ fn hvar_1_004() {
 }
 
 #[test]
-fn hvar_1_005() {
+fn hvar_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVAROne.otf",
@@ -4746,7 +2815,7 @@ fn hvar_1_005() {
 }
 
 #[test]
-fn hvar_1_006() {
+fn hvar_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVAROne.otf",
@@ -4760,7 +2829,7 @@ fn hvar_1_006() {
 }
 
 #[test]
-fn hvar_2_001() {
+fn hvar_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVARTwo.ttf",
@@ -4773,7 +2842,7 @@ fn hvar_2_001() {
 }
 
 #[test]
-fn hvar_2_002() {
+fn hvar_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVARTwo.ttf",
@@ -4786,7 +2855,7 @@ fn hvar_2_002() {
 }
 
 #[test]
-fn hvar_2_003() {
+fn hvar_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVARTwo.ttf",
@@ -4799,7 +2868,7 @@ fn hvar_2_003() {
 }
 
 #[test]
-fn hvar_2_004() {
+fn hvar_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVARTwo.ttf",
@@ -4812,7 +2881,7 @@ fn hvar_2_004() {
 }
 
 #[test]
-fn hvar_2_005() {
+fn hvar_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVARTwo.ttf",
@@ -4825,7 +2894,7 @@ fn hvar_2_005() {
 }
 
 #[test]
-fn hvar_2_006() {
+fn hvar_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestHVARTwo.ttf",
@@ -4838,7 +2907,7 @@ fn hvar_2_006() {
 }
 
 #[test]
-fn kern_1_001() {
+fn kern_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestKERNOne.otf",
@@ -4856,7 +2925,7 @@ fn kern_1_001() {
 }
 
 #[test]
-fn kern_2_001() {
+fn kern_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestKERNOne.otf",
@@ -4877,7 +2946,7 @@ fn kern_2_001() {
 }
 
 #[test]
-fn morx_1_001() {
+fn morx_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXOne.ttf",
@@ -4891,7 +2960,7 @@ fn morx_1_001() {
 }
 
 #[test]
-fn morx_10_001() {
+fn morx_10_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTen.ttf",
@@ -4908,7 +2977,7 @@ fn morx_10_001() {
 }
 
 #[test]
-fn morx_11_001() {
+fn morx_11_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEleven.ttf",
@@ -4927,7 +2996,7 @@ fn morx_11_001() {
 }
 
 #[test]
-fn morx_12_001() {
+fn morx_12_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwelve.ttf",
@@ -4944,7 +3013,7 @@ fn morx_12_001() {
 }
 
 #[test]
-fn morx_12_002() {
+fn morx_12_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwelve.ttf",
@@ -4961,7 +3030,7 @@ fn morx_12_002() {
 }
 
 #[test]
-fn morx_12_003() {
+fn morx_12_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwelve.ttf",
@@ -4978,26 +3047,10 @@ fn morx_12_003() {
 }
 
 #[test]
-fn morx_13_001() {
+fn morx_13_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirteen.ttf",
-            "\u{0041}\u{0042}\u{0043}\u{0044}\u{0045}",
-            "--ned --remove-default-ignorables",
-        ),
-        "B|\
-         C@626,0|\
-         D@1222,0|\
-         E@1896,0|\
-         A@2452,0"
-    );
-}
-
-#[test]
-fn morx_14_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestMORXFourteen.ttf",
             "\u{0041}\u{0042}\u{0043}\u{0044}\u{0045}",
             "--ned --remove-default-ignorables",
         ),
@@ -5014,30 +3067,29 @@ fn morx_14_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFourteen.ttf",
-            "\u{0041}\u{0042}\u{0042}\u{0042}\u{0043}\u{0043}\u{0043}\u{0044}\u{0044}\u{0044}\
-             \u{0042}\u{0043}\u{0044}\u{0043}\u{0045}",
-            "",
+            "\u{0041}\u{0042}\u{0043}\u{0044}\u{0045}",
+            "--ned --remove-default-ignorables",
         ),
-        "B=0+626|\
-         B=0+626|\
-         B=0+626|\
-         C=0+596|\
-         C=0+596|\
-         C=0+596|\
-         D=0+674|\
-         D=0+674|\
-         D=0+674|\
-         B=0+626|\
-         C=0+596|\
-         D=0+674|\
-         C=0+596|\
-         E=0+556|\
-         A=0+639"
+        "B|\
+         C@626,0|\
+         D@1222,0|\
+         E@1896,0|\
+         A@2452,0"
     );
 }
 
 #[test]
-fn morx_16_001() {
+fn morx_14_003() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXFourteen.ttf",
+        "\u{0041}\u{0042}\u{0042}\u{0042}\u{0043}\u{0043}\u{0043}\u{0044}\u{0044}\u{0044}\
+             \u{0042}\u{0043}\u{0044}\u{0043}\u{0045}",
+        "",
+    );
+}
+
+#[test]
+fn morx_16_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXSixteen.ttf",
@@ -5053,7 +3105,7 @@ fn morx_16_001() {
 }
 
 #[test]
-fn morx_17_001() {
+fn morx_17_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXSeventeen.ttf",
@@ -5066,7 +3118,7 @@ fn morx_17_001() {
 }
 
 #[test]
-fn morx_18_001() {
+fn morx_18_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEighteen.ttf",
@@ -5082,7 +3134,7 @@ fn morx_18_001() {
 }
 
 #[test]
-fn morx_18_002() {
+fn morx_18_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEighteen.ttf",
@@ -5099,7 +3151,7 @@ fn morx_18_002() {
 }
 
 #[test]
-fn morx_18_003() {
+fn morx_18_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEighteen.ttf",
@@ -5114,7 +3166,7 @@ fn morx_18_003() {
 }
 
 #[test]
-fn morx_18_004() {
+fn morx_18_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEighteen.ttf",
@@ -5128,7 +3180,7 @@ fn morx_18_004() {
 }
 
 #[test]
-fn morx_19_001() {
+fn morx_19_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEighteen.ttf",
@@ -5143,7 +3195,7 @@ fn morx_19_001() {
 }
 
 #[test]
-fn morx_19_002() {
+fn morx_19_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEighteen.ttf",
@@ -5155,7 +3207,7 @@ fn morx_19_002() {
 }
 
 #[test]
-fn morx_2_001() {
+fn morx_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5181,7 +3233,7 @@ fn morx_2_001() {
 }
 
 #[test]
-fn morx_2_002() {
+fn morx_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5207,7 +3259,7 @@ fn morx_2_002() {
 }
 
 #[test]
-fn morx_2_003() {
+fn morx_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5233,7 +3285,7 @@ fn morx_2_003() {
 }
 
 #[test]
-fn morx_2_004() {
+fn morx_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5259,7 +3311,7 @@ fn morx_2_004() {
 }
 
 #[test]
-fn morx_2_005() {
+fn morx_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5285,7 +3337,7 @@ fn morx_2_005() {
 }
 
 #[test]
-fn morx_2_006() {
+fn morx_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5311,7 +3363,7 @@ fn morx_2_006() {
 }
 
 #[test]
-fn morx_2_007() {
+fn morx_2_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5337,7 +3389,7 @@ fn morx_2_007() {
 }
 
 #[test]
-fn morx_2_008() {
+fn morx_2_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5363,7 +3415,7 @@ fn morx_2_008() {
 }
 
 #[test]
-fn morx_2_009() {
+fn morx_2_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5389,7 +3441,7 @@ fn morx_2_009() {
 }
 
 #[test]
-fn morx_2_010() {
+fn morx_2_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5415,7 +3467,7 @@ fn morx_2_010() {
 }
 
 #[test]
-fn morx_2_011() {
+fn morx_2_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5441,7 +3493,7 @@ fn morx_2_011() {
 }
 
 #[test]
-fn morx_2_012() {
+fn morx_2_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5467,7 +3519,7 @@ fn morx_2_012() {
 }
 
 #[test]
-fn morx_2_013() {
+fn morx_2_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5493,7 +3545,7 @@ fn morx_2_013() {
 }
 
 #[test]
-fn morx_2_014() {
+fn morx_2_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5519,7 +3571,7 @@ fn morx_2_014() {
 }
 
 #[test]
-fn morx_2_015() {
+fn morx_2_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5545,7 +3597,7 @@ fn morx_2_015() {
 }
 
 #[test]
-fn morx_2_016() {
+fn morx_2_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -5571,7 +3623,7 @@ fn morx_2_016() {
 }
 
 #[test]
-fn morx_20_001() {
+fn morx_20_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5587,7 +3639,7 @@ fn morx_20_001() {
 }
 
 #[test]
-fn morx_20_002() {
+fn morx_20_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5601,7 +3653,7 @@ fn morx_20_002() {
 }
 
 #[test]
-fn morx_20_003() {
+fn morx_20_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5615,7 +3667,7 @@ fn morx_20_003() {
 }
 
 #[test]
-fn morx_20_004() {
+fn morx_20_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5628,7 +3680,7 @@ fn morx_20_004() {
 }
 
 #[test]
-fn morx_20_005() {
+fn morx_20_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5641,7 +3693,7 @@ fn morx_20_005() {
 }
 
 #[test]
-fn morx_20_006() {
+fn morx_20_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5653,7 +3705,7 @@ fn morx_20_006() {
 }
 
 #[test]
-fn morx_20_007() {
+fn morx_20_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwenty.ttf",
@@ -5665,7 +3717,7 @@ fn morx_20_007() {
 }
 
 #[test]
-fn morx_21_001() {
+fn morx_21_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyone.ttf",
@@ -5681,7 +3733,7 @@ fn morx_21_001() {
 }
 
 #[test]
-fn morx_22_001() {
+fn morx_22_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentytwo.ttf",
@@ -5693,7 +3745,7 @@ fn morx_22_001() {
 }
 
 #[test]
-fn morx_23_001() {
+fn morx_23_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentythree.ttf",
@@ -5709,23 +3761,16 @@ fn morx_23_001() {
 }
 
 #[test]
-fn morx_24_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestMORXTwentyfour.ttf",
-            "\u{0041}\u{0042}\u{0043}\u{0044}\u{0045}",
-            "",
-        ),
-        "A=0+639|\
-         C=1+596|\
-         D=2+674|\
-         E=3+556|\
-         A=4+639"
+fn morx_24_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXTwentyfour.ttf",
+        "\u{0041}\u{0042}\u{0043}\u{0044}\u{0045}",
+        "",
     );
 }
 
 #[test]
-fn morx_25_001() {
+fn morx_25_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5741,7 +3786,7 @@ fn morx_25_001() {
 }
 
 #[test]
-fn morx_25_002() {
+fn morx_25_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5757,7 +3802,7 @@ fn morx_25_002() {
 }
 
 #[test]
-fn morx_25_003() {
+fn morx_25_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5773,7 +3818,7 @@ fn morx_25_003() {
 }
 
 #[test]
-fn morx_25_004() {
+fn morx_25_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5787,7 +3832,7 @@ fn morx_25_004() {
 }
 
 #[test]
-fn morx_25_005() {
+fn morx_25_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5801,7 +3846,7 @@ fn morx_25_005() {
 }
 
 #[test]
-fn morx_25_006() {
+fn morx_25_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5814,7 +3859,7 @@ fn morx_25_006() {
 }
 
 #[test]
-fn morx_25_007() {
+fn morx_25_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5827,7 +3872,7 @@ fn morx_25_007() {
 }
 
 #[test]
-fn morx_25_008() {
+fn morx_25_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5839,7 +3884,7 @@ fn morx_25_008() {
 }
 
 #[test]
-fn morx_25_009() {
+fn morx_25_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyfive.ttf",
@@ -5851,7 +3896,7 @@ fn morx_25_009() {
 }
 
 #[test]
-fn morx_26_001() {
+fn morx_26_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentysix.ttf",
@@ -5864,7 +3909,7 @@ fn morx_26_001() {
 }
 
 #[test]
-fn morx_26_002() {
+fn morx_26_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentysix.ttf",
@@ -5876,7 +3921,7 @@ fn morx_26_002() {
 }
 
 #[test]
-fn morx_27_001() {
+fn morx_27_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyseven.ttf",
@@ -5888,7 +3933,7 @@ fn morx_27_001() {
 }
 
 #[test]
-fn morx_27_002() {
+fn morx_27_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyseven.ttf",
@@ -5900,22 +3945,10 @@ fn morx_27_002() {
 }
 
 #[test]
-fn morx_27_003() {
+fn morx_27_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyseven.ttf",
-            "\u{0041}\u{0045}\u{0044}",
-            "--ned --remove-default-ignorables",
-        ),
-        "A_E_D"
-    );
-}
-
-#[test]
-fn morx_28_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestMORXTwentyeight.ttf",
             "\u{0041}\u{0045}\u{0044}",
             "--ned --remove-default-ignorables",
         ),
@@ -5928,6 +3961,18 @@ fn morx_28_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyeight.ttf",
+            "\u{0041}\u{0045}\u{0044}",
+            "--ned --remove-default-ignorables",
+        ),
+        "A_E_D"
+    );
+}
+
+#[test]
+fn morx_28_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestMORXTwentyeight.ttf",
             "\u{0041}\u{0078}\u{0045}\u{0044}",
             "--ned --remove-default-ignorables",
         ),
@@ -5937,7 +3982,7 @@ fn morx_28_002() {
 }
 
 #[test]
-fn morx_28_003() {
+fn morx_28_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyeight.ttf",
@@ -5950,7 +3995,7 @@ fn morx_28_003() {
 }
 
 #[test]
-fn morx_28_004() {
+fn morx_28_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyeight.ttf",
@@ -5964,7 +4009,7 @@ fn morx_28_004() {
 }
 
 #[test]
-fn morx_28_005() {
+fn morx_28_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentyeight.ttf",
@@ -5982,7 +4027,7 @@ fn morx_28_005() {
 }
 
 #[test]
-fn morx_29_001() {
+fn morx_29_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6011,7 +4056,7 @@ fn morx_29_001() {
 }
 
 #[test]
-fn morx_29_002() {
+fn morx_29_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6040,7 +4085,7 @@ fn morx_29_002() {
 }
 
 #[test]
-fn morx_29_003() {
+fn morx_29_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6069,7 +4114,7 @@ fn morx_29_003() {
 }
 
 #[test]
-fn morx_29_004() {
+fn morx_29_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6098,7 +4143,7 @@ fn morx_29_004() {
 }
 
 #[test]
-fn morx_3_001() {
+fn morx_3_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6115,7 +4160,7 @@ fn morx_3_001() {
 }
 
 #[test]
-fn morx_3_002() {
+fn morx_3_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6132,7 +4177,7 @@ fn morx_3_002() {
 }
 
 #[test]
-fn morx_3_003() {
+fn morx_3_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6149,7 +4194,7 @@ fn morx_3_003() {
 }
 
 #[test]
-fn morx_3_004() {
+fn morx_3_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6166,7 +4211,7 @@ fn morx_3_004() {
 }
 
 #[test]
-fn morx_3_005() {
+fn morx_3_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6183,7 +4228,7 @@ fn morx_3_005() {
 }
 
 #[test]
-fn morx_3_006() {
+fn morx_3_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6200,7 +4245,7 @@ fn morx_3_006() {
 }
 
 #[test]
-fn morx_3_007() {
+fn morx_3_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6217,7 +4262,7 @@ fn morx_3_007() {
 }
 
 #[test]
-fn morx_3_008() {
+fn morx_3_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6234,7 +4279,7 @@ fn morx_3_008() {
 }
 
 #[test]
-fn morx_3_009() {
+fn morx_3_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6251,7 +4296,7 @@ fn morx_3_009() {
 }
 
 #[test]
-fn morx_3_010() {
+fn morx_3_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6268,7 +4313,7 @@ fn morx_3_010() {
 }
 
 #[test]
-fn morx_3_011() {
+fn morx_3_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6285,7 +4330,7 @@ fn morx_3_011() {
 }
 
 #[test]
-fn morx_3_012() {
+fn morx_3_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6302,7 +4347,7 @@ fn morx_3_012() {
 }
 
 #[test]
-fn morx_3_013() {
+fn morx_3_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6319,7 +4364,7 @@ fn morx_3_013() {
 }
 
 #[test]
-fn morx_3_014() {
+fn morx_3_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6336,7 +4381,7 @@ fn morx_3_014() {
 }
 
 #[test]
-fn morx_3_015() {
+fn morx_3_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6353,7 +4398,7 @@ fn morx_3_015() {
 }
 
 #[test]
-fn morx_3_016() {
+fn morx_3_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThree.ttf",
@@ -6370,7 +4415,7 @@ fn morx_3_016() {
 }
 
 #[test]
-fn morx_30_001() {
+fn morx_30_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6402,7 +4447,7 @@ fn morx_30_001() {
 }
 
 #[test]
-fn morx_30_002() {
+fn morx_30_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6434,7 +4479,7 @@ fn morx_30_002() {
 }
 
 #[test]
-fn morx_30_003() {
+fn morx_30_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6466,7 +4511,7 @@ fn morx_30_003() {
 }
 
 #[test]
-fn morx_30_004() {
+fn morx_30_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwentynine.ttf",
@@ -6498,7 +4543,7 @@ fn morx_30_004() {
 }
 
 #[test]
-fn morx_31_001() {
+fn morx_31_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6523,7 +4568,7 @@ fn morx_31_001() {
 }
 
 #[test]
-fn morx_31_002() {
+fn morx_31_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6548,7 +4593,7 @@ fn morx_31_002() {
 }
 
 #[test]
-fn morx_31_003() {
+fn morx_31_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6573,7 +4618,7 @@ fn morx_31_003() {
 }
 
 #[test]
-fn morx_31_004() {
+fn morx_31_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6598,7 +4643,7 @@ fn morx_31_004() {
 }
 
 #[test]
-fn morx_31_005() {
+fn morx_31_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6624,7 +4669,7 @@ fn morx_31_005() {
 }
 
 #[test]
-fn morx_31_006() {
+fn morx_31_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6650,7 +4695,7 @@ fn morx_31_006() {
 }
 
 #[test]
-fn morx_31_007() {
+fn morx_31_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6676,7 +4721,7 @@ fn morx_31_007() {
 }
 
 #[test]
-fn morx_31_008() {
+fn morx_31_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyone.ttf",
@@ -6702,7 +4747,7 @@ fn morx_31_008() {
 }
 
 #[test]
-fn morx_32_001() {
+fn morx_32_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtytwo.ttf",
@@ -6717,7 +4762,7 @@ fn morx_32_001() {
 }
 
 #[test]
-fn morx_32_002() {
+fn morx_32_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtytwo.ttf",
@@ -6734,7 +4779,7 @@ fn morx_32_002() {
 }
 
 #[test]
-fn morx_32_003() {
+fn morx_32_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtytwo.ttf",
@@ -6749,7 +4794,7 @@ fn morx_32_003() {
 }
 
 #[test]
-fn morx_32_004() {
+fn morx_32_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtytwo.ttf",
@@ -6766,7 +4811,7 @@ fn morx_32_004() {
 }
 
 #[test]
-fn morx_33_001() {
+fn morx_33_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtythree.ttf",
@@ -6781,7 +4826,7 @@ fn morx_33_001() {
 }
 
 #[test]
-fn morx_33_002() {
+fn morx_33_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtythree.ttf",
@@ -6800,7 +4845,7 @@ fn morx_33_002() {
 }
 
 #[test]
-fn morx_33_003() {
+fn morx_33_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtythree.ttf",
@@ -6813,7 +4858,16 @@ fn morx_33_003() {
 }
 
 #[test]
-fn morx_35_001() {
+fn morx_34_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXThirtyfour.ttf",
+        "\u{0068}\u{0061}",
+        "",
+    );
+}
+
+#[test]
+fn morx_35_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyfive.ttf",
@@ -6828,7 +4882,7 @@ fn morx_35_001() {
 }
 
 #[test]
-fn morx_35_002() {
+fn morx_35_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyfive.ttf",
@@ -6845,7 +4899,16 @@ fn morx_35_002() {
 }
 
 #[test]
-fn morx_37_001() {
+fn morx_36_002() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXThirtysix.ttf",
+        "\u{0041}",
+        "",
+    );
+}
+
+#[test]
+fn morx_37_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyseven.ttf",
@@ -6858,7 +4921,7 @@ fn morx_37_001() {
 }
 
 #[test]
-fn morx_37_002() {
+fn morx_37_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyseven.ttf",
@@ -6871,7 +4934,7 @@ fn morx_37_002() {
 }
 
 #[test]
-fn morx_37_003() {
+fn morx_37_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyseven.ttf",
@@ -6884,7 +4947,7 @@ fn morx_37_003() {
 }
 
 #[test]
-fn morx_37_004() {
+fn morx_37_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyseven.ttf",
@@ -6897,7 +4960,7 @@ fn morx_37_004() {
 }
 
 #[test]
-fn morx_38_001() {
+fn morx_38_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyeight.ttf",
@@ -6910,7 +4973,7 @@ fn morx_38_001() {
 }
 
 #[test]
-fn morx_38_002() {
+fn morx_38_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyeight.ttf",
@@ -6923,7 +4986,7 @@ fn morx_38_002() {
 }
 
 #[test]
-fn morx_38_003() {
+fn morx_38_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyeight.ttf",
@@ -6936,7 +4999,7 @@ fn morx_38_003() {
 }
 
 #[test]
-fn morx_38_004() {
+fn morx_38_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtyeight.ttf",
@@ -6949,7 +5012,7 @@ fn morx_38_004() {
 }
 
 #[test]
-fn morx_39_001() {
+fn morx_39_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtynine.ttf",
@@ -6962,7 +5025,7 @@ fn morx_39_001() {
 }
 
 #[test]
-fn morx_39_002() {
+fn morx_39_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtynine.ttf",
@@ -6975,7 +5038,7 @@ fn morx_39_002() {
 }
 
 #[test]
-fn morx_39_003() {
+fn morx_39_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtynine.ttf",
@@ -6988,7 +5051,7 @@ fn morx_39_003() {
 }
 
 #[test]
-fn morx_39_004() {
+fn morx_39_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXThirtynine.ttf",
@@ -7001,7 +5064,7 @@ fn morx_39_004() {
 }
 
 #[test]
-fn morx_4_001() {
+fn morx_4_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7020,7 +5083,7 @@ fn morx_4_001() {
 }
 
 #[test]
-fn morx_4_002() {
+fn morx_4_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7039,7 +5102,7 @@ fn morx_4_002() {
 }
 
 #[test]
-fn morx_4_003() {
+fn morx_4_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7059,7 +5122,7 @@ fn morx_4_003() {
 }
 
 #[test]
-fn morx_4_004() {
+fn morx_4_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7079,7 +5142,7 @@ fn morx_4_004() {
 }
 
 #[test]
-fn morx_4_005() {
+fn morx_4_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7099,7 +5162,7 @@ fn morx_4_005() {
 }
 
 #[test]
-fn morx_4_006() {
+fn morx_4_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7119,7 +5182,7 @@ fn morx_4_006() {
 }
 
 #[test]
-fn morx_4_007() {
+fn morx_4_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7139,7 +5202,7 @@ fn morx_4_007() {
 }
 
 #[test]
-fn morx_4_008() {
+fn morx_4_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7160,7 +5223,7 @@ fn morx_4_008() {
 }
 
 #[test]
-fn morx_4_009() {
+fn morx_4_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7181,7 +5244,7 @@ fn morx_4_009() {
 }
 
 #[test]
-fn morx_4_010() {
+fn morx_4_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7202,7 +5265,7 @@ fn morx_4_010() {
 }
 
 #[test]
-fn morx_4_011() {
+fn morx_4_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7223,7 +5286,7 @@ fn morx_4_011() {
 }
 
 #[test]
-fn morx_4_012() {
+fn morx_4_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7246,7 +5309,7 @@ fn morx_4_012() {
 }
 
 #[test]
-fn morx_4_013() {
+fn morx_4_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7269,7 +5332,7 @@ fn morx_4_013() {
 }
 
 #[test]
-fn morx_4_014() {
+fn morx_4_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7292,7 +5355,7 @@ fn morx_4_014() {
 }
 
 #[test]
-fn morx_4_015() {
+fn morx_4_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7315,7 +5378,7 @@ fn morx_4_015() {
 }
 
 #[test]
-fn morx_40_001() {
+fn morx_40_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXForty.ttf",
@@ -7328,7 +5391,7 @@ fn morx_40_001() {
 }
 
 #[test]
-fn morx_40_002() {
+fn morx_40_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXForty.ttf",
@@ -7341,7 +5404,7 @@ fn morx_40_002() {
 }
 
 #[test]
-fn morx_40_003() {
+fn morx_40_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXForty.ttf",
@@ -7354,7 +5417,7 @@ fn morx_40_003() {
 }
 
 #[test]
-fn morx_40_004() {
+fn morx_40_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXForty.ttf",
@@ -7367,7 +5430,7 @@ fn morx_40_004() {
 }
 
 #[test]
-fn morx_41_001() {
+fn morx_41_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
@@ -7379,7 +5442,7 @@ fn morx_41_001() {
 }
 
 #[test]
-fn morx_41_002() {
+fn morx_41_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
@@ -7391,34 +5454,25 @@ fn morx_41_002() {
 }
 
 #[test]
-fn morx_41_003() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
-            "\u{0063}\u{0063}",
-            "",
-        ),
-        "c=0+480|\
-         c=1+480"
-    );
-}
-
-#[test]
 fn morx_41_004() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
-            "\u{0061}\u{0062}\u{0063}\u{0063}",
-            "",
-        ),
-        "a=0+561|\
-         b_c=1+1070|\
-         c=3+480"
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
+        "\u{0063}\u{0063}",
+        "",
     );
 }
 
 #[test]
-fn morx_5_001() {
+fn morx_41_005() {
+    shape(
+        "tests/fonts/text-rendering-tests/TestMORXFourtyone.ttf",
+        "\u{0061}\u{0062}\u{0063}\u{0063}",
+        "",
+    );
+}
+
+#[test]
+fn morx_5_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7437,7 +5491,7 @@ fn morx_5_001() {
 }
 
 #[test]
-fn morx_5_002() {
+fn morx_5_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7456,7 +5510,7 @@ fn morx_5_002() {
 }
 
 #[test]
-fn morx_5_003() {
+fn morx_5_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7475,7 +5529,7 @@ fn morx_5_003() {
 }
 
 #[test]
-fn morx_5_004() {
+fn morx_5_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7494,7 +5548,7 @@ fn morx_5_004() {
 }
 
 #[test]
-fn morx_5_005() {
+fn morx_5_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7513,7 +5567,7 @@ fn morx_5_005() {
 }
 
 #[test]
-fn morx_5_006() {
+fn morx_5_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7532,7 +5586,7 @@ fn morx_5_006() {
 }
 
 #[test]
-fn morx_5_007() {
+fn morx_5_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7552,7 +5606,7 @@ fn morx_5_007() {
 }
 
 #[test]
-fn morx_5_008() {
+fn morx_5_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7571,7 +5625,7 @@ fn morx_5_008() {
 }
 
 #[test]
-fn morx_5_009() {
+fn morx_5_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7591,7 +5645,7 @@ fn morx_5_009() {
 }
 
 #[test]
-fn morx_5_010() {
+fn morx_5_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7610,7 +5664,7 @@ fn morx_5_010() {
 }
 
 #[test]
-fn morx_5_011() {
+fn morx_5_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7630,7 +5684,7 @@ fn morx_5_011() {
 }
 
 #[test]
-fn morx_5_012() {
+fn morx_5_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7649,7 +5703,7 @@ fn morx_5_012() {
 }
 
 #[test]
-fn morx_5_013() {
+fn morx_5_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7669,7 +5723,7 @@ fn morx_5_013() {
 }
 
 #[test]
-fn morx_5_014() {
+fn morx_5_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7688,7 +5742,7 @@ fn morx_5_014() {
 }
 
 #[test]
-fn morx_5_015() {
+fn morx_5_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7708,7 +5762,7 @@ fn morx_5_015() {
 }
 
 #[test]
-fn morx_5_016() {
+fn morx_5_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7729,7 +5783,7 @@ fn morx_5_016() {
 }
 
 #[test]
-fn morx_5_017() {
+fn morx_5_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7748,7 +5802,7 @@ fn morx_5_017() {
 }
 
 #[test]
-fn morx_5_018() {
+fn morx_5_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7768,7 +5822,7 @@ fn morx_5_018() {
 }
 
 #[test]
-fn morx_5_019() {
+fn morx_5_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7789,7 +5843,7 @@ fn morx_5_019() {
 }
 
 #[test]
-fn morx_5_020() {
+fn morx_5_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7808,7 +5862,7 @@ fn morx_5_020() {
 }
 
 #[test]
-fn morx_5_021() {
+fn morx_5_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7828,7 +5882,7 @@ fn morx_5_021() {
 }
 
 #[test]
-fn morx_5_022() {
+fn morx_5_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7849,7 +5903,7 @@ fn morx_5_022() {
 }
 
 #[test]
-fn morx_5_023() {
+fn morx_5_024() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7868,7 +5922,7 @@ fn morx_5_023() {
 }
 
 #[test]
-fn morx_5_024() {
+fn morx_5_025() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7888,7 +5942,7 @@ fn morx_5_024() {
 }
 
 #[test]
-fn morx_5_025() {
+fn morx_5_026() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXFour.ttf",
@@ -7909,7 +5963,7 @@ fn morx_5_025() {
 }
 
 #[test]
-fn morx_6_001() {
+fn morx_6_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -7938,7 +5992,7 @@ fn morx_6_001() {
 }
 
 #[test]
-fn morx_7_001() {
+fn morx_7_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXTwo.ttf",
@@ -7954,7 +6008,7 @@ fn morx_7_001() {
 }
 
 #[test]
-fn morx_8_001() {
+fn morx_8_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEight.ttf",
@@ -7969,7 +6023,7 @@ fn morx_8_001() {
 }
 
 #[test]
-fn morx_8_002() {
+fn morx_8_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEight.ttf",
@@ -7984,7 +6038,7 @@ fn morx_8_002() {
 }
 
 #[test]
-fn morx_8_003() {
+fn morx_8_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXEight.ttf",
@@ -7999,7 +6053,7 @@ fn morx_8_003() {
 }
 
 #[test]
-fn morx_9_001() {
+fn morx_9_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestMORXNine.ttf",
@@ -8015,7 +6069,7 @@ fn morx_9_001() {
 }
 
 #[test]
-fn sfnt_1_001() {
+fn sfnt_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestSFNTOne.otf",
@@ -8027,7 +6081,7 @@ fn sfnt_1_001() {
 }
 
 #[test]
-fn sfnt_1_002() {
+fn sfnt_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestSFNTOne.otf",
@@ -8035,18 +6089,6 @@ fn sfnt_1_002() {
             "--ned --remove-default-ignorables",
         ),
         "B"
-    );
-}
-
-#[test]
-fn sfnt_2_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/TestSFNTTwo.ttf",
-            "\u{0041}",
-            "--ned --remove-default-ignorables",
-        ),
-        "A"
     );
 }
 
@@ -8055,6 +6097,18 @@ fn sfnt_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestSFNTTwo.ttf",
+            "\u{0041}",
+            "--ned --remove-default-ignorables",
+        ),
+        "A"
+    );
+}
+
+#[test]
+fn sfnt_2_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/TestSFNTTwo.ttf",
             "\u{0042}",
             "--ned --remove-default-ignorables",
         ),
@@ -8063,7 +6117,7 @@ fn sfnt_2_002() {
 }
 
 #[test]
-fn sharan_1_001() {
+fn sharan_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeAran.ttf",
@@ -8080,7 +6134,7 @@ fn sharan_1_001() {
 }
 
 #[test]
-fn sharan_1_002() {
+fn sharan_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeAran.ttf",
@@ -8104,7 +6158,7 @@ fn sharan_1_002() {
 }
 
 #[test]
-fn sharan_1_003() {
+fn sharan_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeAran.ttf",
@@ -8124,7 +6178,7 @@ fn sharan_1_003() {
 }
 
 #[test]
-fn sharan_1_004() {
+fn sharan_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeAran.ttf",
@@ -8151,7 +6205,7 @@ fn sharan_1_004() {
 }
 
 #[test]
-fn sharan_1_005() {
+fn sharan_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeAran.ttf",
@@ -8176,7 +6230,7 @@ fn sharan_1_005() {
 }
 
 #[test]
-fn sharan_1_006() {
+fn sharan_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeAran.ttf",
@@ -8199,7 +6253,7 @@ fn sharan_1_006() {
 }
 
 #[test]
-fn shbali_1_001() {
+fn shbali_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8213,7 +6267,7 @@ fn shbali_1_001() {
 }
 
 #[test]
-fn shbali_1_002() {
+fn shbali_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8227,7 +6281,7 @@ fn shbali_1_002() {
 }
 
 #[test]
-fn shbali_1_003() {
+fn shbali_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8241,7 +6295,7 @@ fn shbali_1_003() {
 }
 
 #[test]
-fn shbali_1_004() {
+fn shbali_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8255,7 +6309,7 @@ fn shbali_1_004() {
 }
 
 #[test]
-fn shbali_1_005() {
+fn shbali_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8268,7 +6322,7 @@ fn shbali_1_005() {
 }
 
 #[test]
-fn shbali_1_006() {
+fn shbali_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8281,7 +6335,7 @@ fn shbali_1_006() {
 }
 
 #[test]
-fn shbali_1_007() {
+fn shbali_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8295,7 +6349,7 @@ fn shbali_1_007() {
 }
 
 #[test]
-fn shbali_1_008() {
+fn shbali_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8309,7 +6363,7 @@ fn shbali_1_008() {
 }
 
 #[test]
-fn shbali_1_009() {
+fn shbali_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8323,7 +6377,7 @@ fn shbali_1_009() {
 }
 
 #[test]
-fn shbali_1_010() {
+fn shbali_1_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8337,7 +6391,7 @@ fn shbali_1_010() {
 }
 
 #[test]
-fn shbali_1_011() {
+fn shbali_1_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8352,7 +6406,7 @@ fn shbali_1_011() {
 }
 
 #[test]
-fn shbali_1_012() {
+fn shbali_1_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8368,7 +6422,7 @@ fn shbali_1_012() {
 }
 
 #[test]
-fn shbali_1_013() {
+fn shbali_1_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8381,7 +6435,7 @@ fn shbali_1_013() {
 }
 
 #[test]
-fn shbali_1_014() {
+fn shbali_1_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8396,7 +6450,7 @@ fn shbali_1_014() {
 }
 
 #[test]
-fn shbali_1_015() {
+fn shbali_1_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8411,7 +6465,7 @@ fn shbali_1_015() {
 }
 
 #[test]
-fn shbali_1_016() {
+fn shbali_1_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8425,7 +6479,7 @@ fn shbali_1_016() {
 }
 
 #[test]
-fn shbali_1_017() {
+fn shbali_1_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8439,7 +6493,7 @@ fn shbali_1_017() {
 }
 
 #[test]
-fn shbali_1_018() {
+fn shbali_1_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8452,7 +6506,7 @@ fn shbali_1_018() {
 }
 
 #[test]
-fn shbali_1_019() {
+fn shbali_1_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8466,7 +6520,7 @@ fn shbali_1_019() {
 }
 
 #[test]
-fn shbali_1_020() {
+fn shbali_1_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8480,7 +6534,7 @@ fn shbali_1_020() {
 }
 
 #[test]
-fn shbali_1_021() {
+fn shbali_1_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8494,7 +6548,7 @@ fn shbali_1_021() {
 }
 
 #[test]
-fn shbali_1_022() {
+fn shbali_1_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8508,7 +6562,7 @@ fn shbali_1_022() {
 }
 
 #[test]
-fn shbali_2_001() {
+fn shbali_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8522,7 +6576,7 @@ fn shbali_2_001() {
 }
 
 #[test]
-fn shbali_2_002() {
+fn shbali_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8536,7 +6590,7 @@ fn shbali_2_002() {
 }
 
 #[test]
-fn shbali_2_003() {
+fn shbali_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8550,7 +6604,7 @@ fn shbali_2_003() {
 }
 
 #[test]
-fn shbali_2_004() {
+fn shbali_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8565,7 +6619,7 @@ fn shbali_2_004() {
 }
 
 #[test]
-fn shbali_2_005() {
+fn shbali_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8580,7 +6634,7 @@ fn shbali_2_005() {
 }
 
 #[test]
-fn shbali_2_006() {
+fn shbali_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8593,7 +6647,7 @@ fn shbali_2_006() {
 }
 
 #[test]
-fn shbali_2_007() {
+fn shbali_2_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8607,7 +6661,7 @@ fn shbali_2_007() {
 }
 
 #[test]
-fn shbali_2_008() {
+fn shbali_2_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8622,7 +6676,7 @@ fn shbali_2_008() {
 }
 
 #[test]
-fn shbali_2_009() {
+fn shbali_2_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8636,7 +6690,7 @@ fn shbali_2_009() {
 }
 
 #[test]
-fn shbali_2_010() {
+fn shbali_2_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8650,7 +6704,7 @@ fn shbali_2_010() {
 }
 
 #[test]
-fn shbali_2_011() {
+fn shbali_2_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8664,7 +6718,7 @@ fn shbali_2_011() {
 }
 
 #[test]
-fn shbali_2_012() {
+fn shbali_2_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8678,7 +6732,7 @@ fn shbali_2_012() {
 }
 
 #[test]
-fn shbali_3_001() {
+fn shbali_3_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8691,7 +6745,7 @@ fn shbali_3_001() {
 }
 
 #[test]
-fn shbali_3_002() {
+fn shbali_3_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8704,7 +6758,7 @@ fn shbali_3_002() {
 }
 
 #[test]
-fn shbali_3_003() {
+fn shbali_3_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8717,7 +6771,7 @@ fn shbali_3_003() {
 }
 
 #[test]
-fn shbali_3_004() {
+fn shbali_3_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8730,7 +6784,7 @@ fn shbali_3_004() {
 }
 
 #[test]
-fn shbali_3_005() {
+fn shbali_3_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8743,7 +6797,7 @@ fn shbali_3_005() {
 }
 
 #[test]
-fn shbali_3_006() {
+fn shbali_3_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8756,7 +6810,7 @@ fn shbali_3_006() {
 }
 
 #[test]
-fn shbali_3_007() {
+fn shbali_3_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8769,7 +6823,7 @@ fn shbali_3_007() {
 }
 
 #[test]
-fn shbali_3_008() {
+fn shbali_3_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8782,7 +6836,7 @@ fn shbali_3_008() {
 }
 
 #[test]
-fn shbali_3_009() {
+fn shbali_3_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansBalinese-Regular.ttf",
@@ -8795,7 +6849,7 @@ fn shbali_3_009() {
 }
 
 #[test]
-fn shknda_1_001() {
+fn shknda_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8808,7 +6862,7 @@ fn shknda_1_001() {
 }
 
 #[test]
-fn shknda_1_002() {
+fn shknda_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8821,7 +6875,7 @@ fn shknda_1_002() {
 }
 
 #[test]
-fn shknda_1_003() {
+fn shknda_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8833,7 +6887,7 @@ fn shknda_1_003() {
 }
 
 #[test]
-fn shknda_1_004() {
+fn shknda_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8845,7 +6899,7 @@ fn shknda_1_004() {
 }
 
 #[test]
-fn shknda_1_005() {
+fn shknda_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8857,7 +6911,7 @@ fn shknda_1_005() {
 }
 
 #[test]
-fn shknda_1_006() {
+fn shknda_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8869,7 +6923,7 @@ fn shknda_1_006() {
 }
 
 #[test]
-fn shknda_1_007() {
+fn shknda_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8882,7 +6936,7 @@ fn shknda_1_007() {
 }
 
 #[test]
-fn shknda_1_008() {
+fn shknda_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8895,7 +6949,7 @@ fn shknda_1_008() {
 }
 
 #[test]
-fn shknda_1_009() {
+fn shknda_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8907,7 +6961,7 @@ fn shknda_1_009() {
 }
 
 #[test]
-fn shknda_1_010() {
+fn shknda_1_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8919,7 +6973,7 @@ fn shknda_1_010() {
 }
 
 #[test]
-fn shknda_1_011() {
+fn shknda_1_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8932,7 +6986,7 @@ fn shknda_1_011() {
 }
 
 #[test]
-fn shknda_1_012() {
+fn shknda_1_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8945,7 +6999,7 @@ fn shknda_1_012() {
 }
 
 #[test]
-fn shknda_1_013() {
+fn shknda_1_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8958,7 +7012,7 @@ fn shknda_1_013() {
 }
 
 #[test]
-fn shknda_1_014() {
+fn shknda_1_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8970,7 +7024,7 @@ fn shknda_1_014() {
 }
 
 #[test]
-fn shknda_1_015() {
+fn shknda_1_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8983,7 +7037,7 @@ fn shknda_1_015() {
 }
 
 #[test]
-fn shknda_1_016() {
+fn shknda_1_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -8995,7 +7049,7 @@ fn shknda_1_016() {
 }
 
 #[test]
-fn shknda_1_017() {
+fn shknda_1_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9007,7 +7061,7 @@ fn shknda_1_017() {
 }
 
 #[test]
-fn shknda_1_018() {
+fn shknda_1_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9020,7 +7074,7 @@ fn shknda_1_018() {
 }
 
 #[test]
-fn shknda_1_019() {
+fn shknda_1_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9033,7 +7087,7 @@ fn shknda_1_019() {
 }
 
 #[test]
-fn shknda_1_020() {
+fn shknda_1_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9045,7 +7099,7 @@ fn shknda_1_020() {
 }
 
 #[test]
-fn shknda_1_021() {
+fn shknda_1_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9057,7 +7111,7 @@ fn shknda_1_021() {
 }
 
 #[test]
-fn shknda_1_022() {
+fn shknda_1_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9069,7 +7123,7 @@ fn shknda_1_022() {
 }
 
 #[test]
-fn shknda_1_023() {
+fn shknda_1_024() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9081,7 +7135,7 @@ fn shknda_1_023() {
 }
 
 #[test]
-fn shknda_1_024() {
+fn shknda_1_025() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9093,7 +7147,7 @@ fn shknda_1_024() {
 }
 
 #[test]
-fn shknda_1_025() {
+fn shknda_1_026() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9105,7 +7159,7 @@ fn shknda_1_025() {
 }
 
 #[test]
-fn shknda_1_026() {
+fn shknda_1_027() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9119,7 +7173,7 @@ fn shknda_1_026() {
 }
 
 #[test]
-fn shknda_1_027() {
+fn shknda_1_028() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9132,7 +7186,7 @@ fn shknda_1_027() {
 }
 
 #[test]
-fn shknda_1_028() {
+fn shknda_1_029() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9144,7 +7198,7 @@ fn shknda_1_028() {
 }
 
 #[test]
-fn shknda_1_029() {
+fn shknda_1_030() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9157,7 +7211,7 @@ fn shknda_1_029() {
 }
 
 #[test]
-fn shknda_1_030() {
+fn shknda_1_031() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9170,7 +7224,7 @@ fn shknda_1_030() {
 }
 
 #[test]
-fn shknda_1_031() {
+fn shknda_1_032() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9182,7 +7236,7 @@ fn shknda_1_031() {
 }
 
 #[test]
-fn shknda_1_032() {
+fn shknda_1_033() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9194,7 +7248,7 @@ fn shknda_1_032() {
 }
 
 #[test]
-fn shknda_1_033() {
+fn shknda_1_034() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9206,7 +7260,7 @@ fn shknda_1_033() {
 }
 
 #[test]
-fn shknda_1_034() {
+fn shknda_1_035() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSerifKannada-Regular.ttf",
@@ -9214,20 +7268,6 @@ fn shknda_1_034() {
             "--ned --remove-default-ignorables",
         ),
         "knDHI"
-    );
-}
-
-#[test]
-fn shknda_2_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
-            "\u{0CA8}\u{0CCD}\u{0CA8}\u{0CBE}",
-            "--ned --remove-default-ignorables",
-        ),
-        "gid150|\
-         gid57@1456,0|\
-         gid116@2375,0"
     );
 }
 
@@ -9250,6 +7290,20 @@ fn shknda_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
+            "\u{0CA8}\u{0CCD}\u{0CA8}\u{0CBE}",
+            "--ned --remove-default-ignorables",
+        ),
+        "gid150|\
+         gid57@1456,0|\
+         gid116@2375,0"
+    );
+}
+
+#[test]
+fn shknda_2_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
             "\u{0CA4}\u{0CCD}\u{0CA4}\u{0CBE}",
             "--ned --remove-default-ignorables",
         ),
@@ -9260,7 +7314,7 @@ fn shknda_2_003() {
 }
 
 #[test]
-fn shknda_2_004() {
+fn shknda_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9274,7 +7328,7 @@ fn shknda_2_004() {
 }
 
 #[test]
-fn shknda_2_005() {
+fn shknda_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9290,7 +7344,7 @@ fn shknda_2_005() {
 }
 
 #[test]
-fn shknda_2_006() {
+fn shknda_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9306,7 +7360,7 @@ fn shknda_2_006() {
 }
 
 #[test]
-fn shknda_2_007() {
+fn shknda_2_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9322,7 +7376,7 @@ fn shknda_2_007() {
 }
 
 #[test]
-fn shknda_2_008() {
+fn shknda_2_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9341,7 +7395,7 @@ fn shknda_2_008() {
 }
 
 #[test]
-fn shknda_2_009() {
+fn shknda_2_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9359,7 +7413,7 @@ fn shknda_2_009() {
 }
 
 #[test]
-fn shknda_2_010() {
+fn shknda_2_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9373,7 +7427,7 @@ fn shknda_2_010() {
 }
 
 #[test]
-fn shknda_2_011() {
+fn shknda_2_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9387,7 +7441,7 @@ fn shknda_2_011() {
 }
 
 #[test]
-fn shknda_2_012() {
+fn shknda_2_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9402,7 +7456,7 @@ fn shknda_2_012() {
 }
 
 #[test]
-fn shknda_2_013() {
+fn shknda_2_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9417,7 +7471,7 @@ fn shknda_2_013() {
 }
 
 #[test]
-fn shknda_2_014() {
+fn shknda_2_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9432,7 +7486,7 @@ fn shknda_2_014() {
 }
 
 #[test]
-fn shknda_2_015() {
+fn shknda_2_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9447,7 +7501,7 @@ fn shknda_2_015() {
 }
 
 #[test]
-fn shknda_2_016() {
+fn shknda_2_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9461,7 +7515,7 @@ fn shknda_2_016() {
 }
 
 #[test]
-fn shknda_3_001() {
+fn shknda_3_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9476,7 +7530,7 @@ fn shknda_3_001() {
 }
 
 #[test]
-fn shknda_3_002() {
+fn shknda_3_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9491,7 +7545,7 @@ fn shknda_3_002() {
 }
 
 #[test]
-fn shknda_3_003() {
+fn shknda_3_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9506,7 +7560,7 @@ fn shknda_3_003() {
 }
 
 #[test]
-fn shknda_3_004() {
+fn shknda_3_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9521,7 +7575,7 @@ fn shknda_3_004() {
 }
 
 #[test]
-fn shknda_3_005() {
+fn shknda_3_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9536,7 +7590,7 @@ fn shknda_3_005() {
 }
 
 #[test]
-fn shknda_3_006() {
+fn shknda_3_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9551,7 +7605,7 @@ fn shknda_3_006() {
 }
 
 #[test]
-fn shknda_3_007() {
+fn shknda_3_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9566,7 +7620,7 @@ fn shknda_3_007() {
 }
 
 #[test]
-fn shknda_3_008() {
+fn shknda_3_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9581,7 +7635,7 @@ fn shknda_3_008() {
 }
 
 #[test]
-fn shknda_3_009() {
+fn shknda_3_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9596,7 +7650,7 @@ fn shknda_3_009() {
 }
 
 #[test]
-fn shknda_3_010() {
+fn shknda_3_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9611,7 +7665,7 @@ fn shknda_3_010() {
 }
 
 #[test]
-fn shknda_3_011() {
+fn shknda_3_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9626,7 +7680,7 @@ fn shknda_3_011() {
 }
 
 #[test]
-fn shknda_3_012() {
+fn shknda_3_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9641,7 +7695,7 @@ fn shknda_3_012() {
 }
 
 #[test]
-fn shknda_3_013() {
+fn shknda_3_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9656,7 +7710,7 @@ fn shknda_3_013() {
 }
 
 #[test]
-fn shknda_3_014() {
+fn shknda_3_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9671,7 +7725,7 @@ fn shknda_3_014() {
 }
 
 #[test]
-fn shknda_3_015() {
+fn shknda_3_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9686,7 +7740,7 @@ fn shknda_3_015() {
 }
 
 #[test]
-fn shknda_3_016() {
+fn shknda_3_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9701,7 +7755,7 @@ fn shknda_3_016() {
 }
 
 #[test]
-fn shknda_3_017() {
+fn shknda_3_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9716,7 +7770,7 @@ fn shknda_3_017() {
 }
 
 #[test]
-fn shknda_3_018() {
+fn shknda_3_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9731,7 +7785,7 @@ fn shknda_3_018() {
 }
 
 #[test]
-fn shknda_3_019() {
+fn shknda_3_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9747,7 +7801,7 @@ fn shknda_3_019() {
 }
 
 #[test]
-fn shknda_3_020() {
+fn shknda_3_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9762,7 +7816,7 @@ fn shknda_3_020() {
 }
 
 #[test]
-fn shknda_3_021() {
+fn shknda_3_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9777,7 +7831,7 @@ fn shknda_3_021() {
 }
 
 #[test]
-fn shknda_3_022() {
+fn shknda_3_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9792,7 +7846,7 @@ fn shknda_3_022() {
 }
 
 #[test]
-fn shknda_3_023() {
+fn shknda_3_024() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9807,7 +7861,7 @@ fn shknda_3_023() {
 }
 
 #[test]
-fn shknda_3_024() {
+fn shknda_3_025() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9822,7 +7876,7 @@ fn shknda_3_024() {
 }
 
 #[test]
-fn shknda_3_025() {
+fn shknda_3_026() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9836,7 +7890,7 @@ fn shknda_3_025() {
 }
 
 #[test]
-fn shknda_3_026() {
+fn shknda_3_027() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9850,7 +7904,7 @@ fn shknda_3_026() {
 }
 
 #[test]
-fn shknda_3_027() {
+fn shknda_3_028() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9865,7 +7919,7 @@ fn shknda_3_027() {
 }
 
 #[test]
-fn shknda_3_028() {
+fn shknda_3_029() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9880,7 +7934,7 @@ fn shknda_3_028() {
 }
 
 #[test]
-fn shknda_3_029() {
+fn shknda_3_030() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9895,7 +7949,7 @@ fn shknda_3_029() {
 }
 
 #[test]
-fn shknda_3_030() {
+fn shknda_3_031() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9910,7 +7964,7 @@ fn shknda_3_030() {
 }
 
 #[test]
-fn shknda_3_031() {
+fn shknda_3_032() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/NotoSansKannada-Regular.ttf",
@@ -9925,7 +7979,7 @@ fn shknda_3_031() {
 }
 
 #[test]
-fn shlana_1_001() {
+fn shlana_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -9938,7 +7992,7 @@ fn shlana_1_001() {
 }
 
 #[test]
-fn shlana_1_002() {
+fn shlana_1_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -9951,7 +8005,7 @@ fn shlana_1_002() {
 }
 
 #[test]
-fn shlana_1_003() {
+fn shlana_1_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -9964,7 +8018,7 @@ fn shlana_1_003() {
 }
 
 #[test]
-fn shlana_1_004() {
+fn shlana_1_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -9979,7 +8033,7 @@ fn shlana_1_004() {
 }
 
 #[test]
-fn shlana_1_005() {
+fn shlana_1_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -9993,7 +8047,7 @@ fn shlana_1_005() {
 }
 
 #[test]
-fn shlana_1_006() {
+fn shlana_1_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10006,7 +8060,7 @@ fn shlana_1_006() {
 }
 
 #[test]
-fn shlana_1_007() {
+fn shlana_1_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10020,7 +8074,7 @@ fn shlana_1_007() {
 }
 
 #[test]
-fn shlana_1_008() {
+fn shlana_1_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10033,7 +8087,7 @@ fn shlana_1_008() {
 }
 
 #[test]
-fn shlana_1_009() {
+fn shlana_1_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10046,7 +8100,7 @@ fn shlana_1_009() {
 }
 
 #[test]
-fn shlana_1_010() {
+fn shlana_1_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10059,7 +8113,7 @@ fn shlana_1_010() {
 }
 
 #[test]
-fn shlana_1_011() {
+fn shlana_1_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10072,7 +8126,7 @@ fn shlana_1_011() {
 }
 
 #[test]
-fn shlana_1_012() {
+fn shlana_1_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10086,7 +8140,7 @@ fn shlana_1_012() {
 }
 
 #[test]
-fn shlana_1_013() {
+fn shlana_1_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10100,7 +8154,7 @@ fn shlana_1_013() {
 }
 
 #[test]
-fn shlana_1_014() {
+fn shlana_1_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10113,7 +8167,7 @@ fn shlana_1_014() {
 }
 
 #[test]
-fn shlana_1_015() {
+fn shlana_1_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10127,7 +8181,7 @@ fn shlana_1_015() {
 }
 
 #[test]
-fn shlana_1_016() {
+fn shlana_1_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10140,7 +8194,7 @@ fn shlana_1_016() {
 }
 
 #[test]
-fn shlana_1_017() {
+fn shlana_1_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10153,7 +8207,7 @@ fn shlana_1_017() {
 }
 
 #[test]
-fn shlana_1_018() {
+fn shlana_1_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10166,7 +8220,7 @@ fn shlana_1_018() {
 }
 
 #[test]
-fn shlana_1_019() {
+fn shlana_1_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10179,7 +8233,7 @@ fn shlana_1_019() {
 }
 
 #[test]
-fn shlana_1_020() {
+fn shlana_1_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10193,7 +8247,7 @@ fn shlana_1_020() {
 }
 
 #[test]
-fn shlana_1_021() {
+fn shlana_1_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10206,7 +8260,7 @@ fn shlana_1_021() {
 }
 
 #[test]
-fn shlana_1_022() {
+fn shlana_1_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10220,7 +8274,7 @@ fn shlana_1_022() {
 }
 
 #[test]
-fn shlana_1_023() {
+fn shlana_1_024() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10233,7 +8287,7 @@ fn shlana_1_023() {
 }
 
 #[test]
-fn shlana_1_024() {
+fn shlana_1_025() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10250,7 +8304,7 @@ fn shlana_1_024() {
 }
 
 #[test]
-fn shlana_1_025() {
+fn shlana_1_026() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10266,7 +8320,7 @@ fn shlana_1_025() {
 }
 
 #[test]
-fn shlana_1_026() {
+fn shlana_1_027() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10283,7 +8337,7 @@ fn shlana_1_026() {
 }
 
 #[test]
-fn shlana_1_027() {
+fn shlana_1_028() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10299,7 +8353,7 @@ fn shlana_1_027() {
 }
 
 #[test]
-fn shlana_1_028() {
+fn shlana_1_029() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10314,7 +8368,7 @@ fn shlana_1_028() {
 }
 
 #[test]
-fn shlana_1_029() {
+fn shlana_1_030() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10327,7 +8381,7 @@ fn shlana_1_029() {
 }
 
 #[test]
-fn shlana_1_030() {
+fn shlana_1_031() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10341,7 +8395,7 @@ fn shlana_1_030() {
 }
 
 #[test]
-fn shlana_1_031() {
+fn shlana_1_032() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10356,7 +8410,7 @@ fn shlana_1_031() {
 }
 
 #[test]
-fn shlana_1_032() {
+fn shlana_1_033() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10370,7 +8424,7 @@ fn shlana_1_032() {
 }
 
 #[test]
-fn shlana_1_033() {
+fn shlana_1_034() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10383,7 +8437,7 @@ fn shlana_1_033() {
 }
 
 #[test]
-fn shlana_1_034() {
+fn shlana_1_035() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10401,7 +8455,7 @@ fn shlana_1_034() {
 }
 
 #[test]
-fn shlana_1_035() {
+fn shlana_1_036() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10419,7 +8473,7 @@ fn shlana_1_035() {
 }
 
 #[test]
-fn shlana_1_036() {
+fn shlana_1_037() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10433,7 +8487,7 @@ fn shlana_1_036() {
 }
 
 #[test]
-fn shlana_1_037() {
+fn shlana_1_038() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10446,7 +8500,7 @@ fn shlana_1_037() {
 }
 
 #[test]
-fn shlana_1_038() {
+fn shlana_1_039() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10461,7 +8515,7 @@ fn shlana_1_038() {
 }
 
 #[test]
-fn shlana_1_039() {
+fn shlana_1_040() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10475,7 +8529,7 @@ fn shlana_1_039() {
 }
 
 #[test]
-fn shlana_1_040() {
+fn shlana_1_041() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10488,7 +8542,7 @@ fn shlana_1_040() {
 }
 
 #[test]
-fn shlana_1_041() {
+fn shlana_1_042() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10501,7 +8555,7 @@ fn shlana_1_041() {
 }
 
 #[test]
-fn shlana_1_042() {
+fn shlana_1_043() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10515,7 +8569,7 @@ fn shlana_1_042() {
 }
 
 #[test]
-fn shlana_1_043() {
+fn shlana_1_044() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10532,7 +8586,7 @@ fn shlana_1_043() {
 }
 
 #[test]
-fn shlana_1_044() {
+fn shlana_1_045() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10548,7 +8602,7 @@ fn shlana_1_044() {
 }
 
 #[test]
-fn shlana_1_045() {
+fn shlana_1_046() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10562,7 +8616,7 @@ fn shlana_1_045() {
 }
 
 #[test]
-fn shlana_1_046() {
+fn shlana_1_047() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10575,7 +8629,7 @@ fn shlana_1_046() {
 }
 
 #[test]
-fn shlana_1_047() {
+fn shlana_1_048() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10589,7 +8643,7 @@ fn shlana_1_047() {
 }
 
 #[test]
-fn shlana_1_048() {
+fn shlana_1_049() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10604,7 +8658,7 @@ fn shlana_1_048() {
 }
 
 #[test]
-fn shlana_1_049() {
+fn shlana_1_050() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10618,7 +8672,7 @@ fn shlana_1_049() {
 }
 
 #[test]
-fn shlana_1_050() {
+fn shlana_1_051() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10632,7 +8686,7 @@ fn shlana_1_050() {
 }
 
 #[test]
-fn shlana_1_051() {
+fn shlana_1_052() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10646,7 +8700,7 @@ fn shlana_1_051() {
 }
 
 #[test]
-fn shlana_1_052() {
+fn shlana_1_053() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10659,7 +8713,7 @@ fn shlana_1_052() {
 }
 
 #[test]
-fn shlana_10_001() {
+fn shlana_10_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10672,7 +8726,7 @@ fn shlana_10_001() {
 }
 
 #[test]
-fn shlana_10_002() {
+fn shlana_10_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10685,7 +8739,7 @@ fn shlana_10_002() {
 }
 
 #[test]
-fn shlana_10_003() {
+fn shlana_10_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10700,7 +8754,7 @@ fn shlana_10_003() {
 }
 
 #[test]
-fn shlana_10_004() {
+fn shlana_10_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10716,7 +8770,7 @@ fn shlana_10_004() {
 }
 
 #[test]
-fn shlana_10_005() {
+fn shlana_10_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10742,7 +8796,7 @@ fn shlana_10_005() {
 }
 
 #[test]
-fn shlana_10_006() {
+fn shlana_10_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10759,7 +8813,7 @@ fn shlana_10_006() {
 }
 
 #[test]
-fn shlana_10_007() {
+fn shlana_10_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10774,7 +8828,7 @@ fn shlana_10_007() {
 }
 
 #[test]
-fn shlana_10_008() {
+fn shlana_10_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10792,7 +8846,7 @@ fn shlana_10_008() {
 }
 
 #[test]
-fn shlana_10_009() {
+fn shlana_10_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10807,7 +8861,7 @@ fn shlana_10_009() {
 }
 
 #[test]
-fn shlana_10_010() {
+fn shlana_10_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10823,7 +8877,7 @@ fn shlana_10_010() {
 }
 
 #[test]
-fn shlana_10_011() {
+fn shlana_10_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10840,7 +8894,7 @@ fn shlana_10_011() {
 }
 
 #[test]
-fn shlana_10_012() {
+fn shlana_10_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10858,7 +8912,7 @@ fn shlana_10_012() {
 }
 
 #[test]
-fn shlana_10_013() {
+fn shlana_10_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10874,7 +8928,7 @@ fn shlana_10_013() {
 }
 
 #[test]
-fn shlana_10_014() {
+fn shlana_10_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10891,7 +8945,7 @@ fn shlana_10_014() {
 }
 
 #[test]
-fn shlana_10_015() {
+fn shlana_10_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10908,7 +8962,7 @@ fn shlana_10_015() {
 }
 
 #[test]
-fn shlana_10_016() {
+fn shlana_10_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10929,7 +8983,7 @@ fn shlana_10_016() {
 }
 
 #[test]
-fn shlana_10_017() {
+fn shlana_10_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10949,7 +9003,7 @@ fn shlana_10_017() {
 }
 
 #[test]
-fn shlana_10_018() {
+fn shlana_10_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10966,7 +9020,7 @@ fn shlana_10_018() {
 }
 
 #[test]
-fn shlana_10_019() {
+fn shlana_10_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10983,7 +9037,7 @@ fn shlana_10_019() {
 }
 
 #[test]
-fn shlana_10_020() {
+fn shlana_10_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -10997,7 +9051,7 @@ fn shlana_10_020() {
 }
 
 #[test]
-fn shlana_10_021() {
+fn shlana_10_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11016,7 +9070,7 @@ fn shlana_10_021() {
 }
 
 #[test]
-fn shlana_10_022() {
+fn shlana_10_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11030,7 +9084,7 @@ fn shlana_10_022() {
 }
 
 #[test]
-fn shlana_10_023() {
+fn shlana_10_024() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11045,7 +9099,7 @@ fn shlana_10_023() {
 }
 
 #[test]
-fn shlana_10_024() {
+fn shlana_10_025() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11060,7 +9114,7 @@ fn shlana_10_024() {
 }
 
 #[test]
-fn shlana_10_025() {
+fn shlana_10_026() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11076,7 +9130,7 @@ fn shlana_10_025() {
 }
 
 #[test]
-fn shlana_10_026() {
+fn shlana_10_027() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11091,7 +9145,7 @@ fn shlana_10_026() {
 }
 
 #[test]
-fn shlana_10_027() {
+fn shlana_10_028() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11109,7 +9163,7 @@ fn shlana_10_027() {
 }
 
 #[test]
-fn shlana_10_028() {
+fn shlana_10_029() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11127,7 +9181,7 @@ fn shlana_10_028() {
 }
 
 #[test]
-fn shlana_10_029() {
+fn shlana_10_030() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11145,7 +9199,7 @@ fn shlana_10_029() {
 }
 
 #[test]
-fn shlana_10_030() {
+fn shlana_10_031() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11160,7 +9214,7 @@ fn shlana_10_030() {
 }
 
 #[test]
-fn shlana_10_031() {
+fn shlana_10_032() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11174,7 +9228,7 @@ fn shlana_10_031() {
 }
 
 #[test]
-fn shlana_10_032() {
+fn shlana_10_033() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11190,7 +9244,7 @@ fn shlana_10_032() {
 }
 
 #[test]
-fn shlana_10_033() {
+fn shlana_10_034() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11206,7 +9260,7 @@ fn shlana_10_033() {
 }
 
 #[test]
-fn shlana_10_034() {
+fn shlana_10_035() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11221,7 +9275,7 @@ fn shlana_10_034() {
 }
 
 #[test]
-fn shlana_10_035() {
+fn shlana_10_036() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11237,7 +9291,7 @@ fn shlana_10_035() {
 }
 
 #[test]
-fn shlana_10_036() {
+fn shlana_10_037() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11252,7 +9306,7 @@ fn shlana_10_036() {
 }
 
 #[test]
-fn shlana_10_037() {
+fn shlana_10_038() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11267,7 +9321,7 @@ fn shlana_10_037() {
 }
 
 #[test]
-fn shlana_10_038() {
+fn shlana_10_039() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11285,7 +9339,7 @@ fn shlana_10_038() {
 }
 
 #[test]
-fn shlana_10_039() {
+fn shlana_10_040() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11304,7 +9358,7 @@ fn shlana_10_039() {
 }
 
 #[test]
-fn shlana_10_040() {
+fn shlana_10_041() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11323,7 +9377,7 @@ fn shlana_10_040() {
 }
 
 #[test]
-fn shlana_10_041() {
+fn shlana_10_042() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11338,7 +9392,7 @@ fn shlana_10_041() {
 }
 
 #[test]
-fn shlana_10_042() {
+fn shlana_10_043() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11355,7 +9409,7 @@ fn shlana_10_042() {
 }
 
 #[test]
-fn shlana_10_043() {
+fn shlana_10_044() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11370,7 +9424,7 @@ fn shlana_10_043() {
 }
 
 #[test]
-fn shlana_10_044() {
+fn shlana_10_045() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11393,7 +9447,7 @@ fn shlana_10_044() {
 }
 
 #[test]
-fn shlana_10_045() {
+fn shlana_10_046() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11408,7 +9462,7 @@ fn shlana_10_045() {
 }
 
 #[test]
-fn shlana_10_046() {
+fn shlana_10_047() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11426,7 +9480,7 @@ fn shlana_10_046() {
 }
 
 #[test]
-fn shlana_10_047() {
+fn shlana_10_048() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11442,7 +9496,7 @@ fn shlana_10_047() {
 }
 
 #[test]
-fn shlana_2_001() {
+fn shlana_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11455,7 +9509,7 @@ fn shlana_2_001() {
 }
 
 #[test]
-fn shlana_2_002() {
+fn shlana_2_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11473,7 +9527,7 @@ fn shlana_2_002() {
 }
 
 #[test]
-fn shlana_2_003() {
+fn shlana_2_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11490,7 +9544,7 @@ fn shlana_2_003() {
 }
 
 #[test]
-fn shlana_2_004() {
+fn shlana_2_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11507,7 +9561,7 @@ fn shlana_2_004() {
 }
 
 #[test]
-fn shlana_2_005() {
+fn shlana_2_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11520,7 +9574,7 @@ fn shlana_2_005() {
 }
 
 #[test]
-fn shlana_2_006() {
+fn shlana_2_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11534,7 +9588,7 @@ fn shlana_2_006() {
 }
 
 #[test]
-fn shlana_2_007() {
+fn shlana_2_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11550,7 +9604,7 @@ fn shlana_2_007() {
 }
 
 #[test]
-fn shlana_2_008() {
+fn shlana_2_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11564,7 +9618,7 @@ fn shlana_2_008() {
 }
 
 #[test]
-fn shlana_2_009() {
+fn shlana_2_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11581,7 +9635,7 @@ fn shlana_2_009() {
 }
 
 #[test]
-fn shlana_2_010() {
+fn shlana_2_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11595,7 +9649,7 @@ fn shlana_2_010() {
 }
 
 #[test]
-fn shlana_2_011() {
+fn shlana_2_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11609,7 +9663,7 @@ fn shlana_2_011() {
 }
 
 #[test]
-fn shlana_2_012() {
+fn shlana_2_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11626,7 +9680,7 @@ fn shlana_2_012() {
 }
 
 #[test]
-fn shlana_2_013() {
+fn shlana_2_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11642,7 +9696,7 @@ fn shlana_2_013() {
 }
 
 #[test]
-fn shlana_2_014() {
+fn shlana_2_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11662,7 +9716,7 @@ fn shlana_2_014() {
 }
 
 #[test]
-fn shlana_2_015() {
+fn shlana_2_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11677,7 +9731,7 @@ fn shlana_2_015() {
 }
 
 #[test]
-fn shlana_2_016() {
+fn shlana_2_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11693,7 +9747,7 @@ fn shlana_2_016() {
 }
 
 #[test]
-fn shlana_2_017() {
+fn shlana_2_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11706,7 +9760,7 @@ fn shlana_2_017() {
 }
 
 #[test]
-fn shlana_2_018() {
+fn shlana_2_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11719,7 +9773,7 @@ fn shlana_2_018() {
 }
 
 #[test]
-fn shlana_2_019() {
+fn shlana_2_020() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11733,7 +9787,7 @@ fn shlana_2_019() {
 }
 
 #[test]
-fn shlana_2_020() {
+fn shlana_2_021() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11747,7 +9801,7 @@ fn shlana_2_020() {
 }
 
 #[test]
-fn shlana_2_021() {
+fn shlana_2_022() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11761,7 +9815,7 @@ fn shlana_2_021() {
 }
 
 #[test]
-fn shlana_2_022() {
+fn shlana_2_023() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11777,7 +9831,7 @@ fn shlana_2_022() {
 }
 
 #[test]
-fn shlana_2_023() {
+fn shlana_2_024() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11790,7 +9844,7 @@ fn shlana_2_023() {
 }
 
 #[test]
-fn shlana_2_024() {
+fn shlana_2_025() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11804,7 +9858,7 @@ fn shlana_2_024() {
 }
 
 #[test]
-fn shlana_2_025() {
+fn shlana_2_026() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11818,7 +9872,7 @@ fn shlana_2_025() {
 }
 
 #[test]
-fn shlana_2_026() {
+fn shlana_2_027() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11832,7 +9886,7 @@ fn shlana_2_026() {
 }
 
 #[test]
-fn shlana_2_027() {
+fn shlana_2_028() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11846,7 +9900,7 @@ fn shlana_2_027() {
 }
 
 #[test]
-fn shlana_2_028() {
+fn shlana_2_029() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11860,7 +9914,7 @@ fn shlana_2_028() {
 }
 
 #[test]
-fn shlana_2_029() {
+fn shlana_2_030() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11875,7 +9929,7 @@ fn shlana_2_029() {
 }
 
 #[test]
-fn shlana_2_030() {
+fn shlana_2_031() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11891,7 +9945,7 @@ fn shlana_2_030() {
 }
 
 #[test]
-fn shlana_2_031() {
+fn shlana_2_032() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11906,7 +9960,7 @@ fn shlana_2_031() {
 }
 
 #[test]
-fn shlana_2_032() {
+fn shlana_2_033() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11923,7 +9977,7 @@ fn shlana_2_032() {
 }
 
 #[test]
-fn shlana_2_033() {
+fn shlana_2_034() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11940,7 +9994,7 @@ fn shlana_2_033() {
 }
 
 #[test]
-fn shlana_2_034() {
+fn shlana_2_035() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11956,7 +10010,7 @@ fn shlana_2_034() {
 }
 
 #[test]
-fn shlana_2_035() {
+fn shlana_2_036() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11974,7 +10028,7 @@ fn shlana_2_035() {
 }
 
 #[test]
-fn shlana_2_036() {
+fn shlana_2_037() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -11992,7 +10046,7 @@ fn shlana_2_036() {
 }
 
 #[test]
-fn shlana_2_037() {
+fn shlana_2_038() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12007,7 +10061,7 @@ fn shlana_2_037() {
 }
 
 #[test]
-fn shlana_3_001() {
+fn shlana_3_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12026,7 +10080,7 @@ fn shlana_3_001() {
 }
 
 #[test]
-fn shlana_3_002() {
+fn shlana_3_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12045,7 +10099,7 @@ fn shlana_3_002() {
 }
 
 #[test]
-fn shlana_3_003() {
+fn shlana_3_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12064,7 +10118,7 @@ fn shlana_3_003() {
 }
 
 #[test]
-fn shlana_3_004() {
+fn shlana_3_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12080,7 +10134,7 @@ fn shlana_3_004() {
 }
 
 #[test]
-fn shlana_3_005() {
+fn shlana_3_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12098,7 +10152,7 @@ fn shlana_3_005() {
 }
 
 #[test]
-fn shlana_3_006() {
+fn shlana_3_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12112,7 +10166,7 @@ fn shlana_3_006() {
 }
 
 #[test]
-fn shlana_3_007() {
+fn shlana_3_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12127,7 +10181,7 @@ fn shlana_3_007() {
 }
 
 #[test]
-fn shlana_3_008() {
+fn shlana_3_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12143,7 +10197,7 @@ fn shlana_3_008() {
 }
 
 #[test]
-fn shlana_3_009() {
+fn shlana_3_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12160,7 +10214,7 @@ fn shlana_3_009() {
 }
 
 #[test]
-fn shlana_3_010() {
+fn shlana_3_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12173,7 +10227,7 @@ fn shlana_3_010() {
 }
 
 #[test]
-fn shlana_3_011() {
+fn shlana_3_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12186,7 +10240,7 @@ fn shlana_3_011() {
 }
 
 #[test]
-fn shlana_3_012() {
+fn shlana_3_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12203,7 +10257,7 @@ fn shlana_3_012() {
 }
 
 #[test]
-fn shlana_3_013() {
+fn shlana_3_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12223,7 +10277,7 @@ fn shlana_3_013() {
 }
 
 #[test]
-fn shlana_4_001() {
+fn shlana_4_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12240,7 +10294,7 @@ fn shlana_4_001() {
 }
 
 #[test]
-fn shlana_4_002() {
+fn shlana_4_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12256,7 +10310,7 @@ fn shlana_4_002() {
 }
 
 #[test]
-fn shlana_4_003() {
+fn shlana_4_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12271,7 +10325,7 @@ fn shlana_4_003() {
 }
 
 #[test]
-fn shlana_5_001() {
+fn shlana_5_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12284,7 +10338,7 @@ fn shlana_5_001() {
 }
 
 #[test]
-fn shlana_5_002() {
+fn shlana_5_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12298,7 +10352,7 @@ fn shlana_5_002() {
 }
 
 #[test]
-fn shlana_5_003() {
+fn shlana_5_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12312,7 +10366,7 @@ fn shlana_5_003() {
 }
 
 #[test]
-fn shlana_5_004() {
+fn shlana_5_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12325,7 +10379,7 @@ fn shlana_5_004() {
 }
 
 #[test]
-fn shlana_5_005() {
+fn shlana_5_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12341,7 +10395,7 @@ fn shlana_5_005() {
 }
 
 #[test]
-fn shlana_5_006() {
+fn shlana_5_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12355,7 +10409,7 @@ fn shlana_5_006() {
 }
 
 #[test]
-fn shlana_5_007() {
+fn shlana_5_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12372,7 +10426,7 @@ fn shlana_5_007() {
 }
 
 #[test]
-fn shlana_5_008() {
+fn shlana_5_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12387,7 +10441,7 @@ fn shlana_5_008() {
 }
 
 #[test]
-fn shlana_5_009() {
+fn shlana_5_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12401,7 +10455,7 @@ fn shlana_5_009() {
 }
 
 #[test]
-fn shlana_5_010() {
+fn shlana_5_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12419,7 +10473,7 @@ fn shlana_5_010() {
 }
 
 #[test]
-fn shlana_5_011() {
+fn shlana_5_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12437,7 +10491,7 @@ fn shlana_5_011() {
 }
 
 #[test]
-fn shlana_5_012() {
+fn shlana_5_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12450,7 +10504,7 @@ fn shlana_5_012() {
 }
 
 #[test]
-fn shlana_5_013() {
+fn shlana_5_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12466,7 +10520,7 @@ fn shlana_5_013() {
 }
 
 #[test]
-fn shlana_6_001() {
+fn shlana_6_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12481,7 +10535,7 @@ fn shlana_6_001() {
 }
 
 #[test]
-fn shlana_6_002() {
+fn shlana_6_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12504,7 +10558,7 @@ fn shlana_6_002() {
 }
 
 #[test]
-fn shlana_6_003() {
+fn shlana_6_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12520,7 +10574,7 @@ fn shlana_6_003() {
 }
 
 #[test]
-fn shlana_6_004() {
+fn shlana_6_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12537,7 +10591,7 @@ fn shlana_6_004() {
 }
 
 #[test]
-fn shlana_6_005() {
+fn shlana_6_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12553,7 +10607,7 @@ fn shlana_6_005() {
 }
 
 #[test]
-fn shlana_6_006() {
+fn shlana_6_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12570,7 +10624,7 @@ fn shlana_6_006() {
 }
 
 #[test]
-fn shlana_6_007() {
+fn shlana_6_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12587,7 +10641,7 @@ fn shlana_6_007() {
 }
 
 #[test]
-fn shlana_7_001() {
+fn shlana_7_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12603,7 +10657,7 @@ fn shlana_7_001() {
 }
 
 #[test]
-fn shlana_7_002() {
+fn shlana_7_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12617,7 +10671,7 @@ fn shlana_7_002() {
 }
 
 #[test]
-fn shlana_7_003() {
+fn shlana_7_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12634,7 +10688,7 @@ fn shlana_7_003() {
 }
 
 #[test]
-fn shlana_7_004() {
+fn shlana_7_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12650,7 +10704,7 @@ fn shlana_7_004() {
 }
 
 #[test]
-fn shlana_7_005() {
+fn shlana_7_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12666,7 +10720,7 @@ fn shlana_7_005() {
 }
 
 #[test]
-fn shlana_7_006() {
+fn shlana_7_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12683,7 +10737,7 @@ fn shlana_7_006() {
 }
 
 #[test]
-fn shlana_7_007() {
+fn shlana_7_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12699,7 +10753,7 @@ fn shlana_7_007() {
 }
 
 #[test]
-fn shlana_7_008() {
+fn shlana_7_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12714,7 +10768,7 @@ fn shlana_7_008() {
 }
 
 #[test]
-fn shlana_7_009() {
+fn shlana_7_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12730,7 +10784,7 @@ fn shlana_7_009() {
 }
 
 #[test]
-fn shlana_7_010() {
+fn shlana_7_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12744,7 +10798,7 @@ fn shlana_7_010() {
 }
 
 #[test]
-fn shlana_7_011() {
+fn shlana_7_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12760,7 +10814,7 @@ fn shlana_7_011() {
 }
 
 #[test]
-fn shlana_7_012() {
+fn shlana_7_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12776,7 +10830,7 @@ fn shlana_7_012() {
 }
 
 #[test]
-fn shlana_7_013() {
+fn shlana_7_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12794,7 +10848,7 @@ fn shlana_7_013() {
 }
 
 #[test]
-fn shlana_7_014() {
+fn shlana_7_015() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12810,7 +10864,7 @@ fn shlana_7_014() {
 }
 
 #[test]
-fn shlana_7_015() {
+fn shlana_7_016() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12826,7 +10880,7 @@ fn shlana_7_015() {
 }
 
 #[test]
-fn shlana_7_016() {
+fn shlana_7_017() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12839,7 +10893,7 @@ fn shlana_7_016() {
 }
 
 #[test]
-fn shlana_7_017() {
+fn shlana_7_018() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12857,7 +10911,7 @@ fn shlana_7_017() {
 }
 
 #[test]
-fn shlana_7_018() {
+fn shlana_7_019() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12874,7 +10928,7 @@ fn shlana_7_018() {
 }
 
 #[test]
-fn shlana_8_001() {
+fn shlana_8_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12890,7 +10944,7 @@ fn shlana_8_001() {
 }
 
 #[test]
-fn shlana_8_002() {
+fn shlana_8_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12907,7 +10961,7 @@ fn shlana_8_002() {
 }
 
 #[test]
-fn shlana_8_003() {
+fn shlana_8_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12921,7 +10975,7 @@ fn shlana_8_003() {
 }
 
 #[test]
-fn shlana_8_004() {
+fn shlana_8_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12936,7 +10990,7 @@ fn shlana_8_004() {
 }
 
 #[test]
-fn shlana_8_005() {
+fn shlana_8_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12957,7 +11011,7 @@ fn shlana_8_005() {
 }
 
 #[test]
-fn shlana_8_006() {
+fn shlana_8_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12974,7 +11028,7 @@ fn shlana_8_006() {
 }
 
 #[test]
-fn shlana_8_007() {
+fn shlana_8_008() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -12991,7 +11045,7 @@ fn shlana_8_007() {
 }
 
 #[test]
-fn shlana_8_008() {
+fn shlana_8_009() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13005,7 +11059,7 @@ fn shlana_8_008() {
 }
 
 #[test]
-fn shlana_8_009() {
+fn shlana_8_010() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13020,7 +11074,7 @@ fn shlana_8_009() {
 }
 
 #[test]
-fn shlana_8_010() {
+fn shlana_8_011() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13034,7 +11088,7 @@ fn shlana_8_010() {
 }
 
 #[test]
-fn shlana_8_011() {
+fn shlana_8_012() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13049,7 +11103,7 @@ fn shlana_8_011() {
 }
 
 #[test]
-fn shlana_8_012() {
+fn shlana_8_013() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13064,7 +11118,7 @@ fn shlana_8_012() {
 }
 
 #[test]
-fn shlana_8_013() {
+fn shlana_8_014() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13078,7 +11132,7 @@ fn shlana_8_013() {
 }
 
 #[test]
-fn shlana_9_001() {
+fn shlana_9_002() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13094,7 +11148,7 @@ fn shlana_9_001() {
 }
 
 #[test]
-fn shlana_9_002() {
+fn shlana_9_003() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13109,7 +11163,7 @@ fn shlana_9_002() {
 }
 
 #[test]
-fn shlana_9_003() {
+fn shlana_9_004() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13124,7 +11178,7 @@ fn shlana_9_003() {
 }
 
 #[test]
-fn shlana_9_004() {
+fn shlana_9_005() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13140,7 +11194,7 @@ fn shlana_9_004() {
 }
 
 #[test]
-fn shlana_9_005() {
+fn shlana_9_006() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",
@@ -13154,7 +11208,7 @@ fn shlana_9_005() {
 }
 
 #[test]
-fn shlana_9_006() {
+fn shlana_9_007() {
     assert_eq!(
         shape(
             "tests/fonts/text-rendering-tests/TestShapeLana.ttf",

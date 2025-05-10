@@ -442,6 +442,8 @@ pub(crate) fn _hb_grapheme_group_func(_: &hb_glyph_info_t, b: &hb_glyph_info_t) 
 }
 
 pub fn _hb_ot_layout_reverse_graphemes(buffer: &mut hb_buffer_t) {
+    // MONOTONE_GRAPHEMES was already applied and is taken care of by _hb_grapheme_group_func.
+    // So we just check for MONOTONE_CHARACTERS here.
     buffer.reverse_groups(
         _hb_grapheme_group_func,
         buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS,
@@ -478,6 +480,20 @@ pub(crate) fn _hb_glyph_info_is_zwj(info: &hb_glyph_info_t) -> bool {
 //       return;
 //     info->unicode_props() ^= UPROPS_MASK_Cf_ZWNJ | UPROPS_MASK_Cf_ZWJ;
 //   }
+
+#[inline]
+pub(crate) fn _hb_glyph_info_is_aat_deleted(info: &hb_glyph_info_t) -> bool {
+    _hb_glyph_info_is_unicode_format(info)
+        && (info.unicode_props() & UnicodeProps::CF_AAT_DELETED.bits() != 0)
+}
+
+#[inline]
+pub(crate) fn _hb_glyph_info_set_aat_deleted(info: &mut hb_glyph_info_t) {
+    _hb_glyph_info_set_general_category(info, hb_unicode_general_category_t::Format);
+    info.set_unicode_props(
+        info.unicode_props() | UnicodeProps::CF_AAT_DELETED.bits() | UnicodeProps::HIDDEN.bits(),
+    );
+}
 
 //   /* lig_props: aka lig_id / lig_comp
 //    *
