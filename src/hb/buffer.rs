@@ -1068,6 +1068,8 @@ impl hb_buffer_t {
         interior: Option<bool>,
         from_out_buffer: Option<bool>,
     ) {
+        // If the range is not specified, ie. whole buffer, allow it.
+        // But if range *is* specified, reject if range is too large.
         if start.is_some() && end.is_some() {
             if end.unwrap().wrapping_sub(start.unwrap()) > 255 {
                 return;

@@ -65,38 +65,32 @@ impl BufferClusterLevel {
     #[inline]
     fn new(level: u32) -> Self {
         match level {
-            0 => BufferClusterLevel::MonotoneGraphemes,
-            1 => BufferClusterLevel::MonotoneCharacters,
-            2 => BufferClusterLevel::Characters,
-            3 => BufferClusterLevel::Graphemes,
-            _ => BufferClusterLevel::MonotoneGraphemes,
+            0 => Self::MonotoneGraphemes,
+            1 => Self::MonotoneCharacters,
+            2 => Self::Characters,
+            3 => Self::Graphemes,
+            _ => Self::MonotoneGraphemes,
         }
     }
     #[inline]
     fn is_monotone(self) -> bool {
         match self {
-            BufferClusterLevel::MonotoneGraphemes => true,
-            BufferClusterLevel::MonotoneCharacters => true,
-            BufferClusterLevel::Characters => false,
-            BufferClusterLevel::Graphemes => false,
+            Self::MonotoneGraphemes | Self::MonotoneCharacters => true,
+            _ => false,
         }
     }
     #[inline]
     fn is_graphemes(self) -> bool {
         match self {
-            BufferClusterLevel::MonotoneGraphemes => true,
-            BufferClusterLevel::MonotoneCharacters => false,
-            BufferClusterLevel::Characters => false,
-            BufferClusterLevel::Graphemes => true,
+            Self::MonotoneGraphemes | Self::Graphemes => true,
+            _ => false,
         }
     }
     #[inline]
     fn _is_characters(self) -> bool {
         match self {
-            BufferClusterLevel::MonotoneGraphemes => false,
-            BufferClusterLevel::MonotoneCharacters => true,
-            BufferClusterLevel::Characters => true,
-            BufferClusterLevel::Graphemes => false,
+            Self::MonotoneCharacters | Self::Characters => true,
+            _ => false,
         }
     }
 }
