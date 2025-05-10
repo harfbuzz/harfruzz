@@ -385,7 +385,7 @@ fn apply_subtable(kind: &morx::SubtableKind, ac: &mut hb_aat_apply_context_t) {
                     }
                 }
 
-                if let Some(replacement) = lookup.value(ac.buffer.cur(i).as_glyph().ttfp_gid()) {
+                if let Some(replacement) = lookup.value(ac.buffer.info[i].as_glyph().ttfp_gid()) {
                     ac.replace_glyph_inplace(i, replacement.into());
                 }
             }
