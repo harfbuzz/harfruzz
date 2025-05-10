@@ -1523,7 +1523,8 @@ bitflags::bitflags! {
         // If GEN_CAT=FORMAT, top byte masks:
         const CF_ZWJ            = 0x0100;
         const CF_ZWNJ           = 0x0200;
-        const CF_VS           = 0x0400;
+        const CF_VS             = 0x0400;
+        const CF_AAT_DELETED    = 0x0800;
     }
 }
 
