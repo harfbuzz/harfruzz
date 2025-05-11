@@ -247,8 +247,7 @@ impl<'a> matcher_t<'a> {
             matching: None,
             lookup_props: ctx.lookup_props,
             // Ignore ZWNJ if we are matching GPOS, or matching GSUB context and asked to.
-            ignore_zwnj: ctx.table_index == TableIndex::GPOS
-                || (context_match && ctx.auto_zwnj),
+            ignore_zwnj: ctx.table_index == TableIndex::GPOS || (context_match && ctx.auto_zwnj),
             // Ignore ZWJ if we are matching context, or asked to.
             ignore_zwj: context_match || ctx.auto_zwj,
             // Ignore hidden glyphs (like CGJ) during GPOS.
@@ -299,6 +298,12 @@ impl<'a> matcher_t<'a> {
     }
 }
 
+// In harfbuzz, skipping iterator works quite differently than it works here. In harfbuzz,
+// hb_ot_apply_context contains a skipping iterator that itself contains references to font
+// and buffer, meaning that we multiple borrows issue. Due to ownership rules in Rust,
+// we cannot copy this approach. Because of this, we basically create a new skipping iterator
+// when needed, and we do not have `init` method that exist in harfbuzz. This has a performance
+// cost, and makes backporting related changes very hard, but it seems unavoidable, unfortunately.
 pub struct skipping_iterator_t<'a, 'b> {
     buffer: &'a hb_buffer_t,
     face: &'a hb_font_t<'b>,
