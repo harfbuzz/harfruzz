@@ -1,7 +1,7 @@
 use super::common::TagExt;
 use super::ot_layout::TableIndex;
 use crate::hb::hb_tag_t;
-use lookup::{LookupCache, LookupInfo};
+use lookup::{LookupCache, LookupInfo, SubtableCache};
 use read_fonts::{
     tables::{
         gdef::Gdef,
@@ -57,9 +57,7 @@ impl<'a> crate::hb::ot_layout::LayoutTable for GsubTable<'a> {
     const INDEX: TableIndex = TableIndex::GSUB;
     const IN_PLACE: bool = false;
 
-    type Lookup = LookupInfo;
-
-    fn get_lookup(&self, index: u16) -> Option<&Self::Lookup> {
+    fn get_lookup(&self, index: u16) -> Option<&LookupInfo> {
         let lookup = self.lookups.get(index)?;
         (lookup.subtables_count > 0).then_some(lookup)
     }
@@ -75,9 +73,7 @@ impl<'a> crate::hb::ot_layout::LayoutTable for GposTable<'a> {
     const INDEX: TableIndex = TableIndex::GPOS;
     const IN_PLACE: bool = true;
 
-    type Lookup = LookupInfo;
-
-    fn get_lookup(&self, index: u16) -> Option<&Self::Lookup> {
+    fn get_lookup(&self, index: u16) -> Option<&LookupInfo> {
         let lookup = self.lookups.get(index)?;
         (lookup.subtables_count > 0).then_some(lookup)
     }
@@ -154,6 +150,38 @@ impl<'a> OtTables<'a> {
             .map(|coverage| coverage.get(glyph_id).is_some())
             .unwrap_or(false)
     }
+
+    pub fn table_data_and_lookups(
+        &self,
+        table_index: TableIndex,
+    ) -> Option<(&'a [u8], &'a LookupCache)> {
+        if table_index == TableIndex::GSUB {
+            let table = self.gsub.as_ref()?;
+            Some((table.table.offset_data().as_bytes(), &table.lookups))
+        } else {
+            let table = self.gpos.as_ref()?;
+            Some((table.table.offset_data().as_bytes(), &table.lookups))
+        }
+    }
+
+    pub fn subtable_cache(
+        &self,
+        table_index: TableIndex,
+        lookup: LookupInfo,
+    ) -> Option<SubtableCache<'a>> {
+        let (table_data, lookups) = self.table_data_and_lookups(table_index)?;
+        Some(SubtableCache::new(table_data, lookups, lookup))
+    }
+
+    pub fn subtable_cache_for_index(
+        &self,
+        table_index: TableIndex,
+        lookup_index: u16,
+    ) -> Option<SubtableCache<'a>> {
+        let (table_data, lookups) = self.table_data_and_lookups(table_index)?;
+        let lookup = lookups.get(lookup_index)?;
+        Some(SubtableCache::new(table_data, lookups, lookup.clone()))
+    }    
 
     pub(super) fn resolve_anchor(&self, anchor: &AnchorTable) -> (i32, i32) {
         let mut x = anchor.x_coordinate() as i32;

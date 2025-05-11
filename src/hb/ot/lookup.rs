@@ -1,6 +1,5 @@
 use crate::hb::{
     hb_font_t,
-    ot_layout::LayoutLookup,
     ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext, OT::hb_ot_apply_context_t},
     set_digest::hb_set_digest_t,
 };
@@ -209,6 +208,17 @@ impl LookupCache {
     pub fn subtables(&self, entry: &LookupInfo) -> Option<&[SubtableInfo]> {
         self.subtables.get(entry.subtables_range())
     }
+
+    fn load_subtable<'a>(
+        &self,
+        lookup: &LookupInfo,
+        idx: usize,
+        table_data: &'a [u8],
+    ) -> Option<Subtable<'a>> {
+        self.subtables(lookup)
+            .and_then(|infos| infos.get(idx))
+            .and_then(|info| info.materialize(table_data).ok())
+    }
 }
 
 fn is_reversed(table_data: FontData, lookup: &Lookup<()>, lookup_offset: usize) -> Option<bool> {
@@ -280,47 +290,35 @@ impl LookupInfo {
         let start = self.subtables_start as usize;
         start..start + self.subtables_count as usize
     }
-}
 
-impl LayoutLookup for LookupInfo {
-    fn props(&self) -> u32 {
+    pub fn props(&self) -> u32 {
         self.props
     }
 
-    fn is_reverse(&self) -> bool {
+    pub fn is_reverse(&self) -> bool {
         self.is_reversed
     }
 
-    fn digest(&self) -> &crate::hb::set_digest::hb_set_digest_t {
+    pub fn digest(&self) -> &crate::hb::set_digest::hb_set_digest_t {
         &self.digest
     }
 }
 
-impl Apply for LookupInfo {
-    fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
+impl LookupInfo {
+    pub(crate) fn apply<'b>(
+        &self,
+        ctx: &mut hb_ot_apply_context_t<'_, 'b>,
+        cache: &mut SubtableCache<'b>,
+    ) -> Option<()> {
         let glyph = ctx.buffer.cur(0).as_glyph();
         if !self.digest.may_have_glyph(glyph) {
             return None;
         }
-        let (table_data, lookups) = if self.is_subst {
-            let table = ctx.face.ot_tables.gsub.as_ref()?;
-            (table.table.offset_data().as_bytes(), &table.lookups)
-        } else {
-            let table = ctx.face.ot_tables.gpos.as_ref()?;
-            (table.table.offset_data().as_bytes(), &table.lookups)
-        };
-        let subtables = lookups.subtables(self)?;
-        for subtable_info in subtables {
+        for (subtable_idx, subtable_info) in cache.subtable_infos().iter().enumerate() {
             if !subtable_info.digest.may_have_glyph(glyph) {
                 continue;
             }
-            // if subtable_info
-            //     .primary_coverage(table_data, skrifa::GlyphId::from(glyph.0))
-            //     .is_none()
-            // {
-            //     continue;
-            // }
-            let Ok(subtable) = subtable_info.materialize(table_data) else {
+            let Some(subtable) = cache.get(subtable_idx) else {
                 continue;
             };
             let result = match subtable {
@@ -551,4 +549,66 @@ impl<'a> Subtable<'a> {
             }
         }
     }
+}
+
+const SUBTABLE_CACHE_SIZE: usize = 16;
+
+pub struct SubtableCache<'a> {
+    table_data: &'a [u8],
+    lookups: &'a LookupCache,
+    lookup: LookupInfo,
+    subtable_infos: &'a [SubtableInfo],
+    subtables: [SubtableCacheEntry<'a>; SUBTABLE_CACHE_SIZE],
+}
+
+impl<'a> SubtableCache<'a> {
+    pub fn new(table_data: &'a [u8], lookups: &'a LookupCache, lookup: LookupInfo) -> Self {
+        let subtable_infos = lookups.subtables(&lookup).unwrap_or_default();
+        Self {
+            table_data,
+            lookups,
+            lookup,
+            subtable_infos,
+            subtables: [const { SubtableCacheEntry::Vacant }; SUBTABLE_CACHE_SIZE],
+        }
+    }
+
+    pub fn lookup(&self) -> &LookupInfo {
+        &self.lookup
+    }
+
+    pub fn subtable_infos(&self) -> &'a [SubtableInfo] {
+        self.subtable_infos
+    }
+
+    pub fn get(&mut self, idx: usize) -> Option<Subtable<'a>> {
+        if idx < SUBTABLE_CACHE_SIZE {
+            let entry = self.subtables.get_mut(idx).unwrap();
+            match entry {
+                SubtableCacheEntry::Vacant => {
+                    if let Some(subtable) =
+                        self.lookups
+                            .load_subtable(&self.lookup, idx, self.table_data)
+                    {
+                        *entry = SubtableCacheEntry::Present(subtable.clone());
+                        Some(subtable)
+                    } else {
+                        *entry = SubtableCacheEntry::Error;
+                        None
+                    }
+                }
+                SubtableCacheEntry::Present(subtable) => Some(subtable.clone()),
+                SubtableCacheEntry::Error => None,
+            }
+        } else {
+            self.lookups
+                .load_subtable(&self.lookup, idx, self.table_data)
+        }
+    }
+}
+
+enum SubtableCacheEntry<'a> {
+    Vacant,
+    Present(Subtable<'a>),
+    Error,
 }
