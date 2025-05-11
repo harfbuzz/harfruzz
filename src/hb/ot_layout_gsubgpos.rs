@@ -242,6 +242,28 @@ impl<'a> Default for matcher_t<'a> {
 }
 
 impl<'a> matcher_t<'a> {
+    fn new<'b>(ctx: &hb_ot_apply_context_t<'a, 'b>, context_match: bool) -> Self {
+        matcher_t {
+            matching: None,
+            lookup_props: ctx.lookup_props,
+            // Ignore ZWNJ if we are matching GPOS, or matching GSUB context and asked to.
+            ignore_zwnj: ctx.table_index == TableIndex::GPOS
+                || (context_match && ctx.auto_zwnj),
+            // Ignore ZWJ if we are matching context, or asked to.
+            ignore_zwj: context_match || ctx.auto_zwj,
+            // Ignore hidden glyphs (like CGJ) during GPOS.
+            ignore_hidden: ctx.table_index == TableIndex::GPOS,
+            mask: if context_match {
+                u32::MAX
+            } else {
+                ctx.lookup_mask()
+            },
+            /* Per syllable matching is only for GSUB. */
+            per_syllable: ctx.table_index == TableIndex::GSUB && ctx.per_syllable,
+            syllable: 0,
+        }
+    }
+
     fn may_match(&self, info: &hb_glyph_info_t, glyph_data: u16) -> may_match_t {
         if (info.mask & self.mask) == 0
             || (self.per_syllable && self.syllable != 0 && self.syllable != info.syllable())
@@ -294,26 +316,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
             glyph_data: 0,
             buf_len: ctx.buffer.len,
             buf_idx: 0,
-
-            matcher: matcher_t {
-                matching: None,
-                lookup_props: ctx.lookup_props,
-                // Ignore ZWNJ if we are matching GPOS, or matching GSUB context and asked to.
-                ignore_zwnj: ctx.table_index == TableIndex::GPOS
-                    || (context_match && ctx.auto_zwnj),
-                // Ignore ZWJ if we are matching context, or asked to.
-                ignore_zwj: context_match || ctx.auto_zwj,
-                // Ignore hidden glyphs (like CGJ) during GPOS.
-                ignore_hidden: ctx.table_index == TableIndex::GPOS,
-                mask: if context_match {
-                    u32::MAX
-                } else {
-                    ctx.lookup_mask()
-                },
-                /* Per syllable matching is only for GSUB. */
-                per_syllable: ctx.table_index == TableIndex::GSUB && ctx.per_syllable,
-                syllable: 0,
-            },
+            matcher: matcher_t::new(ctx, context_match),
         }
     }
 
