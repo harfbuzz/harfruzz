@@ -36,12 +36,12 @@ macro_rules! simple_bench {
             #[bench]
             fn hr(bencher: &mut Bencher) {
                 let font_data = std::fs::read($font_path).unwrap();
+                let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
+                let shaper_font = harfruzz::ShaperFont::new(&font);
+                let shaper = shaper_font.shaper(&font, &[]);
                 let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
                 bencher.iter(|| {
                     test::black_box({
-                        let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
-                        let shaper_font = harfruzz::ShaperFont::new(&font);
-                        let shaper = shaper_font.shaper(&font, &[]);
                         let mut buffer = harfruzz::UnicodeBuffer::new();
                         buffer.push_str(&text);
                         buffer.reset_clusters();
@@ -54,11 +54,11 @@ macro_rules! simple_bench {
             #[bench]
             fn hb(bencher: &mut Bencher) {
                 let font_data = std::fs::read($font_path).unwrap();
+                let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
+                let font = harfbuzz_rs::Font::new(face);
                 let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
                 bencher.iter(|| {
                     test::black_box({
-                        let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
-                        let font = harfbuzz_rs::Font::new(face);
                         let buffer = harfbuzz_rs::UnicodeBuffer::new().add_str(&text);
                         harfbuzz_rs::shape(&font, buffer, &[])
                     });
