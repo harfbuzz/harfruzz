@@ -57,7 +57,6 @@ macro_rules! simple_bench {
                         let shaper = shaper_font.shaper(&font, &coords);
                         let mut buffer = harfruzz::UnicodeBuffer::new();
                         buffer.push_str(&text);
-                        buffer.reset_clusters();
                         buffer.guess_segment_properties();
                         let shape_plan = harfruzz::ShapePlan::new(&shaper, buffer.direction(), Some(buffer.script()), buffer.language().as_ref(), &[]);
                         harfruzz::shape_with_plan(&shaper, &shape_plan, buffer)
@@ -106,7 +105,6 @@ macro_rules! simple_bench {
                     test::black_box({
                         let mut filled_buffer = buffer.take().unwrap();
                         filled_buffer.push_str(&text);
-                        filled_buffer.reset_clusters();
                         let glyph_buffer = harfruzz::shape_with_plan(&shaper, &shape_plan, filled_buffer);
                         buffer = Some(glyph_buffer.clear());
                     });
