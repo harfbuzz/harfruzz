@@ -262,9 +262,7 @@ fn preprocess_text_hangul(_: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut
                     end = start + 2;
                 }
 
-                if buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES {
-                    buffer.merge_out_clusters(start, end);
-                }
+                buffer.merge_out_clusters(start, end);
 
                 continue;
             }
@@ -325,9 +323,7 @@ fn preprocess_text_hangul(_: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut
                         buffer.out_info_mut()[start + 2].set_hangul_shaping_feature(TJMO);
                     }
 
-                    if buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES {
-                        buffer.merge_out_clusters(start, end);
-                    }
+                    buffer.merge_out_clusters(start, end);
 
                     continue;
                 } else if tindex == 0 && buffer.idx + 1 > buffer.len && is_t(buffer.cur(1).glyph_id)

@@ -6,6 +6,8 @@ use read_fonts::FontData;
 
 use super::Value;
 
+// TODO: HarfBuzz uses two class caches, for left and right, as well as coverage.
+
 impl Apply for PairPosFormat1<'_> {
     fn apply(&self, ctx: &mut hb_ot_apply_context_t) -> Option<()> {
         let first_glyph = ctx.buffer.cur(0).as_glyph();

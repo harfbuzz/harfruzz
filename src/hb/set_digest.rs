@@ -59,7 +59,7 @@ impl hb_set_digest_t {
         let mut changed = false;
         for i in 0..N {
             let shift = HB_SET_DIGEST_SHIFTS[i] as mask_t;
-            if (b >> shift) - (a >> shift) >= MB1 as mask_t {
+            if (b >> shift).wrapping_sub(a >> shift) >= MB1 as mask_t {
                 self.masks[i] = ALL;
             } else {
                 let ma = ONE << ((a >> shift) & MB1 as mask_t);
@@ -142,6 +142,7 @@ mod tests {
     #[test]
     fn test_range_2() {
         let mut set = hb_set_digest_t::new();
+        set.add_range(GlyphId::new(20), GlyphId::new(15));
         set.add_range(GlyphId::new(15), GlyphId::new(20));
         for gid in 15..=20 {
             assert!(set.may_have_glyph(GlyphId::new(gid)));

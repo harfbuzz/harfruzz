@@ -1,6 +1,5 @@
 use super::aat_layout::*;
 use super::aat_map::{hb_aat_map_builder_t, hb_aat_map_t, range_flags_t};
-use super::buffer::{hb_buffer_t, UnicodeProps};
 use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
 use crate::hb::ot_layout::MAX_CONTEXT_LENGTH;
@@ -11,7 +10,14 @@ use read_fonts::tables::morx::{
 };
 use read_fonts::types::{BigEndian, FixedSize, GlyphId16};
 
-// TODO: Use set_digest, similarly to how it's used in harfbuzz.
+// TODO: Use class cache, similarly to how it's used in harfbuzz.
+// See https://github.com/harfbuzz/harfbuzz/pull/5031
+
+// TODO: [morx] Blocklist dysfunctional morx table of AALMAGHRIBI.ttf font
+// HarfBuzz commit 1e629c35113e2460fd4a77b4fa9ae3ff6ec876ba
+
+// TODO: [morx] Only collect glyphs that can initiate action in the machine
+// https://github.com/harfbuzz/harfbuzz/pull/5041
 
 // Chain::compile_flags in harfbuzz
 pub fn compile_flags(
@@ -257,6 +263,7 @@ fn drive<T: bytemuck::AnyBitPattern + FixedSize + core::fmt::Debug>(
         //
         //   https://github.com/harfbuzz/harfbuzz/issues/2860
 
+        // TODO HarfBuzz doesn't use this lambda; inlines the logic.
         let is_safe_to_break_extra = || {
             // 2c
             let wouldbe_entry = match machine.entry(START_OF_TEXT, class) {
@@ -265,7 +272,7 @@ fn drive<T: bytemuck::AnyBitPattern + FixedSize + core::fmt::Debug>(
             };
 
             // 2c'
-            if c.is_actionable(&wouldbe_entry, ac.buffer) {
+            if c.is_actionable(&wouldbe_entry) {
                 return false;
             }
 
@@ -274,39 +281,35 @@ fn drive<T: bytemuck::AnyBitPattern + FixedSize + core::fmt::Debug>(
                 && c.can_advance(&entry) == c.can_advance(&wouldbe_entry)
         };
 
-        let is_safe_to_break = || {
+        let is_safe_to_break =
             // 1
-            if c.is_actionable(&entry, ac.buffer) {
-                return false;
-            }
+            !c.is_actionable(&entry) &&
 
             // 2
-            let ok = state == START_OF_TEXT
+            (
+                state == START_OF_TEXT
                 || (!c.can_advance(&entry) && next_state == START_OF_TEXT)
-                || is_safe_to_break_extra();
-            if !ok {
-                return false;
-            }
+                || is_safe_to_break_extra()
+            ) &&
 
             // 3
-            let end_entry = match machine.entry(
-                state,
-                u16::from(read_fonts::tables::aat::class::END_OF_TEXT),
-            ) {
-                Ok(v) => v,
-                _ => return false,
-            };
-            !c.is_actionable(&end_entry, ac.buffer)
-        };
+            (
+                if let Ok(end_entry) = machine.entry(state, u16::from(read_fonts::tables::aat::class::END_OF_TEXT)) {
+                    !c.is_actionable(&end_entry)
+                } else {
+                    false
+                }
+            )
+        ;
 
-        if !is_safe_to_break() && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {
+        if !is_safe_to_break && ac.buffer.backtrack_len() > 0 && ac.buffer.idx < ac.buffer.len {
             ac.buffer.unsafe_to_break_from_outbuffer(
                 Some(ac.buffer.backtrack_len() - 1),
                 Some(ac.buffer.idx + 1),
             );
         }
 
-        c.transition(&entry, ac.buffer);
+        c.transition(&entry, ac);
 
         state = next_state;
 
@@ -338,7 +341,6 @@ fn apply_subtable<'a>(kind: SubtableKind<'a>, ac: &mut hb_aat_apply_context_t<'a
         SubtableKind::Contextual(table) => {
             let mut c = ContextualCtx {
                 mark_set: false,
-                face_if_has_glyph_classes: ac.face.ot_tables.has_glyph_classes().then_some(ac.face),
                 mark: 0,
                 table: table.clone(),
             };
@@ -353,8 +355,6 @@ fn apply_subtable<'a>(kind: SubtableKind<'a>, ac: &mut hb_aat_apply_context_t<'a
             drive(&table.state_table, &mut c, ac);
         }
         SubtableKind::NonContextual(ref lookup) => {
-            let face_if_has_glyph_classes =
-                ac.face.ot_tables.has_glyph_classes().then_some(ac.face);
             let mut last_range = ac.range_flags.as_ref().and_then(|rf| {
                 if rf.len() > 1 {
                     rf.first().map(|_| 0usize)
@@ -364,7 +364,7 @@ fn apply_subtable<'a>(kind: SubtableKind<'a>, ac: &mut hb_aat_apply_context_t<'a
                 }
             });
 
-            for info in 0..ac.buffer.len {
+            for i in 0..ac.buffer.len {
                 // This block copied from StateTableDriver::drive. Keep in sync.
                 if let Some(range_flags) = ac.range_flags.as_ref() {
                     if let Some(last_range) = last_range.as_mut() {
@@ -389,15 +389,11 @@ fn apply_subtable<'a>(kind: SubtableKind<'a>, ac: &mut hb_aat_apply_context_t<'a
                     }
                 }
 
-                let info = &mut ac.buffer.info[info];
-                if let Some(glyph) = info.as_gid16() {
+                if let Some(glyph) = ac.buffer.info[i].as_gid16() {
                     if let Ok(replacement) = lookup.value(glyph.to_u16()) {
                         info.glyph_id = u32::from(replacement);
-                        if let Some(face) = face_if_has_glyph_classes {
-                            info.set_glyph_props(face.glyph_props(replacement.into()));
-                        }
+                        ac.replace_glyph_inplace(i, replacement.into());
                     }
-                }
             }
         }
         SubtableKind::Insertion(ref table) => {
@@ -431,11 +427,16 @@ impl driver_context_t<NoPayload> for RearrangementCtx {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &StateEntry, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &StateEntry) -> bool {
         entry.flags & Self::VERB != 0 && self.start < self.end
     }
 
-    fn transition(&mut self, entry: &StateEntry, buffer: &mut hb_buffer_t) -> Option<()> {
+    fn transition(
+        &mut self,
+        entry: &StateEntry,
+        ac: &mut hb_aat_apply_context_t,
+    ) -> Option<()> {
+        let buffer = &mut ac.buffer;
         let flags = entry.flags;
 
         if flags & Self::MARK_FIRST != 0 {
@@ -524,7 +525,6 @@ impl driver_context_t<NoPayload> for RearrangementCtx {
 
 struct ContextualCtx<'a> {
     mark_set: bool,
-    face_if_has_glyph_classes: Option<&'a hb_font_t<'a>>,
     mark: usize,
     table: ContextualSubtable<'a>,
 }
@@ -543,22 +543,18 @@ impl driver_context_t<ContextualEntryData> for ContextualCtx<'_> {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &StateEntry<ContextualEntryData>, buffer: &hb_buffer_t) -> bool {
-        if buffer.idx == buffer.len && !self.mark_set {
-            return false;
-        }
-
-        entry.payload.mark_index.get() != 0xFFFF || entry.payload.current_index.get() != 0xFFFF
+    fn is_actionable(&self, entry: &StateEntry<ContextualEntryData>) -> bool {
+         entry.payload.mark_index.get() != 0xFFFF || entry.payload.current_index.get() != 0xFFFF
     }
 
     fn transition(
         &mut self,
         entry: &StateEntry<ContextualEntryData>,
-        buffer: &mut hb_buffer_t,
+        ac: &mut hb_aat_apply_context_t,
     ) -> Option<()> {
         // Looks like CoreText applies neither mark nor current substitution for
         // end-of-text if mark was not explicitly set.
-        if buffer.idx == buffer.len && !self.mark_set {
+        if ac.buffer.idx == ac.buffer.len && !self.mark_set {
             return Some(());
         }
 
@@ -570,44 +566,39 @@ impl driver_context_t<ContextualEntryData> for ContextualCtx<'_> {
                 .lookups
                 .get(usize::from(entry.payload.mark_index.get()))
                 .ok()?;
-            if let Some(gid) = buffer.info[self.mark].as_gid16() {
+            if let Some(gid) = ac.buffer.info[self.mark].as_gid16() {
                 replacement = lookup.value(gid.to_u16()).ok();
             }
         }
 
         if let Some(replacement) = replacement {
-            buffer.unsafe_to_break(Some(self.mark), Some((buffer.idx + 1).min(buffer.len)));
-            buffer.info[self.mark].glyph_id = u32::from(replacement);
-
-            if let Some(face) = self.face_if_has_glyph_classes {
-                buffer.info[self.mark].set_glyph_props(face.glyph_props(replacement.into()));
-            }
+            ac.buffer.unsafe_to_break(
+                Some(self.mark),
+                Some((ac.buffer.idx + 1).min(ac.buffer.len)),
+            );
+            ac.replace_glyph_inplace(self.mark, replacement.into());
         }
 
         replacement = None;
-        let idx = buffer.idx.min(buffer.len - 1);
+        let idx = ac.buffer.idx.min(buffer.len - 1);
         if entry.payload.current_index.get() != 0xFFFF {
             let lookup = self
                 .table
                 .lookups
                 .get(usize::from(entry.payload.current_index.get()))
                 .ok()?;
-            if let Some(gid) = buffer.info[idx].as_gid16() {
+            if let Some(gid) = ac.buffer.info[idx].as_gid16() {
                 replacement = lookup.value(gid.to_u16()).ok();
             }
         }
 
         if let Some(replacement) = replacement {
-            buffer.info[idx].glyph_id = u32::from(replacement);
-
-            if let Some(face) = self.face_if_has_glyph_classes {
-                buffer.info[self.mark].set_glyph_props(face.glyph_props(replacement.into()));
-            }
+            ac.replace_glyph_inplace(idx, replacement.into());
         }
 
         if entry.flags & Self::SET_MARK != 0 {
             self.mark_set = true;
-            self.mark = buffer.idx;
+            self.mark = ac.buffer.idx;
         }
 
         Some(())
@@ -637,7 +628,7 @@ impl driver_context_t<InsertionEntryData> for InsertionCtx<'_> {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &StateEntry<InsertionEntryData>, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &StateEntry<InsertionEntryData>) -> bool {
         (entry.flags & (Self::CURRENT_INSERT_COUNT | Self::MARKED_INSERT_COUNT) != 0)
             && (entry.payload.current_insert_index.get() != 0xFFFF
                 || entry.payload.marked_insert_index.get() != 0xFFFF)
@@ -646,43 +637,43 @@ impl driver_context_t<InsertionEntryData> for InsertionCtx<'_> {
     fn transition(
         &mut self,
         entry: &StateEntry<InsertionEntryData>,
-        buffer: &mut hb_buffer_t,
+        ac: &mut hb_aat_apply_context_t,
     ) -> Option<()> {
         let flags = entry.flags;
-        let mark_loc = buffer.out_len;
+        let mark_loc = ac.buffer.out_len;
 
         if entry.payload.marked_insert_index.get() != 0xFFFF {
             let count = flags & Self::MARKED_INSERT_COUNT;
-            buffer.max_ops -= i32::from(count);
-            if buffer.max_ops <= 0 {
+            ac.buffer.max_ops -= i32::from(count);
+            if ac.buffer.max_ops <= 0 {
                 return Some(());
             }
 
             let start = entry.payload.marked_insert_index.get();
             let before = flags & Self::MARKED_INSERT_BEFORE != 0;
 
-            let end = buffer.out_len;
-            buffer.move_to(self.mark as usize);
+            let end = ac.buffer.out_len;
+            ac.buffer.move_to(self.mark as usize);
 
-            if buffer.idx < buffer.len && !before {
-                buffer.copy_glyph();
+            if ac.buffer.idx < ac.buffer.len && !before {
+                ac.buffer.copy_glyph();
             }
 
             // TODO We ignore KashidaLike setting.
             for i in 0..count {
                 let i = usize::from(start + i);
-                buffer.output_glyph(u32::from(self.glyphs.get(i)?.get().to_u16()));
+                ac.output_glyph(u32::from(self.glyphs.get(i)?.get().to_u16()));
             }
 
-            if buffer.idx < buffer.len && !before {
-                buffer.skip_glyph();
+            if ac.buffer.idx < ac.buffer.len && !before {
+                ac.buffer.skip_glyph();
             }
 
-            buffer.move_to(end + usize::from(count));
+            ac.buffer.move_to(end + usize::from(count));
 
-            buffer.unsafe_to_break_from_outbuffer(
+            ac.buffer.unsafe_to_break_from_outbuffer(
                 Some(self.mark as usize),
-                Some((buffer.idx + 1).min(buffer.len)),
+                Some((ac.buffer.idx + 1).min(ac.buffer.len)),
             );
         }
 
@@ -692,27 +683,27 @@ impl driver_context_t<InsertionEntryData> for InsertionCtx<'_> {
 
         if entry.payload.current_insert_index.get() != 0xFFFF {
             let count = (flags & Self::CURRENT_INSERT_COUNT) >> 5;
-            buffer.max_ops -= i32::from(count);
-            if buffer.max_ops < 0 {
+            ac.buffer.max_ops -= i32::from(count);
+            if ac.buffer.max_ops < 0 {
                 return Some(());
             }
 
             let start = entry.payload.current_insert_index.get();
             let before = flags & Self::CURRENT_INSERT_BEFORE != 0;
-            let end = buffer.out_len;
+            let end = ac.buffer.out_len;
 
-            if buffer.idx < buffer.len && !before {
-                buffer.copy_glyph();
+            if ac.buffer.idx < ac.buffer.len && !before {
+                ac.buffer.copy_glyph();
             }
 
             // TODO We ignore KashidaLike setting.
             for i in 0..count {
                 let i = usize::from(start + i);
-                buffer.output_glyph(u32::from(self.glyphs.get(i)?.get().to_u16()));
+                ac.output_glyph(u32::from(self.glyphs.get(i)?.get().to_u16()));
             }
 
-            if buffer.idx < buffer.len && !before {
-                buffer.skip_glyph();
+            if ac.buffer.idx < ac.buffer.len && !before {
+                ac.buffer.skip_glyph();
             }
 
             // Humm. Not sure where to move to. There's this wording under
@@ -729,7 +720,7 @@ impl driver_context_t<InsertionEntryData> for InsertionCtx<'_> {
             // glyphs are now visible.
             //
             // https://github.com/harfbuzz/harfbuzz/issues/1224#issuecomment-427691417
-            buffer.move_to(if flags & Self::DONT_ADVANCE != 0 {
+            ac.buffer.move_to(if flags & Self::DONT_ADVANCE != 0 {
                 end
             } else {
                 end + usize::from(count)
@@ -767,36 +758,36 @@ impl driver_context_t<BigEndian<u16>> for LigatureCtx<'_> {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &StateEntry<BigEndian<u16>>, _: &hb_buffer_t) -> bool {
+    fn is_actionable(&self, entry: &StateEntry<BigEndian<u16>>) -> bool {
         entry.flags & Self::PERFORM_ACTION != 0
     }
 
     fn transition(
         &mut self,
         entry: &StateEntry<BigEndian<u16>>,
-        buffer: &mut hb_buffer_t,
+        ac: &mut hb_aat_apply_context_t,
     ) -> Option<()> {
         if entry.flags & Self::SET_COMPONENT != 0 {
             // Never mark same index twice, in case DONT_ADVANCE was used...
             if self.match_length != 0
                 && self.match_positions[(self.match_length - 1) % LIGATURE_MAX_MATCHES]
-                    == buffer.out_len
+                    == ac.buffer.out_len
             {
                 self.match_length -= 1;
             }
 
-            self.match_positions[self.match_length % LIGATURE_MAX_MATCHES] = buffer.out_len;
+            self.match_positions[self.match_length % LIGATURE_MAX_MATCHES] = ac.buffer.out_len;
             self.match_length += 1;
         }
 
         if entry.flags & Self::PERFORM_ACTION != 0 {
-            let end = buffer.out_len;
+            let end = ac.buffer.out_len;
 
             if self.match_length == 0 {
                 return Some(());
             }
 
-            if buffer.idx >= buffer.len {
+            if ac.buffer.idx >= ac.buffer.len {
                 return Some(()); // TODO: Work on previous instead?
             }
 
@@ -812,10 +803,11 @@ impl driver_context_t<BigEndian<u16>> for LigatureCtx<'_> {
                 }
 
                 cursor -= 1;
-                buffer.move_to(self.match_positions[cursor % LIGATURE_MAX_MATCHES]);
+                ac.buffer
+                    .move_to(self.match_positions[cursor % LIGATURE_MAX_MATCHES]);
 
                 // We cannot use ? in this loop, because we must call
-                // buffer.move_to(end) in the end.
+                // ac.buffer.move_to(end) in the end.
                 let action = match self
                     .table
                     .ligature_actions
@@ -831,7 +823,7 @@ impl driver_context_t<BigEndian<u16>> for LigatureCtx<'_> {
                 }
 
                 let offset = uoffset as i32;
-                let component_idx = (buffer.cur(0).glyph_id as i32 + offset) as usize;
+                let component_idx = (ac.buffer.cur(0).glyph_id as i32 + offset) as usize;
                 ligature_idx += match self.table.components.get(component_idx) {
                     Some(v) => v.get(),
                     None => break,
@@ -843,27 +835,23 @@ impl driver_context_t<BigEndian<u16>> for LigatureCtx<'_> {
                         None => break,
                     };
 
-                    buffer.replace_glyph(u32::from(lig.to_u16()));
+                    ac.replace_glyph(u32::from(lig.to_u16()));
 
                     let lig_end =
                         self.match_positions[(self.match_length - 1) % LIGATURE_MAX_MATCHES] + 1;
                     // Now go and delete all subsequent components.
                     while self.match_length - 1 > cursor {
                         self.match_length -= 1;
-                        buffer.move_to(
+                        ac.buffer.move_to(
                             self.match_positions[self.match_length % LIGATURE_MAX_MATCHES],
                         );
-                        let cur_unicode = buffer.cur(0).unicode_props();
-                        buffer
-                            .cur_mut(0)
-                            .set_unicode_props(cur_unicode | UnicodeProps::IGNORABLE.bits());
-                        buffer.replace_glyph(0xFFFF);
+                        ac.delete_glyph();
                     }
 
-                    buffer.move_to(lig_end);
-                    buffer.merge_out_clusters(
+                    ac.buffer.move_to(lig_end);
+                    ac.buffer.merge_out_clusters(
                         self.match_positions[cursor % LIGATURE_MAX_MATCHES],
-                        buffer.out_len,
+                        ac.buffer.out_len,
                     );
                 }
 
@@ -874,7 +862,7 @@ impl driver_context_t<BigEndian<u16>> for LigatureCtx<'_> {
                 }
             }
 
-            buffer.move_to(end);
+            ac.buffer.move_to(end);
         }
 
         Some(())

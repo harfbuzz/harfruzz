@@ -1,4 +1,5 @@
 /target
+/benches/target
 .directory
 .DS_Store
 /src/complex/*.ri

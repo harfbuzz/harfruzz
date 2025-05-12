@@ -10,13 +10,12 @@ from sys import platform
 
 # harfbuzz test files that will be ignored.
 IGNORE_TESTS = [
-    # We disable those here because we handle MacOS tests separately.
-    "macos.tests",
+    "macos.tests", # We disable these here because we handle MacOS tests separately.
     "coretext.tests",
     "directwrite.tests",
     "uniscribe.tests",
     "arabic-fallback-shaping.tests",
-    "emoji-clusters.tests",
+    "vertical.tests",
 ]
 
 # harfbuzz test cases that will be ignored.
@@ -62,6 +61,7 @@ IGNORE_TEST_CASES = [
     # (see https://github.com/harfbuzz/harfruzz/pull/4#issuecomment-2252964385)
     "color_fonts_001",
     "color_fonts_002",
+    "color_fonts_003",
 ]
 
 
@@ -112,6 +112,9 @@ def prune_test_options(options):
 def convert_test_file(
     root_dir, hb_shape_exe, tests_name, file_name, idx, data, fonts, custom
 ):
+    if data.startswith("@"):
+        return ""  # Directive; ignore.
+
     fontfile, options, unicodes, glyphs_expected = data.split(";")
 
     # MacOS tests contain hashes, remove them.
@@ -156,14 +159,15 @@ def convert_test_file(
     options_list.append(str(abs_font_path))
     options_list.append(f"--unicodes={unicodes}")  # no need to escape it
 
-    glyphs_expected = subprocess.run(
-        options_list, check=True, stdout=subprocess.PIPE
-    ).stdout.decode()
+    if glyphs_expected != "*":
 
-    glyphs_expected = glyphs_expected.strip()[
-        1:-1
-    ]  # remove leading and trailing whitespaces and `[..]`
-    glyphs_expected = glyphs_expected.replace("|", "|\\\n         ")
+        glyphs_expected = subprocess.run(
+            options_list, check=True, stdout=subprocess.PIPE
+        ).stdout.decode()
+
+        glyphs_expected = glyphs_expected.strip()[
+            1:-1
+        ]  # remove leading and trailing whitespaces and `[..]`
 
     options_rs = options
     options_rs = options_rs.replace('"', '\\"')
@@ -172,20 +176,33 @@ def convert_test_file(
     if not fontfile.startswith("/"):
         fonts.add(os.path.split(fontfile_rs)[1])
 
-    final_string = (
-        f"#[test]\n"
-        f"fn {test_name}() {{\n"
-        f"    assert_eq!(\n"
-        f"        shape(\n"
-        f'            "{fontfile_rs}",\n'
-        f'            "{unicodes_rs}",\n'
-        f'            "{options_rs}",\n'
-        f"        ),\n"
-        f'        "{glyphs_expected}"\n'
-        f"    );\n"
-        f"}}\n"
-        "\n"
-    )
+    if glyphs_expected == "*":
+        final_string = (
+            f"#[test]\n"
+            f"fn {test_name}() {{\n"
+            f"    shape(\n"
+            f'        "{fontfile_rs}",\n'
+            f'        "{unicodes_rs}",\n'
+            f'        "{options_rs}",\n'
+            f"    );\n"
+            f"}}\n"
+            "\n"
+        )
+    else:
+        final_string = (
+            f"#[test]\n"
+            f"fn {test_name}() {{\n"
+            f"    assert_eq!(\n"
+            f"        shape(\n"
+            f'            "{fontfile_rs}",\n'
+            f'            "{unicodes_rs}",\n'
+            f'            "{options_rs}",\n'
+            f"        ),\n"
+            f'        "{glyphs_expected}"\n'
+            f"    );\n"
+            f"}}\n"
+            "\n"
+        )
 
     if file_name == "macos.tests":
         final_string = '#[cfg(target_os = "macos")]\n' + final_string
