@@ -7,17 +7,15 @@ use super::ot_layout_common::lookup_flags;
 use super::ot_layout_gpos_table::attach_type;
 use super::ot_layout_gsubgpos::{skipping_iterator_t, OT::hb_ot_apply_context_t};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use read_fonts::tables::kerx::Subtable;
-use read_fonts::tables::kerx::Subtable0;
-use read_fonts::tables::kerx::Subtable1;
-use read_fonts::tables::kerx::Subtable2;
-use read_fonts::tables::kerx::Subtable4;
-use read_fonts::tables::kerx::Subtable4Actions;
-use read_fonts::tables::kerx::Subtable6;
-use read_fonts::tables::{aat, ankr::Ankr, kerx::SubtableKind};
-use read_fonts::types::BigEndian;
-use read_fonts::types::FixedSize;
-use read_fonts::types::GlyphId;
+use read_fonts::tables::{
+    aat,
+    ankr::Ankr,
+    kerx::{
+        Subtable, Subtable0, Subtable1, Subtable2, Subtable4, Subtable4Actions, Subtable6,
+        SubtableKind,
+    },
+};
+use read_fonts::types::{BigEndian, FixedSize, GlyphId};
 
 // TODO: Use set_t, similarly to how it's used in harfbuzz.
 // HarfBuzz commit 9a4601b06b50cb0197c02203b6b19467ad4b4da8

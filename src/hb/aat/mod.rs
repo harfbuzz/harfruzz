@@ -1,4 +1,3 @@
-use core::num::NonZeroU16;
 use read_fonts::{
     tables::{ankr::Ankr, feat::Feat, kerx::Kerx, morx::Morx, trak::Trak},
     types::Tag,
@@ -18,13 +17,6 @@ pub struct AatTables<'a> {
 
 impl<'a> AatTables<'a> {
     pub fn new(font: &FontRef<'a>) -> Self {
-        let Some(num_glyphs) = NonZeroU16::new(
-            font.maxp()
-                .map(|maxp| maxp.num_glyphs())
-                .unwrap_or_default(),
-        ) else {
-            return Self::default();
-        };
         Self {
             morx: font.morx().ok(),
             ankr: font.ankr().ok(),
