@@ -6,6 +6,8 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::{aat_layout_kerx_table, aat_layout_morx_table, aat_layout_trak_table};
 use super::{aat_map, hb_font_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
+use crate::hb::aat_layout_common::HB_BUFFER_SCRATCH_FLAG_AAT_HAS_DELETED;
+use crate::hb::ot_layout::_hb_glyph_info_is_aat_deleted;
 
 pub type hb_aat_layout_feature_type_t = u8;
 pub const HB_AAT_LAYOUT_FEATURE_TYPE_INVALID: u8 = 0xFF;
@@ -487,7 +489,7 @@ pub const feature_mappings: &[hb_aat_feature_mapping_t] = &[
     hb_aat_feature_mapping_t::new(b"zero", HB_AAT_LAYOUT_FEATURE_TYPE_TYPOGRAPHIC_EXTRAS, HB_AAT_LAYOUT_FEATURE_SELECTOR_SLASHED_ZERO_ON, HB_AAT_LAYOUT_FEATURE_SELECTOR_SLASHED_ZERO_OFF),
 ];
 
-mod AAT {
+pub mod AAT {
     pub const DELETED_GLYPH: u32 = 0xFFFF;
 }
 
@@ -523,11 +525,13 @@ pub fn hb_aat_layout_zero_width_deleted_glyphs(buffer: &mut hb_buffer_t) {
 }
 
 fn is_deleted_glyph(info: &hb_glyph_info_t) -> bool {
-    info.glyph_id == AAT::DELETED_GLYPH
+    _hb_glyph_info_is_aat_deleted(info)
 }
 
 pub fn hb_aat_layout_remove_deleted_glyphs(buffer: &mut hb_buffer_t) {
-    buffer.delete_glyphs_inplace(is_deleted_glyph)
+    if (buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_AAT_HAS_DELETED) != 0 {
+        buffer.delete_glyphs_inplace(is_deleted_glyph)
+    }
 }
 
 pub fn hb_aat_layout_position(

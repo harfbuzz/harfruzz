@@ -379,7 +379,11 @@ fn position_cluster(
         if !_hb_glyph_info_is_unicode_mark(&buffer.info[i]) {
             // Find mark glyphs
             let mut j = i + 1;
-            while j < end && _hb_glyph_info_is_unicode_mark(&buffer.info[j]) {
+            while j < end
+                && (_hb_glyph_info_is_hidden(&buffer.info[j])
+                    || _hb_glyph_info_is_default_ignorable(&buffer.info[j])
+                    || _hb_glyph_info_is_unicode_mark(&buffer.info[j]))
+            {
                 j += 1;
             }
 
@@ -399,7 +403,10 @@ pub fn position_marks(
     let mut start = 0;
     let len = buffer.len;
     for i in 1..len {
-        if !_hb_glyph_info_is_unicode_mark(&buffer.info[i]) {
+        if !_hb_glyph_info_is_unicode_mark(&buffer.info[i])
+            && !_hb_glyph_info_is_hidden(&buffer.info[i])
+            && !_hb_glyph_info_is_default_ignorable(&buffer.info[i])
+        {
             position_cluster(plan, face, buffer, start, i, adjust_offsets_when_zeroing);
             start = i;
         }

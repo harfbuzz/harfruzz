@@ -20,7 +20,6 @@ pub struct hb_ot_shape_plan_t {
     pub(crate) dnom_mask: hb_mask_t,
     pub(crate) rtlm_mask: hb_mask_t,
     pub(crate) kern_mask: hb_mask_t,
-    pub(crate) trak_mask: hb_mask_t,
 
     pub(crate) requested_kerning: bool,
     pub(crate) has_frac: bool,

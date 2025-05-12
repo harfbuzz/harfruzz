@@ -11,7 +11,7 @@ fn output_dotted_circle(buffer: &mut hb_buffer_t) {
     buffer.output_glyph(0x25CC);
     {
         let out_idx = buffer.out_len - 1;
-        _hb_glyph_info_reset_continuation(&mut buffer.out_info_mut()[out_idx]);
+        _hb_glyph_info_clear_continuation(&mut buffer.out_info_mut()[out_idx]);
     }
 }
 

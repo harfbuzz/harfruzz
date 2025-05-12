@@ -58,6 +58,41 @@ pub enum BufferClusterLevel {
     MonotoneGraphemes,
     MonotoneCharacters,
     Characters,
+    Graphemes,
+}
+
+impl BufferClusterLevel {
+    #[inline]
+    fn new(level: u32) -> Self {
+        match level {
+            0 => Self::MonotoneGraphemes,
+            1 => Self::MonotoneCharacters,
+            2 => Self::Characters,
+            3 => Self::Graphemes,
+            _ => Self::MonotoneGraphemes,
+        }
+    }
+    #[inline]
+    fn is_monotone(self) -> bool {
+        match self {
+            Self::MonotoneGraphemes | Self::MonotoneCharacters => true,
+            _ => false,
+        }
+    }
+    #[inline]
+    fn is_graphemes(self) -> bool {
+        match self {
+            Self::MonotoneGraphemes | Self::Graphemes => true,
+            _ => false,
+        }
+    }
+    #[inline]
+    fn _is_characters(self) -> bool {
+        match self {
+            Self::MonotoneCharacters | Self::Characters => true,
+            _ => false,
+        }
+    }
 }
 
 impl Default for BufferClusterLevel {

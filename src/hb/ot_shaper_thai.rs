@@ -413,7 +413,7 @@ fn preprocess_text(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_
         } else {
             // Since we decomposed, and NIKHAHIT is combining, merge clusters with the
             // previous cluster.
-            if start != 0 && buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES {
+            if start != 0 {
                 buffer.merge_out_clusters(start - 1, end);
             }
         }
