@@ -63,7 +63,7 @@ checksum = "a0d2fde1f7b3d48b8395d5f2de76c18a528bd6a9cdde438df747bfcba3e05d6f"
 
 [[package]]
 name = "font-types"
-version = "0.8.4"
+version = "0.9.0"
 dependencies = [
  "bytemuck",
 ]
@@ -157,7 +157,7 @@ dependencies = [
 
 [[package]]
 name = "read-fonts"
-version = "0.28.0"
+version = "0.29.0"
 dependencies = [
  "bytemuck",
  "core_maths",
