@@ -188,10 +188,8 @@ impl LookupCache {
             };
             let subtable = subtable_info.materialize(data.table_data.as_bytes())?;
             let (coverage, coverage_offset) = subtable.coverage_and_offset()?;
-            add_coverage_to_digest(&coverage, &mut subtable_info.digest);
-            add_coverage_to_digest(&coverage, &mut entry.digest);
-            // subtable_info.digest.insert_coverage(&coverage);
-            // entry.digest.insert_coverage(&coverage);
+            subtable_info.digest.add_coverage(&coverage);
+            entry.digest.add_coverage(&coverage);
             subtable_info.coverage_offset = coverage_offset;
             self.subtables.push(subtable_info);
             entry.subtables_count += 1;
@@ -233,21 +231,6 @@ fn is_reversed(table_data: FontData, lookup: &Lookup<()>, lookup_offset: usize) 
             Some(ext.extension_lookup_type() == 8)
         }
         _ => Some(false),
-    }
-}
-
-fn add_coverage_to_digest(coverage: &CoverageTable, digest: &mut hb_set_digest_t) {
-    match coverage {
-        CoverageTable::Format1(table) => {
-            for glyph in table.glyph_array() {
-                digest.add(glyph.get().into());
-            }
-        }
-        CoverageTable::Format2(table) => {
-            for range in table.range_records() {
-                digest.add_range(range.start_glyph_id().into(), range.end_glyph_id().into());
-            }
-        }
     }
 }
 

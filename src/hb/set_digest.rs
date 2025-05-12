@@ -1,4 +1,4 @@
-use read_fonts::types::GlyphId;
+use read_fonts::{tables::layout::CoverageTable, types::GlyphId};
 
 type mask_t = u64;
 
@@ -23,6 +23,12 @@ impl Default for hb_set_digest_t {
 impl hb_set_digest_t {
     pub fn new() -> Self {
         Self { masks: [0; N] }
+    }
+
+    pub fn from_coverage(coverage: &CoverageTable) -> Self {
+        let mut digest = Self::new();
+        digest.add_coverage(coverage);
+        digest
     }
 
     pub fn _clear(&mut self) {
@@ -69,6 +75,21 @@ impl hb_set_digest_t {
             }
         }
         changed
+    }
+
+    pub fn add_coverage(&mut self, coverage: &CoverageTable) {
+        match coverage {
+            CoverageTable::Format1(table) => {
+                for glyph in table.glyph_array() {
+                    self.add(glyph.get().into());
+                }
+            }
+            CoverageTable::Format2(table) => {
+                for range in table.range_records() {
+                    self.add_range(range.start_glyph_id().into(), range.end_glyph_id().into());
+                }
+            }
+        }
     }
 
     pub fn may_have_glyph(&self, g: GlyphId) -> bool {

@@ -1,11 +1,14 @@
 use super::aat_layout::*;
-use super::aat_layout_common::ToTtfParserGid;
 use super::aat_map::{hb_aat_map_builder_t, hb_aat_map_t, range_flags_t};
 use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
 use crate::hb::ot_layout::MAX_CONTEXT_LENGTH;
 use alloc::vec;
-use ttf_parser::{apple_layout, morx, FromData, GlyphId, LazyArray32};
+use read_fonts::tables::aat::{ExtendedStateTable, NoPayload, StateEntry};
+use read_fonts::tables::morx::{
+    ContextualEntryData, ContextualSubtable, InsertionEntryData, LigatureSubtable, SubtableKind,
+};
+use read_fonts::types::{BigEndian, FixedSize, GlyphId16};
 
 // TODO: Use class cache, similarly to how it's used in harfbuzz.
 // See https://github.com/harfbuzz/harfbuzz/pull/5031
@@ -35,21 +38,25 @@ pub fn compile_flags(
             .is_ok()
     };
 
-    let chains = face.aat_tables.morx.as_ref()?.chains;
-    let chain_len = chains.into_iter().count();
+    let chains = face.aat_tables.morx.as_ref()?.chains();
+    let chain_len = chains.iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
-    for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
-        let mut flags = chain.default_flags;
-        for feature in chain.features {
+    for (chain, chain_flags) in chains.iter().zip(map.chain_flags.iter_mut()) {
+        let Ok(chain) = chain else {
+            continue;
+        };
+        let mut flags = chain.default_flags();
+        for feature in chain.features() {
             // Check whether this type/setting pair was requested in the map,
             // and if so, apply its flags.
 
-            if has_feature(feature.kind, feature.setting) {
-                flags &= feature.disable_flags;
-                flags |= feature.enable_flags;
-            } else if feature.kind == HB_AAT_LAYOUT_FEATURE_TYPE_LETTER_CASE as u16
-                && feature.setting == u16::from(HB_AAT_LAYOUT_FEATURE_SELECTOR_SMALL_CAPS)
+            if has_feature(feature.feature_type(), feature.feature_settings()) {
+                flags &= feature.disable_flags();
+                flags |= feature.enable_flags();
+            } else if feature.feature_type() == HB_AAT_LAYOUT_FEATURE_TYPE_LETTER_CASE as u16
+                && feature.feature_settings()
+                    == u16::from(HB_AAT_LAYOUT_FEATURE_SELECTOR_SMALL_CAPS)
             {
                 // Deprecated. https://github.com/harfbuzz/harfbuzz/issues/1342
                 let ok = has_feature(
@@ -57,8 +64,8 @@ pub fn compile_flags(
                     u16::from(HB_AAT_LAYOUT_FEATURE_SELECTOR_LOWER_CASE_SMALL_CAPS),
                 );
                 if ok {
-                    flags &= feature.disable_flags;
-                    flags |= feature.enable_flags;
+                    flags &= feature.disable_flags();
+                    flags |= feature.enable_flags();
                 }
             }
             // TODO: Port the following commit: https://github.com/harfbuzz/harfbuzz/commit/2124ad890
@@ -78,26 +85,30 @@ pub fn compile_flags(
 pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) -> Option<()> {
     c.buffer.unsafe_to_concat(None, None);
 
-    let chains = c.face.aat_tables.morx.as_ref()?.chains;
-    let chain_len = chains.into_iter().count();
+    let chains = c.face.aat_tables.morx.as_ref()?.chains();
+    let chain_len = chains.iter().count();
     map.chain_flags.resize(chain_len, vec![]);
 
-    for (chain, chain_flags) in chains.into_iter().zip(map.chain_flags.iter_mut()) {
+    for (chain, chain_flags) in chains.iter().zip(map.chain_flags.iter_mut()) {
+        let Ok(chain) = chain else {
+            continue;
+        };
         c.range_flags = Some(chain_flags.as_mut_slice());
-        for subtable in chain.subtables {
-            let coverage = subtable.coverage;
-
-            let subtable_flags = subtable.feature_flags;
+        for subtable in chain.subtables().iter() {
+            let Ok(subtable) = subtable else {
+                continue;
+            };
             if let Some(range_flags) = c.range_flags.as_ref() {
-                if range_flags.len() == 1 && (subtable_flags & range_flags[0].flags == 0) {
+                if range_flags.len() == 1
+                    && (subtable.sub_feature_flags() & range_flags[0].flags == 0)
+                {
                     continue;
                 }
             }
+            c.subtable_flags = subtable.sub_feature_flags();
 
-            c.subtable_flags = subtable_flags;
-
-            if !subtable.coverage.is_all_directions()
-                && c.buffer.direction.is_vertical() != subtable.coverage.is_vertical()
+            if !subtable.is_all_directions()
+                && c.buffer.direction.is_vertical() != subtable.is_vertical()
             {
                 continue;
             }
@@ -129,17 +140,19 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
             //                   (the order opposite that of the characters, which
             //                   may be right-to-left or left-to-right).
 
-            let reverse = if coverage.is_logical() {
-                coverage.is_backwards()
+            let reverse = if subtable.is_logical() {
+                subtable.is_backwards()
             } else {
-                coverage.is_backwards() != c.buffer.direction.is_backward()
+                subtable.is_backwards() != c.buffer.direction.is_backward()
             };
 
             if reverse {
                 c.buffer.reverse();
             }
 
-            apply_subtable(&subtable.kind, c);
+            if let Ok(kind) = subtable.kind() {
+                apply_subtable(kind, c);
+            }
 
             if reverse {
                 c.buffer.reverse();
@@ -150,21 +163,17 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
     Some(())
 }
 
-trait driver_context_t<T: FromData> {
+trait driver_context_t<T> {
     fn in_place(&self) -> bool;
-    fn can_advance(&self, entry: &apple_layout::GenericStateEntry<T>) -> bool;
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<T>) -> bool;
-    fn transition(
-        &mut self,
-        entry: &apple_layout::GenericStateEntry<T>,
-        ac: &mut hb_aat_apply_context_t,
-    ) -> Option<()>;
+    fn can_advance(&self, entry: &StateEntry<T>) -> bool;
+    fn is_actionable(&self, entry: &StateEntry<T>) -> bool;
+    fn transition(&mut self, entry: &StateEntry<T>, ac: &mut hb_aat_apply_context_t) -> Option<()>;
 }
 
 const START_OF_TEXT: u16 = 0;
 
-fn drive<T: FromData>(
-    machine: &apple_layout::ExtendedStateTable<T>,
+fn drive<T: bytemuck::AnyBitPattern + FixedSize + core::fmt::Debug>(
+    machine: &ExtendedStateTable<'_, T>,
     c: &mut dyn driver_context_t<T>,
     ac: &mut hb_aat_apply_context_t,
 ) {
@@ -214,16 +223,14 @@ fn drive<T: FromData>(
         }
 
         let class = if ac.buffer.idx < ac.buffer.len {
-            machine
-                .class(ac.buffer.cur(0).as_glyph().ttfp_gid())
-                .unwrap_or(1)
+            machine.class(ac.buffer.cur(0).as_glyph()).unwrap_or(1)
         } else {
-            u16::from(apple_layout::class::END_OF_TEXT)
+            u16::from(read_fonts::tables::aat::class::END_OF_TEXT)
         };
 
-        let entry: apple_layout::GenericStateEntry<T> = match machine.entry(state, class) {
-            Some(v) => v,
-            None => break,
+        let entry = match machine.entry(state, class) {
+            Ok(v) => v,
+            _ => break,
         };
 
         let next_state = entry.new_state;
@@ -260,8 +267,8 @@ fn drive<T: FromData>(
         let is_safe_to_break_extra = || {
             // 2c
             let wouldbe_entry = match machine.entry(START_OF_TEXT, class) {
-                Some(v) => v,
-                None => return false,
+                Ok(v) => v,
+                _ => return false,
             };
 
             // 2c'
@@ -287,7 +294,7 @@ fn drive<T: FromData>(
 
             // 3
             (
-                if let Some(end_entry) = machine.entry(state, u16::from(apple_layout::class::END_OF_TEXT)) {
+                if let Ok(end_entry) = machine.entry(state, u16::from(read_fonts::tables::aat::class::END_OF_TEXT)) {
                     !c.is_actionable(&end_entry)
                 } else {
                     false
@@ -325,32 +332,29 @@ fn drive<T: FromData>(
     }
 }
 
-fn apply_subtable(kind: &morx::SubtableKind, ac: &mut hb_aat_apply_context_t) {
+fn apply_subtable<'a>(kind: SubtableKind<'a>, ac: &mut hb_aat_apply_context_t<'a>) {
     match kind {
-        morx::SubtableKind::Rearrangement(ref table) => {
+        SubtableKind::Rearrangement(table) => {
             let mut c = RearrangementCtx { start: 0, end: 0 };
-
-            drive::<()>(table, &mut c, ac);
+            drive(&table, &mut c, ac);
         }
-        morx::SubtableKind::Contextual(ref table) => {
+        SubtableKind::Contextual(table) => {
             let mut c = ContextualCtx {
                 mark_set: false,
                 mark: 0,
-                table,
+                table: table.clone(),
             };
-
-            drive::<morx::ContextualEntryData>(&table.state, &mut c, ac);
+            drive(&table.state_table, &mut c, ac);
         }
-        morx::SubtableKind::Ligature(ref table) => {
+        SubtableKind::Ligature(table) => {
             let mut c = LigatureCtx {
-                table,
+                table: table.clone(),
                 match_length: 0,
                 match_positions: [0; LIGATURE_MAX_MATCHES],
             };
-
-            drive::<u16>(&table.state, &mut c, ac);
+            drive(&table.state_table, &mut c, ac);
         }
-        morx::SubtableKind::NonContextual(ref lookup) => {
+        SubtableKind::NonContextual(ref lookup) => {
             let mut last_range = ac.range_flags.as_ref().and_then(|rf| {
                 if rf.len() > 1 {
                     rf.first().map(|_| 0usize)
@@ -385,18 +389,19 @@ fn apply_subtable(kind: &morx::SubtableKind, ac: &mut hb_aat_apply_context_t) {
                     }
                 }
 
-                if let Some(replacement) = lookup.value(ac.buffer.info[i].as_glyph().ttfp_gid()) {
-                    ac.replace_glyph_inplace(i, replacement.into());
+                if let Some(glyph) = ac.buffer.info[i].as_gid16() {
+                    if let Ok(replacement) = lookup.value(glyph.to_u16()) {
+                        ac.replace_glyph_inplace(i, replacement.into());
+                    }
                 }
             }
         }
-        morx::SubtableKind::Insertion(ref table) => {
+        SubtableKind::Insertion(table) => {
             let mut c = InsertionCtx {
                 mark: 0,
                 glyphs: table.glyphs,
             };
-
-            drive::<morx::InsertionEntryData>(&table.state, &mut c, ac);
+            drive(&table.state_table, &mut c, ac);
         }
     }
 }
@@ -413,24 +418,20 @@ impl RearrangementCtx {
     const VERB: u16 = 0x000F;
 }
 
-impl driver_context_t<()> for RearrangementCtx {
+impl driver_context_t<NoPayload> for RearrangementCtx {
     fn in_place(&self) -> bool {
         true
     }
 
-    fn can_advance(&self, entry: &apple_layout::GenericStateEntry<()>) -> bool {
+    fn can_advance(&self, entry: &StateEntry) -> bool {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<()>) -> bool {
+    fn is_actionable(&self, entry: &StateEntry) -> bool {
         entry.flags & Self::VERB != 0 && self.start < self.end
     }
 
-    fn transition(
-        &mut self,
-        entry: &apple_layout::GenericStateEntry<()>,
-        ac: &mut hb_aat_apply_context_t,
-    ) -> Option<()> {
+    fn transition(&mut self, entry: &StateEntry, ac: &mut hb_aat_apply_context_t) -> Option<()> {
         let buffer = &mut ac.buffer;
         let flags = entry.flags;
 
@@ -521,7 +522,7 @@ impl driver_context_t<()> for RearrangementCtx {
 struct ContextualCtx<'a> {
     mark_set: bool,
     mark: usize,
-    table: &'a morx::ContextualSubtable<'a>,
+    table: ContextualSubtable<'a>,
 }
 
 impl ContextualCtx<'_> {
@@ -529,28 +530,22 @@ impl ContextualCtx<'_> {
     const DONT_ADVANCE: u16 = 0x4000;
 }
 
-impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
+impl driver_context_t<ContextualEntryData> for ContextualCtx<'_> {
     fn in_place(&self) -> bool {
         true
     }
 
-    fn can_advance(
-        &self,
-        entry: &apple_layout::GenericStateEntry<morx::ContextualEntryData>,
-    ) -> bool {
+    fn can_advance(&self, entry: &StateEntry<ContextualEntryData>) -> bool {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(
-        &self,
-        entry: &apple_layout::GenericStateEntry<morx::ContextualEntryData>,
-    ) -> bool {
-        entry.extra.mark_index != 0xFFFF || entry.extra.current_index != 0xFFFF
+    fn is_actionable(&self, entry: &StateEntry<ContextualEntryData>) -> bool {
+        entry.payload.mark_index.get() != 0xFFFF || entry.payload.current_index.get() != 0xFFFF
     }
 
     fn transition(
         &mut self,
-        entry: &apple_layout::GenericStateEntry<morx::ContextualEntryData>,
+        entry: &StateEntry<ContextualEntryData>,
         ac: &mut hb_aat_apply_context_t,
     ) -> Option<()> {
         // Looks like CoreText applies neither mark nor current substitution for
@@ -561,9 +556,15 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
 
         let mut replacement = None;
 
-        if entry.extra.mark_index != 0xFFFF {
-            let lookup = self.table.lookup(u32::from(entry.extra.mark_index))?;
-            replacement = lookup.value(ac.buffer.info[self.mark].as_glyph().ttfp_gid());
+        if entry.payload.mark_index.get() != 0xFFFF {
+            let lookup = self
+                .table
+                .lookups
+                .get(usize::from(entry.payload.mark_index.get()))
+                .ok()?;
+            if let Some(gid) = ac.buffer.info[self.mark].as_gid16() {
+                replacement = lookup.value(gid.to_u16()).ok();
+            }
         }
 
         if let Some(replacement) = replacement {
@@ -576,9 +577,15 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
 
         replacement = None;
         let idx = ac.buffer.idx.min(ac.buffer.len - 1);
-        if entry.extra.current_index != 0xFFFF {
-            let lookup = self.table.lookup(u32::from(entry.extra.current_index))?;
-            replacement = lookup.value(ac.buffer.info[idx].as_glyph().ttfp_gid());
+        if entry.payload.current_index.get() != 0xFFFF {
+            let lookup = self
+                .table
+                .lookups
+                .get(usize::from(entry.payload.current_index.get()))
+                .ok()?;
+            if let Some(gid) = ac.buffer.info[idx].as_gid16() {
+                replacement = lookup.value(gid.to_u16()).ok();
+            }
         }
 
         if let Some(replacement) = replacement {
@@ -596,7 +603,7 @@ impl driver_context_t<morx::ContextualEntryData> for ContextualCtx<'_> {
 
 struct InsertionCtx<'a> {
     mark: u32,
-    glyphs: LazyArray32<'a, GlyphId>,
+    glyphs: &'a [BigEndian<GlyphId16>],
 }
 
 impl InsertionCtx<'_> {
@@ -608,43 +615,37 @@ impl InsertionCtx<'_> {
     const MARKED_INSERT_COUNT: u16 = 0x001F;
 }
 
-impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
+impl driver_context_t<InsertionEntryData> for InsertionCtx<'_> {
     fn in_place(&self) -> bool {
         false
     }
 
-    fn can_advance(
-        &self,
-        entry: &apple_layout::GenericStateEntry<morx::InsertionEntryData>,
-    ) -> bool {
+    fn can_advance(&self, entry: &StateEntry<InsertionEntryData>) -> bool {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(
-        &self,
-        entry: &apple_layout::GenericStateEntry<morx::InsertionEntryData>,
-    ) -> bool {
+    fn is_actionable(&self, entry: &StateEntry<InsertionEntryData>) -> bool {
         (entry.flags & (Self::CURRENT_INSERT_COUNT | Self::MARKED_INSERT_COUNT) != 0)
-            && (entry.extra.current_insert_index != 0xFFFF
-                || entry.extra.marked_insert_index != 0xFFFF)
+            && (entry.payload.current_insert_index.get() != 0xFFFF
+                || entry.payload.marked_insert_index.get() != 0xFFFF)
     }
 
     fn transition(
         &mut self,
-        entry: &apple_layout::GenericStateEntry<morx::InsertionEntryData>,
+        entry: &StateEntry<InsertionEntryData>,
         ac: &mut hb_aat_apply_context_t,
     ) -> Option<()> {
         let flags = entry.flags;
         let mark_loc = ac.buffer.out_len;
 
-        if entry.extra.marked_insert_index != 0xFFFF {
+        if entry.payload.marked_insert_index.get() != 0xFFFF {
             let count = flags & Self::MARKED_INSERT_COUNT;
             ac.buffer.max_ops -= i32::from(count);
             if ac.buffer.max_ops <= 0 {
                 return Some(());
             }
 
-            let start = entry.extra.marked_insert_index;
+            let start = entry.payload.marked_insert_index.get();
             let before = flags & Self::MARKED_INSERT_BEFORE != 0;
 
             let end = ac.buffer.out_len;
@@ -656,8 +657,8 @@ impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
 
             // TODO We ignore KashidaLike setting.
             for i in 0..count {
-                let i = u32::from(start + i);
-                ac.output_glyph(u32::from(self.glyphs.get(i)?.0));
+                let i = usize::from(start + i);
+                ac.output_glyph(u32::from(self.glyphs.get(i)?.get().to_u16()));
             }
 
             if ac.buffer.idx < ac.buffer.len && !before {
@@ -676,14 +677,14 @@ impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
             self.mark = mark_loc as u32;
         }
 
-        if entry.extra.current_insert_index != 0xFFFF {
+        if entry.payload.current_insert_index.get() != 0xFFFF {
             let count = (flags & Self::CURRENT_INSERT_COUNT) >> 5;
             ac.buffer.max_ops -= i32::from(count);
             if ac.buffer.max_ops < 0 {
                 return Some(());
             }
 
-            let start = entry.extra.current_insert_index;
+            let start = entry.payload.current_insert_index.get();
             let before = flags & Self::CURRENT_INSERT_BEFORE != 0;
             let end = ac.buffer.out_len;
 
@@ -693,8 +694,8 @@ impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
 
             // TODO We ignore KashidaLike setting.
             for i in 0..count {
-                let i = u32::from(start + i);
-                ac.output_glyph(u32::from(self.glyphs.get(i)?.0));
+                let i = usize::from(start + i);
+                ac.output_glyph(u32::from(self.glyphs.get(i)?.get().to_u16()));
             }
 
             if ac.buffer.idx < ac.buffer.len && !before {
@@ -729,7 +730,7 @@ impl driver_context_t<morx::InsertionEntryData> for InsertionCtx<'_> {
 const LIGATURE_MAX_MATCHES: usize = 64;
 
 struct LigatureCtx<'a> {
-    table: &'a morx::LigatureSubtable<'a>,
+    table: LigatureSubtable<'a>,
     match_length: usize,
     match_positions: [usize; LIGATURE_MAX_MATCHES],
 }
@@ -744,22 +745,22 @@ impl LigatureCtx<'_> {
     const LIG_ACTION_OFFSET: u32 = 0x3FFFFFFF;
 }
 
-impl driver_context_t<u16> for LigatureCtx<'_> {
+impl driver_context_t<BigEndian<u16>> for LigatureCtx<'_> {
     fn in_place(&self) -> bool {
         false
     }
 
-    fn can_advance(&self, entry: &apple_layout::GenericStateEntry<u16>) -> bool {
+    fn can_advance(&self, entry: &StateEntry<BigEndian<u16>>) -> bool {
         entry.flags & Self::DONT_ADVANCE == 0
     }
 
-    fn is_actionable(&self, entry: &apple_layout::GenericStateEntry<u16>) -> bool {
+    fn is_actionable(&self, entry: &StateEntry<BigEndian<u16>>) -> bool {
         entry.flags & Self::PERFORM_ACTION != 0
     }
 
     fn transition(
         &mut self,
-        entry: &apple_layout::GenericStateEntry<u16>,
+        entry: &StateEntry<BigEndian<u16>>,
         ac: &mut hb_aat_apply_context_t,
     ) -> Option<()> {
         if entry.flags & Self::SET_COMPONENT != 0 {
@@ -788,7 +789,7 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
 
             let mut cursor = self.match_length;
 
-            let mut ligature_actions_index = entry.extra;
+            let mut ligature_actions_index = entry.payload.get();
             let mut ligature_idx = 0;
             loop {
                 if cursor == 0 {
@@ -806,9 +807,9 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
                 let action = match self
                     .table
                     .ligature_actions
-                    .get(u32::from(ligature_actions_index))
+                    .get(usize::from(ligature_actions_index))
                 {
-                    Some(v) => v,
+                    Some(v) => v.get(),
                     None => break,
                 };
 
@@ -818,19 +819,19 @@ impl driver_context_t<u16> for LigatureCtx<'_> {
                 }
 
                 let offset = uoffset as i32;
-                let component_idx = (ac.buffer.cur(0).glyph_id as i32 + offset) as u32;
+                let component_idx = (ac.buffer.cur(0).glyph_id as i32 + offset) as usize;
                 ligature_idx += match self.table.components.get(component_idx) {
-                    Some(v) => v,
+                    Some(v) => v.get(),
                     None => break,
                 };
 
                 if (action & (Self::LIG_ACTION_STORE | Self::LIG_ACTION_LAST)) != 0 {
-                    let lig = match self.table.ligatures.get(u32::from(ligature_idx)) {
-                        Some(v) => v,
+                    let lig = match self.table.ligatures.get(usize::from(ligature_idx)) {
+                        Some(v) => v.get(),
                         None => break,
                     };
 
-                    ac.replace_glyph(u32::from(lig.0));
+                    ac.replace_glyph(u32::from(lig.to_u16()));
 
                     let lig_end =
                         self.match_positions[(self.match_length - 1) % LIGATURE_MAX_MATCHES] + 1;
