@@ -69,7 +69,7 @@ impl Apply for MarkBasePosFormat1<'_> {
 
         // Now we search backwards for a non-mark glyph
         // We don't use skippy_iter.prev() to avoid O(n^2) behavior.
-        let mut iter = skipping_iterator_t::new(ctx, 0, false);
+        let mut iter = skipping_iterator_t::new(ctx, false);
         iter.set_lookup_props(u32::from(lookup_flags::IGNORE_MARKS));
 
         let mut j = buffer.idx;
@@ -150,7 +150,8 @@ impl Apply for MarkMarkPosFormat1<'_> {
         let mark1_index = self.mark1_coverage().ok()?.get(mark1_glyph)?;
 
         // Now we search backwards for a suitable mark glyph until a non-mark glyph
-        let mut iter = skipping_iterator_t::new(ctx, buffer.idx, false);
+        let mut iter = skipping_iterator_t::new(ctx, false);
+        iter.reset_fast(buffer.idx);
         iter.set_lookup_props(ctx.lookup_props & !u32::from(lookup_flags::IGNORE_FLAGS));
 
         let mut unsafe_from = 0;
@@ -220,7 +221,7 @@ impl Apply for MarkLigPosFormat1<'_> {
         }
 
         // Now we search backwards for a non-mark glyph
-        let mut iter = skipping_iterator_t::new(ctx, 0, false);
+        let mut iter = skipping_iterator_t::new(ctx, false);
         iter.set_lookup_props(u32::from(lookup_flags::IGNORE_MARKS));
 
         let mut j = buffer.idx;

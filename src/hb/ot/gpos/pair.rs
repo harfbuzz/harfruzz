@@ -13,7 +13,8 @@ impl Apply for PairPosFormat1<'_> {
         let first_glyph = ctx.buffer.cur(0).as_glyph();
         let first_glyph_coverage_index = self.coverage().ok()?.get(first_glyph)?;
 
-        let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
+        let mut iter = skipping_iterator_t::new(ctx, false);
+        iter.reset(ctx.buffer.idx);
 
         let mut unsafe_to = 0;
         if !iter.next(Some(&mut unsafe_to)) {
@@ -126,7 +127,8 @@ impl Apply for PairPosFormat2<'_> {
         let first_glyph = ctx.buffer.cur(0).as_glyph();
         self.coverage().ok()?.get(first_glyph)?;
 
-        let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
+        let mut iter = skipping_iterator_t::new(ctx, false);
+        iter.reset(ctx.buffer.idx);
 
         let mut unsafe_to = 0;
         if !iter.next(Some(&mut unsafe_to)) {

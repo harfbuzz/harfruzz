@@ -156,7 +156,8 @@ fn apply_simple_kerning(
             continue;
         }
 
-        let mut iter = skipping_iterator_t::new(&ctx, i, false);
+        let mut iter = skipping_iterator_t::new(&ctx, false);
+        iter.reset(i);
 
         let mut unsafe_to = 0;
         if !iter.next(Some(&mut unsafe_to)) {
