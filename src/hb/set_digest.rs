@@ -1,185 +1,119 @@
-use read_fonts::types::GlyphId;
+use read_fonts::{tables::layout::CoverageTable, types::GlyphId};
 
-// To make things easier, we don't have the generic parameter mask_t,
-// and assume we always use u64, since this is what is also used in
-// harfbuzz.
 type mask_t = u64;
 
-pub trait hb_set_digest_ext: Clone + Default {
-    type A;
-    // Instead of `init()`
-    fn new() -> Self;
-    fn full() -> Self;
-    fn add(&mut self, g: GlyphId);
-    fn add_array(&mut self, array: impl IntoIterator<Item = GlyphId> + Clone);
-    fn add_range(&mut self, a: GlyphId, b: GlyphId) -> bool;
-    fn may_have(&self, o: &Self::A) -> bool;
-    fn may_have_glyph(&self, g: GlyphId) -> bool;
+const HB_SET_DIGEST_SHIFTS: [u32; 3] = [4, 0, 6];
+const N: usize = HB_SET_DIGEST_SHIFTS.len();
+const MASK_BITS: u32 = mask_t::BITS;
+const MB1: u32 = MASK_BITS - 1;
+const ONE: mask_t = 1;
+const ALL: mask_t = mask_t::MAX;
+
+#[derive(Clone, Debug)]
+pub struct hb_set_digest_t {
+    masks: [mask_t; N],
 }
 
-#[derive(Clone, Default, Debug)]
-pub struct hb_set_digest_bits_pattern_t<const shift: u8> {
-    mask: mask_t,
-}
-
-impl<const shift: u8> hb_set_digest_bits_pattern_t<shift> {
-    const fn mask_bytes() -> mask_t {
-        core::mem::size_of::<mask_t>() as mask_t
-    }
-
-    const fn mask_bits() -> mask_t {
-        (core::mem::size_of::<mask_t>() * 8) as mask_t
-    }
-
-    fn mask_for(g: GlyphId) -> mask_t {
-        1 << ((g.to_u32() as mask_t >> shift)
-            & (hb_set_digest_bits_pattern_t::<shift>::mask_bits() - 1))
-    }
-
-    const fn num_bits() -> usize {
-        let mut num = 0;
-
-        if hb_set_digest_bits_pattern_t::<shift>::mask_bytes() >= 1 {
-            num += 3;
-        }
-
-        if hb_set_digest_bits_pattern_t::<shift>::mask_bytes() >= 2 {
-            num += 1;
-        }
-
-        if hb_set_digest_bits_pattern_t::<shift>::mask_bytes() >= 4 {
-            num += 1;
-        }
-
-        if hb_set_digest_bits_pattern_t::<shift>::mask_bytes() >= 8 {
-            num += 1;
-        }
-
-        if hb_set_digest_bits_pattern_t::<shift>::mask_bytes() >= 16 {
-            num += 1;
-        }
-
-        num
+impl Default for hb_set_digest_t {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
-impl<const shift: u8> hb_set_digest_ext for hb_set_digest_bits_pattern_t<shift> {
-    type A = hb_set_digest_bits_pattern_t<shift>;
-
-    fn new() -> Self {
-        debug_assert!((shift as usize) < core::mem::size_of::<GlyphId>() * 8);
-        debug_assert!((shift as usize + Self::num_bits()) < core::mem::size_of::<GlyphId>() * 8);
-        Self { mask: 0 }
+impl hb_set_digest_t {
+    pub fn new() -> Self {
+        Self { masks: [0; N] }
     }
 
-    fn full() -> Self {
-        Self { mask: mask_t::MAX }
+    pub fn from_coverage(coverage: &CoverageTable) -> Self {
+        let mut digest = Self::new();
+        digest.add_coverage(coverage);
+        digest
     }
 
-    fn add(&mut self, g: GlyphId) {
-        self.mask |= hb_set_digest_bits_pattern_t::<shift>::mask_for(g);
+    pub fn _clear(&mut self) {
+        self.masks = [0; N];
     }
 
-    fn add_array(&mut self, array: impl IntoIterator<Item = GlyphId> + Clone) {
-        for el in array {
-            self.add(el);
+    pub fn _full() -> Self {
+        Self { masks: [ALL; N] }
+    }
+
+    pub fn add(&mut self, g: GlyphId) {
+        let gid = g.to_u32();
+        for i in 0..N {
+            let shift = HB_SET_DIGEST_SHIFTS[i];
+            let bit = (gid >> shift) & MB1;
+            self.masks[i] |= ONE << bit;
         }
     }
 
-    fn add_range(&mut self, a: GlyphId, b: GlyphId) -> bool {
-        if self.mask == mask_t::MAX {
+    pub fn add_array(&mut self, array: impl IntoIterator<Item = GlyphId>) {
+        for g in array {
+            self.add(g);
+        }
+    }
+
+    pub fn add_range(&mut self, a: GlyphId, b: GlyphId) -> bool {
+        let a = a.to_u32() as mask_t;
+        let b = b.to_u32() as mask_t;
+
+        if self.masks.iter().all(|&m| m == ALL) {
             return false;
         }
 
-        if (b.to_u32() as mask_t >> shift) - (a.to_u32() as mask_t >> shift)
-            >= hb_set_digest_bits_pattern_t::<shift>::mask_bits() - 1
-        {
-            self.mask = mask_t::MAX;
-            false
-        } else {
-            let ma = hb_set_digest_bits_pattern_t::<shift>::mask_for(a);
-            let mb = hb_set_digest_bits_pattern_t::<shift>::mask_for(b);
-            self.mask |= mb + mb.wrapping_sub(ma) - mask_t::from(mb < ma);
-            true
+        let mut changed = false;
+        for i in 0..N {
+            let shift = HB_SET_DIGEST_SHIFTS[i] as mask_t;
+            if (b >> shift).wrapping_sub(a >> shift) >= MB1 as mask_t {
+                self.masks[i] = ALL;
+            } else {
+                let ma = ONE << ((a >> shift) & MB1 as mask_t);
+                let mb = ONE << ((b >> shift) & MB1 as mask_t);
+                self.masks[i] |= mb + mb.wrapping_sub(ma) - mask_t::from(mb < ma);
+                changed = true;
+            }
+        }
+        changed
+    }
+
+    pub fn add_coverage(&mut self, coverage: &CoverageTable) {
+        match coverage {
+            CoverageTable::Format1(table) => {
+                for glyph in table.glyph_array() {
+                    self.add(glyph.get().into());
+                }
+            }
+            CoverageTable::Format2(table) => {
+                for range in table.range_records() {
+                    self.add_range(range.start_glyph_id().into(), range.end_glyph_id().into());
+                }
+            }
         }
     }
 
-    fn may_have(&self, o: &hb_set_digest_bits_pattern_t<shift>) -> bool {
-        self.mask & o.mask != 0
-    }
-
-    fn may_have_glyph(&self, g: GlyphId) -> bool {
-        self.mask & hb_set_digest_bits_pattern_t::<shift>::mask_for(g) != 0
-    }
-}
-
-#[derive(Clone, Default, Debug)]
-pub struct hb_set_digest_combiner_t<head_t, tail_t>
-where
-    head_t: hb_set_digest_ext,
-    tail_t: hb_set_digest_ext,
-{
-    head: head_t,
-    tail: tail_t,
-}
-
-impl<head_t, tail_t> hb_set_digest_ext for hb_set_digest_combiner_t<head_t, tail_t>
-where
-    head_t: hb_set_digest_ext<A = head_t>,
-    tail_t: hb_set_digest_ext<A = tail_t>,
-{
-    type A = hb_set_digest_combiner_t<head_t, tail_t>;
-
-    fn new() -> Self {
-        Self {
-            head: head_t::new(),
-            tail: tail_t::new(),
+    pub fn may_have_glyph(&self, g: GlyphId) -> bool {
+        let gid = g.to_u32();
+        for i in 0..N {
+            let shift = HB_SET_DIGEST_SHIFTS[i];
+            let bit = (gid >> shift) & MB1;
+            if self.masks[i] & (ONE << bit) == 0 {
+                return false;
+            }
         }
+        true
     }
 
-    fn full() -> Self {
-        Self {
-            head: head_t::full(),
-            tail: tail_t::full(),
+    pub fn may_intersect(&self, other: &Self) -> bool {
+        for i in 0..N {
+            if self.masks[i] & other.masks[i] == 0 {
+                return false;
+            }
         }
-    }
-
-    fn add(&mut self, g: GlyphId) {
-        self.head.add(g);
-        self.tail.add(g);
-    }
-
-    fn add_array(&mut self, array: impl IntoIterator<Item = GlyphId> + Clone) {
-        // TODO: Is this expensive if someone passes e.g. a vector?
-        self.head.add_array(array.clone());
-        self.tail.add_array(array);
-    }
-
-    fn add_range(&mut self, a: GlyphId, b: GlyphId) -> bool {
-        let first = self.head.add_range(a, b);
-        let second = self.tail.add_range(a, b);
-        first || second
-    }
-
-    fn may_have(&self, o: &Self::A) -> bool {
-        self.head.may_have(&o.head) && self.tail.may_have(&o.tail)
-    }
-
-    fn may_have_glyph(&self, g: GlyphId) -> bool {
-        self.head.may_have_glyph(g) && self.tail.may_have_glyph(g)
+        true
     }
 }
 
-#[rustfmt::skip]
-pub type hb_set_digest_t = hb_set_digest_combiner_t<
-    hb_set_digest_bits_pattern_t<4>,
-    hb_set_digest_combiner_t<
-        hb_set_digest_bits_pattern_t<0>,
-        hb_set_digest_bits_pattern_t<9>
-    >,
->;
-
-#[rustfmt::skip]
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -187,29 +121,26 @@ mod tests {
     #[test]
     fn test_single() {
         let mut set = hb_set_digest_t::new();
-
         set.add(GlyphId::new(2));
-        assert!(set.may_have_glyph(GlyphId::new(2)))
+        assert!(set.may_have_glyph(GlyphId::new(2)));
     }
 
     #[test]
     fn test_multiple_1() {
         let mut set = hb_set_digest_t::new();
-
         set.add(GlyphId::new(2));
         set.add(GlyphId::new(10));
         set.add(GlyphId::new(300));
         set.add(GlyphId::new(255));
         assert!(set.may_have_glyph(GlyphId::new(2)));
-        assert!(set.may_have_glyph(GlyphId::new(300)));
         assert!(set.may_have_glyph(GlyphId::new(10)));
         assert!(set.may_have_glyph(GlyphId::new(255)));
+        assert!(set.may_have_glyph(GlyphId::new(300)));
     }
 
     #[test]
     fn test_multiple_2() {
         let mut set = hb_set_digest_t::new();
-
         set.add(GlyphId::new(245));
         set.add(GlyphId::new(1060));
         set.add(GlyphId::new(300));
@@ -223,7 +154,6 @@ mod tests {
     #[test]
     fn test_range_1() {
         let mut set = hb_set_digest_t::new();
-
         set.add_range(GlyphId::new(10), GlyphId::new(12));
         assert!(set.may_have_glyph(GlyphId::new(10)));
         assert!(set.may_have_glyph(GlyphId::new(11)));
@@ -233,20 +163,16 @@ mod tests {
     #[test]
     fn test_range_2() {
         let mut set = hb_set_digest_t::new();
-
+        set.add_range(GlyphId::new(20), GlyphId::new(15));
         set.add_range(GlyphId::new(15), GlyphId::new(20));
-        assert!(set.may_have_glyph(GlyphId::new(15)));
-        assert!(set.may_have_glyph(GlyphId::new(16)));
-        assert!(set.may_have_glyph(GlyphId::new(17)));
-        assert!(set.may_have_glyph(GlyphId::new(18)));
-        assert!(set.may_have_glyph(GlyphId::new(19)));
-        assert!(set.may_have_glyph(GlyphId::new(20)));
+        for gid in 15..=20 {
+            assert!(set.may_have_glyph(GlyphId::new(gid)));
+        }
     }
 
     #[test]
     fn test_range_3() {
         let mut set = hb_set_digest_t::new();
-
         for i in 170..=239 {
             set.add(GlyphId::new(i));
         }
@@ -256,18 +182,31 @@ mod tests {
     #[test]
     fn test_complex() {
         let mut set = hb_set_digest_t::new();
-
         set.add_range(GlyphId::new(5670), GlyphId::new(5675));
         set.add(GlyphId::new(3));
         set.add(GlyphId::new(8769));
         set.add(GlyphId::new(10000));
         set.add_range(GlyphId::new(3456), GlyphId::new(3460));
+
+        assert!(set.may_have_glyph(GlyphId::new(3)));
         assert!(set.may_have_glyph(GlyphId::new(5670)));
         assert!(set.may_have_glyph(GlyphId::new(5675)));
-        assert!(set.may_have_glyph(GlyphId::new(3)));
         assert!(set.may_have_glyph(GlyphId::new(8769)));
         assert!(set.may_have_glyph(GlyphId::new(10000)));
         assert!(set.may_have_glyph(GlyphId::new(3456)));
         assert!(set.may_have_glyph(GlyphId::new(3460)));
+    }
+
+    #[test]
+    fn test_intersect() {
+        let mut a = hb_set_digest_t::new();
+        let mut b = hb_set_digest_t::new();
+
+        a.add(GlyphId::new(123));
+        b.add(GlyphId::new(456));
+        assert!(!a.may_intersect(&b));
+
+        b.add(GlyphId::new(123));
+        assert!(a.may_intersect(&b));
     }
 }

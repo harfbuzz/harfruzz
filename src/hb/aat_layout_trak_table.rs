@@ -1,116 +1,164 @@
 #[cfg(not(feature = "std"))]
 use core_maths::CoreFloat;
+use read_fonts::tables::trak::TrackTableEntry;
+use read_fonts::types::{BigEndian, Fixed};
+use read_fonts::FontData;
 
 use super::buffer::hb_buffer_t;
 use super::hb_font_t;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 
-pub fn apply(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) -> Option<()> {
-    let trak_mask = plan.trak_mask;
-
-    let ptem = face.points_per_em?;
+pub fn apply(_plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) -> Option<()> {
+    let trak = face.aat_tables.trak.as_ref()?;
+    let mut ptem = face.points_per_em.unwrap_or(0.0) as f32;
     if ptem <= 0.0 {
-        return None;
+        ptem = 12.0; // CoreText fallback
     }
-
-    let trak = face.aat_tables.trak?;
 
     if !buffer.have_positions {
         buffer.clear_positions();
     }
 
-    if buffer.direction.is_horizontal() {
-        let tracking = trak.hor_tracking(ptem)?;
-        let advance_to_add = tracking;
-        let offset_to_add = tracking / 2;
-        foreach_grapheme!(buffer, start, end, {
-            if buffer.info[start].mask & trak_mask != 0 {
-                buffer.pos[start].x_advance += advance_to_add;
-                buffer.pos[start].x_offset += offset_to_add;
-            }
-        });
+    let advance_to_add = if buffer.direction.is_horizontal() {
+        trak.get_h_tracking(ptem, 0.0)
     } else {
-        let tracking = trak.ver_tracking(ptem)?;
-        let advance_to_add = tracking;
-        let offset_to_add = tracking / 2;
-        foreach_grapheme!(buffer, start, end, {
-            if buffer.info[start].mask & trak_mask != 0 {
-                buffer.pos[start].y_advance += advance_to_add;
-                buffer.pos[start].y_offset += offset_to_add;
-            }
-        });
-    }
+        trak.get_v_tracking(ptem, 0.0)
+    };
+
+    foreach_grapheme!(buffer, start, end, {
+        if buffer.direction.is_horizontal() {
+            buffer.pos[start].x_advance += advance_to_add;
+        } else {
+            buffer.pos[start].y_advance += advance_to_add;
+        }
+    });
 
     Some(())
 }
 
-trait TrackTableExt {
-    fn hor_tracking(&self, ptem: f32) -> Option<i32>;
-    fn ver_tracking(&self, ptem: f32) -> Option<i32>;
+trait TrakExt {
+    fn get_h_tracking(&self, ptem: f32, track: f32) -> i32;
+    fn get_v_tracking(&self, ptem: f32, track: f32) -> i32;
 }
 
-impl TrackTableExt for ttf_parser::trak::Table<'_> {
-    fn hor_tracking(&self, ptem: f32) -> Option<i32> {
-        self.horizontal.tracking(ptem)
+impl TrakExt for read_fonts::tables::trak::Trak<'_> {
+    fn get_h_tracking(&self, ptem: f32, track: f32) -> i32 {
+        self.horiz()
+            .transpose()
+            .ok()
+            .flatten()
+            .map(|t| t.get_tracking(self.offset_data(), ptem, track).round() as i32)
+            .unwrap_or(0)
     }
 
-    fn ver_tracking(&self, ptem: f32) -> Option<i32> {
-        self.vertical.tracking(ptem)
+    fn get_v_tracking(&self, ptem: f32, track: f32) -> i32 {
+        self.vert()
+            .transpose()
+            .ok()
+            .flatten()
+            .map(|t| t.get_tracking(self.offset_data(), ptem, track).round() as i32)
+            .unwrap_or(0)
     }
 }
 
-trait TrackTableDataExt {
-    fn tracking(&self, ptem: f32) -> Option<i32>;
-    fn interpolate_at(
-        &self,
-        idx: u16,
-        target_size: f32,
-        track: &ttf_parser::trak::Track,
-    ) -> Option<f32>;
+trait TrackDataExt {
+    fn get_tracking(&self, offset_data: FontData, ptem: f32, track: f32) -> f32;
 }
 
-impl TrackTableDataExt for ttf_parser::trak::TrackData<'_> {
-    fn tracking(&self, ptem: f32) -> Option<i32> {
-        // Choose track.
-        let track = self.tracks.into_iter().find(|t| t.value == 0.0)?;
-
-        // Choose size.
-        if self.sizes.is_empty() {
-            return None;
-        }
-
-        let mut idx = self
-            .sizes
-            .into_iter()
-            .position(|s| s.0 >= ptem)
-            .unwrap_or(self.sizes.len() as usize - 1);
-
-        idx = idx.saturating_sub(1);
-
-        self.interpolate_at(idx as u16, ptem, &track)
-            .map(|n| n.round() as i32)
-    }
-
-    fn interpolate_at(
-        &self,
-        idx: u16,
-        target_size: f32,
-        track: &ttf_parser::trak::Track,
-    ) -> Option<f32> {
-        debug_assert!(idx < self.sizes.len() - 1);
-
-        let s0 = self.sizes.get(idx)?.0;
-        let s1 = self.sizes.get(idx + 1)?.0;
-
-        let t = if s0 == s1 {
-            0.0
-        } else {
-            (target_size - s0) / (s1 - s0)
+impl TrackDataExt for read_fonts::tables::trak::TrackData<'_> {
+    fn get_tracking(&self, offset_data: FontData, ptem: f32, track: f32) -> f32 {
+        let Ok(sizes) = self.size_table(offset_data) else {
+            return 0.0;
         };
 
-        let n =
-            t * (track.values.get(idx + 1)? as f32) + (1.0 - t) * (track.values.get(idx)? as f32);
+        if sizes.is_empty() {
+            return 0.0;
+        }
 
-        Some(n)
+        let tracks = self.track_table();
+        if tracks.is_empty() {
+            return 0.0;
+        }
+
+        let get_value = |entry: &TrackTableEntry| {
+            let Ok(values) = entry.per_size_values(offset_data, sizes.len() as u16) else {
+                return 0.0;
+            };
+            entry.get_value(ptem, sizes, values)
+        };
+
+        if tracks.len() == 1 {
+            return tracks.get(0).map(|t| get_value(t)).unwrap_or(0.0);
+        }
+
+        let mut i = 0;
+        let mut j = tracks.len() - 1;
+
+        while i + 1 < tracks.len()
+            && tracks.get(i + 1).map(|t| t.track().to_f32()).unwrap_or(0.0) <= track
+        {
+            i += 1;
+        }
+        while j > 0 && tracks.get(j - 1).map(|t| t.track().to_f32()).unwrap_or(0.0) >= track {
+            j -= 1;
+        }
+
+        if i == j {
+            return tracks.get(i).map(|t| get_value(t)).unwrap_or(0.0);
+        }
+
+        let t0 = tracks.get(i).map(|t| t.track().to_f32()).unwrap_or(0.0);
+        let t1 = tracks.get(j).map(|t| t.track().to_f32()).unwrap_or(0.0);
+        let interp = if (t1 - t0).abs() < f32::EPSILON {
+            0.0
+        } else {
+            (track - t0) / (t1 - t0)
+        };
+
+        let a = tracks.get(i).map(|t| get_value(t)).unwrap_or(0.0);
+        let b = tracks.get(j).map(|t| get_value(t)).unwrap_or(0.0);
+        a + interp * (b - a)
+    }
+}
+
+trait TrackEntryExt {
+    fn get_value(&self, ptem: f32, sizes: &[BigEndian<Fixed>], values: &[BigEndian<i16>]) -> f32;
+}
+
+impl TrackEntryExt for read_fonts::tables::trak::TrackTableEntry {
+    fn get_value(&self, ptem: f32, sizes: &[BigEndian<Fixed>], values: &[BigEndian<i16>]) -> f32 {
+        let n = sizes.len().min(values.len());
+        if n == 0 {
+            return 0.0;
+        }
+
+        for i in 0..n {
+            let size_pt = sizes.get(i).map(|f| f.get().to_f32()).unwrap_or(0.0);
+            if size_pt >= ptem {
+                if i == 0 {
+                    return values.get(0).map(|v| v.get() as f32).unwrap_or_default();
+                }
+
+                let s0 = sizes.get(i - 1).map(|f| f.get().to_f32()).unwrap_or(0.0);
+                let s1 = size_pt;
+                let v0 = values
+                    .get(i - 1)
+                    .map(|v| v.get() as f32)
+                    .unwrap_or_default();
+                let v1 = values.get(i).map(|v| v.get() as f32).unwrap_or_default();
+
+                if (s1 - s0).abs() < f32::EPSILON {
+                    return (v0 + v1) * 0.5;
+                }
+
+                let t = (ptem - s0) / (s1 - s0);
+                return v0 + t * (v1 - v0);
+            }
+        }
+
+        values
+            .get(n - 1)
+            .map(|v| v.get() as f32)
+            .unwrap_or_default()
     }
 }

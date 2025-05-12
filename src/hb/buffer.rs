@@ -7,7 +7,7 @@ use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_
 use super::face::hb_glyph_extents_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
 use super::{hb_font_t, hb_mask_t};
-use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
+use crate::hb::set_digest::hb_set_digest_t;
 use crate::{script, BufferClusterLevel, BufferFlags, Direction, Language, Script, SerializeFlags};
 
 const CONTEXT_LENGTH: usize = 5;
@@ -328,6 +328,7 @@ pub type hb_buffer_cluster_level_t = u32;
 pub const HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES: u32 = 0;
 pub const HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS: u32 = 1;
 pub const HB_BUFFER_CLUSTER_LEVEL_CHARACTERS: u32 = 2;
+pub const HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES: u32 = 3;
 pub const HB_BUFFER_CLUSTER_LEVEL_DEFAULT: u32 = HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES;
 
 pub struct hb_buffer_t {
@@ -868,7 +869,7 @@ impl hb_buffer_t {
     }
 
     fn merge_clusters_impl(&mut self, mut start: usize, mut end: usize) {
-        if self.cluster_level == HB_BUFFER_CLUSTER_LEVEL_CHARACTERS {
+        if !BufferClusterLevel::new(self.cluster_level).is_monotone() {
             self.unsafe_to_break(Some(start), Some(end));
             return;
         }
@@ -908,7 +909,7 @@ impl hb_buffer_t {
     }
 
     pub fn merge_out_clusters(&mut self, mut start: usize, mut end: usize) {
-        if self.cluster_level == HB_BUFFER_CLUSTER_LEVEL_CHARACTERS {
+        if !BufferClusterLevel::new(self.cluster_level).is_monotone() {
             return;
         }
 
@@ -1067,6 +1068,14 @@ impl hb_buffer_t {
         interior: Option<bool>,
         from_out_buffer: Option<bool>,
     ) {
+        // If the range is not specified, ie. whole buffer, allow it.
+        // But if range *is* specified, reject if range is too large.
+        if start.is_some() && end.is_some() {
+            if end.unwrap().wrapping_sub(start.unwrap()) > 255 {
+                return;
+            }
+        }
+
         let start = start.unwrap_or(0);
         let end = min(end.unwrap_or(self.len), self.len);
         let interior = interior.unwrap_or(false);
@@ -1522,7 +1531,8 @@ bitflags::bitflags! {
         // If GEN_CAT=FORMAT, top byte masks:
         const CF_ZWJ            = 0x0100;
         const CF_ZWNJ           = 0x0200;
-        const CF_VS           = 0x0400;
+        const CF_VS             = 0x0400;
+        const CF_AAT_DELETED    = 0x0800;
     }
 }
 
@@ -1678,6 +1688,7 @@ impl UnicodeBuffer {
             BufferClusterLevel::MonotoneGraphemes => HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES,
             BufferClusterLevel::MonotoneCharacters => HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS,
             BufferClusterLevel::Characters => HB_BUFFER_CLUSTER_LEVEL_CHARACTERS,
+            BufferClusterLevel::Graphemes => HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES,
         }
     }
 
@@ -1688,6 +1699,7 @@ impl UnicodeBuffer {
             HB_BUFFER_CLUSTER_LEVEL_MONOTONE_GRAPHEMES => BufferClusterLevel::MonotoneGraphemes,
             HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS => BufferClusterLevel::MonotoneCharacters,
             HB_BUFFER_CLUSTER_LEVEL_CHARACTERS => BufferClusterLevel::Characters,
+            HB_BUFFER_CLUSTER_LEVEL_GRAPHEMES => BufferClusterLevel::Graphemes,
             _ => BufferClusterLevel::MonotoneGraphemes,
         }
     }
