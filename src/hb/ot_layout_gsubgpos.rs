@@ -4,7 +4,6 @@ use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
 use super::hb_font_t;
 use super::hb_mask_t;
-use super::ot_layout::LayoutTable;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
@@ -725,29 +724,15 @@ pub mod OT {
             let saved_index = self.lookup_index;
 
             self.lookup_index = sub_lookup_index;
-            let applied = match self.table_index {
-                TableIndex::GSUB => self
-                    .face
-                    .ot_tables
-                    .gsub
-                    .as_ref()
-                    .and_then(|table| table.get_lookup(sub_lookup_index))
-                    .and_then(|lookup| {
-                        self.lookup_props = lookup.props();
-                        lookup.apply(self)
-                    }),
-                TableIndex::GPOS => self
-                    .face
-                    .ot_tables
-                    .gpos
-                    .as_ref()
-                    .and_then(|table| table.get_lookup(sub_lookup_index))
-                    .and_then(|lookup| {
-                        self.lookup_props = lookup.props();
-                        lookup.apply(self)
-                    }),
-            };
-
+            let applied = self
+                .face
+                .ot_tables
+                .subtable_cache_for_index(self.table_index, sub_lookup_index)
+                .and_then(|mut cache| {
+                    let lookup = cache.lookup().clone();
+                    self.lookup_props = lookup.props();
+                    lookup.apply(self, &mut cache)
+                });
             self.lookup_props = saved_props;
             self.lookup_index = saved_index;
             self.nesting_level_left += 1;

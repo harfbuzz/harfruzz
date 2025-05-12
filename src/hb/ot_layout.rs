@@ -3,12 +3,12 @@
 use core::ops::{Index, IndexMut};
 
 use super::buffer::*;
-use super::ot_layout_gsubgpos::{Apply, OT};
+use super::ot::lookup::LookupInfo;
+use super::ot_layout_gsubgpos::OT;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
 use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
-use crate::hb::set_digest::hb_set_digest_t;
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
@@ -83,23 +83,8 @@ pub trait LayoutTable {
     /// Whether lookups in this table can be applied to the buffer in-place.
     const IN_PLACE: bool;
 
-    /// The kind of lookup stored in this table.
-    type Lookup: LayoutLookup;
-
     /// Get the lookup at the specified index.
-    fn get_lookup(&self, index: u16) -> Option<&Self::Lookup>;
-}
-
-/// A lookup in a layout table.
-pub trait LayoutLookup: Apply {
-    /// The lookup's lookup_props.
-    fn props(&self) -> u32;
-
-    /// Whether the lookup has to be applied backwards.
-    fn is_reverse(&self) -> bool;
-
-    /// The digest of the lookup.
-    fn digest(&self) -> &hb_set_digest_t;
+    fn get_lookup(&self, index: u16) -> Option<&LookupInfo>;
 }
 
 /// Called before substitution lookups are performed, to ensure that glyph
@@ -146,7 +131,7 @@ pub fn apply_layout_table<T: LayoutTable>(
     }
 }
 
-fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &T::Lookup) {
+fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) {
     if ctx.buffer.is_empty() || ctx.lookup_mask() == 0 {
         return;
     }
@@ -173,13 +158,20 @@ fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &T:
     }
 }
 
-fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> bool {
+fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) -> bool {
     let mut ret = false;
+    let Some(mut cache) = ctx
+        .face
+        .ot_tables
+        .subtable_cache(ctx.table_index, lookup.clone())
+    else {
+        return false;
+    };
     while ctx.buffer.idx < ctx.buffer.len && ctx.buffer.successful {
         let cur = ctx.buffer.cur(0);
         if (cur.mask & ctx.lookup_mask()) != 0
             && check_glyph_property(ctx.face, cur, ctx.lookup_props)
-            && lookup.apply(ctx).is_some()
+            && lookup.apply(ctx, &mut cache).is_some()
         {
             ret = true;
         } else {
@@ -189,13 +181,20 @@ fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> bo
     ret
 }
 
-fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> bool {
+fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) -> bool {
     let mut ret = false;
+    let Some(mut cache) = ctx
+        .face
+        .ot_tables
+        .subtable_cache(ctx.table_index, lookup.clone())
+    else {
+        return false;
+    };
     loop {
         let cur = ctx.buffer.cur(0);
         ret |= (cur.mask & ctx.lookup_mask()) != 0
             && check_glyph_property(ctx.face, cur, ctx.lookup_props)
-            && lookup.apply(ctx).is_some();
+            && lookup.apply(ctx, &mut cache).is_some();
 
         if ctx.buffer.idx == 0 {
             break;
