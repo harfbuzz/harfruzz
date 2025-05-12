@@ -10,6 +10,7 @@ use read_fonts::{
     TableProvider,
 };
 
+#[derive(Copy, Clone)]
 struct CustomVariation {
     tag: Tag,
     value: f32,
@@ -29,42 +30,7 @@ impl Into<harfbuzz_rs::Variation> for CustomVariation {
 
 macro_rules! simple_bench {
     ($name:ident, $font_path:expr, $text_path:expr) => {
-        mod $name {
-            use super::*;
-            use test::Bencher;
-
-            #[bench]
-            fn hr(bencher: &mut Bencher) {
-                let font_data = std::fs::read($font_path).unwrap();
-                let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
-                bencher.iter(|| {
-                    test::black_box({
-                        let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
-                        let shaper_font = harfruzz::ShaperFont::new(&font);
-                        let shaper = shaper_font.shaper(&font, &[]);
-                        let mut buffer = harfruzz::UnicodeBuffer::new();
-                        buffer.push_str(&text);
-                        buffer.reset_clusters();
-                        harfruzz::shape(&shaper, &[], buffer);
-                    });
-                })
-            }
-
-            #[cfg(feature = "hb")]
-            #[bench]
-            fn hb(bencher: &mut Bencher) {
-                let font_data = std::fs::read($font_path).unwrap();
-                let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
-                bencher.iter(|| {
-                    test::black_box({
-                        let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
-                        let font = harfbuzz_rs::Font::new(face);
-                        let buffer = harfbuzz_rs::UnicodeBuffer::new().add_str(&text);
-                        harfbuzz_rs::shape(&font, buffer, &[])
-                    });
-                })
-            }
-        }
+        simple_bench!($name, $font_path, $text_path, []);
     };
 
     // Keep in sync with above.
@@ -76,21 +42,19 @@ macro_rules! simple_bench {
             #[bench]
             fn hr(bencher: &mut Bencher) {
                 let font_data = std::fs::read($font_path).unwrap();
+                let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
+                let shaper_font = harfruzz::ShaperFont::new(&font);
+                let vars: &[CustomVariation] = $variations.as_slice();
+                let vars = vars.iter().copied().map(|var| var.into()).collect::<Vec<harfruzz::Variation>>();
+                let mut coords = vec![];
+                if let Ok(fvar) = font.fvar() {
+                    coords.resize(fvar.axis_count() as usize, F2Dot14::default());
+                    fvar.user_to_normalized(None, vars.iter().map(|var: &harfruzz::Variation| (var.tag, Fixed::from_f64(var.value as f64))), &mut coords);
+                }
+                let shaper = shaper_font.shaper(&font, &coords);
                 let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
                 bencher.iter(|| {
                     test::black_box({
-                        let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
-                        let shaper_font = harfruzz::ShaperFont::new(&font);
-                        let mut coords = vec![];
-                        if let Ok(fvar) = font.fvar() {
-                            coords.resize(fvar.axis_count() as usize, F2Dot14::default());
-                            fvar.user_to_normalized(
-                                None,
-                                $variations.iter().map(|var: &harfruzz::Variation| (var.tag, Fixed::from_f64(var.value as f64))),
-                                &mut coords,
-                            );
-                        }
-                        let shaper = shaper_font.shaper(&font, &coords);
                         let mut buffer = harfruzz::UnicodeBuffer::new();
                         buffer.push_str(&text);
                         buffer.reset_clusters();
@@ -103,12 +67,14 @@ macro_rules! simple_bench {
             #[bench]
             fn hb(bencher: &mut Bencher) {
                 let font_data = std::fs::read($font_path).unwrap();
+                let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
+                let mut font = harfbuzz_rs::Font::new(face);
+                let vars: &[CustomVariation] = $variations.as_slice();
+                let vars = vars.iter().copied().map(|var| var.into()).collect::<Vec<harfbuzz_rs::Variation>>();
+                font.set_variations(&vars);
                 let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
                 bencher.iter(|| {
                     test::black_box({
-                        let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
-                        let mut font = harfbuzz_rs::Font::new(face);
-                        font.set_variations($variations);
                         let buffer = harfbuzz_rs::UnicodeBuffer::new().add_str(&text);
                         harfbuzz_rs::shape(&font, buffer, &[])
                     });
@@ -142,8 +108,8 @@ mod english {
 
     const WIDTH_VAR_DEFAULT: CustomVariation = CustomVariation { tag: Tag::new(b"wdth"), value: 100.0 };
 
-    simple_bench!(variations, "fonts/NotoSans-VariableFont.ttf", "texts/english/paragraph_long.txt", &[WIDTH_VAR.into()]);
-    simple_bench!(variations_default, "fonts/NotoSans-VariableFont.ttf", "texts/english/paragraph_long.txt", &[WIDTH_VAR_DEFAULT.into()]);
+    simple_bench!(variations, "fonts/NotoSans-VariableFont.ttf", "texts/english/paragraph_long.txt", [WIDTH_VAR]);
+    simple_bench!(variations_default, "fonts/NotoSans-VariableFont.ttf", "texts/english/paragraph_long.txt", [WIDTH_VAR_DEFAULT]);
 
     #[cfg(target_os = "macos")]
     simple_bench!(aat_word_1, "/System/Library/Fonts/Supplemental/Zapfino.ttf", "texts/english/word_1.txt");
