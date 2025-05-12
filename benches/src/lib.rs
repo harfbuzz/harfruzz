@@ -41,6 +41,7 @@ macro_rules! simple_bench {
 
             #[bench]
             fn hr(bencher: &mut Bencher) {
+                let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
                 let font_data = std::fs::read($font_path).unwrap();
                 let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
                 let shaper_font = harfruzz::ShaperFont::new(&font);
@@ -52,13 +53,16 @@ macro_rules! simple_bench {
                     fvar.user_to_normalized(None, vars.iter().map(|var: &harfruzz::Variation| (var.tag, Fixed::from_f64(var.value as f64))), &mut coords);
                 }
                 let shaper = shaper_font.shaper(&font, &coords);
-                let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
+                let mut buffer = harfruzz::UnicodeBuffer::new();
+                buffer.push_str(&text);
+                buffer.guess_segment_properties();
+                let shape_plan = harfruzz::ShapePlan::new(&shaper, buffer.direction(), Some(buffer.script()), buffer.language().as_ref(), &[]);
                 bencher.iter(|| {
                     test::black_box({
                         let mut buffer = harfruzz::UnicodeBuffer::new();
                         buffer.push_str(&text);
                         buffer.reset_clusters();
-                        harfruzz::shape(&shaper, &[], buffer);
+                        harfruzz::shape_with_plan(&shaper, &shape_plan, buffer)
                     });
                 })
             }
