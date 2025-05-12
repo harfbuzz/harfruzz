@@ -35,3 +35,13 @@ pub fn rb_flag64_unsafe(x: u32) -> u64 {
         0
     }
 }
+
+#[allow(non_snake_case)]
+pub const fn HB_CODEPOINT_ENCODE3(x: u32, y: u32, z: u32) -> u64 {
+    ((x as u64) << 42) | ((y as u64) << 21) | (z as u64)
+}
+
+#[allow(non_snake_case)]
+pub const fn HB_CODEPOINT_ENCODE3_11_7_14(x: u32, y: u32, z: u32) -> u32 {
+    ((x & 0x07FF) << 21) | ((y & 0x007F) << 14) | (z & 0x3FFF)
+}

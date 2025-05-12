@@ -4,6 +4,7 @@ pub use unicode_ccc::CanonicalCombiningClass;
 // TODO: prefer unic-ucd-normal::CanonicalCombiningClass
 pub use unicode_properties::GeneralCategory as hb_unicode_general_category_t;
 
+use super::ucd_table::ucd;
 use crate::Script;
 
 // Space estimates based on:
