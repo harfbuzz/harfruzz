@@ -3,11 +3,12 @@
 use core::ops::{Index, IndexMut};
 
 use super::buffer::*;
-use super::ot_layout_gsubgpos::{Apply, OT};
+use super::ot::lookup::LookupInfo;
+use super::ot_layout_gsubgpos::OT;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
 use super::{hb_font_t, hb_glyph_info_t};
-use crate::hb::set_digest::{hb_set_digest_ext, hb_set_digest_t};
+use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
@@ -82,23 +83,8 @@ pub trait LayoutTable {
     /// Whether lookups in this table can be applied to the buffer in-place.
     const IN_PLACE: bool;
 
-    /// The kind of lookup stored in this table.
-    type Lookup: LayoutLookup;
-
     /// Get the lookup at the specified index.
-    fn get_lookup(&self, index: u16) -> Option<&Self::Lookup>;
-}
-
-/// A lookup in a layout table.
-pub trait LayoutLookup: Apply {
-    /// The lookup's lookup_props.
-    fn props(&self) -> u32;
-
-    /// Whether the lookup has to be applied backwards.
-    fn is_reverse(&self) -> bool;
-
-    /// The digest of the lookup.
-    fn digest(&self) -> &hb_set_digest_t;
+    fn get_lookup(&self, index: u16) -> Option<&LookupInfo>;
 }
 
 /// Called before substitution lookups are performed, to ensure that glyph
@@ -123,7 +109,7 @@ pub fn apply_layout_table<T: LayoutTable>(
                     continue;
                 };
 
-                if lookup.digest().may_have(&ctx.digest) {
+                if lookup.digest().may_intersect(&ctx.digest) {
                     ctx.lookup_index = lookup_map.index;
                     ctx.set_lookup_mask(lookup_map.mask);
                     ctx.auto_zwj = lookup_map.auto_zwj;
@@ -145,7 +131,7 @@ pub fn apply_layout_table<T: LayoutTable>(
     }
 }
 
-fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &T::Lookup) {
+fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) {
     if ctx.buffer.is_empty() || ctx.lookup_mask() == 0 {
         return;
     }
@@ -172,13 +158,20 @@ fn apply_string<T: LayoutTable>(ctx: &mut OT::hb_ot_apply_context_t, lookup: &T:
     }
 }
 
-fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> bool {
+fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) -> bool {
     let mut ret = false;
+    let Some(mut cache) = ctx
+        .face
+        .ot_tables
+        .subtable_cache(ctx.table_index, lookup.clone())
+    else {
+        return false;
+    };
     while ctx.buffer.idx < ctx.buffer.len && ctx.buffer.successful {
         let cur = ctx.buffer.cur(0);
         if (cur.mask & ctx.lookup_mask()) != 0
-            && ctx.check_glyph_property(cur, ctx.lookup_props)
-            && lookup.apply(ctx).is_some()
+            && check_glyph_property(ctx.face, cur, ctx.lookup_props)
+            && lookup.apply(ctx, &mut cache).is_some()
         {
             ret = true;
         } else {
@@ -188,13 +181,20 @@ fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> bo
     ret
 }
 
-fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &impl Apply) -> bool {
+fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) -> bool {
     let mut ret = false;
+    let Some(mut cache) = ctx
+        .face
+        .ot_tables
+        .subtable_cache(ctx.table_index, lookup.clone())
+    else {
+        return false;
+    };
     loop {
         let cur = ctx.buffer.cur(0);
         ret |= (cur.mask & ctx.lookup_mask()) != 0
-            && ctx.check_glyph_property(cur, ctx.lookup_props)
-            && lookup.apply(ctx).is_some();
+            && check_glyph_property(ctx.face, cur, ctx.lookup_props)
+            && lookup.apply(ctx, &mut cache).is_some();
 
         if ctx.buffer.idx == 0 {
             break;
@@ -396,6 +396,11 @@ pub(crate) fn _hb_glyph_info_is_default_ignorable(info: &hb_glyph_info_t) -> boo
 }
 
 #[inline]
+pub(crate) fn _hb_glyph_info_set_default_ignorable(info: &mut hb_glyph_info_t) {
+    info.set_unicode_props(info.unicode_props() | UnicodeProps::IGNORABLE.bits());
+}
+
+#[inline]
 pub(crate) fn _hb_glyph_info_clear_default_ignorable(info: &mut hb_glyph_info_t) {
     let mut n = info.unicode_props();
     n &= !UnicodeProps::IGNORABLE.bits();
@@ -421,7 +426,7 @@ pub(crate) fn _hb_glyph_info_set_continuation(info: &mut hb_glyph_info_t) {
 }
 
 #[inline]
-pub(crate) fn _hb_glyph_info_reset_continuation(info: &mut hb_glyph_info_t) {
+pub(crate) fn _hb_glyph_info_clear_continuation(info: &mut hb_glyph_info_t) {
     let mut n = info.unicode_props();
     n &= !UnicodeProps::CONTINUATION.bits();
     info.set_unicode_props(n);
@@ -437,6 +442,8 @@ pub(crate) fn _hb_grapheme_group_func(_: &hb_glyph_info_t, b: &hb_glyph_info_t) 
 }
 
 pub fn _hb_ot_layout_reverse_graphemes(buffer: &mut hb_buffer_t) {
+    // MONOTONE_GRAPHEMES was already applied and is taken care of by _hb_grapheme_group_func.
+    // So we just check for MONOTONE_CHARACTERS here.
     buffer.reverse_groups(
         _hb_grapheme_group_func,
         buffer.cluster_level == HB_BUFFER_CLUSTER_LEVEL_MONOTONE_CHARACTERS,
@@ -473,6 +480,20 @@ pub(crate) fn _hb_glyph_info_is_zwj(info: &hb_glyph_info_t) -> bool {
 //       return;
 //     info->unicode_props() ^= UPROPS_MASK_Cf_ZWNJ | UPROPS_MASK_Cf_ZWJ;
 //   }
+
+#[inline]
+pub(crate) fn _hb_glyph_info_is_aat_deleted(info: &hb_glyph_info_t) -> bool {
+    _hb_glyph_info_is_unicode_format(info)
+        && (info.unicode_props() & UnicodeProps::CF_AAT_DELETED.bits() != 0)
+}
+
+#[inline]
+pub(crate) fn _hb_glyph_info_set_aat_deleted(info: &mut hb_glyph_info_t) {
+    _hb_glyph_info_set_general_category(info, hb_unicode_general_category_t::Format);
+    info.set_unicode_props(
+        info.unicode_props() | UnicodeProps::CF_AAT_DELETED.bits() | UnicodeProps::HIDDEN.bits(),
+    );
+}
 
 //   /* lig_props: aka lig_id / lig_comp
 //    *

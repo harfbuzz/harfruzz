@@ -43,16 +43,18 @@ Ra    = 15;
 CM    = 16;
 Symbol= 17;
 CS    = 18;
+SMPst = 57;
 
 c = (C | Ra);			# is_consonant
 n = ((ZWNJ?.RS)? (N.N?)?);	# is_consonant_modifier
 z = ZWJ|ZWNJ;			# is_joiner
 reph = (Ra H | Repha);		# possible reph
+sm = SM | SMPst;
 
 cn = c.ZWJ?.n?;
 symbol = Symbol.N?;
-matra_group = z*.(M | SM? MPst).N?.H?;
-syllable_tail = (z?.SM.SM?.ZWNJ?)? (A | VD)*;
+matra_group = z*.(M | sm? MPst).N?.H?;
+syllable_tail = (z?.sm.sm?.ZWNJ?)? (A | VD)*;
 halant_group = (z?.H.(ZWJ.N?)?);
 final_halant_group = halant_group | H.ZWNJ;
 medial_group = CM?;
@@ -72,6 +74,7 @@ main := |*
 	vowel_syllable		=> { found_syllable!(SyllableType::VowelSyllable); };
 	standalone_cluster	=> { found_syllable!(SyllableType::StandaloneCluster); };
 	symbol_cluster		=> { found_syllable!(SyllableType::SymbolCluster); };
+	SMPst			=> { found_syllable!(SyllableType::NonIndicCluster); };
 	broken_cluster		=> { found_syllable!(SyllableType::BrokenCluster); buffer.scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_BROKEN_SYLLABLE; };
 	other			=> { found_syllable!(SyllableType::NonIndicCluster); };
 *|;

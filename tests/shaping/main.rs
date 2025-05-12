@@ -90,6 +90,7 @@ fn parse_cluster(s: &str) -> Result<harfruzz::BufferClusterLevel, String> {
         "0" => Ok(harfruzz::BufferClusterLevel::MonotoneGraphemes),
         "1" => Ok(harfruzz::BufferClusterLevel::MonotoneCharacters),
         "2" => Ok(harfruzz::BufferClusterLevel::Characters),
+        "3" => Ok(harfruzz::BufferClusterLevel::Graphemes),
         _ => Err("invalid cluster level".to_string()),
     }
 }

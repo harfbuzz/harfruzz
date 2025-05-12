@@ -385,6 +385,8 @@ defaults = (category_map[defaults[0]], position_map[defaults[1]], defaults[2])
 indic_data = {}
 for k, (cat, pos, block) in combined.items():
   cat = category_map[cat]
+  if cat == 'SM' and pos == 'Not_Applicable':
+    cat = 'SMPst'
   pos = position_map[pos]
   indic_data[k] = (cat, pos, block)
 
@@ -404,7 +406,7 @@ for k, (cat, pos, block) in indic_data.items():
 # Keep in sync with CONSONANT_FLAGS in the shaper
 consonant_categories = ('C', 'CS', 'Ra','CM', 'V', 'PLACEHOLDER', 'DOTTEDCIRCLE')
 matra_categories = ('M', 'MPst')
-smvd_categories = ('SM', 'VD', 'A', 'Symbol')
+smvd_categories = ('SM', 'SMPst', 'VD', 'A', 'Symbol')
 for k, (cat, pos, block) in indic_data.items():
   if cat in consonant_categories:
     pos = 'BASE_C'
@@ -446,6 +448,7 @@ short = [{
 	"Repha":		'Rf',
 	"PLACEHOLDER":		'GB',
 	"DOTTEDCIRCLE":		'DC',
+    "SMPst":        'SP',
     "VPst":			'VR',
     "VPre":			'VL',
     "Robatic":		'Rt',

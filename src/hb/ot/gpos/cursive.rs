@@ -16,7 +16,8 @@ impl Apply for CursivePosFormat1<'_> {
         let offset_data = self.offset_data();
         let entry_this = records.get(index_this)?.entry_anchor(offset_data)?.ok()?;
 
-        let mut iter = skipping_iterator_t::new(ctx, ctx.buffer.idx, false);
+        let mut iter = skipping_iterator_t::new(ctx, false);
+        iter.reset_fast(ctx.buffer.idx);
 
         let mut unsafe_from = 0;
         if !iter.prev(Some(&mut unsafe_from)) {

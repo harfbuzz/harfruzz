@@ -3,39 +3,31 @@
 use crate::shape;
 
 #[test]
-fn classdef1_001() {
+fn classdef1_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef1_font4.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         19|\
-         20|\
-         21"
+        "17|18|19|20|21"
     );
 }
 
 #[test]
-fn classdef1_empty_001() {
+fn classdef1_empty_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef1_font2.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         24|\
-         25|\
-         21"
+        "17|23|24|25|21"
     );
 }
 
 #[test]
-fn classdef1_multiple_001() {
+fn classdef1_multiple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef1_font3.otf",
@@ -43,79 +35,48 @@ fn classdef1_multiple_001() {
              \u{001B}\u{001C}\u{001D}\u{001E}\u{001F}\u{0020}\u{0021}\u{0022}\u{0023}\u{0024}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "20|\
-         23|\
-         24|\
-         25|\
-         24|\
-         26|\
-         27|\
-         28|\
-         28|\
-         29|\
-         30|\
-         31|\
-         34|\
-         33|\
-         34|\
-         35|\
-         37|\
-         38|\
-         38|\
-         39"
+        "20|23|24|25|24|26|27|28|28|29|30|31|34|33|34|35|37|38|38|39"
     );
 }
 
 #[test]
-fn classdef1_single_001() {
+fn classdef1_single_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         24|\
-         25|\
-         21"
+        "17|23|24|25|21"
     );
 }
 
 #[test]
-fn classdef2_001() {
+fn classdef2_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font4.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         19|\
-         20|\
-         21"
+        "17|18|19|20|21"
     );
 }
 
 #[test]
-fn classdef2_empty_001() {
+fn classdef2_empty_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font2.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         24|\
-         25|\
-         21"
+        "17|23|24|25|21"
     );
 }
 
 #[test]
-fn classdef2_multiple_001() {
+fn classdef2_multiple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font3.otf",
@@ -123,80 +84,31 @@ fn classdef2_multiple_001() {
              \u{001B}\u{001C}\u{001D}\u{001E}\u{001F}\u{0020}\u{0021}\u{0022}\u{0023}\u{0024}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "20|\
-         23|\
-         24|\
-         25|\
-         24|\
-         26|\
-         27|\
-         28|\
-         28|\
-         29|\
-         30|\
-         31|\
-         34|\
-         33|\
-         34|\
-         35|\
-         37|\
-         38|\
-         38|\
-         39"
+        "20|23|24|25|24|26|27|28|28|29|30|31|34|33|34|35|37|38|38|39"
     );
 }
 
 #[test]
-fn classdef2_single_001() {
+fn classdef2_single_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/classdef2_font1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         24|\
-         25|\
-         21"
+        "17|23|24|25|21"
     );
 }
 
 #[test]
-fn cmap0_001() {
+fn cmap0_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap0_font1.otf",
             "\u{0000}\u{0001}\u{0033}\u{0034}\u{0035}\u{0036}\u{0037}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         17|\
-         56|\
-         12|\
-         0|\
-         0"
-    );
-}
-
-#[test]
-fn cmap10_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/cmap10_font1.otf",
-            "\u{0000}\u{0001}\u{9232}\u{109422}\u{109423}\u{109424}\u{109425}\u{FFFF}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         0|\
-         0|\
-         0|\
-         26|\
-         27|\
-         32|\
-         0"
+        "0|0|0|17|56|12|0|0"
     );
 }
 
@@ -204,23 +116,28 @@ fn cmap10_001() {
 fn cmap10_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/cmap10_font2.otf",
-            "\u{0000}\u{0001}\u{0021}\u{0022}\u{0023}\u{0024}\u{0025}\u{FFFF}",
+            "tests/fonts/aots/cmap10_font1.otf",
+            "\u{0000}\u{0001}\u{9232}\u{109422}\u{109423}\u{109424}\u{109425}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0"
+        "0|0|0|0|26|27|32|0"
     );
 }
 
 #[test]
-fn cmap12_001() {
+fn cmap10_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/cmap10_font2.otf",
+            "\u{0000}\u{0001}\u{0021}\u{0022}\u{0023}\u{0024}\u{0025}\u{FFFF}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|0|0|0|0|0|0|0"
+    );
+}
+
+#[test]
+fn cmap12_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap12_font1.otf",
@@ -228,43 +145,7 @@ fn cmap12_001() {
              \u{102528}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         23|\
-         24|\
-         27|\
-         0|\
-         0|\
-         53|\
-         57|\
-         0|\
-         0"
-    );
-}
-
-#[test]
-fn cmap4_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/cmap4_font1.otf",
-            "\u{0000}\u{0001}\u{0010}\u{0011}\u{0012}\u{001E}\u{001F}\u{00C7}\u{00C8}\u{00CD}\
-             \u{00D2}\u{00D3}\u{FFFF}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         0|\
-         0|\
-         40|\
-         41|\
-         53|\
-         0|\
-         0|\
-         256|\
-         261|\
-         266|\
-         0|\
-         0"
+        "0|0|0|23|24|27|0|0|53|57|0|0"
     );
 }
 
@@ -272,24 +153,12 @@ fn cmap4_001() {
 fn cmap4_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/cmap4_font2.otf",
+            "tests/fonts/aots/cmap4_font1.otf",
             "\u{0000}\u{0001}\u{0010}\u{0011}\u{0012}\u{001E}\u{001F}\u{00C7}\u{00C8}\u{00CD}\
              \u{00D2}\u{00D3}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0"
+        "0|0|0|40|41|53|0|0|256|261|266|0|0"
     );
 }
 
@@ -297,24 +166,12 @@ fn cmap4_002() {
 fn cmap4_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/cmap4_font3.otf",
+            "tests/fonts/aots/cmap4_font2.otf",
             "\u{0000}\u{0001}\u{0010}\u{0011}\u{0012}\u{001E}\u{001F}\u{00C7}\u{00C8}\u{00CD}\
              \u{00D2}\u{00D3}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         65534"
+        "0|0|0|0|0|0|0|0|0|0|0|0|0"
     );
 }
 
@@ -322,17 +179,12 @@ fn cmap4_003() {
 fn cmap4_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/cmap4_font4.otf",
-            "\u{0000}\u{AFC7}\u{AFC8}\u{AFC9}\u{B02B}\u{B02C}\u{B02D}",
+            "tests/fonts/aots/cmap4_font3.otf",
+            "\u{0000}\u{0001}\u{0010}\u{0011}\u{0012}\u{001E}\u{001F}\u{00C7}\u{00C8}\u{00CD}\
+             \u{00D2}\u{00D3}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         44500|\
-         44501|\
-         44599|\
-         44600|\
-         0"
+        "0|0|0|0|0|0|0|0|0|0|0|0|65534"
     );
 }
 
@@ -341,36 +193,22 @@ fn cmap4_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/cmap4_font4.otf",
-            "\u{0000}\u{0063}\u{0064}\u{01F3}\u{01F4}\u{01F5}\u{03E8}\u{03E9}",
+            "\u{0000}\u{AFC7}\u{AFC8}\u{AFC9}\u{B02B}\u{B02C}\u{B02D}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         65136|\
-         65535|\
-         0|\
-         1|\
-         500|\
-         0"
+        "0|0|44500|44501|44599|44600|0"
     );
 }
 
 #[test]
-fn cmap6_001() {
+fn cmap4_006() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/cmap6_font1.otf",
-            "\u{0000}\u{0001}\u{0021}\u{0022}\u{0023}\u{0024}\u{0025}\u{FFFF}",
+            "tests/fonts/aots/cmap4_font4.otf",
+            "\u{0000}\u{0063}\u{0064}\u{01F3}\u{01F4}\u{01F5}\u{03E8}\u{03E9}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         17|\
-         56|\
-         12|\
-         0|\
-         0"
+        "0|0|65136|65535|0|1|500|0"
     );
 }
 
@@ -378,50 +216,35 @@ fn cmap6_001() {
 fn cmap6_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/cmap6_font2.otf",
+            "tests/fonts/aots/cmap6_font1.otf",
             "\u{0000}\u{0001}\u{0021}\u{0022}\u{0023}\u{0024}\u{0025}\u{FFFF}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0|\
-         0"
+        "0|0|0|17|56|12|0|0"
     );
 }
 
 #[test]
-fn gpos1_1_lookupflag_001() {
+fn cmap6_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/cmap6_font2.otf",
+            "\u{0000}\u{0001}\u{0021}\u{0022}\u{0023}\u{0024}\u{0025}\u{FFFF}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|0|0|0|0|0|0|0"
+    );
+}
+
+#[test]
+fn gpos1_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_1_lookupflag_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@3000,0|\
-         20@4200,0|\
-         21@6000,0"
-    );
-}
-
-#[test]
-fn gpos1_1_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos1_1_simple_f1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "17|\
-         18@1300,0|\
-         19@3000,0|\
-         20@4300,0|\
-         21@6000,0"
+        "17|18@1500,0|19@3000,0|20@4200,0|21@6000,0"
     );
 }
 
@@ -429,15 +252,11 @@ fn gpos1_1_simple_001() {
 fn gpos1_1_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos1_1_simple_f2.otf",
+            "tests/fonts/aots/gpos1_1_simple_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,-200|\
-         19@3000,0|\
-         20@4500,-200|\
-         21@6000,0"
+        "17|18@1300,0|19@3000,0|20@4300,0|21@6000,0"
     );
 }
 
@@ -445,65 +264,47 @@ fn gpos1_1_simple_002() {
 fn gpos1_1_simple_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos1_1_simple_f3.otf",
+            "tests/fonts/aots/gpos1_1_simple_f2.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@2800,0|\
-         20@4300,0|\
-         21@5600,0"
+        "17|18@1500,-200|19@3000,0|20@4500,-200|21@6000,0"
     );
 }
 
 #[test]
-fn gpos1_2_001() {
+fn gpos1_1_simple_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos1_1_simple_f3.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "17|18@1500,0|19@2800,0|20@4300,0|21@5600,0"
+    );
+}
+
+#[test]
+fn gpos1_2_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_2_font1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1300,0|\
-         19@3000,0|\
-         20@4200,0|\
-         21@6000,0"
+        "17|18@1300,0|19@3000,0|20@4200,0|21@6000,0"
     );
 }
 
 #[test]
-fn gpos1_2_lookupflag_001() {
+fn gpos1_2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos1_2_font2.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@3000,0|\
-         20@4200,0|\
-         21@6000,0"
-    );
-}
-
-#[test]
-fn gpos2_1_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos2_1_font6.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}\u{0011}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "17|\
-         18@1300,0|\
-         19@3000,-100|\
-         17@4500,0|\
-         18@5700,0|\
-         20@7500,-400|\
-         17@9000,0"
+        "17|18@1500,0|19@3000,0|20@4200,0|21@6000,0"
     );
 }
 
@@ -511,39 +312,23 @@ fn gpos2_1_001() {
 fn gpos2_1_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_1_font7.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}\u{0011}\u{0015}\u{0016}\u{0011}",
+            "tests/fonts/aots/gpos2_1_font6.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1300,0|\
-         19@3000,-100|\
-         17@4500,0|\
-         18@5700,0|\
-         20@7500,-400|\
-         17@9000,0|\
-         21@10000,0|\
-         22@12000,-600|\
-         17@13500,0"
+        "17|18@1300,0|19@3000,-100|17@4500,0|18@5700,0|20@7500,-400|17@9000,0"
     );
 }
 
 #[test]
-fn gpos2_1_lookupflag_001() {
+fn gpos2_1_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_1_lookupflag_f1.otf",
-            "\u{0011}\u{0013}\u{0014}\u{0011}\u{0013}\u{0012}\u{0014}\u{0011}",
+            "tests/fonts/aots/gpos2_1_font7.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}\u{0011}\u{0015}\u{0016}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         19@1300,0|\
-         20@3000,-100|\
-         17@4500,0|\
-         19@5800,0|\
-         18@7500,0|\
-         20@9000,-100|\
-         17@10500,0"
+        "17|18@1300,0|19@3000,-100|17@4500,0|18@5700,0|20@7500,-400|17@9000,0|21@10000,0|22@12000,-600|17@13500,0"
     );
 }
 
@@ -551,33 +336,23 @@ fn gpos2_1_lookupflag_001() {
 fn gpos2_1_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_1_lookupflag_f2.otf",
+            "tests/fonts/aots/gpos2_1_lookupflag_f1.otf",
             "\u{0011}\u{0013}\u{0014}\u{0011}\u{0013}\u{0012}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         19@1500,0|\
-         20@2800,-100|\
-         17@4300,0|\
-         19@5800,0|\
-         18@7100,0|\
-         20@8600,-100|\
-         17@10100,0"
+        "17|19@1300,0|20@3000,-100|17@4500,0|19@5800,0|18@7500,0|20@9000,-100|17@10500,0"
     );
 }
 
 #[test]
-fn gpos2_1_next_glyph_001() {
+fn gpos2_1_lookupflag_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_1_next_glyph_f1.otf",
-            "\u{0012}\u{0012}\u{0012}\u{0012}",
+            "tests/fonts/aots/gpos2_1_lookupflag_f2.otf",
+            "\u{0011}\u{0013}\u{0014}\u{0011}\u{0013}\u{0012}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "18@-100,0|\
-         18@1500,-100|\
-         18@2900,0|\
-         18@4500,-100"
+        "17|19@1500,0|20@2800,-100|17@4300,0|19@5800,0|18@7100,0|20@8600,-100|17@10100,0"
     );
 }
 
@@ -585,31 +360,23 @@ fn gpos2_1_next_glyph_001() {
 fn gpos2_1_next_glyph_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_1_next_glyph_f2.otf",
+            "tests/fonts/aots/gpos2_1_next_glyph_f1.otf",
             "\u{0012}\u{0012}\u{0012}\u{0012}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "18@-100,0|\
-         18@1400,0|\
-         18@2900,0|\
-         18@4500,0"
+        "18@-100,0|18@1500,-100|18@2900,0|18@4500,-100"
     );
 }
 
 #[test]
-fn gpos2_1_simple_001() {
+fn gpos2_1_next_glyph_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_1_simple_f1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}",
+            "tests/fonts/aots/gpos2_1_next_glyph_f2.otf",
+            "\u{0012}\u{0012}\u{0012}\u{0012}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1300,0|\
-         19@3000,-100|\
-         17@4500,0|\
-         18@6000,0|\
-         20@7500,0"
+        "18@-100,0|18@1400,0|18@2900,0|18@4500,0"
     );
 }
 
@@ -618,28 +385,22 @@ fn gpos2_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos2_1_simple_f1.otf",
-            "\u{0011}\u{0012}",
+            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0"
+        "17|18@1300,0|19@3000,-100|17@4500,0|18@6000,0|20@7500,0"
     );
 }
 
 #[test]
-fn gpos2_2_001() {
+fn gpos2_1_simple_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_2_font1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}",
+            "tests/fonts/aots/gpos2_1_simple_f1.otf",
+            "\u{0011}\u{0012}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1300,0|\
-         19@3000,-100|\
-         17@4500,0|\
-         18@6000,0|\
-         20@7500,0"
+        "17|18@1500,0"
     );
 }
 
@@ -647,18 +408,11 @@ fn gpos2_2_001() {
 fn gpos2_2_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_2_font2.otf",
-            "\u{0011}\u{0013}\u{0014}\u{0011}\u{0013}\u{0012}\u{0014}\u{0011}",
+            "tests/fonts/aots/gpos2_2_font1.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0011}\u{0012}\u{0014}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         19@1300,0|\
-         20@3000,-100|\
-         17@4500,0|\
-         19@5800,0|\
-         18@7500,0|\
-         20@9000,-100|\
-         17@10500,0"
+        "17|18@1300,0|19@3000,-100|17@4500,0|18@6000,0|20@7500,0"
     );
 }
 
@@ -666,18 +420,11 @@ fn gpos2_2_002() {
 fn gpos2_2_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_2_font3.otf",
+            "tests/fonts/aots/gpos2_2_font2.otf",
             "\u{0011}\u{0013}\u{0014}\u{0011}\u{0013}\u{0012}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         19@1500,0|\
-         20@2800,-100|\
-         17@4300,0|\
-         19@5800,0|\
-         18@7100,0|\
-         20@8600,-100|\
-         17@10100,0"
+        "17|19@1300,0|20@3000,-100|17@4500,0|19@5800,0|18@7500,0|20@9000,-100|17@10500,0"
     );
 }
 
@@ -685,14 +432,11 @@ fn gpos2_2_003() {
 fn gpos2_2_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_2_font4.otf",
-            "\u{0012}\u{0012}\u{0012}\u{0012}",
+            "tests/fonts/aots/gpos2_2_font3.otf",
+            "\u{0011}\u{0013}\u{0014}\u{0011}\u{0013}\u{0012}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "18@-100,0|\
-         18@1500,-100|\
-         18@2900,0|\
-         18@4500,-100"
+        "17|19@1500,0|20@2800,-100|17@4300,0|19@5800,0|18@7100,0|20@8600,-100|17@10100,0"
     );
 }
 
@@ -700,30 +444,23 @@ fn gpos2_2_004() {
 fn gpos2_2_005() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos2_2_font5.otf",
+            "tests/fonts/aots/gpos2_2_font4.otf",
             "\u{0012}\u{0012}\u{0012}\u{0012}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "18@-100,0|\
-         18@1400,0|\
-         18@2900,0|\
-         18@4500,0"
+        "18@-100,0|18@1500,-100|18@2900,0|18@4500,-100"
     );
 }
 
 #[test]
-fn gpos3_001() {
+fn gpos2_2_006() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos3_font1.otf",
-            "\u{0011}\u{0012}\u{0011}\u{0013}\u{0011}",
+            "tests/fonts/aots/gpos2_2_font5.otf",
+            "\u{0012}\u{0012}\u{0012}\u{0012}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         17@3000,0|\
-         19@4500,0|\
-         17@6000,0"
+        "18@-100,0|18@1400,0|18@2900,0|18@4500,0"
     );
 }
 
@@ -731,14 +468,11 @@ fn gpos3_001() {
 fn gpos3_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos3_font3.otf",
-            "\u{0011}\u{0012}\u{0014}\u{0011}",
+            "tests/fonts/aots/gpos3_font1.otf",
+            "\u{0011}\u{0012}\u{0011}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         20@3000,0|\
-         17@4500,0"
+        "17|18@1500,0|17@3000,0|19@4500,0|17@6000,0"
     );
 }
 
@@ -747,13 +481,10 @@ fn gpos3_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
-            "\u{0011}\u{0013}\u{0012}\u{0011}",
+            "\u{0011}\u{0012}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         19@1500,0|\
-         18@3000,0|\
-         17@4500,0"
+        "17|18@1500,0|20@3000,0|17@4500,0"
     );
 }
 
@@ -762,13 +493,10 @@ fn gpos3_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
-            "\u{0011}\u{0013}\u{0014}\u{0011}",
+            "\u{0011}\u{0013}\u{0012}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         19@1500,0|\
-         20@3000,0|\
-         17@4500,0"
+        "17|19@1500,0|18@3000,0|17@4500,0"
     );
 }
 
@@ -777,11 +505,10 @@ fn gpos3_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
-            "\u{0011}\u{0012}",
+            "\u{0011}\u{0013}\u{0014}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0"
+        "17|19@1500,0|20@3000,0|17@4500,0"
     );
 }
 
@@ -790,30 +517,22 @@ fn gpos3_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos3_font3.otf",
-            "\u{0011}\u{0012}\u{0015}\u{0015}\u{0015}",
+            "\u{0011}\u{0012}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         21@3000,0|\
-         21@4500,0|\
-         21@6000,0"
+        "17|18@1500,0"
     );
 }
 
 #[test]
-fn gpos4_lookupflag_001() {
+fn gpos3_007() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos4_lookupflag_f1.otf",
-            "\u{0011}\u{0012}\u{0011}\u{0013}\u{0011}",
+            "tests/fonts/aots/gpos3_font3.otf",
+            "\u{0011}\u{0012}\u{0015}\u{0015}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         17@3000,0|\
-         19@4500,0|\
-         17@4500,0"
+        "17|18@1500,0|21@3000,0|21@4500,0|21@6000,0"
     );
 }
 
@@ -821,29 +540,23 @@ fn gpos4_lookupflag_001() {
 fn gpos4_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos4_lookupflag_f2.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0011}",
+            "tests/fonts/aots/gpos4_lookupflag_f1.otf",
+            "\u{0011}\u{0012}\u{0011}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@3000,0|\
-         17@3000,0"
+        "17|18@1500,0|17@3000,0|19@4500,0|17@4500,0"
     );
 }
 
 #[test]
-fn gpos4_simple_001() {
+fn gpos4_lookupflag_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos4_simple_1.otf",
+            "tests/fonts/aots/gpos4_lookupflag_f2.otf",
             "\u{0011}\u{0012}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@1400,-80|\
-         17@3000,0"
+        "17|18@1500,0|19@3000,0|17@3000,0"
     );
 }
 
@@ -852,13 +565,10 @@ fn gpos4_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_simple_1.otf",
-            "\u{0011}\u{0011}\u{0013}\u{0011}",
+            "\u{0011}\u{0012}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         17@1500,0|\
-         19@3000,0|\
-         17@3000,0"
+        "17|18@1500,0|19@1400,-80|17@3000,0"
     );
 }
 
@@ -867,28 +577,22 @@ fn gpos4_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos4_simple_1.otf",
-            "\u{0019}\u{0019}\u{0013}\u{0011}",
+            "\u{0011}\u{0011}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "25|\
-         25@1500,0|\
-         19@3000,0|\
-         17@3000,0"
+        "17|17@1500,0|19@3000,0|17@3000,0"
     );
 }
 
 #[test]
-fn gpos5_001() {
+fn gpos4_simple_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos5_font1.otf",
-            "\u{0011}\u{001E}\u{0013}\u{001F}\u{0011}",
+            "tests/fonts/aots/gpos4_simple_1.otf",
+            "\u{0019}\u{0019}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@1400,-80|\
-         17@3000,0"
+        "25|25@1500,0|19@3000,0|17@3000,0"
     );
 }
 
@@ -897,28 +601,22 @@ fn gpos5_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos5_font1.otf",
-            "\u{0011}\u{001E}\u{001F}\u{0013}\u{0011}",
+            "\u{0011}\u{001E}\u{0013}\u{001F}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         19@1401,-79|\
-         17@3000,0"
+        "17|18@1500,0|19@1400,-80|17@3000,0"
     );
 }
 
 #[test]
-fn gpos6_001() {
+fn gpos5_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos6_font1.otf",
-            "\u{0011}\u{0011}\u{0013}\u{0011}",
+            "tests/fonts/aots/gpos5_font1.otf",
+            "\u{0011}\u{001E}\u{001F}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         17@1500,0|\
-         19@3000,0|\
-         17@3000,0"
+        "17|18@1500,0|19@1401,-79|17@3000,0"
     );
 }
 
@@ -927,29 +625,22 @@ fn gpos6_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos6_font1.otf",
-            "\u{0014}\u{0014}\u{0013}\u{0011}",
+            "\u{0011}\u{0011}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "20|\
-         20|\
-         19|\
-         17"
+        "17|17@1500,0|19@3000,0|17@3000,0"
     );
 }
 
 #[test]
-fn gpos7_1_001() {
+fn gpos6_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos7_1_font1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
+            "tests/fonts/aots/gpos6_font1.otf",
+            "\u{0014}\u{0014}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1600,0|\
-         19@3200,0|\
-         20@4800,0|\
-         21@6000,0"
+        "20|20|19|17"
     );
 }
 
@@ -958,31 +649,22 @@ fn gpos7_1_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos7_1_font1.otf",
-            "\u{0011}\u{0012}\u{0011}\u{0012}\u{0013}\u{0011}",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1500,0|\
-         17@3000,0|\
-         18@4500,0|\
-         19@6000,0|\
-         17@7500,0"
+        "17|18@1600,0|19@3200,0|20@4800,0|21@6000,0"
     );
 }
 
 #[test]
-fn gpos9_001() {
+fn gpos7_1_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos9_font1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
+            "tests/fonts/aots/gpos7_1_font1.otf",
+            "\u{0011}\u{0012}\u{0011}\u{0012}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1300,0|\
-         19@3000,0|\
-         20@4300,0|\
-         21@6000,0"
+        "17|18@1500,0|17@3000,0|18@4500,0|19@6000,0|17@7500,0"
     );
 }
 
@@ -990,33 +672,23 @@ fn gpos9_001() {
 fn gpos9_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos9_font2.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}\u{0011}",
+            "tests/fonts/aots/gpos9_font1.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "17|\
-         18@1300,0|\
-         19@2700,0|\
-         20@4300,0|\
-         21@5700,0|\
-         17@7500,0"
+        "17|18@1300,0|19@3000,0|20@4300,0|21@6000,0"
     );
 }
 
 #[test]
-fn gpos_chaining1_boundary_001() {
+fn gpos9_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining1_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "tests/fonts/aots/gpos9_font2.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "17|18@1300,0|19@2700,0|20@4300,0|21@5700,0|17@7500,0"
     );
 }
 
@@ -1024,16 +696,11 @@ fn gpos_chaining1_boundary_001() {
 fn gpos_chaining1_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining1_boundary_f2.otf",
+            "tests/fonts/aots/gpos_chaining1_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1041,16 +708,11 @@ fn gpos_chaining1_boundary_002() {
 fn gpos_chaining1_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining1_boundary_f3.otf",
+            "tests/fonts/aots/gpos_chaining1_boundary_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1058,21 +720,28 @@ fn gpos_chaining1_boundary_003() {
 fn gpos_chaining1_boundary_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining1_boundary_f4.otf",
+            "tests/fonts/aots/gpos_chaining1_boundary_f3.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
 #[test]
-fn gpos_chaining1_lookupflag_001() {
+fn gpos_chaining1_boundary_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_chaining1_boundary_f4.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|0@7500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_lookupflag_f1.otf",
@@ -1080,46 +749,7 @@ fn gpos_chaining1_lookupflag_001() {
              \u{0018}\u{005A}\u{0019}\u{005B}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         90@3000,0|\
-         21@3000,0|\
-         91@4500,0|\
-         22@4500,0|\
-         92@6000,0|\
-         23@6020,0|\
-         93@7500,0|\
-         94@7500,0|\
-         24@7500,0|\
-         90@9000,0|\
-         25@9000,0|\
-         91@10500,0|\
-         26@10500,0|\
-         0@12000,0"
-    );
-}
-
-#[test]
-fn gpos_chaining1_multiple_subrules_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining1_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
-             \u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         0@9000,0|\
-         20@10500,0|\
-         21@12000,0|\
-         22@13520,0|\
-         23@15000,0|\
-         0@16500,0"
+        "0|20@1500,0|90@3000,0|21@3000,0|91@4500,0|22@4500,0|92@6000,0|23@6020,0|93@7500,0|94@7500,0|24@7500,0|90@9000,0|25@9000,0|91@10500,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1127,57 +757,37 @@ fn gpos_chaining1_multiple_subrules_001() {
 fn gpos_chaining1_multiple_subrules_002() {
     assert_eq!(
         shape(
+            "tests/fonts/aots/gpos_chaining1_multiple_subrules_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
+             \u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|24@7500,0|0@9000,0|20@10500,0|21@12000,0|22@13520,0|23@15000,0|0@16500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining1_multiple_subrules_003() {
+    assert_eq!(
+        shape(
             "tests/fonts/aots/gpos_chaining1_multiple_subrules_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
              \u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         24@7500,0|\
-         0@9000,0|\
-         20@10500,0|\
-         21@12000,0|\
-         22@13520,0|\
-         23@15000,0|\
-         0@16500,0"
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|24@7500,0|0@9000,0|20@10500,0|21@12000,0|22@13520,0|23@15000,0|0@16500,0"
     );
 }
 
 #[test]
-fn gpos_chaining1_next_glyph_001() {
+fn gpos_chaining1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6020,0|\
-         0@7500,0"
-    );
-}
-
-#[test]
-fn gpos_chaining1_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining1_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6020,0|0@7500,0"
     );
 }
 
@@ -1185,19 +795,11 @@ fn gpos_chaining1_simple_001() {
 fn gpos_chaining1_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "tests/fonts/aots/gpos_chaining1_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1206,18 +808,10 @@ fn gpos_chaining1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         0@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1226,16 +820,10 @@ fn gpos_chaining1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0|0@10500,0|0@12000,0"
     );
 }
 
@@ -1244,15 +832,10 @@ fn gpos_chaining1_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0"
     );
 }
 
@@ -1261,18 +844,10 @@ fn gpos_chaining1_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         0@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0"
     );
 }
 
@@ -1281,16 +856,10 @@ fn gpos_chaining1_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "21|\
-         22@1500,0|\
-         23@3000,0|\
-         24@4500,0|\
-         25@6000,0|\
-         26@7500,0|\
-         0@9000,0"
+        "0|0@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1299,15 +868,10 @@ fn gpos_chaining1_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "22|\
-         23@1500,0|\
-         24@3000,0|\
-         25@4500,0|\
-         26@6000,0|\
-         0@7500,0"
+        "21|22@1500,0|23@3000,0|24@4500,0|25@6000,0|26@7500,0|0@9000,0"
     );
 }
 
@@ -1316,18 +880,10 @@ fn gpos_chaining1_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "22|23@1500,0|24@3000,0|25@4500,0|26@6000,0|0@7500,0"
     );
 }
 
@@ -1336,14 +892,10 @@ fn gpos_chaining1_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|0@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1352,49 +904,34 @@ fn gpos_chaining1_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0"
     );
 }
 
 #[test]
-fn gpos_chaining1_successive_001() {
+fn gpos_chaining1_simple_012() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_chaining1_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3000,0|22@4500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining1_successive_f1.otf",
             "\u{0000}\u{0019}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         25@1500,0|\
-         20@3000,0|\
-         21@4520,0|\
-         22@6020,0|\
-         23@7500,0|\
-         24@9000,0|\
-         0@10500,0"
-    );
-}
-
-#[test]
-fn gpos_chaining2_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining2_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|25@1500,0|20@3000,0|21@4520,0|22@6020,0|23@7500,0|24@9000,0|0@10500,0"
     );
 }
 
@@ -1402,16 +939,11 @@ fn gpos_chaining2_boundary_001() {
 fn gpos_chaining2_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining2_boundary_f2.otf",
+            "tests/fonts/aots/gpos_chaining2_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1419,16 +951,11 @@ fn gpos_chaining2_boundary_002() {
 fn gpos_chaining2_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining2_boundary_f3.otf",
+            "tests/fonts/aots/gpos_chaining2_boundary_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1436,21 +963,28 @@ fn gpos_chaining2_boundary_003() {
 fn gpos_chaining2_boundary_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining2_boundary_f4.otf",
+            "tests/fonts/aots/gpos_chaining2_boundary_f3.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
 #[test]
-fn gpos_chaining2_lookupflag_001() {
+fn gpos_chaining2_boundary_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_chaining2_boundary_f4.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|0@7500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_lookupflag_f1.otf",
@@ -1458,46 +992,7 @@ fn gpos_chaining2_lookupflag_001() {
              \u{0018}\u{005A}\u{0019}\u{005B}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         90@3000,0|\
-         21@3000,0|\
-         91@4500,0|\
-         22@4500,0|\
-         92@6000,0|\
-         23@6020,0|\
-         93@7500,0|\
-         94@7500,0|\
-         24@7500,0|\
-         90@9000,0|\
-         25@9000,0|\
-         91@10500,0|\
-         26@10500,0|\
-         0@12000,0"
-    );
-}
-
-#[test]
-fn gpos_chaining2_multiple_subrules_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining2_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
-             \u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         0@9000,0|\
-         20@10500,0|\
-         21@12000,0|\
-         22@13520,0|\
-         23@15000,0|\
-         0@16500,0"
+        "0|20@1500,0|90@3000,0|21@3000,0|91@4500,0|22@4500,0|92@6000,0|23@6020,0|93@7500,0|94@7500,0|24@7500,0|90@9000,0|25@9000,0|91@10500,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1505,57 +1000,37 @@ fn gpos_chaining2_multiple_subrules_001() {
 fn gpos_chaining2_multiple_subrules_002() {
     assert_eq!(
         shape(
+            "tests/fonts/aots/gpos_chaining2_multiple_subrules_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
+             \u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|24@7500,0|0@9000,0|20@10500,0|21@12000,0|22@13520,0|23@15000,0|0@16500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining2_multiple_subrules_003() {
+    assert_eq!(
+        shape(
             "tests/fonts/aots/gpos_chaining2_multiple_subrules_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
              \u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         24@7500,0|\
-         0@9000,0|\
-         20@10500,0|\
-         21@12000,0|\
-         22@13520,0|\
-         23@15000,0|\
-         0@16500,0"
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|24@7500,0|0@9000,0|20@10500,0|21@12000,0|22@13520,0|23@15000,0|0@16500,0"
     );
 }
 
 #[test]
-fn gpos_chaining2_next_glyph_001() {
+fn gpos_chaining2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6020,0|\
-         0@7500,0"
-    );
-}
-
-#[test]
-fn gpos_chaining2_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining2_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6020,0|0@7500,0"
     );
 }
 
@@ -1563,19 +1038,11 @@ fn gpos_chaining2_simple_001() {
 fn gpos_chaining2_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "tests/fonts/aots/gpos_chaining2_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1584,18 +1051,10 @@ fn gpos_chaining2_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         0@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1604,16 +1063,10 @@ fn gpos_chaining2_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0|0@10500,0|0@12000,0"
     );
 }
 
@@ -1622,15 +1075,10 @@ fn gpos_chaining2_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0"
     );
 }
 
@@ -1639,18 +1087,10 @@ fn gpos_chaining2_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         0@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0"
     );
 }
 
@@ -1659,16 +1099,10 @@ fn gpos_chaining2_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "21|\
-         22@1500,0|\
-         23@3000,0|\
-         24@4500,0|\
-         25@6000,0|\
-         26@7500,0|\
-         0@9000,0"
+        "0|0@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1677,15 +1111,10 @@ fn gpos_chaining2_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "22|\
-         23@1500,0|\
-         24@3000,0|\
-         25@4500,0|\
-         26@6000,0|\
-         0@7500,0"
+        "21|22@1500,0|23@3000,0|24@4500,0|25@6000,0|26@7500,0|0@9000,0"
     );
 }
 
@@ -1694,18 +1123,10 @@ fn gpos_chaining2_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "22|23@1500,0|24@3000,0|25@4500,0|26@6000,0|0@7500,0"
     );
 }
 
@@ -1714,14 +1135,10 @@ fn gpos_chaining2_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|0@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1730,49 +1147,34 @@ fn gpos_chaining2_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0"
     );
 }
 
 #[test]
-fn gpos_chaining2_successive_001() {
+fn gpos_chaining2_simple_012() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_chaining2_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3000,0|22@4500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining2_successive_f1.otf",
             "\u{0000}\u{0019}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         25@1500,0|\
-         20@3000,0|\
-         21@4520,0|\
-         22@6020,0|\
-         23@7500,0|\
-         24@9000,0|\
-         0@10500,0"
-    );
-}
-
-#[test]
-fn gpos_chaining3_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining3_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|25@1500,0|20@3000,0|21@4520,0|22@6020,0|23@7500,0|24@9000,0|0@10500,0"
     );
 }
 
@@ -1780,16 +1182,11 @@ fn gpos_chaining3_boundary_001() {
 fn gpos_chaining3_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining3_boundary_f2.otf",
+            "tests/fonts/aots/gpos_chaining3_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1797,16 +1194,11 @@ fn gpos_chaining3_boundary_002() {
 fn gpos_chaining3_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining3_boundary_f3.otf",
+            "tests/fonts/aots/gpos_chaining3_boundary_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1814,21 +1206,28 @@ fn gpos_chaining3_boundary_003() {
 fn gpos_chaining3_boundary_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining3_boundary_f4.otf",
+            "tests/fonts/aots/gpos_chaining3_boundary_f3.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4500,0|23@6000,0|0@7500,0"
     );
 }
 
 #[test]
-fn gpos_chaining3_lookupflag_001() {
+fn gpos_chaining3_boundary_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_chaining3_boundary_f4.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|0@7500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining3_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_lookupflag_f1.otf",
@@ -1836,58 +1235,19 @@ fn gpos_chaining3_lookupflag_001() {
              \u{0018}\u{005A}\u{0019}\u{005B}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         90@3000,0|\
-         21@3000,0|\
-         91@4500,0|\
-         22@4500,0|\
-         92@6000,0|\
-         23@6020,0|\
-         93@7500,0|\
-         94@7500,0|\
-         24@7500,0|\
-         90@9000,0|\
-         25@9000,0|\
-         91@10500,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|90@3000,0|21@3000,0|91@4500,0|22@4500,0|92@6000,0|23@6020,0|93@7500,0|94@7500,0|24@7500,0|90@9000,0|25@9000,0|91@10500,0|26@10500,0|0@12000,0"
     );
 }
 
 #[test]
-fn gpos_chaining3_next_glyph_001() {
+fn gpos_chaining3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_next_glyph_f1.otf",
             "\u{0000}\u{0016}\u{0015}\u{0016}\u{0015}\u{0016}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         22@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         21@6020,0|\
-         22@7500,0|\
-         21@9000,0|\
-         0@10500,0"
-    );
-}
-
-#[test]
-fn gpos_chaining3_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_chaining3_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|22@1500,0|21@3020,0|22@4500,0|21@6020,0|22@7500,0|21@9000,0|0@10500,0"
     );
 }
 
@@ -1895,19 +1255,11 @@ fn gpos_chaining3_simple_001() {
 fn gpos_chaining3_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "tests/fonts/aots/gpos_chaining3_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4520,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -1916,18 +1268,10 @@ fn gpos_chaining3_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         0@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3000,0|22@4520,0|23@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -1936,16 +1280,10 @@ fn gpos_chaining3_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0|0@10500,0|0@12000,0"
     );
 }
 
@@ -1954,15 +1292,10 @@ fn gpos_chaining3_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0"
     );
 }
 
@@ -1971,18 +1304,10 @@ fn gpos_chaining3_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         0@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0"
     );
 }
 
@@ -1991,16 +1316,10 @@ fn gpos_chaining3_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "21|\
-         22@1500,0|\
-         23@3000,0|\
-         24@4500,0|\
-         25@6000,0|\
-         26@7500,0|\
-         0@9000,0"
+        "0|0@1500,0|21@3000,0|22@4500,0|23@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -2009,15 +1328,10 @@ fn gpos_chaining3_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "22|\
-         23@1500,0|\
-         24@3000,0|\
-         25@4500,0|\
-         26@6000,0|\
-         0@7500,0"
+        "21|22@1500,0|23@3000,0|24@4500,0|25@6000,0|26@7500,0|0@9000,0"
     );
 }
 
@@ -2026,18 +1340,10 @@ fn gpos_chaining3_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0|\
-         24@7500,0|\
-         25@9000,0|\
-         26@10500,0|\
-         0@12000,0"
+        "22|23@1500,0|24@3000,0|25@4500,0|26@6000,0|0@7500,0"
     );
 }
 
@@ -2046,14 +1352,10 @@ fn gpos_chaining3_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         23@6000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|0@6000,0|24@7500,0|25@9000,0|26@10500,0|0@12000,0"
     );
 }
 
@@ -2062,50 +1364,34 @@ fn gpos_chaining3_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|23@6000,0"
     );
 }
 
 #[test]
-fn gpos_chaining3_successive_001() {
+fn gpos_chaining3_simple_012() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_chaining3_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3000,0|22@4500,0"
+    );
+}
+
+#[test]
+fn gpos_chaining3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_chaining3_successive_f1.otf",
             "\u{0000}\u{0019}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         25@1500,0|\
-         20@3000,0|\
-         21@4520,0|\
-         22@6020,0|\
-         23@7500,0|\
-         24@9000,0|\
-         0@10500,0"
-    );
-}
-
-#[test]
-fn gpos_context1_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context1_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         20@3000,0|\
-         20@4500,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
+        "0|25@1500,0|20@3000,0|21@4520,0|22@6020,0|23@7500,0|24@9000,0|0@10500,0"
     );
 }
 
@@ -2113,52 +1399,35 @@ fn gpos_context1_boundary_001() {
 fn gpos_context1_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context1_boundary_f2.otf",
+            "tests/fonts/aots/gpos_context1_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         20@3020,0|\
-         20@4520,0|\
-         20@6020,0|\
-         20@7520,0|\
-         0@9000,0"
+        "0|20@1500,0|20@3000,0|20@4500,0|20@6000,0|20@7500,0|0@9000,0"
     );
 }
 
 #[test]
-fn gpos_context1_expansion_001() {
+fn gpos_context1_boundary_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context1_boundary_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1520,0|20@3020,0|20@4520,0|20@6020,0|20@7520,0|0@9000,0"
+    );
+}
+
+#[test]
+fn gpos_context1_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_expansion_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0"
-    );
-}
-
-#[test]
-fn gpos_context1_lookupflag_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context1_lookupflag_f1.otf",
-            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1520,0|\
-         90@3000,0|\
-         21@3020,0|\
-         91@4500,0|\
-         92@4500,0|\
-         22@4520,0|\
-         0@6000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|0@6000,0"
     );
 }
 
@@ -2166,37 +1435,23 @@ fn gpos_context1_lookupflag_001() {
 fn gpos_context1_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context1_lookupflag_f2.otf",
+            "tests/fonts/aots/gpos_context1_lookupflag_f1.otf",
             "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         90@3000,0|\
-         21@3020,0|\
-         91@4500,0|\
-         92@4500,0|\
-         22@4500,0|\
-         0@6000,0"
+        "0|20@1520,0|90@3000,0|21@3020,0|91@4500,0|92@4500,0|22@4520,0|0@6000,0"
     );
 }
 
 #[test]
-fn gpos_context1_multiple_subrules_001() {
+fn gpos_context1_lookupflag_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context1_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "tests/fonts/aots/gpos_context1_lookupflag_f2.otf",
+            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0|\
-         20@7500,0|\
-         21@9020,0|\
-         0@10500,0"
+        "0|20@1500,0|90@3000,0|21@3020,0|91@4500,0|92@4500,0|22@4500,0|0@6000,0"
     );
 }
 
@@ -2204,52 +1459,35 @@ fn gpos_context1_multiple_subrules_001() {
 fn gpos_context1_multiple_subrules_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context1_multiple_subrules_f2.otf",
+            "tests/fonts/aots/gpos_context1_multiple_subrules_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         0@6000,0|\
-         20@7500,0|\
-         21@9020,0|\
-         0@10500,0"
+        "0|20@1520,0|21@3000,0|22@4500,0|0@6000,0|20@7500,0|21@9020,0|0@10500,0"
     );
 }
 
 #[test]
-fn gpos_context1_next_glyph_001() {
+fn gpos_context1_multiple_subrules_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context1_multiple_subrules_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3020,0|22@4500,0|0@6000,0|20@7500,0|21@9020,0|0@10500,0"
+    );
+}
+
+#[test]
+fn gpos_context1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         20@3000,0|\
-         20@4520,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
-    );
-}
-
-#[test]
-fn gpos_context1_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context1_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1520,0|\
-         21@3020,0|\
-         22@4520,0|\
-         0@6000,0"
+        "0|20@1520,0|20@3000,0|20@4520,0|20@6000,0|20@7500,0|0@9000,0"
     );
 }
 
@@ -2258,15 +1496,10 @@ fn gpos_context1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         0@3000,0|\
-         20@4500,0|\
-         21@6000,0|\
-         0@7500,0"
+        "0|20@1520,0|21@3020,0|22@4520,0|0@6000,0"
     );
 }
 
@@ -2274,52 +1507,35 @@ fn gpos_context1_simple_002() {
 fn gpos_context1_simple_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "tests/fonts/aots/gpos_context1_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         20@3020,0|\
-         20@4500,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
+        "0|20@1500,0|0@3000,0|20@4500,0|21@6000,0|0@7500,0"
     );
 }
 
 #[test]
-fn gpos_context1_successive_001() {
+fn gpos_context1_simple_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context1_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|20@3020,0|20@4500,0|20@6000,0|20@7500,0|0@9000,0"
+    );
+}
+
+#[test]
+fn gpos_context1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context1_successive_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
-    );
-}
-
-#[test]
-fn gpos_context2_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context2_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         20@3000,0|\
-         20@4500,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -2327,44 +1543,23 @@ fn gpos_context2_boundary_001() {
 fn gpos_context2_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context2_boundary_f2.otf",
+            "tests/fonts/aots/gpos_context2_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         20@3020,0|\
-         20@4520,0|\
-         20@6020,0|\
-         20@7520,0|\
-         0@9000,0"
+        "0|20@1500,0|20@3000,0|20@4500,0|20@6000,0|20@7500,0|0@9000,0"
     );
 }
 
 #[test]
-fn gpos_context2_classes_001() {
+fn gpos_context2_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context2_classes_f1.otf",
-            "\u{0000}\u{0014}\u{001A}\u{001C}\u{0018}\u{0000}\u{0015}\u{001B}\u{001A}\u{0018}\
-             \u{0000}\u{0016}\u{001B}\u{001A}\u{0018}",
+            "tests/fonts/aots/gpos_context2_boundary_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         26@3020,0|\
-         28@4500,0|\
-         24@6000,0|\
-         0@7500,0|\
-         21@9000,0|\
-         27@10520,0|\
-         26@12000,0|\
-         24@13500,0|\
-         0@15000,0|\
-         22@16500,0|\
-         27@18000,0|\
-         26@19500,0|\
-         24@21000,0"
+        "0|20@1520,0|20@3020,0|20@4520,0|20@6020,0|20@7520,0|0@9000,0"
     );
 }
 
@@ -2372,61 +1567,37 @@ fn gpos_context2_classes_001() {
 fn gpos_context2_classes_002() {
     assert_eq!(
         shape(
+            "tests/fonts/aots/gpos_context2_classes_f1.otf",
+            "\u{0000}\u{0014}\u{001A}\u{001C}\u{0018}\u{0000}\u{0015}\u{001B}\u{001A}\u{0018}\
+             \u{0000}\u{0016}\u{001B}\u{001A}\u{0018}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|26@3020,0|28@4500,0|24@6000,0|0@7500,0|21@9000,0|27@10520,0|26@12000,0|24@13500,0|0@15000,0|22@16500,0|27@18000,0|26@19500,0|24@21000,0"
+    );
+}
+
+#[test]
+fn gpos_context2_classes_003() {
+    assert_eq!(
+        shape(
             "tests/fonts/aots/gpos_context2_classes_f2.otf",
             "\u{0000}\u{0016}\u{001B}\u{001A}\u{0018}\u{0000}\u{0018}\u{0018}\u{001D}\u{0016}\
              \u{0000}\u{0016}\u{001B}\u{001A}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         22@1500,0|\
-         27@3020,0|\
-         26@4500,0|\
-         24@6000,0|\
-         0@7500,0|\
-         24@9000,0|\
-         24@10500,0|\
-         29@12020,0|\
-         22@13500,0|\
-         0@15000,0|\
-         22@16500,0|\
-         27@18020,0|\
-         26@19500,0|\
-         24@21000,0"
+        "0|22@1500,0|27@3020,0|26@4500,0|24@6000,0|0@7500,0|24@9000,0|24@10500,0|29@12020,0|22@13500,0|0@15000,0|22@16500,0|27@18020,0|26@19500,0|24@21000,0"
     );
 }
 
 #[test]
-fn gpos_context2_expansion_001() {
+fn gpos_context2_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_expansion_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0"
-    );
-}
-
-#[test]
-fn gpos_context2_lookupflag_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context2_lookupflag_f1.otf",
-            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1520,0|\
-         90@3000,0|\
-         21@3020,0|\
-         91@4500,0|\
-         92@4500,0|\
-         22@4520,0|\
-         0@6000,0"
+        "0|20@1500,0|21@3000,0|22@4500,0|0@6000,0"
     );
 }
 
@@ -2434,37 +1605,23 @@ fn gpos_context2_lookupflag_001() {
 fn gpos_context2_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context2_lookupflag_f2.otf",
+            "tests/fonts/aots/gpos_context2_lookupflag_f1.otf",
             "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         90@3000,0|\
-         21@3020,0|\
-         91@4500,0|\
-         92@4500,0|\
-         22@4500,0|\
-         0@6000,0"
+        "0|20@1520,0|90@3000,0|21@3020,0|91@4500,0|92@4500,0|22@4520,0|0@6000,0"
     );
 }
 
 #[test]
-fn gpos_context2_multiple_subrules_001() {
+fn gpos_context2_lookupflag_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context2_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "tests/fonts/aots/gpos_context2_lookupflag_f2.otf",
+            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         21@3000,0|\
-         22@4500,0|\
-         0@6000,0|\
-         20@7500,0|\
-         21@9020,0|\
-         0@10500,0"
+        "0|20@1500,0|90@3000,0|21@3020,0|91@4500,0|92@4500,0|22@4500,0|0@6000,0"
     );
 }
 
@@ -2472,52 +1629,35 @@ fn gpos_context2_multiple_subrules_001() {
 fn gpos_context2_multiple_subrules_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context2_multiple_subrules_f2.otf",
+            "tests/fonts/aots/gpos_context2_multiple_subrules_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4500,0|\
-         0@6000,0|\
-         20@7500,0|\
-         21@9020,0|\
-         0@10500,0"
+        "0|20@1520,0|21@3000,0|22@4500,0|0@6000,0|20@7500,0|21@9020,0|0@10500,0"
     );
 }
 
 #[test]
-fn gpos_context2_next_glyph_001() {
+fn gpos_context2_multiple_subrules_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context2_multiple_subrules_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|21@3020,0|22@4500,0|0@6000,0|20@7500,0|21@9020,0|0@10500,0"
+    );
+}
+
+#[test]
+fn gpos_context2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         20@3000,0|\
-         20@4520,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
-    );
-}
-
-#[test]
-fn gpos_context2_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context2_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1520,0|\
-         21@3020,0|\
-         22@4520,0|\
-         0@6000,0"
+        "0|20@1520,0|20@3000,0|20@4520,0|20@6000,0|20@7500,0|0@9000,0"
     );
 }
 
@@ -2526,15 +1666,10 @@ fn gpos_context2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         0@3000,0|\
-         20@4500,0|\
-         21@6000,0|\
-         0@7500,0"
+        "0|20@1520,0|21@3020,0|22@4520,0|0@6000,0"
     );
 }
 
@@ -2542,52 +1677,35 @@ fn gpos_context2_simple_002() {
 fn gpos_context2_simple_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "tests/fonts/aots/gpos_context2_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         20@3020,0|\
-         20@4500,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
+        "0|20@1500,0|0@3000,0|20@4500,0|21@6000,0|0@7500,0"
     );
 }
 
 #[test]
-fn gpos_context2_successive_001() {
+fn gpos_context2_simple_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context2_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|20@3020,0|20@4500,0|20@6000,0|20@7500,0|0@9000,0"
+    );
+}
+
+#[test]
+fn gpos_context2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context2_successive_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
-    );
-}
-
-#[test]
-fn gpos_context3_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context3_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1500,0|\
-         20@3000,0|\
-         20@4500,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6000,0|0@7500,0"
     );
 }
 
@@ -2595,36 +1713,23 @@ fn gpos_context3_boundary_001() {
 fn gpos_context3_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context3_boundary_f2.otf",
+            "tests/fonts/aots/gpos_context3_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         20@3020,0|\
-         20@4520,0|\
-         20@6020,0|\
-         20@7520,0|\
-         0@9000,0"
+        "0|20@1500,0|20@3000,0|20@4500,0|20@6000,0|20@7500,0|0@9000,0"
     );
 }
 
 #[test]
-fn gpos_context3_lookupflag_001() {
+fn gpos_context3_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context3_lookupflag_f1.otf",
-            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
+            "tests/fonts/aots/gpos_context3_boundary_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         90@3000,0|\
-         21@3020,0|\
-         91@4500,0|\
-         92@4500,0|\
-         22@4520,0|\
-         0@6000,0"
+        "0|20@1520,0|20@3020,0|20@4520,0|20@6020,0|20@7520,0|0@9000,0"
     );
 }
 
@@ -2632,52 +1737,35 @@ fn gpos_context3_lookupflag_001() {
 fn gpos_context3_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gpos_context3_lookupflag_f2.otf",
+            "tests/fonts/aots/gpos_context3_lookupflag_f1.otf",
             "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         90@3000,0|\
-         21@3020,0|\
-         91@4500,0|\
-         92@4500,0|\
-         22@4500,0|\
-         0@6000,0"
+        "0|20@1520,0|90@3000,0|21@3020,0|91@4500,0|92@4500,0|22@4520,0|0@6000,0"
     );
 }
 
 #[test]
-fn gpos_context3_next_glyph_001() {
+fn gpos_context3_lookupflag_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context3_lookupflag_f2.otf",
+            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|90@3000,0|21@3020,0|91@4500,0|92@4500,0|22@4500,0|0@6000,0"
+    );
+}
+
+#[test]
+fn gpos_context3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1520,0|\
-         20@3000,0|\
-         20@4520,0|\
-         20@6000,0|\
-         20@7500,0|\
-         0@9000,0"
-    );
-}
-
-#[test]
-fn gpos_context3_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gpos_context3_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --ned",
-        ),
-        "0|\
-         20@1520,0|\
-         21@3020,0|\
-         22@4520,0|\
-         0@6000,0"
+        "0|20@1520,0|20@3000,0|20@4520,0|20@6000,0|20@7500,0|0@9000,0"
     );
 }
 
@@ -2686,168 +1774,118 @@ fn gpos_context3_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         0@3000,0|\
-         20@4500,0|\
-         21@6000,0|\
-         0@7500,0|\
-         20@9020,0|\
-         21@10520,0|\
-         22@12020,0|\
-         0@13500,0"
+        "0|20@1520,0|21@3020,0|22@4520,0|0@6000,0"
     );
 }
 
 #[test]
-fn gpos_context3_successive_001() {
+fn gpos_context3_simple_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gpos_context3_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --ned",
+        ),
+        "0|20@1500,0|0@3000,0|20@4500,0|21@6000,0|0@7500,0|20@9020,0|21@10520,0|22@12020,0|0@13500,0"
+    );
+}
+
+#[test]
+fn gpos_context3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gpos_context3_successive_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --ned",
         ),
-        "0|\
-         20@1500,0|\
-         21@3020,0|\
-         22@4520,0|\
-         23@6000,0|\
-         0@7500,0"
+        "0|20@1500,0|21@3020,0|22@4520,0|23@6000,0|0@7500,0"
     );
 }
 
 #[test]
-fn gsub1_1_lookupflag_001() {
+fn gsub1_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_1_lookupflag_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         24|\
-         20|\
-         21"
+        "17|18|24|20|21"
     );
 }
 
 #[test]
-fn gsub1_1_modulo_001() {
+fn gsub1_1_modulo_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_1_modulo_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         17|\
-         24|\
-         23|\
-         18|\
-         23|\
-         24"
+        "17|18|17|24|23|18|23|24"
     );
 }
 
 #[test]
-fn gsub1_1_simple_001() {
+fn gsub1_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_1_simple_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         24|\
-         20|\
-         21"
+        "17|23|24|20|21"
     );
 }
 
 #[test]
-fn gsub1_2_lookupflag_001() {
+fn gsub1_2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_2_lookupflag_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         19|\
-         25|\
-         21"
+        "17|18|19|25|21"
     );
 }
 
 #[test]
-fn gsub1_2_simple_001() {
+fn gsub1_2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub1_2_simple_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         22|\
-         19|\
-         25|\
-         21"
+        "17|22|19|25|21"
     );
 }
 
 #[test]
-fn gsub2_1_lookupflag_001() {
+fn gsub2_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_lookupflag_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         22|\
-         23|\
-         17"
+        "17|18|22|23|17"
     );
 }
 
 #[test]
-fn gsub2_1_multiple_sequences_001() {
+fn gsub2_1_multiple_sequences_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_multiple_sequences_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0011}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         20|\
-         21|\
-         22|\
-         23|\
-         17"
-    );
-}
-
-#[test]
-fn gsub2_1_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub2_1_simple_f1.otf",
-            "\u{0011}\u{0012}\u{0013}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "17|\
-         20|\
-         21|\
-         22|\
-         19"
+        "17|20|21|22|23|17"
     );
 }
 
@@ -2856,63 +1894,51 @@ fn gsub2_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub2_1_simple_f1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0012}",
+            "\u{0011}\u{0012}\u{0013}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         20|\
-         21|\
-         22|\
-         19|\
-         20|\
-         21|\
-         22"
+        "17|20|21|22|19"
     );
 }
 
 #[test]
-fn gsub3_1_lookupflag_001() {
+fn gsub2_1_simple_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub2_1_simple_f1.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0012}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "17|20|21|22|19|20|21|22"
+    );
+}
+
+#[test]
+fn gsub3_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub3_1_lookupflag_f1.otf",
             "\u{0011}\u{0012}\u{0012}\u{0012}\u{0013}\u{0013}\u{0013}\u{0013}\u{0011}",
             "--features=\"-test[4],test[5],test[6]=2,-test[7]\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         18|\
-         18|\
-         19|\
-         22|\
-         23|\
-         19|\
-         17"
+        "17|18|18|18|19|22|23|19|17"
     );
 }
 
 #[test]
-fn gsub3_1_multiple_001() {
+fn gsub3_1_multiple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub3_1_multiple_f1.otf",
             "\u{0011}\u{0012}\u{0012}\u{0012}\u{0012}\u{0013}\u{0013}\u{0013}\u{0013}\u{0011}",
             "--features=\"-test[1],test[2],test[3]=2,-test[4],-test[5],test[6],test[7]=2,-test[8]\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         20|\
-         21|\
-         18|\
-         19|\
-         22|\
-         23|\
-         19|\
-         17"
+        "17|18|20|21|18|19|22|23|19|17"
     );
 }
 
 #[test]
-fn gsub3_1_simple_001() {
+fn gsub3_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub3_1_simple_f1.otf",
@@ -2920,24 +1946,12 @@ fn gsub3_1_simple_001() {
              \u{0011}\u{0012}\u{0011}",
             "--features=\"-test[1],test[3],test[5]=2,test[7]=3,-test[9],test[11]\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         17|\
-         20|\
-         17|\
-         21|\
-         17|\
-         22|\
-         17|\
-         18|\
-         17|\
-         20|\
-         17"
+        "17|18|17|20|17|21|17|22|17|18|17|20|17"
     );
 }
 
 #[test]
-fn gsub4_1_lookupflag_001() {
+fn gsub4_1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_lookupflag_f1.otf",
@@ -2945,35 +1959,7 @@ fn gsub4_1_lookupflag_001() {
              \u{0012}\u{0013}\u{0016}\u{0014}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         24|\
-         23|\
-         24|\
-         24|\
-         24|\
-         24|\
-         17|\
-         18|\
-         19|\
-         22|\
-         20"
-    );
-}
-
-#[test]
-fn gsub4_1_multiple_ligatures_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub4_1_multiple_ligatures_f1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0011}\u{0012}\u{0013}\u{0016}\u{0014}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "17|\
-         23|\
-         17|\
-         24|\
-         22|\
-         20"
+        "17|24|23|24|24|24|24|17|18|19|22|20"
     );
 }
 
@@ -2981,67 +1967,47 @@ fn gsub4_1_multiple_ligatures_001() {
 fn gsub4_1_multiple_ligatures_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub4_1_multiple_ligatures_f2.otf",
+            "tests/fonts/aots/gsub4_1_multiple_ligatures_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0011}\u{0012}\u{0013}\u{0016}\u{0014}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         24|\
-         20|\
-         17|\
-         24|\
-         22|\
-         20"
+        "17|23|17|24|22|20"
     );
 }
 
 #[test]
-fn gsub4_1_multiple_ligsets_001() {
+fn gsub4_1_multiple_ligatures_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub4_1_multiple_ligatures_f2.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0011}\u{0012}\u{0013}\u{0016}\u{0014}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "17|24|20|17|24|22|20"
+    );
+}
+
+#[test]
+fn gsub4_1_multiple_ligsets_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_multiple_ligsets_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0015}\u{0014}\u{0013}\u{0016}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         21|\
-         24|\
-         22"
+        "17|23|21|24|22"
     );
 }
 
 #[test]
-fn gsub4_1_simple_001() {
+fn gsub4_1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub4_1_simple_f1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0011}\u{0012}\u{0013}\u{0016}\u{0014}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         17|\
-         18|\
-         19|\
-         22|\
-         20"
-    );
-}
-
-#[test]
-fn gsub7_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub7_font1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "17|\
-         23|\
-         24|\
-         20|\
-         21"
+        "17|23|17|18|19|22|20"
     );
 }
 
@@ -3049,32 +2015,23 @@ fn gsub7_001() {
 fn gsub7_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub7_font2.otf",
+            "tests/fonts/aots/gsub7_font1.otf",
             "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         29|\
-         20|\
-         21"
+        "17|23|24|20|21"
     );
 }
 
 #[test]
-fn gsub_chaining1_boundary_001() {
+fn gsub7_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining1_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "tests/fonts/aots/gsub7_font2.otf",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         0"
+        "17|23|29|20|21"
     );
 }
 
@@ -3082,16 +2039,11 @@ fn gsub_chaining1_boundary_001() {
 fn gsub_chaining1_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining1_boundary_f2.otf",
+            "tests/fonts/aots/gsub_chaining1_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         0"
+        "0|20|21|22|23|0"
     );
 }
 
@@ -3099,16 +2051,11 @@ fn gsub_chaining1_boundary_002() {
 fn gsub_chaining1_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining1_boundary_f3.otf",
+            "tests/fonts/aots/gsub_chaining1_boundary_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         0"
+        "0|20|61|22|23|0"
     );
 }
 
@@ -3116,21 +2063,28 @@ fn gsub_chaining1_boundary_003() {
 fn gsub_chaining1_boundary_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining1_boundary_f4.otf",
+            "tests/fonts/aots/gsub_chaining1_boundary_f3.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|61|22|23|0"
     );
 }
 
 #[test]
-fn gsub_chaining1_lookupflag_001() {
+fn gsub_chaining1_boundary_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_chaining1_boundary_f4.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|21|62|23|0"
+    );
+}
+
+#[test]
+fn gsub_chaining1_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_lookupflag_f1.otf",
@@ -3138,46 +2092,7 @@ fn gsub_chaining1_lookupflag_001() {
              \u{0018}\u{005A}\u{0019}\u{005B}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         90|\
-         21|\
-         91|\
-         22|\
-         92|\
-         63|\
-         93|\
-         94|\
-         24|\
-         90|\
-         25|\
-         91|\
-         26|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining1_multiple_subrules_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining1_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
-             \u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         24|\
-         0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|90|21|91|22|92|63|93|94|24|90|25|91|26|0"
     );
 }
 
@@ -3185,57 +2100,37 @@ fn gsub_chaining1_multiple_subrules_001() {
 fn gsub_chaining1_multiple_subrules_002() {
     assert_eq!(
         shape(
+            "tests/fonts/aots/gsub_chaining1_multiple_subrules_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
+             \u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|61|22|23|24|0|20|21|62|23|0"
+    );
+}
+
+#[test]
+fn gsub_chaining1_multiple_subrules_003() {
+    assert_eq!(
+        shape(
             "tests/fonts/aots/gsub_chaining1_multiple_subrules_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
              \u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         24|\
-         0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|21|62|23|24|0|20|21|62|23|0"
     );
 }
 
 #[test]
-fn gsub_chaining1_next_glyph_001() {
+fn gsub_chaining1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         63|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining1_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining1_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         23|\
-         0"
+        "0|20|61|62|63|0"
     );
 }
 
@@ -3243,19 +2138,11 @@ fn gsub_chaining1_simple_001() {
 fn gsub_chaining1_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "tests/fonts/aots/gsub_chaining1_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|20|61|62|23|0"
     );
 }
 
@@ -3264,18 +2151,10 @@ fn gsub_chaining1_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         0|\
-         0"
+        "0|20|21|62|23|24|25|26|0"
     );
 }
 
@@ -3284,16 +2163,10 @@ fn gsub_chaining1_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25"
+        "0|20|21|22|23|24|25|0|0"
     );
 }
 
@@ -3302,15 +2175,10 @@ fn gsub_chaining1_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24"
+        "0|20|21|22|23|24|25"
     );
 }
 
@@ -3319,18 +2187,10 @@ fn gsub_chaining1_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|20|21|22|23|24"
     );
 }
 
@@ -3339,16 +2199,10 @@ fn gsub_chaining1_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|0|21|22|23|24|25|26|0"
     );
 }
 
@@ -3357,15 +2211,10 @@ fn gsub_chaining1_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "21|22|23|24|25|26|0"
     );
 }
 
@@ -3374,18 +2223,10 @@ fn gsub_chaining1_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         0|\
-         24|\
-         25|\
-         26|\
-         0"
+        "22|23|24|25|26|0"
     );
 }
 
@@ -3394,14 +2235,10 @@ fn gsub_chaining1_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23"
+        "0|20|21|22|0|24|25|26|0"
     );
 }
 
@@ -3410,48 +2247,34 @@ fn gsub_chaining1_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22"
+        "0|20|21|22|23"
     );
 }
 
 #[test]
-fn gsub_chaining1_successive_001() {
+fn gsub_chaining1_simple_012() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_chaining1_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|21|22"
+    );
+}
+
+#[test]
+fn gsub_chaining1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining1_successive_f1.otf",
             "\u{0000}\u{0019}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         25|\
-         20|\
-         61|\
-         63|\
-         24|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining2_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining2_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         0"
+        "0|25|20|61|63|24|0"
     );
 }
 
@@ -3459,16 +2282,11 @@ fn gsub_chaining2_boundary_001() {
 fn gsub_chaining2_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining2_boundary_f2.otf",
+            "tests/fonts/aots/gsub_chaining2_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         0"
+        "0|20|21|22|23|0"
     );
 }
 
@@ -3476,16 +2294,11 @@ fn gsub_chaining2_boundary_002() {
 fn gsub_chaining2_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining2_boundary_f3.otf",
+            "tests/fonts/aots/gsub_chaining2_boundary_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         0"
+        "0|20|61|22|23|0"
     );
 }
 
@@ -3493,21 +2306,28 @@ fn gsub_chaining2_boundary_003() {
 fn gsub_chaining2_boundary_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining2_boundary_f4.otf",
+            "tests/fonts/aots/gsub_chaining2_boundary_f3.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|61|22|23|0"
     );
 }
 
 #[test]
-fn gsub_chaining2_lookupflag_001() {
+fn gsub_chaining2_boundary_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_chaining2_boundary_f4.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|21|62|23|0"
+    );
+}
+
+#[test]
+fn gsub_chaining2_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_lookupflag_f1.otf",
@@ -3515,46 +2335,7 @@ fn gsub_chaining2_lookupflag_001() {
              \u{0018}\u{005A}\u{0019}\u{005B}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         90|\
-         21|\
-         91|\
-         22|\
-         92|\
-         63|\
-         93|\
-         94|\
-         24|\
-         90|\
-         25|\
-         91|\
-         26|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining2_multiple_subrules_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining2_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
-             \u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         24|\
-         0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|90|21|91|22|92|63|93|94|24|90|25|91|26|0"
     );
 }
 
@@ -3562,57 +2343,37 @@ fn gsub_chaining2_multiple_subrules_001() {
 fn gsub_chaining2_multiple_subrules_002() {
     assert_eq!(
         shape(
+            "tests/fonts/aots/gsub_chaining2_multiple_subrules_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
+             \u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|61|22|23|24|0|20|21|62|23|0"
+    );
+}
+
+#[test]
+fn gsub_chaining2_multiple_subrules_003() {
+    assert_eq!(
+        shape(
             "tests/fonts/aots/gsub_chaining2_multiple_subrules_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}\u{0014}\u{0015}\u{0016}\
              \u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         24|\
-         0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|21|62|23|24|0|20|21|62|23|0"
     );
 }
 
 #[test]
-fn gsub_chaining2_next_glyph_001() {
+fn gsub_chaining2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         63|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining2_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining2_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         23|\
-         0"
+        "0|20|61|62|63|0"
     );
 }
 
@@ -3620,19 +2381,11 @@ fn gsub_chaining2_simple_001() {
 fn gsub_chaining2_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "tests/fonts/aots/gsub_chaining2_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|20|61|62|23|0"
     );
 }
 
@@ -3641,18 +2394,10 @@ fn gsub_chaining2_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         0|\
-         0"
+        "0|20|21|62|23|24|25|26|0"
     );
 }
 
@@ -3661,16 +2406,10 @@ fn gsub_chaining2_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25"
+        "0|20|21|22|23|24|25|0|0"
     );
 }
 
@@ -3679,15 +2418,10 @@ fn gsub_chaining2_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24"
+        "0|20|21|22|23|24|25"
     );
 }
 
@@ -3696,18 +2430,10 @@ fn gsub_chaining2_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|20|21|22|23|24"
     );
 }
 
@@ -3716,16 +2442,10 @@ fn gsub_chaining2_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|0|21|22|23|24|25|26|0"
     );
 }
 
@@ -3734,15 +2454,10 @@ fn gsub_chaining2_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "21|22|23|24|25|26|0"
     );
 }
 
@@ -3751,18 +2466,10 @@ fn gsub_chaining2_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         0|\
-         24|\
-         25|\
-         26|\
-         0"
+        "22|23|24|25|26|0"
     );
 }
 
@@ -3771,14 +2478,10 @@ fn gsub_chaining2_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23"
+        "0|20|21|22|0|24|25|26|0"
     );
 }
 
@@ -3787,48 +2490,34 @@ fn gsub_chaining2_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22"
+        "0|20|21|22|23"
     );
 }
 
 #[test]
-fn gsub_chaining2_successive_001() {
+fn gsub_chaining2_simple_012() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_chaining2_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|21|22"
+    );
+}
+
+#[test]
+fn gsub_chaining2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining2_successive_f1.otf",
             "\u{0000}\u{0019}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         25|\
-         20|\
-         61|\
-         63|\
-         24|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining3_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining3_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         0"
+        "0|25|20|61|63|24|0"
     );
 }
 
@@ -3836,16 +2525,11 @@ fn gsub_chaining3_boundary_001() {
 fn gsub_chaining3_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining3_boundary_f2.otf",
+            "tests/fonts/aots/gsub_chaining3_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         0"
+        "0|20|21|22|23|0"
     );
 }
 
@@ -3853,16 +2537,11 @@ fn gsub_chaining3_boundary_002() {
 fn gsub_chaining3_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining3_boundary_f3.otf",
+            "tests/fonts/aots/gsub_chaining3_boundary_f2.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         23|\
-         0"
+        "0|20|61|22|23|0"
     );
 }
 
@@ -3870,21 +2549,28 @@ fn gsub_chaining3_boundary_003() {
 fn gsub_chaining3_boundary_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining3_boundary_f4.otf",
+            "tests/fonts/aots/gsub_chaining3_boundary_f3.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         0"
+        "0|20|61|22|23|0"
     );
 }
 
 #[test]
-fn gsub_chaining3_lookupflag_001() {
+fn gsub_chaining3_boundary_005() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_chaining3_boundary_f4.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|21|62|23|0"
+    );
+}
+
+#[test]
+fn gsub_chaining3_lookupflag_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_lookupflag_f1.otf",
@@ -3892,58 +2578,19 @@ fn gsub_chaining3_lookupflag_001() {
              \u{0018}\u{005A}\u{0019}\u{005B}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         90|\
-         21|\
-         91|\
-         22|\
-         92|\
-         63|\
-         93|\
-         94|\
-         24|\
-         90|\
-         25|\
-         91|\
-         26|\
-         0"
+        "0|20|90|21|91|22|92|63|93|94|24|90|25|91|26|0"
     );
 }
 
 #[test]
-fn gsub_chaining3_next_glyph_001() {
+fn gsub_chaining3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_next_glyph_f1.otf",
             "\u{0000}\u{0016}\u{0015}\u{0016}\u{0015}\u{0016}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         22|\
-         61|\
-         22|\
-         61|\
-         22|\
-         21|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_chaining3_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_chaining3_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         23|\
-         0"
+        "0|22|61|22|61|22|21|0"
     );
 }
 
@@ -3951,19 +2598,11 @@ fn gsub_chaining3_simple_001() {
 fn gsub_chaining3_simple_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "tests/fonts/aots/gsub_chaining3_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         62|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|20|61|62|23|0"
     );
 }
 
@@ -3972,18 +2611,10 @@ fn gsub_chaining3_simple_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         0|\
-         0"
+        "0|20|21|62|23|24|25|26|0"
     );
 }
 
@@ -3992,16 +2623,10 @@ fn gsub_chaining3_simple_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{0000}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25"
+        "0|20|21|22|23|24|25|0|0"
     );
 }
 
@@ -4010,15 +2635,10 @@ fn gsub_chaining3_simple_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23|\
-         24"
+        "0|20|21|22|23|24|25"
     );
 }
 
@@ -4027,18 +2647,10 @@ fn gsub_chaining3_simple_006() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         0|\
-         21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|20|21|22|23|24"
     );
 }
 
@@ -4047,16 +2659,10 @@ fn gsub_chaining3_simple_007() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0000}\u{0000}\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "21|\
-         22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "0|0|21|22|23|24|25|26|0"
     );
 }
 
@@ -4065,15 +2671,10 @@ fn gsub_chaining3_simple_008() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0015}\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "22|\
-         23|\
-         24|\
-         25|\
-         26|\
-         0"
+        "21|22|23|24|25|26|0"
     );
 }
 
@@ -4082,18 +2683,10 @@ fn gsub_chaining3_simple_009() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
+            "\u{0016}\u{0017}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         0|\
-         24|\
-         25|\
-         26|\
-         0"
+        "22|23|24|25|26|0"
     );
 }
 
@@ -4102,14 +2695,10 @@ fn gsub_chaining3_simple_010() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0018}\u{0019}\u{001A}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22|\
-         23"
+        "0|20|21|22|0|24|25|26|0"
     );
 }
 
@@ -4118,49 +2707,34 @@ fn gsub_chaining3_simple_011() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         21|\
-         22"
+        "0|20|21|22|23"
     );
 }
 
 #[test]
-fn gsub_chaining3_successive_001() {
+fn gsub_chaining3_simple_012() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_chaining3_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|21|22"
+    );
+}
+
+#[test]
+fn gsub_chaining3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_chaining3_successive_f1.otf",
             "\u{0000}\u{0019}\u{0014}\u{0015}\u{0016}\u{0017}\u{0018}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         25|\
-         20|\
-         61|\
-         63|\
-         24|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context1_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context1_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         20|\
-         20|\
-         20|\
-         20|\
-         0"
+        "0|25|20|61|63|24|0"
     );
 }
 
@@ -4168,54 +2742,35 @@ fn gsub_context1_boundary_001() {
 fn gsub_context1_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context1_boundary_f2.otf",
+            "tests/fonts/aots/gsub_context1_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         60|\
-         60|\
-         60|\
-         60|\
-         0"
+        "0|20|20|20|20|20|0"
     );
 }
 
 #[test]
-fn gsub_context1_expansion_001() {
+fn gsub_context1_boundary_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context1_boundary_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|60|60|60|60|60|0"
+    );
+}
+
+#[test]
+fn gsub_context1_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_expansion_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         63|\
-         22|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context1_lookupflag_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context1_lookupflag_f1.otf",
-            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         60|\
-         90|\
-         61|\
-         91|\
-         92|\
-         62|\
-         0"
+        "0|20|61|62|63|22|0"
     );
 }
 
@@ -4223,36 +2778,23 @@ fn gsub_context1_lookupflag_001() {
 fn gsub_context1_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context1_lookupflag_f2.otf",
+            "tests/fonts/aots/gsub_context1_lookupflag_f1.otf",
             "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         90|\
-         61|\
-         91|\
-         92|\
-         0"
+        "0|60|90|61|91|92|62|0"
     );
 }
 
 #[test]
-fn gsub_context1_multiple_subrules_001() {
+fn gsub_context1_lookupflag_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context1_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "tests/fonts/aots/gsub_context1_lookupflag_f2.otf",
+            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         21|\
-         22|\
-         0|\
-         20|\
-         61|\
-         0"
+        "0|20|90|61|91|92|0"
     );
 }
 
@@ -4260,52 +2802,35 @@ fn gsub_context1_multiple_subrules_001() {
 fn gsub_context1_multiple_subrules_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context1_multiple_subrules_f2.otf",
+            "tests/fonts/aots/gsub_context1_multiple_subrules_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         0|\
-         20|\
-         61|\
-         0"
+        "0|60|21|22|0|20|61|0"
     );
 }
 
 #[test]
-fn gsub_context1_next_glyph_001() {
+fn gsub_context1_multiple_subrules_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context1_multiple_subrules_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|61|22|0|20|61|0"
+    );
+}
+
+#[test]
+fn gsub_context1_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         20|\
-         60|\
-         20|\
-         20|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context1_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context1_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         60|\
-         61|\
-         62|\
-         0"
+        "0|60|20|60|20|20|0"
     );
 }
 
@@ -4314,15 +2839,10 @@ fn gsub_context1_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         0|\
-         20|\
-         21|\
-         0"
+        "0|60|61|62|0"
     );
 }
 
@@ -4330,51 +2850,35 @@ fn gsub_context1_simple_002() {
 fn gsub_context1_simple_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context1_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "tests/fonts/aots/gsub_context1_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         60|\
-         20|\
-         20|\
-         20|\
-         0"
+        "0|20|0|20|21|0"
     );
 }
 
 #[test]
-fn gsub_context1_successive_001() {
+fn gsub_context1_simple_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context1_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|60|20|20|20|0"
+    );
+}
+
+#[test]
+fn gsub_context1_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context1_successive_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         63|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context2_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context2_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         20|\
-         20|\
-         20|\
-         20|\
-         0"
+        "0|20|61|63|0"
     );
 }
 
@@ -4382,44 +2886,23 @@ fn gsub_context2_boundary_001() {
 fn gsub_context2_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context2_boundary_f2.otf",
+            "tests/fonts/aots/gsub_context2_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         60|\
-         60|\
-         60|\
-         60|\
-         0"
+        "0|20|20|20|20|20|0"
     );
 }
 
 #[test]
-fn gsub_context2_classes_001() {
+fn gsub_context2_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context2_classes_f1.otf",
-            "\u{0000}\u{0014}\u{001A}\u{001C}\u{0018}\u{0000}\u{0015}\u{001B}\u{001A}\u{0018}\
-             \u{0000}\u{0016}\u{001B}\u{001A}\u{0018}",
+            "tests/fonts/aots/gsub_context2_boundary_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         66|\
-         28|\
-         24|\
-         0|\
-         21|\
-         67|\
-         26|\
-         24|\
-         0|\
-         22|\
-         27|\
-         26|\
-         24"
+        "0|60|60|60|60|60|0"
     );
 }
 
@@ -4427,63 +2910,37 @@ fn gsub_context2_classes_001() {
 fn gsub_context2_classes_002() {
     assert_eq!(
         shape(
+            "tests/fonts/aots/gsub_context2_classes_f1.otf",
+            "\u{0000}\u{0014}\u{001A}\u{001C}\u{0018}\u{0000}\u{0015}\u{001B}\u{001A}\u{0018}\
+             \u{0000}\u{0016}\u{001B}\u{001A}\u{0018}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|66|28|24|0|21|67|26|24|0|22|27|26|24"
+    );
+}
+
+#[test]
+fn gsub_context2_classes_003() {
+    assert_eq!(
+        shape(
             "tests/fonts/aots/gsub_context2_classes_f2.otf",
             "\u{0000}\u{0016}\u{001B}\u{001A}\u{0018}\u{0000}\u{0018}\u{0018}\u{001D}\u{0016}\
              \u{0000}\u{0016}\u{001B}\u{001A}\u{0018}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         22|\
-         67|\
-         26|\
-         24|\
-         0|\
-         24|\
-         24|\
-         69|\
-         22|\
-         0|\
-         22|\
-         67|\
-         26|\
-         24"
+        "0|22|67|26|24|0|24|24|69|22|0|22|67|26|24"
     );
 }
 
 #[test]
-fn gsub_context2_expansion_001() {
+fn gsub_context2_expansion_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_expansion_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         62|\
-         63|\
-         22|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context2_lookupflag_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context2_lookupflag_f1.otf",
-            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         60|\
-         90|\
-         61|\
-         91|\
-         92|\
-         62|\
-         0"
+        "0|20|61|62|63|22|0"
     );
 }
 
@@ -4491,36 +2948,23 @@ fn gsub_context2_lookupflag_001() {
 fn gsub_context2_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context2_lookupflag_f2.otf",
+            "tests/fonts/aots/gsub_context2_lookupflag_f1.otf",
             "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         90|\
-         61|\
-         91|\
-         92|\
-         0"
+        "0|60|90|61|91|92|62|0"
     );
 }
 
 #[test]
-fn gsub_context2_multiple_subrules_001() {
+fn gsub_context2_lookupflag_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context2_multiple_subrules_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "tests/fonts/aots/gsub_context2_lookupflag_f2.otf",
+            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         21|\
-         22|\
-         0|\
-         20|\
-         61|\
-         0"
+        "0|20|90|61|91|92|0"
     );
 }
 
@@ -4528,52 +2972,35 @@ fn gsub_context2_multiple_subrules_001() {
 fn gsub_context2_multiple_subrules_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context2_multiple_subrules_f2.otf",
+            "tests/fonts/aots/gsub_context2_multiple_subrules_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         22|\
-         0|\
-         20|\
-         61|\
-         0"
+        "0|60|21|22|0|20|61|0"
     );
 }
 
 #[test]
-fn gsub_context2_next_glyph_001() {
+fn gsub_context2_multiple_subrules_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context2_multiple_subrules_f2.otf",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|61|22|0|20|61|0"
+    );
+}
+
+#[test]
+fn gsub_context2_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         20|\
-         60|\
-         20|\
-         20|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context2_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context2_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         60|\
-         61|\
-         62|\
-         0"
+        "0|60|20|60|20|20|0"
     );
 }
 
@@ -4582,15 +3009,10 @@ fn gsub_context2_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         0|\
-         20|\
-         21|\
-         0"
+        "0|60|61|62|0"
     );
 }
 
@@ -4598,51 +3020,35 @@ fn gsub_context2_simple_002() {
 fn gsub_context2_simple_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context2_simple_f2.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "tests/fonts/aots/gsub_context2_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         60|\
-         20|\
-         20|\
-         20|\
-         0"
+        "0|20|0|20|21|0"
     );
 }
 
 #[test]
-fn gsub_context2_successive_001() {
+fn gsub_context2_simple_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context2_simple_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|60|20|20|20|0"
+    );
+}
+
+#[test]
+fn gsub_context2_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context2_successive_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         63|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context3_boundary_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context3_boundary_f1.otf",
-            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         20|\
-         20|\
-         20|\
-         20|\
-         20|\
-         0"
+        "0|20|61|63|0"
     );
 }
 
@@ -4650,36 +3056,23 @@ fn gsub_context3_boundary_001() {
 fn gsub_context3_boundary_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context3_boundary_f2.otf",
+            "tests/fonts/aots/gsub_context3_boundary_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         60|\
-         60|\
-         60|\
-         60|\
-         0"
+        "0|20|20|20|20|20|0"
     );
 }
 
 #[test]
-fn gsub_context3_lookupflag_001() {
+fn gsub_context3_boundary_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context3_lookupflag_f1.otf",
-            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
+            "tests/fonts/aots/gsub_context3_boundary_f2.otf",
+            "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         90|\
-         61|\
-         91|\
-         92|\
-         62|\
-         0"
+        "0|60|60|60|60|60|0"
     );
 }
 
@@ -4687,51 +3080,35 @@ fn gsub_context3_lookupflag_001() {
 fn gsub_context3_lookupflag_002() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/gsub_context3_lookupflag_f2.otf",
+            "tests/fonts/aots/gsub_context3_lookupflag_f1.otf",
             "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         90|\
-         61|\
-         91|\
-         92|\
-         0"
+        "0|60|90|61|91|92|62|0"
     );
 }
 
 #[test]
-fn gsub_context3_next_glyph_001() {
+fn gsub_context3_lookupflag_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context3_lookupflag_f2.otf",
+            "\u{0000}\u{0014}\u{005A}\u{0015}\u{005B}\u{005C}\u{0016}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|90|61|91|92|0"
+    );
+}
+
+#[test]
+fn gsub_context3_next_glyph_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_next_glyph_f1.otf",
             "\u{0000}\u{0014}\u{0014}\u{0014}\u{0014}\u{0014}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         60|\
-         20|\
-         60|\
-         20|\
-         20|\
-         0"
-    );
-}
-
-#[test]
-fn gsub_context3_simple_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/gsub_context3_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "0|\
-         60|\
-         61|\
-         62|\
-         0"
+        "0|60|20|60|20|20|0"
     );
 }
 
@@ -4740,49 +3117,34 @@ fn gsub_context3_simple_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_simple_f1.otf",
-            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
+            "\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         0|\
-         20|\
-         21|\
-         0|\
-         60|\
-         61|\
-         62|\
-         0"
+        "0|60|61|62|0"
     );
 }
 
 #[test]
-fn gsub_context3_successive_001() {
+fn gsub_context3_simple_003() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/gsub_context3_simple_f1.otf",
+            "\u{0000}\u{0014}\u{0000}\u{0014}\u{0015}\u{0000}\u{0014}\u{0015}\u{0016}\u{0000}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "0|20|0|20|21|0|60|61|62|0"
+    );
+}
+
+#[test]
+fn gsub_context3_successive_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/gsub_context3_successive_f1.otf",
             "\u{0000}\u{0014}\u{0015}\u{0016}\u{0017}\u{0000}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "0|\
-         20|\
-         61|\
-         63|\
-         0"
-    );
-}
-
-#[test]
-fn lookupflag_ignore_attach_001() {
-    assert_eq!(
-        shape(
-            "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
-            "\u{000A}\u{000B}\u{000D}\u{001A}\u{000A}",
-            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
-        ),
-        "10|\
-         15|\
-         10"
+        "0|20|61|63|0"
     );
 }
 
@@ -4791,16 +3153,10 @@ fn lookupflag_ignore_attach_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
-            "\u{000A}\u{000B}\u{0015}\u{000D}\u{0016}\u{0017}\u{001D}\u{001A}\u{000A}",
+            "\u{000A}\u{000B}\u{000D}\u{001A}\u{000A}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "10|\
-         15|\
-         21|\
-         22|\
-         23|\
-         29|\
-         10"
+        "10|15|10"
     );
 }
 
@@ -4809,17 +3165,10 @@ fn lookupflag_ignore_attach_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
-            "\u{000A}\u{000B}\u{0015}\u{000D}\u{0016}\u{001B}\u{001A}\u{000A}",
+            "\u{000A}\u{000B}\u{0015}\u{000D}\u{0016}\u{0017}\u{001D}\u{001A}\u{000A}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "10|\
-         11|\
-         21|\
-         13|\
-         22|\
-         27|\
-         26|\
-         10"
+        "10|15|21|22|23|29|10"
     );
 }
 
@@ -4828,17 +3177,10 @@ fn lookupflag_ignore_attach_004() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
-            "\u{000A}\u{000B}\u{001B}\u{000D}\u{0016}\u{0017}\u{001A}\u{000A}",
+            "\u{000A}\u{000B}\u{0015}\u{000D}\u{0016}\u{001B}\u{001A}\u{000A}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "10|\
-         11|\
-         27|\
-         13|\
-         22|\
-         23|\
-         26|\
-         10"
+        "10|11|21|13|22|27|26|10"
     );
 }
 
@@ -4847,31 +3189,22 @@ fn lookupflag_ignore_attach_005() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
-            "\u{000A}\u{000B}\u{001B}\u{000D}\u{000E}\u{0017}\u{001A}\u{000A}",
+            "\u{000A}\u{000B}\u{001B}\u{000D}\u{0016}\u{0017}\u{001A}\u{000A}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "10|\
-         11|\
-         27|\
-         13|\
-         14|\
-         23|\
-         26|\
-         10"
+        "10|11|27|13|22|23|26|10"
     );
 }
 
 #[test]
-fn lookupflag_ignore_base_001() {
+fn lookupflag_ignore_attach_006() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/lookupflag_ignore_base_f1.otf",
-            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
+            "tests/fonts/aots/lookupflag_ignore_attach_f1.otf",
+            "\u{000A}\u{000B}\u{001B}\u{000D}\u{000E}\u{0017}\u{001A}\u{000A}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         21"
+        "10|11|27|13|14|23|26|10"
     );
 }
 
@@ -4880,30 +3213,22 @@ fn lookupflag_ignore_base_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_base_f1.otf",
-            "\u{0011}\u{0012}\u{0018}\u{0018}\u{0013}\u{0019}\u{0014}\u{0015}",
+            "\u{0011}\u{0012}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         24|\
-         24|\
-         25|\
-         21"
+        "17|23|21"
     );
 }
 
 #[test]
-fn lookupflag_ignore_combination_001() {
+fn lookupflag_ignore_base_003() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
-            "\u{0011}\u{0012}\u{001A}\u{0013}\u{0014}\u{0015}",
+            "tests/fonts/aots/lookupflag_ignore_base_f1.otf",
+            "\u{0011}\u{0012}\u{0018}\u{0018}\u{0013}\u{0019}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         26|\
-         21"
+        "17|23|24|24|25|21"
     );
 }
 
@@ -4912,16 +3237,10 @@ fn lookupflag_ignore_combination_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
-            "\u{0011}\u{0012}\u{001A}\u{0013}\u{0018}\u{001E}\u{001F}\u{0014}\u{0015}",
+            "\u{0011}\u{0012}\u{001A}\u{0013}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         26|\
-         24|\
-         30|\
-         31|\
-         21"
+        "17|23|26|21"
     );
 }
 
@@ -4930,35 +3249,22 @@ fn lookupflag_ignore_combination_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
-            "\u{0011}\u{0012}\u{001A}\u{0013}\u{0018}\u{001E}\u{0020}\u{0014}\u{0015}",
+            "\u{0011}\u{0012}\u{001A}\u{0013}\u{0018}\u{001E}\u{001F}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         26|\
-         19|\
-         24|\
-         30|\
-         32|\
-         20|\
-         21"
+        "17|23|26|24|30|31|21"
     );
 }
 
 #[test]
-fn lookupflag_ignore_ligatures_001() {
+fn lookupflag_ignore_combination_004() {
     assert_eq!(
         shape(
-            "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
-            "\u{0011}\u{0012}\u{001A}\u{001B}\u{0013}\u{001B}\u{0014}\u{0015}",
+            "tests/fonts/aots/lookupflag_ignore_combination_f1.otf",
+            "\u{0011}\u{0012}\u{001A}\u{0013}\u{0018}\u{001E}\u{0020}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         26|\
-         27|\
-         27|\
-         21"
+        "17|18|26|19|24|30|32|20|21"
     );
 }
 
@@ -4967,17 +3273,10 @@ fn lookupflag_ignore_ligatures_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
-            "\u{0011}\u{0012}\u{001A}\u{0018}\u{0013}\u{001B}\u{0014}\u{0015}",
+            "\u{0011}\u{0012}\u{001A}\u{001B}\u{0013}\u{001B}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         26|\
-         24|\
-         19|\
-         27|\
-         20|\
-         21"
+        "17|23|26|27|27|21"
     );
 }
 
@@ -4986,33 +3285,33 @@ fn lookupflag_ignore_ligatures_003() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
-            "\u{0011}\u{0012}\u{001A}\u{002A}\u{0013}\u{001B}\u{0014}\u{0015}",
+            "\u{0011}\u{0012}\u{001A}\u{0018}\u{0013}\u{001B}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         18|\
-         26|\
-         42|\
-         19|\
-         27|\
-         20|\
-         21"
+        "17|18|26|24|19|27|20|21"
     );
 }
 
 #[test]
-fn lookupflag_ignore_marks_001() {
+fn lookupflag_ignore_ligatures_004() {
+    assert_eq!(
+        shape(
+            "tests/fonts/aots/lookupflag_ignore_ligatures_f1.otf",
+            "\u{0011}\u{0012}\u{001A}\u{002A}\u{0013}\u{001B}\u{0014}\u{0015}",
+            "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
+        ),
+        "17|18|26|42|19|27|20|21"
+    );
+}
+
+#[test]
+fn lookupflag_ignore_marks_002() {
     assert_eq!(
         shape(
             "tests/fonts/aots/lookupflag_ignore_marks_f1.otf",
             "\u{0011}\u{0012}\u{001C}\u{001D}\u{0013}\u{001D}\u{0014}\u{0015}",
             "--features=\"test\" --no-clusters --no-glyph-names --no-positions",
         ),
-        "17|\
-         23|\
-         28|\
-         29|\
-         29|\
-         21"
+        "17|23|28|29|29|21"
     );
 }

@@ -19,7 +19,11 @@ use read_fonts::types::BigEndian;
 use read_fonts::types::FixedSize;
 use read_fonts::types::GlyphId;
 
-// TODO: Use set_digest, similarly to how it's used in harfbuzz.
+// TODO: Use set_t, similarly to how it's used in harfbuzz.
+// HarfBuzz commit 9a4601b06b50cb0197c02203b6b19467ad4b4da8
+
+// TODO: Use a machine class cache.
+// HarfBuzz commit 83e0944f0f6cfbb46b63e2627e6ee076f4bfd489
 
 pub(crate) fn apply(
     plan: &hb_ot_shape_plan_t,
@@ -167,7 +171,8 @@ fn apply_simple_kerning<T: SimpleKerning>(
             continue;
         }
 
-        let mut iter = skipping_iterator_t::new(&ctx, i, false);
+        let mut iter = skipping_iterator_t::new(&ctx, false);
+        iter.reset(i);
 
         let mut unsafe_to = 0;
         if !iter.next(Some(&mut unsafe_to)) {
