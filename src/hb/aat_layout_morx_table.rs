@@ -166,8 +166,8 @@ pub fn apply<'a>(c: &mut hb_aat_apply_context_t<'a>, map: &'a mut hb_aat_map_t) 
 trait driver_context_t<T> {
     fn in_place(&self) -> bool;
     fn can_advance(&self, entry: &StateEntry<T>) -> bool;
-    fn is_actionable(&self, entry: &StateEntry<T>, buffer: &hb_buffer_t) -> bool;
-    fn transition(&mut self, entry: &StateEntry<T>, buffer: &mut hb_buffer_t) -> Option<()>;
+    fn is_actionable(&self, entry: &StateEntry<T>) -> bool;
+    fn transition(&mut self, entry: &StateEntry<T>, ac: &mut hb_aat_apply_context_t) -> Option<()>;
 }
 
 const START_OF_TEXT: u16 = 0;
@@ -391,12 +391,12 @@ fn apply_subtable<'a>(kind: SubtableKind<'a>, ac: &mut hb_aat_apply_context_t<'a
 
                 if let Some(glyph) = ac.buffer.info[i].as_gid16() {
                     if let Ok(replacement) = lookup.value(glyph.to_u16()) {
-                        info.glyph_id = u32::from(replacement);
                         ac.replace_glyph_inplace(i, replacement.into());
                     }
+                }
             }
         }
-        SubtableKind::Insertion(ref table) => {
+        SubtableKind::Insertion(table) => {
             let mut c = InsertionCtx {
                 mark: 0,
                 glyphs: table.glyphs,
@@ -431,11 +431,7 @@ impl driver_context_t<NoPayload> for RearrangementCtx {
         entry.flags & Self::VERB != 0 && self.start < self.end
     }
 
-    fn transition(
-        &mut self,
-        entry: &StateEntry,
-        ac: &mut hb_aat_apply_context_t,
-    ) -> Option<()> {
+    fn transition(&mut self, entry: &StateEntry, ac: &mut hb_aat_apply_context_t) -> Option<()> {
         let buffer = &mut ac.buffer;
         let flags = entry.flags;
 
@@ -544,7 +540,7 @@ impl driver_context_t<ContextualEntryData> for ContextualCtx<'_> {
     }
 
     fn is_actionable(&self, entry: &StateEntry<ContextualEntryData>) -> bool {
-         entry.payload.mark_index.get() != 0xFFFF || entry.payload.current_index.get() != 0xFFFF
+        entry.payload.mark_index.get() != 0xFFFF || entry.payload.current_index.get() != 0xFFFF
     }
 
     fn transition(
@@ -580,7 +576,7 @@ impl driver_context_t<ContextualEntryData> for ContextualCtx<'_> {
         }
 
         replacement = None;
-        let idx = ac.buffer.idx.min(buffer.len - 1);
+        let idx = ac.buffer.idx.min(ac.buffer.len - 1);
         if entry.payload.current_index.get() != 0xFFFF {
             let lookup = self
                 .table
