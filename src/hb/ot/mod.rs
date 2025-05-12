@@ -1,6 +1,7 @@
-use super::common::TagExt;
 use super::ot_layout::TableIndex;
+use super::{common::TagExt, set_digest::hb_set_digest_t};
 use crate::hb::hb_tag_t;
+use alloc::vec::Vec;
 use lookup::{LookupCache, LookupInfo};
 use read_fonts::{
     tables::{
@@ -23,6 +24,7 @@ pub mod lookup;
 pub struct OtCache {
     pub gsub: LookupCache,
     pub gpos: LookupCache,
+    pub gdef_mark_set_digests: Vec<hb_set_digest_t>,
 }
 
 impl OtCache {
@@ -43,7 +45,21 @@ impl OtCache {
                 cache
             })
             .unwrap_or_default();
-        Self { gsub, gpos }
+        let mut gdef_mark_set_digests = Vec::new();
+        if let Ok(gdef) = font.gdef() {
+            if let Some(Ok(mark_sets)) = gdef.mark_glyph_sets_def() {
+                gdef_mark_set_digests.extend(mark_sets.coverages().iter().map(|set| {
+                    set.ok()
+                        .and_then(|coverage| Some(hb_set_digest_t::from_coverage(&coverage)))
+                        .unwrap_or_default()
+                }));
+            }
+        }
+        Self {
+            gsub,
+            gpos,
+            gdef_mark_set_digests,
+        }
     }
 }
 
@@ -88,6 +104,7 @@ pub struct OtTables<'a> {
     pub gsub: Option<GsubTable<'a>>,
     pub gpos: Option<GposTable<'a>>,
     pub gdef: Option<Gdef<'a>>,
+    pub gdef_mark_set_digests: &'a [hb_set_digest_t],
     pub coords: &'a [F2Dot14],
     pub var_store: Option<ItemVariationStore<'a>>,
 }
@@ -118,6 +135,7 @@ impl<'a> OtTables<'a> {
             gsub,
             gpos,
             gdef,
+            gdef_mark_set_digests: &cache.gdef_mark_set_digests,
             var_store,
             coords,
         }
@@ -147,12 +165,21 @@ impl<'a> OtTables<'a> {
     }
 
     pub fn is_mark_glyph(&self, glyph_id: u32, set_index: u16) -> bool {
-        self.gdef
-            .as_ref()
-            .and_then(|gdef| gdef.mark_glyph_sets_def().transpose().ok().flatten())
-            .and_then(|sets| sets.coverages().get(set_index as usize).ok())
-            .map(|coverage| coverage.get(glyph_id).is_some())
-            .unwrap_or(false)
+        if self
+            .gdef_mark_set_digests
+            .get(set_index as usize)
+            .map(|digest| digest.may_have_glyph(glyph_id.into()))
+            .unwrap_or(true)
+        {
+            self.gdef
+                .as_ref()
+                .and_then(|gdef| gdef.mark_glyph_sets_def().transpose().ok().flatten())
+                .and_then(|sets| sets.coverages().get(set_index as usize).ok())
+                .map(|coverage| coverage.get(glyph_id).is_some())
+                .unwrap_or(false)
+        } else {
+            false
+        }
     }
 
     pub(super) fn resolve_anchor(&self, anchor: &AnchorTable) -> (i32, i32) {
