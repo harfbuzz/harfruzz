@@ -11,6 +11,9 @@ use read_fonts::tables::kerx::Subtable;
 use read_fonts::tables::kerx::Subtable0;
 use read_fonts::tables::kerx::Subtable1;
 use read_fonts::tables::kerx::Subtable2;
+use read_fonts::tables::kerx::Subtable4;
+use read_fonts::tables::kerx::Subtable4Actions;
+use read_fonts::tables::kerx::Subtable6;
 use read_fonts::tables::{aat, ankr::Ankr, kerx::SubtableKind};
 use read_fonts::types::BigEndian;
 use read_fonts::types::FixedSize;
@@ -71,7 +74,6 @@ pub(crate) fn apply(
                 if !plan.requested_kerning {
                     continue;
                 }
-
                 apply_simple_kerning(&subtable, format0, plan, face, buffer);
             }
             SubtableKind::Format1(format1) => {
@@ -79,7 +81,6 @@ pub(crate) fn apply(
                     stack: [0; 8],
                     depth: 0,
                 };
-
                 apply_state_machine_kerning(
                     &subtable,
                     format1,
@@ -93,28 +94,30 @@ pub(crate) fn apply(
                 if !plan.requested_kerning {
                     continue;
                 }
-
                 buffer.unsafe_to_concat(None, None);
-
                 apply_simple_kerning(&subtable, format2, plan, face, buffer);
             }
-            // kerx::Format::Format4(ref sub) => {
-            //     let mut driver = Driver4 {
-            //         mark_set: false,
-            //         mark: 0,
-            //         ankr_table: face.aat_tables.ankr.clone(),
-            //     };
-
-            //     apply_state_machine_kerning(&subtable, sub, &mut driver, plan, buffer);
-            // }
-            // kerx::Format::Format6(_) => {
-            //     if !plan.requested_kerning {
-            //         continue;
-            //     }
-
-            //     apply_simple_kerning(&subtable, plan, face, buffer);
-            // }
-            _ => return None,
+            SubtableKind::Format4(format4) => {
+                let mut driver = Driver4 {
+                    mark_set: false,
+                    mark: 0,
+                    ankr_table: face.aat_tables.ankr.clone(),
+                };
+                apply_state_machine_kerning(
+                    &subtable,
+                    format4,
+                    &format4.state_table,
+                    &mut driver,
+                    plan,
+                    buffer,
+                );
+            }
+            SubtableKind::Format6(format6) => {
+                if !plan.requested_kerning {
+                    continue;
+                }
+                apply_simple_kerning(&subtable, format6, plan, face, buffer);
+            }
         }
 
         if reverse {
@@ -126,17 +129,23 @@ pub(crate) fn apply(
 }
 
 trait SimpleKerning {
-    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i16>;
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32>;
 }
 
 impl SimpleKerning for Subtable0<'_> {
-    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i16> {
-        self.kerning(left, right)
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
+        self.kerning(left, right).map(|value| value as i32)
     }
 }
 
 impl SimpleKerning for Subtable2<'_> {
-    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i16> {
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
+        self.kerning(left, right).map(|value| value as i32)
+    }
+}
+
+impl SimpleKerning for Subtable6<'_> {
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
         self.kerning(left, right)
     }
 }
@@ -178,7 +187,6 @@ fn apply_simple_kerning<T: SimpleKerning>(
         let a = info[i].as_glyph();
         let b = info[j].as_glyph();
         let kern = kind.simple_kerning(a, b).unwrap_or(0);
-        let kern = i32::from(kern);
 
         let pos = &mut ctx.buffer.pos;
         if kern != 0 {
@@ -232,6 +240,10 @@ trait KerxStateEntryExt {
     }
 
     fn has_push(&self) -> bool {
+        self.flags() & 0x8000 != 0
+    }
+
+    fn has_mark(&self) -> bool {
         self.flags() & 0x8000 != 0
     }
 }
@@ -436,47 +448,59 @@ impl StateTableDriver<Subtable1<'_>, BigEndian<u16>> for Driver1 {
         Some(())
     }
 }
-
-/*
 struct Driver4<'a> {
     mark_set: bool,
     mark: usize,
     ankr_table: Option<Ankr<'a>>,
 }
 
-impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
+impl StateTableDriver<Subtable4<'_>, BigEndian<u16>> for Driver4<'_> {
     fn transition(
         &mut self,
-        aat: &kerx::Subtable4,
-        entry: apple_layout::GenericStateEntry<kerx::EntryData>,
+        aat: &Subtable4,
+        entry: &aat::StateEntry<BigEndian<u16>>,
         _has_cross_stream: bool,
         _tuple_count: u32,
         _opt: &hb_ot_shape_plan_t,
         buffer: &mut hb_buffer_t,
     ) -> Option<()> {
         if self.mark_set && entry.is_actionable() && buffer.idx < buffer.len {
-            if let Some(ref ankr_table) = self.ankr_table {
-                let point = aat.anchor_points.get(entry.action_index())?;
+            match (self.ankr_table.as_ref(), &aat.actions) {
+                (Some(ankr_table), Subtable4Actions::AnchorPoints(ankr_data)) => {
+                    let action_idx = entry.action_index() as usize * 2;
+                    let mark_action_idx = ankr_data.get(action_idx)?.get() as usize;
+                    let curr_action_idx = ankr_data.get(action_idx + 1)?.get() as usize;
+                    let mark_idx = buffer.info[self.mark].as_glyph();
+                    let mark_anchor = ankr_table
+                        .anchor_points(mark_idx)
+                        .ok()
+                        .and_then(|list| list.get(mark_action_idx))
+                        .map(|point| (point.x(), point.y()))
+                        .unwrap_or_default();
 
-                let mark_idx = buffer.info[self.mark].as_glyph();
-                let mark_anchor = ankr_table
-                    .anchor_points(mark_idx)
-                    .ok()
-                    .and_then(|list| list.get(usize::from(point.0)))
-                    .map(|point| (point.x(), point.y()))
-                    .unwrap_or_default();
+                    let curr_idx = buffer.cur(0).as_glyph();
+                    let curr_anchor = ankr_table
+                        .anchor_points(curr_idx)
+                        .ok()
+                        .and_then(|list| list.get(curr_action_idx))
+                        .map(|point| (point.x(), point.y()))
+                        .unwrap_or_default();
 
-                let curr_idx = buffer.cur(0).as_glyph();
-                let curr_anchor = ankr_table
-                    .anchor_points(curr_idx)
-                    .ok()
-                    .and_then(|list| list.get(usize::from(point.1)))
-                    .map(|point| (point.x(), point.y()))
-                    .unwrap_or_default();
-
-                let pos = buffer.cur_pos_mut();
-                pos.x_offset = i32::from(mark_anchor.0 - curr_anchor.0);
-                pos.y_offset = i32::from(mark_anchor.1 - curr_anchor.1);
+                    let pos = buffer.cur_pos_mut();
+                    pos.x_offset = i32::from(mark_anchor.0 - curr_anchor.0);
+                    pos.y_offset = i32::from(mark_anchor.1 - curr_anchor.1);
+                }
+                (_, Subtable4Actions::ControlPointCoords(coords)) => {
+                    let action_idx = entry.action_index() as usize * 4;
+                    let mark_x = coords.get(action_idx)?.get() as i32;
+                    let mark_y = coords.get(action_idx + 1)?.get() as i32;
+                    let curr_x = coords.get(action_idx + 2)?.get() as i32;
+                    let curr_y = coords.get(action_idx + 3)?.get() as i32;
+                    let pos = buffer.cur_pos_mut();
+                    pos.x_offset = mark_x - curr_x;
+                    pos.y_offset = mark_y - curr_y;
+                }
+                _ => {}
             }
 
             buffer.cur_pos_mut().set_attach_type(attach_type::MARK);
@@ -495,5 +519,3 @@ impl StateTableDriver<kerx::Subtable4<'_>, kerx::EntryData> for Driver4<'_> {
         Some(())
     }
 }
-
-*/
