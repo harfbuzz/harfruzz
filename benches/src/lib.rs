@@ -40,7 +40,51 @@ macro_rules! simple_bench {
             use test::Bencher;
 
             #[bench]
-            fn hr(bencher: &mut Bencher) {
+            fn cold_hr(bencher: &mut Bencher) {
+                let font_data = std::fs::read($font_path).unwrap();
+                let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
+                bencher.iter(|| {
+                    test::black_box({
+                        let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
+                        let shaper_font = harfruzz::ShaperFont::new(&font);
+                        let vars: &[CustomVariation] = $variations.as_slice();
+                        let vars = vars.iter().copied().map(|var| var.into()).collect::<Vec<harfruzz::Variation>>();
+                        let mut coords = vec![];
+                        if let Ok(fvar) = font.fvar() {
+                            coords.resize(fvar.axis_count() as usize, F2Dot14::default());
+                            fvar.user_to_normalized(None, vars.iter().map(|var: &harfruzz::Variation| (var.tag, Fixed::from_f64(var.value as f64))), &mut coords);
+                        }
+                        let shaper = shaper_font.shaper(&font, &coords);
+                        let mut buffer = harfruzz::UnicodeBuffer::new();
+                        buffer.push_str(&text);
+                        buffer.reset_clusters();
+                        buffer.guess_segment_properties();
+                        let shape_plan = harfruzz::ShapePlan::new(&shaper, buffer.direction(), Some(buffer.script()), buffer.language().as_ref(), &[]);
+                        harfruzz::shape_with_plan(&shaper, &shape_plan, buffer)
+                    });
+                })
+            }
+
+            #[cfg(feature = "hb")]
+            #[bench]
+            fn cold_hb(bencher: &mut Bencher) {
+                let font_data = std::fs::read($font_path).unwrap();
+                let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
+                bencher.iter(|| {
+                    test::black_box({
+                        let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
+                        let mut font = harfbuzz_rs::Font::new(face);
+                        let vars: &[CustomVariation] = $variations.as_slice();
+                        let vars = vars.iter().copied().map(|var| var.into()).collect::<Vec<harfbuzz_rs::Variation>>();
+                        font.set_variations(&vars);
+                        let buffer = harfbuzz_rs::UnicodeBuffer::new().add_str(&text);
+                        harfbuzz_rs::shape(&font, buffer, &[])
+                    });
+                })
+            }
+
+            #[bench]
+            fn warm_hr(bencher: &mut Bencher) {
                 let text = std::fs::read_to_string($text_path).unwrap().trim().to_string();
                 let font_data = std::fs::read($font_path).unwrap();
                 let font = harfruzz::FontRef::from_index(&font_data, 0).unwrap();
@@ -69,7 +113,7 @@ macro_rules! simple_bench {
 
             #[cfg(feature = "hb")]
             #[bench]
-            fn hb(bencher: &mut Bencher) {
+            fn warm_hb(bencher: &mut Bencher) {
                 let font_data = std::fs::read($font_path).unwrap();
                 let face = harfbuzz_rs::Face::from_bytes(&font_data, 0);
                 let mut font = harfbuzz_rs::Font::new(face);
