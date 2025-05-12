@@ -344,6 +344,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
         self.buf_idx
     }
 
+    #[inline]
     pub fn next(&mut self, unsafe_to: Option<&mut usize>) -> bool {
         let stop = self.buf_len as i32 - 1;
 
@@ -374,6 +375,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
         false
     }
 
+    #[inline]
     pub fn prev(&mut self, unsafe_from: Option<&mut usize>) -> bool {
         let stop: usize = 0;
 
@@ -425,6 +427,7 @@ impl<'a, 'b> skipping_iterator_t<'a, 'b> {
         self.matcher.may_skip(info, self.face)
     }
 
+    #[inline]
     pub fn match_(&self, info: &hb_glyph_info_t) -> match_t {
         let skip = self.matcher.may_skip(info, self.face);
 
