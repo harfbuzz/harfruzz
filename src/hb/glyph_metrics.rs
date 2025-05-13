@@ -207,15 +207,7 @@ impl<'a> GlyphMetrics<'a> {
             y_max: glyph.y_max() as i32,
         };
         if !coords.is_empty() {
-            if self.vmtx.is_none() {
-                return None;
-            }
-            if let Some(deltas) = self.phantom_deltas(gid, coords) {
-                bbox.x_min += deltas[0].x.to_i32();
-                bbox.x_max += deltas[1].x.to_i32();
-                bbox.y_min += deltas[2].y.to_i32();
-                bbox.y_max += deltas[3].y.to_i32();
-            }
+            return None;
         }
         Some(bbox)
     }
