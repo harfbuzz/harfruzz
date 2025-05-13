@@ -545,7 +545,13 @@ impl CharExt for char {
     }
 
     fn mirrored(self) -> Option<char> {
-        unicode_bidi_mirroring::get_mirrored(self)
+        let delta = ucd::_hb_ucd_bmg(self as usize);
+        std::println!("mirrored: {} -> {}", self, delta);
+        if delta == 0 {
+            None
+        } else {
+            char::from_u32(((self as i32).wrapping_add(delta as i32)) as u32)
+        }
     }
 
     fn is_emoji_extended_pictographic(self) -> bool {
@@ -837,7 +843,6 @@ pub fn decompose_hangul(ab: char) -> Option<(char, char)> {
 mod tests {
     #[test]
     fn check_unicode_version() {
-        assert_eq!(unicode_bidi_mirroring::UNICODE_VERSION, (16, 0, 0));
         assert_eq!(unicode_ccc::UNICODE_VERSION, (16, 0, 0));
         assert_eq!(unicode_properties::UNICODE_VERSION, (16, 0, 0));
         assert_eq!(unicode_script::UNICODE_VERSION, (16, 0, 0));
