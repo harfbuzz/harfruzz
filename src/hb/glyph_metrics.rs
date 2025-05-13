@@ -1,7 +1,8 @@
+use crate::Tag;
 use read_fonts::{
     tables::{
-        glyf::Glyf, gvar::Gvar, hmtx::Hmtx, hvar::Hvar, loca::Loca, vmtx::Vmtx, vorg::Vorg,
-        vvar::Vvar,
+        glyf::Glyf, gvar::Gvar, hmtx::Hmtx, hvar::Hvar, loca::Loca, mvar::Mvar, vmtx::Vmtx,
+        vorg::Vorg, vvar::Vvar,
     },
     types::{BoundingBox, F2Dot14, Fixed, GlyphId, Point},
     FontRef, TableProvider,
@@ -15,6 +16,7 @@ pub(crate) struct GlyphMetrics<'a> {
     vvar: Option<Vvar<'a>>,
     vorg: Option<Vorg<'a>>,
     glyf: Option<GlyfTables<'a>>,
+    mvar: Option<Mvar<'a>>,
     ascent: i16,
     descent: i16,
 }
@@ -42,6 +44,7 @@ impl<'a> GlyphMetrics<'a> {
         } else {
             None
         };
+        let mvar = font.mvar().ok();
         let (ascent, descent) = if let Ok(os2) = font.os2() {
             (os2.s_typo_ascender(), os2.s_typo_descender())
         } else if let Ok(hhea) = font.hhea() {
@@ -56,6 +59,7 @@ impl<'a> GlyphMetrics<'a> {
             vvar,
             vorg,
             glyf,
+            mvar,
             ascent,
             descent,
         }
@@ -182,12 +186,29 @@ impl<'a> GlyphMetrics<'a> {
             if let Some(origin) = origin {
                 origin
             } else {
-                let advance = self.ascent as i32 - self.descent as i32;
+                let mut advance = self.ascent as i32 - self.descent as i32;
+                if let Some(mvar) = self.mvar.as_ref() {
+                    advance += mvar
+                        .metric_delta(Tag::new(b"hasc"), coords)
+                        .unwrap_or_default()
+                        .to_i32()
+                        - mvar
+                            .metric_delta(Tag::new(b"hdsc"), coords)
+                            .unwrap_or_default()
+                            .to_i32();
+                }
                 let diff = advance - (extents.y_max - extents.y_min);
                 extents.y_max + (diff >> 1)
             }
         } else {
-            self.ascent as i32
+            let mut ascent = self.ascent as i32;
+            if let Some(mvar) = self.mvar.as_ref() {
+                ascent += mvar
+                    .metric_delta(Tag::new(b"hasc"), coords)
+                    .unwrap_or_default()
+                    .to_i32();
+            }
+            ascent
         };
         Some(origin)
     }
