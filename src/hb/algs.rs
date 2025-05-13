@@ -36,12 +36,39 @@ pub fn rb_flag64_unsafe(x: u32) -> u64 {
     }
 }
 
-#[allow(non_snake_case)]
+/* Encodes three unsigned integers in one 64-bit number.  If the inputs have more than 21 bits,
+ * values will be truncated / overlap, and might not decode exactly. */
+#[allow(non_snake_case, dead_code)]
 pub const fn HB_CODEPOINT_ENCODE3(x: u32, y: u32, z: u32) -> u64 {
     ((x as u64) << 42) | ((y as u64) << 21) | (z as u64)
 }
+#[allow(non_snake_case, dead_code)]
+pub const fn HB_CODEPOINT_DECODE3_1(v: u64) -> u32 {
+    (v >> 42) as u32
+}
+#[allow(non_snake_case, dead_code)]
+pub const fn HB_CODEPOINT_DECODE3_2(v: u64) -> u32 {
+    ((v >> 21) & 0x1FFFFF) as u32
+}
+#[allow(non_snake_case, dead_code)]
+pub const fn HB_CODEPOINT_DECODE3_3(v: u64) -> u32 {
+    (v & 0x1FFFFF) as u32
+}
 
-#[allow(non_snake_case)]
+/* Custom encoding used by hb-ucd. */
+#[allow(non_snake_case, dead_code)]
 pub const fn HB_CODEPOINT_ENCODE3_11_7_14(x: u32, y: u32, z: u32) -> u32 {
     ((x & 0x07FF) << 21) | ((y & 0x007F) << 14) | (z & 0x3FFF)
+}
+#[allow(non_snake_case, dead_code)]
+pub const fn HB_CODEPOINT_DECODE3_11_7_14_1(v: u32) -> u32 {
+    v >> 21
+}
+#[allow(non_snake_case, dead_code)]
+pub const fn HB_CODEPOINT_DECODE3_11_7_14_2(v: u32) -> u32 {
+    ((v >> 14) & 0x007F) | 0x0300
+}
+#[allow(non_snake_case, dead_code)]
+pub const fn HB_CODEPOINT_DECODE3_11_7_14_3(v: u32) -> u32 {
+    v & 0x3FFF
 }

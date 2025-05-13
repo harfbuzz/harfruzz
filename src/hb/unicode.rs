@@ -3,7 +3,8 @@ use core::convert::TryFrom;
 pub use unicode_ccc::CanonicalCombiningClass;
 // TODO: prefer unic-ucd-normal::CanonicalCombiningClass
 
-use super::ucd_table::ucd;
+use super::ucd_table::ucd::*;
+use crate::hb::algs::*;
 use crate::Script;
 
 // Space estimates based on:
@@ -57,7 +58,7 @@ pub enum hb_unicode_general_category_t {
     Surrogate,
     TitlecaseLetter,
     Unassigned,
-    UppercaseLetter
+    UppercaseLetter,
 }
 
 #[allow(dead_code)]
@@ -363,11 +364,11 @@ pub trait CharExt {
 
 impl CharExt for char {
     fn script(self) -> Script {
-        ucd::_hb_ucd_sc_map[ucd::_hb_ucd_sc (self as usize) as usize]
+        _hb_ucd_sc_map[_hb_ucd_sc(self as usize) as usize]
     }
 
     fn general_category(self) -> hb_unicode_general_category_t {
-        hb_unicode_general_category_t::from_u32(ucd::_hb_ucd_gc (self as usize) as u32)
+        hb_unicode_general_category_t::from_u32(_hb_ucd_gc(self as usize) as u32)
     }
 
     fn space_fallback(self) -> hb_unicode_funcs_t::space_t {
@@ -396,7 +397,7 @@ impl CharExt for char {
     }
 
     fn combining_class(self) -> u8 {
-      ucd::_hb_ucd_ccc(self as usize)
+        _hb_ucd_ccc(self as usize)
     }
 
     fn modified_combining_class(self) -> u8 {
@@ -423,8 +424,7 @@ impl CharExt for char {
     }
 
     fn mirrored(self) -> Option<char> {
-        let delta = ucd::_hb_ucd_bmg(self as usize);
-        std::println!("mirrored: {} -> {}", self, delta);
+        let delta = _hb_ucd_bmg(self as usize);
         if delta == 0 {
             None
         } else {
@@ -656,15 +656,57 @@ const N_COUNT: u32 = V_COUNT * T_COUNT;
 const S_COUNT: u32 = L_COUNT * N_COUNT;
 
 pub fn compose(a: char, b: char) -> Option<char> {
+    // Hangul is handled algorithmically.
     if let Some(ab) = compose_hangul(a, b) {
         return Some(ab);
     }
 
-    let needle = (a as u64) << 32 | (b as u64);
-    super::unicode_norm::COMPOSITION_TABLE
-        .binary_search_by(|item| item.0.cmp(&needle))
-        .map(|idx| super::unicode_norm::COMPOSITION_TABLE[idx].1)
-        .ok()
+    let a = a as u32;
+    let b = b as u32;
+    let u: u32;
+
+    if (a & 0xFFFFF800) == 0x0000 && (b & 0xFFFFFF80) == 0x0300 {
+        /* If "a" is small enough and "b" is in the U+0300 range,
+         * the composition data is encoded in a 32bit array sorted
+         * by "a,b" pair. */
+        let k = HB_CODEPOINT_ENCODE3_11_7_14(a, b, 0);
+        let v = _hb_ucd_dm2_u32_map
+            .binary_search_by(|probe| {
+                let key = probe & HB_CODEPOINT_ENCODE3_11_7_14(0x1FFFFF, 0x1FFFFF, 0);
+                key.cmp(&k)
+            })
+            .ok()
+            .map(|index| _hb_ucd_dm2_u32_map[index]);
+
+        if let Some(value) = v {
+            u = HB_CODEPOINT_DECODE3_11_7_14_3(value);
+        } else {
+            return None;
+        }
+    } else {
+        /* Otherwise it is stored in a 64bit array sorted by
+         * "a,b" pair. */
+        let k = HB_CODEPOINT_ENCODE3(a, b, 0);
+        let v = _hb_ucd_dm2_u64_map
+            .binary_search_by(|probe| {
+                let key = probe & HB_CODEPOINT_ENCODE3(0x1FFFFF, 0x1FFFFF, 0);
+                key.cmp(&k)
+            })
+            .ok()
+            .map(|index| _hb_ucd_dm2_u64_map[index]);
+
+        if let Some(value) = v {
+            u = HB_CODEPOINT_DECODE3_3(value);
+        } else {
+            return None;
+        }
+    }
+
+    if u == 0 {
+        None
+    } else {
+        char::from_u32(u)
+    }
 }
 
 fn compose_hangul(a: char, b: char) -> Option<char> {
@@ -687,17 +729,49 @@ fn compose_hangul(a: char, b: char) -> Option<char> {
 }
 
 pub fn decompose(ab: char) -> Option<(char, char)> {
-    if let Some(ab) = decompose_hangul(ab) {
-        return Some(ab);
+    if let Some((a, b)) = decompose_hangul(ab) {
+        return Some((a, b));
     }
 
-    super::unicode_norm::DECOMPOSITION_TABLE
-        .binary_search_by(|item| item.0.cmp(&ab))
-        .map(|idx| {
-            let chars = &super::unicode_norm::DECOMPOSITION_TABLE[idx];
-            (chars.1, chars.2.unwrap_or('\0'))
-        })
-        .ok()
+    let mut i = _hb_ucd_dm(ab as usize) as usize;
+
+    // If no data, there's no decomposition.
+    if i == 0 {
+        return None;
+    }
+    i -= 1;
+
+    if i < _hb_ucd_dm1_p0_map.len() + _hb_ucd_dm1_p2_map.len() {
+        let a = if i < _hb_ucd_dm1_p0_map.len() {
+            _hb_ucd_dm1_p0_map[i] as u32
+        } else {
+            let j = i - _hb_ucd_dm1_p0_map.len();
+            0x20000 | _hb_ucd_dm1_p2_map[j] as u32
+        };
+        return char::from_u32(a).map(|a_char| (a_char, '\0'));
+    }
+
+    i -= _hb_ucd_dm1_p0_map.len() + _hb_ucd_dm1_p2_map.len();
+
+    if i < _hb_ucd_dm2_u32_map.len() {
+        let v = _hb_ucd_dm2_u32_map[i];
+        let a = HB_CODEPOINT_DECODE3_11_7_14_1(v);
+        let b = HB_CODEPOINT_DECODE3_11_7_14_2(v);
+        return match (char::from_u32(a), char::from_u32(b)) {
+            (Some(a), Some(b)) => Some((a, b)),
+            _ => None,
+        };
+    }
+
+    i -= _hb_ucd_dm2_u32_map.len();
+
+    let v = _hb_ucd_dm2_u64_map[i];
+    let a = HB_CODEPOINT_DECODE3_1(v);
+    let b = HB_CODEPOINT_DECODE3_2(v);
+    match (char::from_u32(a), char::from_u32(b)) {
+        (Some(a), Some(b)) => Some((a, b)),
+        _ => None,
+    }
 }
 
 pub fn decompose_hangul(ab: char) -> Option<(char, char)> {
@@ -723,7 +797,6 @@ mod tests {
     fn check_unicode_version() {
         assert_eq!(unicode_ccc::UNICODE_VERSION, (16, 0, 0));
         assert_eq!(unicode_properties::UNICODE_VERSION, (16, 0, 0));
-        assert_eq!(crate::hb::unicode_norm::UNICODE_VERSION, (16, 0, 0));
     }
 }
 
