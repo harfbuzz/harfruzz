@@ -18,21 +18,21 @@ const HB_BUFFER_SCRATCH_FLAG_ARABIC_HAS_STCH: hb_buffer_scratch_flags_t =
 // See:
 // https://github.com/harfbuzz/harfbuzz/commit/6e6f82b6f3dde0fc6c3c7d991d9ec6cfff57823d#commitcomment-14248516
 fn is_word_category(gc: hb_unicode_general_category_t) -> bool {
-    (rb_flag_unsafe(gc.to_rb())
-        & (rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_UNASSIGNED)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_SPACING_MARK)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL)))
+    (rb_flag_unsafe(gc.to_u32())
+        & (rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_UNASSIGNED)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_SPACING_MARK)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL)))
         != 0
 }
 
@@ -55,10 +55,10 @@ fn get_joining_type(u: char, gc: hb_unicode_general_category_t) -> hb_arabic_joi
         return j_type;
     }
 
-    let ok = rb_flag_unsafe(gc.to_rb())
-        & (rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK)
-            | rb_flag(hb_gc::RB_UNICODE_GENERAL_CATEGORY_FORMAT));
+    let ok = rb_flag_unsafe(gc.to_u32())
+        & (rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK)
+            | rb_flag(hb_gc::HB_UNICODE_GENERAL_CATEGORY_FORMAT));
 
     if ok != 0 {
         hb_arabic_joining_type_t::T

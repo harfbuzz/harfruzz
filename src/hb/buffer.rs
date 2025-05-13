@@ -221,7 +221,7 @@ impl hb_glyph_info_t {
     pub(crate) fn init_unicode_props(&mut self, scratch_flags: &mut hb_buffer_scratch_flags_t) {
         let u = self.as_char();
         let gc = u.general_category();
-        let mut props = gc.to_rb() as u16;
+        let mut props = gc.to_u32() as u16;
 
         if u as u32 >= 0x80 {
             *scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_NON_ASCII;

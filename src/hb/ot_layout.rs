@@ -295,7 +295,7 @@ pub fn _hb_glyph_info_set_general_category(
     gen_cat: hb_unicode_general_category_t,
 ) {
     /* Clears top-byte. */
-    let gen_cat = gen_cat.to_rb();
+    let gen_cat = gen_cat.to_u32();
     let n =
         (gen_cat as u16) | (info.unicode_props() & (0xFF & !UnicodeProps::GENERAL_CATEGORY.bits()));
     info.set_unicode_props(n);
@@ -306,7 +306,7 @@ pub fn _hb_glyph_info_get_general_category(
     info: &hb_glyph_info_t,
 ) -> hb_unicode_general_category_t {
     let n = info.unicode_props() & UnicodeProps::GENERAL_CATEGORY.bits();
-    hb_unicode_general_category_t::from_rb(n as u32)
+    hb_unicode_general_category_t::from_u32(n as u32)
 }
 
 #[inline]

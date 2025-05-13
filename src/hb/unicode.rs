@@ -2,7 +2,6 @@ use core::convert::TryFrom;
 
 pub use unicode_ccc::CanonicalCombiningClass;
 // TODO: prefer unic-ucd-normal::CanonicalCombiningClass
-pub use unicode_properties::GeneralCategory as hb_unicode_general_category_t;
 
 use super::ucd_table::ucd;
 use crate::Script;
@@ -25,6 +24,40 @@ pub mod hb_unicode_funcs_t {
     pub const SPACE_FIGURE: u8 = 19;
     pub const SPACE_PUNCTUATION: u8 = 20;
     pub const SPACE_NARROW: u8 = 21;
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum hb_unicode_general_category_t {
+    ClosePunctuation,
+    ConnectorPunctuation,
+    Control,
+    CurrencySymbol,
+    DashPunctuation,
+    DecimalNumber,
+    EnclosingMark,
+    FinalPunctuation,
+    Format,
+    InitialPunctuation,
+    LetterNumber,
+    LineSeparator,
+    LowercaseLetter,
+    MathSymbol,
+    ModifierLetter,
+    ModifierSymbol,
+    NonspacingMark,
+    OpenPunctuation,
+    OtherLetter,
+    OtherNumber,
+    OtherPunctuation,
+    OtherSymbol,
+    ParagraphSeparator,
+    PrivateUse,
+    SpaceSeparator,
+    SpacingMark,
+    Surrogate,
+    TitlecaseLetter,
+    Unassigned,
+    UppercaseLetter
 }
 
 #[allow(dead_code)]
@@ -215,85 +248,85 @@ const MODIFIED_COMBINING_CLASS: &[u8; 256] = &[
     235, 236, 237, 238, 239,
     CanonicalCombiningClass::IotaSubscript as u8,
     241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254,
-    255, // RB_UNICODE_COMBINING_CLASS_INVALID
+    255, // HB_UNICODE_COMBINING_CLASS_INVALID
 ];
 
 pub trait GeneralCategoryExt {
-    fn to_rb(&self) -> u32;
-    fn from_rb(gc: u32) -> Self;
+    fn to_u32(&self) -> u32;
+    fn from_u32(gc: u32) -> Self;
     fn is_mark(&self) -> bool;
     fn is_letter(&self) -> bool;
 }
 
 #[rustfmt::skip]
 impl GeneralCategoryExt for hb_unicode_general_category_t {
-    fn to_rb(&self) -> u32 {
+    fn to_u32(&self) -> u32 {
         match *self {
-            hb_unicode_general_category_t::ClosePunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION,
-            hb_unicode_general_category_t::ConnectorPunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION,
-            hb_unicode_general_category_t::Control => hb_gc::RB_UNICODE_GENERAL_CATEGORY_CONTROL,
-            hb_unicode_general_category_t::CurrencySymbol => hb_gc::RB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL,
-            hb_unicode_general_category_t::DashPunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION,
-            hb_unicode_general_category_t::DecimalNumber => hb_gc::RB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER,
-            hb_unicode_general_category_t::EnclosingMark => hb_gc::RB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK,
-            hb_unicode_general_category_t::FinalPunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION,
-            hb_unicode_general_category_t::Format => hb_gc::RB_UNICODE_GENERAL_CATEGORY_FORMAT,
-            hb_unicode_general_category_t::InitialPunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION,
-            hb_unicode_general_category_t::LetterNumber => hb_gc::RB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER,
-            hb_unicode_general_category_t::LineSeparator => hb_gc::RB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR,
-            hb_unicode_general_category_t::LowercaseLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER,
-            hb_unicode_general_category_t::MathSymbol => hb_gc::RB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL,
-            hb_unicode_general_category_t::ModifierLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER,
-            hb_unicode_general_category_t::ModifierSymbol => hb_gc::RB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL,
-            hb_unicode_general_category_t::NonspacingMark => hb_gc::RB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK,
-            hb_unicode_general_category_t::OpenPunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION,
-            hb_unicode_general_category_t::OtherLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER,
-            hb_unicode_general_category_t::OtherNumber => hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER,
-            hb_unicode_general_category_t::OtherPunctuation => hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION,
-            hb_unicode_general_category_t::OtherSymbol => hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL,
-            hb_unicode_general_category_t::ParagraphSeparator => hb_gc::RB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR,
-            hb_unicode_general_category_t::PrivateUse => hb_gc::RB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE,
-            hb_unicode_general_category_t::SpaceSeparator => hb_gc::RB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR,
-            hb_unicode_general_category_t::SpacingMark => hb_gc::RB_UNICODE_GENERAL_CATEGORY_SPACING_MARK,
-            hb_unicode_general_category_t::Surrogate => hb_gc::RB_UNICODE_GENERAL_CATEGORY_SURROGATE,
-            hb_unicode_general_category_t::TitlecaseLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER,
-            hb_unicode_general_category_t::Unassigned => hb_gc::RB_UNICODE_GENERAL_CATEGORY_UNASSIGNED,
-            hb_unicode_general_category_t::UppercaseLetter => hb_gc::RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER
+            hb_unicode_general_category_t::ClosePunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION,
+            hb_unicode_general_category_t::ConnectorPunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION,
+            hb_unicode_general_category_t::Control => hb_gc::HB_UNICODE_GENERAL_CATEGORY_CONTROL,
+            hb_unicode_general_category_t::CurrencySymbol => hb_gc::HB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL,
+            hb_unicode_general_category_t::DashPunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION,
+            hb_unicode_general_category_t::DecimalNumber => hb_gc::HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER,
+            hb_unicode_general_category_t::EnclosingMark => hb_gc::HB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK,
+            hb_unicode_general_category_t::FinalPunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION,
+            hb_unicode_general_category_t::Format => hb_gc::HB_UNICODE_GENERAL_CATEGORY_FORMAT,
+            hb_unicode_general_category_t::InitialPunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION,
+            hb_unicode_general_category_t::LetterNumber => hb_gc::HB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER,
+            hb_unicode_general_category_t::LineSeparator => hb_gc::HB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR,
+            hb_unicode_general_category_t::LowercaseLetter => hb_gc::HB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER,
+            hb_unicode_general_category_t::MathSymbol => hb_gc::HB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL,
+            hb_unicode_general_category_t::ModifierLetter => hb_gc::HB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER,
+            hb_unicode_general_category_t::ModifierSymbol => hb_gc::HB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL,
+            hb_unicode_general_category_t::NonspacingMark => hb_gc::HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK,
+            hb_unicode_general_category_t::OpenPunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION,
+            hb_unicode_general_category_t::OtherLetter => hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER,
+            hb_unicode_general_category_t::OtherNumber => hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER,
+            hb_unicode_general_category_t::OtherPunctuation => hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION,
+            hb_unicode_general_category_t::OtherSymbol => hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL,
+            hb_unicode_general_category_t::ParagraphSeparator => hb_gc::HB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR,
+            hb_unicode_general_category_t::PrivateUse => hb_gc::HB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE,
+            hb_unicode_general_category_t::SpaceSeparator => hb_gc::HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR,
+            hb_unicode_general_category_t::SpacingMark => hb_gc::HB_UNICODE_GENERAL_CATEGORY_SPACING_MARK,
+            hb_unicode_general_category_t::Surrogate => hb_gc::HB_UNICODE_GENERAL_CATEGORY_SURROGATE,
+            hb_unicode_general_category_t::TitlecaseLetter => hb_gc::HB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER,
+            hb_unicode_general_category_t::Unassigned => hb_gc::HB_UNICODE_GENERAL_CATEGORY_UNASSIGNED,
+            hb_unicode_general_category_t::UppercaseLetter => hb_gc::HB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER
         }
     }
 
-    fn from_rb(gc: u32) -> Self {
+    fn from_u32(gc: u32) -> Self {
         match gc {
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION => hb_unicode_general_category_t::ClosePunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION => hb_unicode_general_category_t::ConnectorPunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_CONTROL => hb_unicode_general_category_t::Control,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL => hb_unicode_general_category_t::CurrencySymbol,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION => hb_unicode_general_category_t::DashPunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER => hb_unicode_general_category_t::DecimalNumber,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK => hb_unicode_general_category_t::EnclosingMark,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION => hb_unicode_general_category_t::FinalPunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_FORMAT => hb_unicode_general_category_t::Format,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION => hb_unicode_general_category_t::InitialPunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER => hb_unicode_general_category_t::LetterNumber,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR => hb_unicode_general_category_t::LineSeparator,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER => hb_unicode_general_category_t::LowercaseLetter,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL => hb_unicode_general_category_t::MathSymbol,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER => hb_unicode_general_category_t::ModifierLetter,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL => hb_unicode_general_category_t::ModifierSymbol,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK => hb_unicode_general_category_t::NonspacingMark,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION => hb_unicode_general_category_t::OpenPunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER => hb_unicode_general_category_t::OtherLetter,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER => hb_unicode_general_category_t::OtherNumber,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION => hb_unicode_general_category_t::OtherPunctuation,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL => hb_unicode_general_category_t::OtherSymbol,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR => hb_unicode_general_category_t::ParagraphSeparator,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE => hb_unicode_general_category_t::PrivateUse,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR => hb_unicode_general_category_t::SpaceSeparator,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_SPACING_MARK => hb_unicode_general_category_t::SpacingMark,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_SURROGATE => hb_unicode_general_category_t::Surrogate,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER => hb_unicode_general_category_t::TitlecaseLetter,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_UNASSIGNED => hb_unicode_general_category_t::Unassigned,
-            hb_gc::RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER => hb_unicode_general_category_t::UppercaseLetter,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION => hb_unicode_general_category_t::ClosePunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION => hb_unicode_general_category_t::ConnectorPunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_CONTROL => hb_unicode_general_category_t::Control,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL => hb_unicode_general_category_t::CurrencySymbol,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION => hb_unicode_general_category_t::DashPunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER => hb_unicode_general_category_t::DecimalNumber,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK => hb_unicode_general_category_t::EnclosingMark,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION => hb_unicode_general_category_t::FinalPunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_FORMAT => hb_unicode_general_category_t::Format,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION => hb_unicode_general_category_t::InitialPunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER => hb_unicode_general_category_t::LetterNumber,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR => hb_unicode_general_category_t::LineSeparator,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER => hb_unicode_general_category_t::LowercaseLetter,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL => hb_unicode_general_category_t::MathSymbol,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER => hb_unicode_general_category_t::ModifierLetter,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL => hb_unicode_general_category_t::ModifierSymbol,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK => hb_unicode_general_category_t::NonspacingMark,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION => hb_unicode_general_category_t::OpenPunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER => hb_unicode_general_category_t::OtherLetter,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER => hb_unicode_general_category_t::OtherNumber,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION => hb_unicode_general_category_t::OtherPunctuation,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL => hb_unicode_general_category_t::OtherSymbol,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR => hb_unicode_general_category_t::ParagraphSeparator,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE => hb_unicode_general_category_t::PrivateUse,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR => hb_unicode_general_category_t::SpaceSeparator,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_SPACING_MARK => hb_unicode_general_category_t::SpacingMark,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_SURROGATE => hb_unicode_general_category_t::Surrogate,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER => hb_unicode_general_category_t::TitlecaseLetter,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_UNASSIGNED => hb_unicode_general_category_t::Unassigned,
+            hb_gc::HB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER => hb_unicode_general_category_t::UppercaseLetter,
             _ => unreachable!()
         }
     }
@@ -334,7 +367,7 @@ impl CharExt for char {
     }
 
     fn general_category(self) -> hb_unicode_general_category_t {
-        unicode_properties::general_category::UnicodeGeneralCategory::general_category(self)
+        hb_unicode_general_category_t::from_u32(ucd::_hb_ucd_gc (self as usize) as u32)
     }
 
     fn space_fallback(self) -> hb_unicode_funcs_t::space_t {
@@ -696,34 +729,34 @@ mod tests {
 
 // TODO: remove
 pub mod hb_gc {
-    pub const RB_UNICODE_GENERAL_CATEGORY_CONTROL: u32 = 0;
-    pub const RB_UNICODE_GENERAL_CATEGORY_FORMAT: u32 = 1;
-    pub const RB_UNICODE_GENERAL_CATEGORY_UNASSIGNED: u32 = 2;
-    pub const RB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE: u32 = 3;
-    pub const RB_UNICODE_GENERAL_CATEGORY_SURROGATE: u32 = 4;
-    pub const RB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER: u32 = 5;
-    pub const RB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER: u32 = 6;
-    pub const RB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER: u32 = 7;
-    pub const RB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER: u32 = 8;
-    pub const RB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER: u32 = 9;
-    pub const RB_UNICODE_GENERAL_CATEGORY_SPACING_MARK: u32 = 10;
-    pub const RB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK: u32 = 11;
-    pub const RB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK: u32 = 12;
-    pub const RB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER: u32 = 13;
-    pub const RB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER: u32 = 14;
-    pub const RB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER: u32 = 15;
-    pub const RB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION: u32 = 16;
-    pub const RB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION: u32 = 17;
-    pub const RB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION: u32 = 18;
-    pub const RB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION: u32 = 19;
-    pub const RB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION: u32 = 20;
-    pub const RB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION: u32 = 21;
-    pub const RB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION: u32 = 22;
-    pub const RB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL: u32 = 23;
-    pub const RB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL: u32 = 24;
-    pub const RB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL: u32 = 25;
-    pub const RB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL: u32 = 26;
-    pub const RB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR: u32 = 27;
-    pub const RB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR: u32 = 28;
-    pub const RB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR: u32 = 29;
+    pub const HB_UNICODE_GENERAL_CATEGORY_CONTROL: u32 = 0;
+    pub const HB_UNICODE_GENERAL_CATEGORY_FORMAT: u32 = 1;
+    pub const HB_UNICODE_GENERAL_CATEGORY_UNASSIGNED: u32 = 2;
+    pub const HB_UNICODE_GENERAL_CATEGORY_PRIVATE_USE: u32 = 3;
+    pub const HB_UNICODE_GENERAL_CATEGORY_SURROGATE: u32 = 4;
+    pub const HB_UNICODE_GENERAL_CATEGORY_LOWERCASE_LETTER: u32 = 5;
+    pub const HB_UNICODE_GENERAL_CATEGORY_MODIFIER_LETTER: u32 = 6;
+    pub const HB_UNICODE_GENERAL_CATEGORY_OTHER_LETTER: u32 = 7;
+    pub const HB_UNICODE_GENERAL_CATEGORY_TITLECASE_LETTER: u32 = 8;
+    pub const HB_UNICODE_GENERAL_CATEGORY_UPPERCASE_LETTER: u32 = 9;
+    pub const HB_UNICODE_GENERAL_CATEGORY_SPACING_MARK: u32 = 10;
+    pub const HB_UNICODE_GENERAL_CATEGORY_ENCLOSING_MARK: u32 = 11;
+    pub const HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK: u32 = 12;
+    pub const HB_UNICODE_GENERAL_CATEGORY_DECIMAL_NUMBER: u32 = 13;
+    pub const HB_UNICODE_GENERAL_CATEGORY_LETTER_NUMBER: u32 = 14;
+    pub const HB_UNICODE_GENERAL_CATEGORY_OTHER_NUMBER: u32 = 15;
+    pub const HB_UNICODE_GENERAL_CATEGORY_CONNECT_PUNCTUATION: u32 = 16;
+    pub const HB_UNICODE_GENERAL_CATEGORY_DASH_PUNCTUATION: u32 = 17;
+    pub const HB_UNICODE_GENERAL_CATEGORY_CLOSE_PUNCTUATION: u32 = 18;
+    pub const HB_UNICODE_GENERAL_CATEGORY_FINAL_PUNCTUATION: u32 = 19;
+    pub const HB_UNICODE_GENERAL_CATEGORY_INITIAL_PUNCTUATION: u32 = 20;
+    pub const HB_UNICODE_GENERAL_CATEGORY_OTHER_PUNCTUATION: u32 = 21;
+    pub const HB_UNICODE_GENERAL_CATEGORY_OPEN_PUNCTUATION: u32 = 22;
+    pub const HB_UNICODE_GENERAL_CATEGORY_CURRENCY_SYMBOL: u32 = 23;
+    pub const HB_UNICODE_GENERAL_CATEGORY_MODIFIER_SYMBOL: u32 = 24;
+    pub const HB_UNICODE_GENERAL_CATEGORY_MATH_SYMBOL: u32 = 25;
+    pub const HB_UNICODE_GENERAL_CATEGORY_OTHER_SYMBOL: u32 = 26;
+    pub const HB_UNICODE_GENERAL_CATEGORY_LINE_SEPARATOR: u32 = 27;
+    pub const HB_UNICODE_GENERAL_CATEGORY_PARAGRAPH_SEPARATOR: u32 = 28;
+    pub const HB_UNICODE_GENERAL_CATEGORY_SPACE_SEPARATOR: u32 = 29;
 }
