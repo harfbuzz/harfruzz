@@ -1,7 +1,6 @@
 use core::convert::TryFrom;
 
 pub use unicode_ccc::CanonicalCombiningClass;
-// TODO: prefer unic-ucd-normal::CanonicalCombiningClass
 
 use super::ucd_table::ucd::*;
 use crate::hb::algs::*;
@@ -791,16 +790,6 @@ pub fn decompose_hangul(ab: char) -> Option<(char, char)> {
     Some((char::try_from(a).unwrap(), char::try_from(b).unwrap()))
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn check_unicode_version() {
-        assert_eq!(unicode_ccc::UNICODE_VERSION, (16, 0, 0));
-        assert_eq!(unicode_properties::UNICODE_VERSION, (16, 0, 0));
-    }
-}
-
-// TODO: remove
 pub mod hb_gc {
     pub const HB_UNICODE_GENERAL_CATEGORY_CONTROL: u32 = 0;
     pub const HB_UNICODE_GENERAL_CATEGORY_FORMAT: u32 = 1;
