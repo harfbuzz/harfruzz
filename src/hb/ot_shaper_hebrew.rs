@@ -4,8 +4,7 @@ use super::{hb_tag_t, unicode};
 use crate::hb::buffer::hb_buffer_t;
 use crate::hb::ot_layout::_hb_glyph_info_get_modified_combining_class;
 use crate::hb::ot_shape_plan::hb_ot_shape_plan_t;
-use crate::hb::unicode::modified_combining_class;
-use unicode_ccc::CanonicalCombiningClass;
+use crate::hb::unicode::{combining_class, modified_combining_class};
 
 pub const HEBREW_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: None,
@@ -40,7 +39,7 @@ fn reorder_marks_hebrew(
             (_hb_glyph_info_get_modified_combining_class(&c1) == modified_combining_class::CCC10
                 || _hb_glyph_info_get_modified_combining_class(&c1) == modified_combining_class::CCC14) /* sheva or hiriq */ &&
             (_hb_glyph_info_get_modified_combining_class(&c2) == modified_combining_class::CCC22
-                || _hb_glyph_info_get_modified_combining_class(&c2) == CanonicalCombiningClass::Below as u8)
+                || _hb_glyph_info_get_modified_combining_class(&c2) == combining_class::Below as u8)
         /* meteg or below */
         {
             buffer.merge_clusters(i - 1, i + 1);

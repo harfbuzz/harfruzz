@@ -1849,10 +1849,10 @@ fn final_reordering_impl(
     if buffer.info[start].indic_position() == ot_position_t::POS_PRE_M {
         if start == 0
             || (rb_flag_unsafe(
-                _hb_glyph_info_get_general_category(&buffer.info[start - 1]).to_rb(),
+                _hb_glyph_info_get_general_category(&buffer.info[start - 1]).to_u32(),
             ) & rb_flag_range(
-                hb_gc::RB_UNICODE_GENERAL_CATEGORY_FORMAT,
-                hb_gc::RB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK,
+                hb_gc::HB_UNICODE_GENERAL_CATEGORY_FORMAT,
+                hb_gc::HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK,
             )) == 0
         {
             buffer.info[start].mask |= indic_plan.mask_array[indic_feature::INIT];

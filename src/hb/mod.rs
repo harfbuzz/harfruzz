@@ -74,8 +74,9 @@ mod shape_wasm;
 mod tag;
 mod tag_table;
 mod text_parser;
+#[rustfmt::skip]
+mod ucd_table;
 mod unicode;
-mod unicode_norm;
 
 use read_fonts::types::Tag as hb_tag_t;
 

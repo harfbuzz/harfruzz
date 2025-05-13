@@ -61,7 +61,7 @@ harfbuzz (C++ edition) can roughly be split into 6 parts:
 You can find the "real" code size (eliminating generated code) using:
 
 ```sh
-tokei --exclude hb/unicode_norm.rs --exclude hb/ot_shaper_vowel_constraints.rs \
+tokei --exclude hb/ot_shaper_vowel_constraints.rs \
       --exclude '*_machine.rs' --exclude '*_table.rs' src
 ```
 
