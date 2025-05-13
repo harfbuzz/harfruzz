@@ -15,7 +15,6 @@ IGNORE_TESTS = [
     "directwrite.tests",
     "uniscribe.tests",
     "arabic-fallback-shaping.tests",
-    "vertical.tests",
 ]
 
 # harfbuzz test cases that will be ignored.

@@ -47,7 +47,7 @@ impl<'a> GlyphMetrics<'a> {
         } else if let Ok(hhea) = font.hhea() {
             (hhea.ascender().to_i16(), hhea.descender().to_i16())
         } else {
-            (0, 0)
+            (0, 0) // TODO
         };
         Self {
             hmtx,
@@ -126,8 +126,6 @@ impl<'a> GlyphMetrics<'a> {
         let gid = gid.into();
         let mut bearing = if let Some(vmtx) = self.vmtx.as_ref() {
             vmtx.side_bearing(gid).unwrap_or_default() as i32
-        } else if let Some(extents) = self.extents(gid, coords) {
-            return Some(extents.y_min);
         } else {
             return None;
         };
@@ -135,7 +133,7 @@ impl<'a> GlyphMetrics<'a> {
             if let Some(vvar) = self.vvar.as_ref() {
                 bearing += vvar.tsb_delta(gid, coords).unwrap_or_default().to_i32();
             } else if let Some(deltas) = self.phantom_deltas(gid, coords) {
-                bearing += deltas[2].x.to_i32();
+                bearing += deltas[3].y.to_i32();
             }
         }
         Some(bearing)
@@ -147,17 +145,46 @@ impl<'a> GlyphMetrics<'a> {
             let mut origin = vorg.vertical_origin_y(gid) as i32;
             if !coords.is_empty() {
                 if let Some(vvar) = self.vvar.as_ref() {
-                    origin += vvar.v_org_delta(gid, coords).unwrap_or_default().to_i32();
+                    origin += vvar
+                        .v_org_delta(gid, coords)
+                        .unwrap_or_default()
+                        .round()
+                        .to_i32();
                 }
             }
             origin
         } else if let Some(extents) = self.extents(gid, coords) {
-            if self.vmtx.is_some() {
-                extents.y_min + self.top_side_bearing(gid, coords).unwrap_or_default()
+            let origin = if self.vmtx.is_some() {
+                let mut origin = Some(extents.y_max);
+                let tsb = self.top_side_bearing(gid, coords);
+                if let Some(tsb) = tsb {
+                    origin = Some(origin.unwrap() + tsb);
+                } else {
+                    origin = None;
+                }
+                if origin.is_some() && !coords.is_empty() {
+                    if let Some(vvar) = self.vvar.as_ref() {
+                        origin = Some(
+                            origin.unwrap()
+                                + vvar
+                                    .v_org_delta(gid, coords)
+                                    .unwrap_or_default()
+                                    .round()
+                                    .to_i32(),
+                        );
+                    }
+                }
+                origin
+            } else {
+                None
+            };
+
+            if let Some(origin) = origin {
+                origin
             } else {
                 let advance = self.ascent as i32 - self.descent as i32;
-                let diff = advance - -(extents.y_max - extents.y_min);
-                extents.y_min + (diff >> 1)
+                let diff = advance - (extents.y_max - extents.y_min);
+                extents.y_max + (diff >> 1)
             }
         } else {
             self.ascent as i32
@@ -180,6 +207,9 @@ impl<'a> GlyphMetrics<'a> {
             y_max: glyph.y_max() as i32,
         };
         if !coords.is_empty() {
+            if self.vmtx.is_none() {
+                return None;
+            }
             if let Some(deltas) = self.phantom_deltas(gid, coords) {
                 bbox.x_min += deltas[0].x.to_i32();
                 bbox.x_max += deltas[1].x.to_i32();
