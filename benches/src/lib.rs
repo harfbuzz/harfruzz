@@ -33,7 +33,6 @@ macro_rules! simple_bench {
         simple_bench!($name, $font_path, $text_path, []);
     };
 
-    // Keep in sync with above.
     ($name:ident, $font_path:expr, $text_path:expr, $variations:expr) => {
         mod $name {
             use super::*;
