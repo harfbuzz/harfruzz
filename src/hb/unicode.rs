@@ -319,6 +319,7 @@ pub trait CharExt {
     fn script(self) -> Script;
     fn general_category(self) -> hb_unicode_general_category_t;
     fn space_fallback(self) -> hb_unicode_funcs_t::space_t;
+    fn combining_class(self) -> u8;
     fn modified_combining_class(self) -> u8;
     fn mirrored(self) -> Option<char>;
     fn is_emoji_extended_pictographic(self) -> bool;
@@ -361,6 +362,10 @@ impl CharExt for char {
         }
     }
 
+    fn combining_class(self) -> u8 {
+      ucd::_hb_ucd_ccc(self as usize)
+    }
+
     fn modified_combining_class(self) -> u8 {
         let u = self;
 
@@ -379,7 +384,8 @@ impl CharExt for char {
             return 127;
         }
 
-        let k = unicode_ccc::get_canonical_combining_class(u);
+        let k = u.combining_class();
+
         MODIFIED_COMBINING_CLASS[k as usize]
     }
 
