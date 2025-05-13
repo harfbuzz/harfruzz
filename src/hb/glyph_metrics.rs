@@ -221,16 +221,15 @@ impl<'a> GlyphMetrics<'a> {
             // Return empty extents for empty glyph
             return Some(BoundingBox::default());
         };
-        let mut bbox = BoundingBox {
+        if !coords.is_empty() {
+            return None; // TODO https://github.com/harfbuzz/harfruzz/pull/52#issuecomment-2878117808
+        }
+        Some(BoundingBox {
             x_min: glyph.x_min() as i32,
             x_max: glyph.x_max() as i32,
             y_min: glyph.y_min() as i32,
             y_max: glyph.y_max() as i32,
-        };
-        if !coords.is_empty() {
-            return None;
-        }
-        Some(bbox)
+        })
     }
 
     fn phantom_deltas(&self, gid: GlyphId, coords: &[F2Dot14]) -> Option<[Point<Fixed>; 4]> {
