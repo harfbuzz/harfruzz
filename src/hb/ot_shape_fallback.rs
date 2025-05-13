@@ -9,7 +9,6 @@ use super::{hb_font_t, Direction};
 
 fn recategorize_combining_class(u: u32, mut class: u8) -> u8 {
     use modified_combining_class as mcc;
-    use CanonicalCombiningClass as Class;
 
     if class >= 200 {
         return class;
@@ -20,69 +19,69 @@ fn recategorize_combining_class(u: u32, mut class: u8) -> u8 {
         if class == 0 {
             match u {
                 0x0E31 | 0x0E34 | 0x0E35 | 0x0E36 | 0x0E37 | 0x0E47 | 0x0E4C | 0x0E4D | 0x0E4E => {
-                    class = Class::AboveRight as u8
+                    class = combining_class::AboveRight as u8
                 }
 
                 0x0EB1 | 0x0EB4 | 0x0EB5 | 0x0EB6 | 0x0EB7 | 0x0EBB | 0x0ECC | 0x0ECD => {
-                    class = Class::Above as u8
+                    class = combining_class::Above as u8
                 }
 
-                0x0EBC => class = Class::Below as u8,
+                0x0EBC => class = combining_class::Below as u8,
 
                 _ => {}
             }
         } else {
             // Thai virama is below-right
             if u == 0x0E3A {
-                class = Class::BelowRight as u8;
+                class = combining_class::BelowRight as u8;
             }
         }
     }
 
     match class {
         // Hebrew
-        mcc::CCC10 => Class::Below as u8,         // sheva
-        mcc::CCC11 => Class::Below as u8,         // hataf segol
-        mcc::CCC12 => Class::Below as u8,         // hataf patah
-        mcc::CCC13 => Class::Below as u8,         // hataf qamats
-        mcc::CCC14 => Class::Below as u8,         // hiriq
-        mcc::CCC15 => Class::Below as u8,         // tsere
-        mcc::CCC16 => Class::Below as u8,         // segol
-        mcc::CCC17 => Class::Below as u8,         // patah
-        mcc::CCC18 => Class::Below as u8,         // qamats & qamats qatan
-        mcc::CCC20 => Class::Below as u8,         // qubuts
-        mcc::CCC22 => Class::Below as u8,         // meteg
-        mcc::CCC23 => Class::AttachedAbove as u8, // rafe
-        mcc::CCC24 => Class::AboveRight as u8,    // shin dot
-        mcc::CCC25 => Class::AboveLeft as u8,     // sin dot
-        mcc::CCC19 => Class::AboveLeft as u8,     // holam & holam haser for vav
-        mcc::CCC26 => Class::Above as u8,         // point varika
-        mcc::CCC21 => class,                      // dagesh
+        mcc::CCC10 => combining_class::Below as u8, // sheva
+        mcc::CCC11 => combining_class::Below as u8, // hataf segol
+        mcc::CCC12 => combining_class::Below as u8, // hataf patah
+        mcc::CCC13 => combining_class::Below as u8, // hataf qamats
+        mcc::CCC14 => combining_class::Below as u8, // hiriq
+        mcc::CCC15 => combining_class::Below as u8, // tsere
+        mcc::CCC16 => combining_class::Below as u8, // segol
+        mcc::CCC17 => combining_class::Below as u8, // patah
+        mcc::CCC18 => combining_class::Below as u8, // qamats & qamats qatan
+        mcc::CCC20 => combining_class::Below as u8, // qubuts
+        mcc::CCC22 => combining_class::Below as u8, // meteg
+        mcc::CCC23 => combining_class::AttachedAbove as u8, // rafe
+        mcc::CCC24 => combining_class::AboveRight as u8, // shin dot
+        mcc::CCC25 => combining_class::AboveLeft as u8, // sin dot
+        mcc::CCC19 => combining_class::AboveLeft as u8, // holam & holam haser for vav
+        mcc::CCC26 => combining_class::Above as u8, // point varika
+        mcc::CCC21 => class,                        // dagesh
 
         // Arabic and Syriac
-        mcc::CCC27 => Class::Above as u8, // fathatan
-        mcc::CCC28 => Class::Above as u8, // dammatan
-        mcc::CCC30 => Class::Above as u8, // fatha
-        mcc::CCC31 => Class::Above as u8, // damma
-        mcc::CCC33 => Class::Above as u8, // shadda
-        mcc::CCC34 => Class::Above as u8, // sukun
-        mcc::CCC35 => Class::Above as u8, // superscript alef
-        mcc::CCC36 => Class::Above as u8, // superscript alaph
-        mcc::CCC29 => Class::Below as u8, // kasratan
-        mcc::CCC32 => Class::Below as u8, // kasra
+        mcc::CCC27 => combining_class::Above as u8, // fathatan
+        mcc::CCC28 => combining_class::Above as u8, // dammatan
+        mcc::CCC30 => combining_class::Above as u8, // fatha
+        mcc::CCC31 => combining_class::Above as u8, // damma
+        mcc::CCC33 => combining_class::Above as u8, // shadda
+        mcc::CCC34 => combining_class::Above as u8, // sukun
+        mcc::CCC35 => combining_class::Above as u8, // superscript alef
+        mcc::CCC36 => combining_class::Above as u8, // superscript alaph
+        mcc::CCC29 => combining_class::Below as u8, // kasratan
+        mcc::CCC32 => combining_class::Below as u8, // kasra
 
         // Thai
-        mcc::CCC103 => Class::BelowRight as u8, // sara u / sara uu
-        mcc::CCC107 => Class::AboveRight as u8, // mai
+        mcc::CCC103 => combining_class::BelowRight as u8, // sara u / sara uu
+        mcc::CCC107 => combining_class::AboveRight as u8, // mai
 
         // Lao
-        mcc::CCC118 => Class::Below as u8, // sign u / sign uu
-        mcc::CCC122 => Class::Above as u8, // mai
+        mcc::CCC118 => combining_class::Below as u8, // sign u / sign uu
+        mcc::CCC122 => combining_class::Above as u8, // mai
 
         // Tibetian
-        mcc::CCC129 => Class::Below as u8, // sign aa
-        mcc::CCC130 => Class::Above as u8, // sign i
-        mcc::CCC132 => Class::Below as u8, // sign u
+        mcc::CCC129 => combining_class::Below as u8, // sign aa
+        mcc::CCC130 => combining_class::Above as u8, // sign i
+        mcc::CCC132 => combining_class::Below as u8, // sign u
 
         _ => class,
     }
@@ -135,10 +134,8 @@ fn position_mark(
     glyph: GlyphId,
     pos: &mut GlyphPosition,
     base_extents: &mut hb_glyph_extents_t,
-    combining_class: CanonicalCombiningClass,
+    combining_class: u8,
 ) {
-    use CanonicalCombiningClass as Class;
-
     let mut mark_extents = hb_glyph_extents_t::default();
     if !face.glyph_extents(glyph, &mut mark_extents) {
         return;
@@ -152,7 +149,9 @@ fn position_mark(
 
     // X positioning
     match combining_class {
-        Class::DoubleBelow | Class::DoubleAbove if direction.is_horizontal() => {
+        combining_class::DoubleBelow | combining_class::DoubleAbove
+            if direction.is_horizontal() =>
+        {
             pos.x_offset += base_extents.x_bearing
                 + if direction.is_forward() {
                     base_extents.width
@@ -163,19 +162,27 @@ fn position_mark(
                 - mark_extents.x_bearing;
         }
 
-        Class::AttachedBelowLeft | Class::BelowLeft | Class::AboveLeft => {
+        combining_class::AttachedBelowLeft
+        | combining_class::BelowLeft
+        | combining_class::AboveLeft => {
             // Left align.
             pos.x_offset += base_extents.x_bearing - mark_extents.x_bearing;
         }
 
-        Class::AttachedAboveRight | Class::BelowRight | Class::AboveRight => {
+        combining_class::AttachedAboveRight
+        | combining_class::BelowRight
+        | combining_class::AboveRight => {
             // Right align.
             pos.x_offset += base_extents.x_bearing + base_extents.width
                 - mark_extents.width
                 - mark_extents.x_bearing;
         }
 
-        Class::AttachedBelow | Class::AttachedAbove | Class::Below | Class::Above | _ => {
+        combining_class::AttachedBelow
+        | combining_class::AttachedAbove
+        | combining_class::Below
+        | combining_class::Above
+        | _ => {
             // Center align.
             pos.x_offset += base_extents.x_bearing + (base_extents.width - mark_extents.width) / 2
                 - mark_extents.x_bearing;
@@ -184,20 +191,20 @@ fn position_mark(
 
     let is_attached = matches!(
         combining_class,
-        Class::AttachedBelowLeft
-            | Class::AttachedBelow
-            | Class::AttachedAbove
-            | Class::AttachedAboveRight
+        combining_class::AttachedBelowLeft
+            | combining_class::AttachedBelow
+            | combining_class::AttachedAbove
+            | combining_class::AttachedAboveRight
     );
 
     // Y positioning.
     match combining_class {
-        Class::DoubleBelow
-        | Class::BelowLeft
-        | Class::Below
-        | Class::BelowRight
-        | Class::AttachedBelowLeft
-        | Class::AttachedBelow => {
+        combining_class::DoubleBelow
+        | combining_class::BelowLeft
+        | combining_class::Below
+        | combining_class::BelowRight
+        | combining_class::AttachedBelowLeft
+        | combining_class::AttachedBelow => {
             if !is_attached {
                 // Add gap.
                 base_extents.height -= y_gap;
@@ -214,12 +221,12 @@ fn position_mark(
             base_extents.height += mark_extents.height;
         }
 
-        Class::DoubleAbove
-        | Class::AboveLeft
-        | Class::Above
-        | Class::AboveRight
-        | Class::AttachedAbove
-        | Class::AttachedAboveRight => {
+        combining_class::DoubleAbove
+        | combining_class::AboveLeft
+        | combining_class::Above
+        | combining_class::AboveRight
+        | combining_class::AttachedAbove
+        | combining_class::AttachedAboveRight => {
             if !is_attached {
                 // Add gap.
                 base_extents.y_bearing += y_gap;
@@ -342,7 +349,7 @@ fn position_around_base(
                 info.as_glyph(),
                 pos,
                 &mut cluster_extents,
-                conv_combining_class(this_combining_class),
+                this_combining_class,
             );
 
             pos.x_advance = 0;
@@ -500,69 +507,5 @@ pub fn _hb_ot_shape_fallback_spaces(
                 _ => {}
             }
         }
-    }
-}
-
-// TODO: can we cast directly?
-fn conv_combining_class(n: u8) -> CanonicalCombiningClass {
-    use CanonicalCombiningClass as Class;
-    match n {
-        1 => Class::Overlay,
-        6 => Class::HanReading,
-        7 => Class::Nukta,
-        8 => Class::KanaVoicing,
-        9 => Class::Virama,
-        10 => Class::CCC10,
-        11 => Class::CCC11,
-        12 => Class::CCC12,
-        13 => Class::CCC13,
-        14 => Class::CCC14,
-        15 => Class::CCC15,
-        16 => Class::CCC16,
-        17 => Class::CCC17,
-        18 => Class::CCC18,
-        19 => Class::CCC19,
-        20 => Class::CCC20,
-        21 => Class::CCC21,
-        22 => Class::CCC22,
-        23 => Class::CCC23,
-        24 => Class::CCC24,
-        25 => Class::CCC25,
-        26 => Class::CCC26,
-        27 => Class::CCC27,
-        28 => Class::CCC28,
-        29 => Class::CCC29,
-        30 => Class::CCC30,
-        31 => Class::CCC31,
-        32 => Class::CCC32,
-        33 => Class::CCC33,
-        34 => Class::CCC34,
-        35 => Class::CCC35,
-        36 => Class::CCC36,
-        84 => Class::CCC84,
-        91 => Class::CCC91,
-        103 => Class::CCC103,
-        107 => Class::CCC107,
-        118 => Class::CCC118,
-        122 => Class::CCC122,
-        129 => Class::CCC129,
-        130 => Class::CCC130,
-        132 => Class::CCC132,
-        200 => Class::AttachedBelowLeft,
-        202 => Class::AttachedBelow,
-        214 => Class::AttachedAbove,
-        216 => Class::AttachedAboveRight,
-        218 => Class::BelowLeft,
-        220 => Class::Below,
-        222 => Class::BelowRight,
-        224 => Class::Left,
-        226 => Class::Right,
-        228 => Class::AboveLeft,
-        230 => Class::Above,
-        232 => Class::AboveRight,
-        233 => Class::DoubleBelow,
-        234 => Class::DoubleAbove,
-        240 => Class::IotaSubscript,
-        _ => Class::NotReordered,
     }
 }

@@ -1,7 +1,5 @@
 use core::convert::TryFrom;
 
-pub use unicode_ccc::CanonicalCombiningClass;
-
 use super::ucd_table::ucd::*;
 use crate::hb::algs::*;
 use crate::Script;
@@ -58,6 +56,84 @@ pub enum hb_unicode_general_category_t {
     TitlecaseLetter,
     Unassigned,
     UppercaseLetter,
+}
+
+#[allow(dead_code)]
+pub mod combining_class {
+    pub const NotReordered: u8 = 0;
+    pub const Overlay: u8 = 1;
+    pub const Nukta: u8 = 7;
+    pub const KanaVoicing: u8 = 8;
+    pub const Virama: u8 = 9;
+
+    /* Hebrew */
+    pub const CCC10: u8 = 10;
+    pub const CCC11: u8 = 11;
+    pub const CCC12: u8 = 12;
+    pub const CCC13: u8 = 13;
+    pub const CCC14: u8 = 14;
+    pub const CCC15: u8 = 15;
+    pub const CCC16: u8 = 16;
+    pub const CCC17: u8 = 17;
+    pub const CCC18: u8 = 18;
+    pub const CCC19: u8 = 19;
+    pub const CCC20: u8 = 20;
+    pub const CCC21: u8 = 21;
+    pub const CCC22: u8 = 22;
+    pub const CCC23: u8 = 23;
+    pub const CCC24: u8 = 24;
+    pub const CCC25: u8 = 25;
+    pub const CCC26: u8 = 26;
+
+    /* Arabic */
+    pub const CCC27: u8 = 27;
+    pub const CCC28: u8 = 28;
+    pub const CCC29: u8 = 29;
+    pub const CCC30: u8 = 30;
+    pub const CCC31: u8 = 31;
+    pub const CCC32: u8 = 32;
+    pub const CCC33: u8 = 33;
+    pub const CCC34: u8 = 34;
+    pub const CCC35: u8 = 35;
+
+    /* Syriac */
+    pub const CCC36: u8 = 36;
+
+    /* Telugu */
+    pub const CCC84: u8 = 84;
+    pub const CCC91: u8 = 91;
+
+    /* Thai */
+    pub const CCC103: u8 = 103;
+    pub const CCC107: u8 = 107;
+
+    /* Lao */
+    pub const CCC118: u8 = 118;
+    pub const CCC122: u8 = 122;
+
+    /* Tibetan */
+    pub const CCC129: u8 = 129;
+    pub const CCC130: u8 = 130;
+    pub const CCC132: u8 = 132;
+
+    pub const AttachedBelowLeft: u8 = 200;
+    pub const AttachedBelow: u8 = 202;
+    pub const AttachedAbove: u8 = 214;
+    pub const AttachedAboveRight: u8 = 216;
+    pub const BelowLeft: u8 = 218;
+    pub const Below: u8 = 220;
+    pub const BelowRight: u8 = 222;
+    pub const Left: u8 = 224;
+    pub const Right: u8 = 226;
+    pub const AboveLeft: u8 = 228;
+    pub const Above: u8 = 230;
+    pub const AboveRight: u8 = 232;
+    pub const DoubleBelow: u8 = 233;
+    pub const DoubleAbove: u8 = 234;
+
+    pub const IotaSubscript: u8 = 240;
+
+    pub const Invalid: u8 = 255;
 }
 
 #[allow(dead_code)]
@@ -142,12 +218,12 @@ pub mod modified_combining_class {
 
 #[rustfmt::skip]
 const MODIFIED_COMBINING_CLASS: &[u8; 256] = &[
-    CanonicalCombiningClass::NotReordered as u8,
-    CanonicalCombiningClass::Overlay as u8,
+    combining_class::NotReordered as u8,
+    combining_class::Overlay as u8,
     2, 3, 4, 5, 6,
-    CanonicalCombiningClass::Nukta as u8,
-    CanonicalCombiningClass::KanaVoicing as u8,
-    CanonicalCombiningClass::Virama as u8,
+    combining_class::Nukta as u8,
+    combining_class::KanaVoicing as u8,
+    combining_class::Virama as u8,
 
     // Hebrew
     modified_combining_class::CCC10,
@@ -220,35 +296,35 @@ const MODIFIED_COMBINING_CLASS: &[u8; 256] = &[
     180, 181, 182, 183, 184, 185, 186, 187, 188, 189,
     190, 191, 192, 193, 194, 195, 196, 197, 198, 199,
 
-    CanonicalCombiningClass::AttachedBelowLeft as u8,
+    combining_class::AttachedBelowLeft as u8,
     201,
-    CanonicalCombiningClass::AttachedBelow as u8,
+    combining_class::AttachedBelow as u8,
     203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213,
-    CanonicalCombiningClass::AttachedAbove as u8,
+    combining_class::AttachedAbove as u8,
     215,
-    CanonicalCombiningClass::AttachedAboveRight as u8,
+    combining_class::AttachedAboveRight as u8,
     217,
-    CanonicalCombiningClass::BelowLeft as u8,
+    combining_class::BelowLeft as u8,
     219,
-    CanonicalCombiningClass::Below as u8,
+    combining_class::Below as u8,
     221,
-    CanonicalCombiningClass::BelowRight as u8,
+    combining_class::BelowRight as u8,
     223,
-    CanonicalCombiningClass::Left as u8,
+    combining_class::Left as u8,
     225,
-    CanonicalCombiningClass::Right as u8,
+    combining_class::Right as u8,
     227,
-    CanonicalCombiningClass::AboveLeft as u8,
+    combining_class::AboveLeft as u8,
     229,
-    CanonicalCombiningClass::Above as u8,
+    combining_class::Above as u8,
     231,
-    CanonicalCombiningClass::AboveRight as u8,
-    CanonicalCombiningClass::DoubleBelow as u8,
-    CanonicalCombiningClass::DoubleAbove as u8,
+    combining_class::AboveRight as u8,
+    combining_class::DoubleBelow as u8,
+    combining_class::DoubleAbove as u8,
     235, 236, 237, 238, 239,
-    CanonicalCombiningClass::IotaSubscript as u8,
+    combining_class::IotaSubscript as u8,
     241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254,
-    255, // HB_UNICODE_COMBINING_CLASS_INVALID
+    combining_class::Invalid as u8,
 ];
 
 pub trait GeneralCategoryExt {
