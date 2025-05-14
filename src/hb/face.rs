@@ -5,7 +5,7 @@ use read_fonts::{FontRef, TableProvider};
 
 use super::aat::AatTables;
 use super::buffer::GlyphPropsFlags;
-use super::charmap::Charmap;
+use super::charmap::{cache_t as cmap_cache_t, Charmap};
 use super::glyph_metrics::GlyphMetrics;
 use super::glyph_names::GlyphNames;
 use super::ot::{LayoutTable, OtCache, OtTables};
@@ -14,20 +14,25 @@ use super::ot_layout::TableIndex;
 /// Cached shaper state for a single font.
 pub struct ShaperFont {
     ot_cache: OtCache,
+    cmap_cache: cmap_cache_t,
 }
 
 impl ShaperFont {
     /// Creates new cached state for the given font.
     pub fn new(font: &FontRef) -> Self {
         let ot_cache = OtCache::new(font);
-        Self { ot_cache }
+        let cmap_cache = cmap_cache_t::new();
+        Self {
+            ot_cache,
+            cmap_cache,
+        }
     }
 
     /// Creates a shaper instance for the given font and variation
     /// coordinates.
     pub fn shaper<'a>(&'a self, font: &FontRef<'a>, coords: &'a [F2Dot14]) -> Shaper<'a> {
         let units_per_em = font.head().map(|head| head.units_per_em()).unwrap_or(1000);
-        let charmap = Charmap::new(font);
+        let charmap = Charmap::new(font, &self.cmap_cache);
         let glyph_metrics = GlyphMetrics::new(font);
         let ot_tables = OtTables::new(font, &self.ot_cache, coords);
         let aat_tables = AatTables::new(font);
