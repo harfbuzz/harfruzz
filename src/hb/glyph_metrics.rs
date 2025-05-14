@@ -149,11 +149,7 @@ impl<'a> GlyphMetrics<'a> {
             let mut origin = vorg.vertical_origin_y(gid) as i32;
             if !coords.is_empty() {
                 if let Some(vvar) = self.vvar.as_ref() {
-                    origin += vvar
-                        .v_org_delta(gid, coords)
-                        .unwrap_or_default()
-                        .round()
-                        .to_i32();
+                    origin += vvar.v_org_delta(gid, coords).unwrap_or_default().to_i32();
                 }
             }
             origin
@@ -170,11 +166,7 @@ impl<'a> GlyphMetrics<'a> {
                     if let Some(vvar) = self.vvar.as_ref() {
                         origin = Some(
                             origin.unwrap()
-                                + vvar
-                                    .v_org_delta(gid, coords)
-                                    .unwrap_or_default()
-                                    .round()
-                                    .to_i32(),
+                                + vvar.v_org_delta(gid, coords).unwrap_or_default().to_i32(),
                         );
                     }
                 }
