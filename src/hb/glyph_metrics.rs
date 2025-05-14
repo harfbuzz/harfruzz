@@ -1,7 +1,8 @@
+use crate::Tag;
 use read_fonts::{
     tables::{
-        glyf::Glyf, gvar::Gvar, hmtx::Hmtx, hvar::Hvar, loca::Loca, vmtx::Vmtx, vorg::Vorg,
-        vvar::Vvar,
+        glyf::Glyf, gvar::Gvar, hmtx::Hmtx, hvar::Hvar, loca::Loca, mvar::Mvar, vmtx::Vmtx,
+        vorg::Vorg, vvar::Vvar,
     },
     types::{BoundingBox, F2Dot14, Fixed, GlyphId, Point},
     FontRef, TableProvider,
@@ -15,6 +16,7 @@ pub(crate) struct GlyphMetrics<'a> {
     vvar: Option<Vvar<'a>>,
     vorg: Option<Vorg<'a>>,
     glyf: Option<GlyfTables<'a>>,
+    mvar: Option<Mvar<'a>>,
     ascent: i16,
     descent: i16,
 }
@@ -42,12 +44,13 @@ impl<'a> GlyphMetrics<'a> {
         } else {
             None
         };
+        let mvar = font.mvar().ok();
         let (ascent, descent) = if let Ok(os2) = font.os2() {
             (os2.s_typo_ascender(), os2.s_typo_descender())
         } else if let Ok(hhea) = font.hhea() {
             (hhea.ascender().to_i16(), hhea.descender().to_i16())
         } else {
-            (0, 0)
+            (0, 0) // TODO
         };
         Self {
             hmtx,
@@ -56,6 +59,7 @@ impl<'a> GlyphMetrics<'a> {
             vvar,
             vorg,
             glyf,
+            mvar,
             ascent,
             descent,
         }
@@ -126,8 +130,6 @@ impl<'a> GlyphMetrics<'a> {
         let gid = gid.into();
         let mut bearing = if let Some(vmtx) = self.vmtx.as_ref() {
             vmtx.side_bearing(gid).unwrap_or_default() as i32
-        } else if let Some(extents) = self.extents(gid, coords) {
-            return Some(extents.y_min);
         } else {
             return None;
         };
@@ -135,7 +137,7 @@ impl<'a> GlyphMetrics<'a> {
             if let Some(vvar) = self.vvar.as_ref() {
                 bearing += vvar.tsb_delta(gid, coords).unwrap_or_default().to_i32();
             } else if let Some(deltas) = self.phantom_deltas(gid, coords) {
-                bearing += deltas[2].x.to_i32();
+                bearing += deltas[3].y.to_i32();
             }
         }
         Some(bearing)
@@ -152,15 +154,53 @@ impl<'a> GlyphMetrics<'a> {
             }
             origin
         } else if let Some(extents) = self.extents(gid, coords) {
-            if self.vmtx.is_some() {
-                extents.y_min + self.top_side_bearing(gid, coords).unwrap_or_default()
+            let origin = if self.vmtx.is_some() {
+                let mut origin = Some(extents.y_max);
+                let tsb = self.top_side_bearing(gid, coords);
+                if let Some(tsb) = tsb {
+                    origin = Some(origin.unwrap() + tsb);
+                } else {
+                    origin = None;
+                }
+                if origin.is_some() && !coords.is_empty() {
+                    if let Some(vvar) = self.vvar.as_ref() {
+                        origin = Some(
+                            origin.unwrap()
+                                + vvar.v_org_delta(gid, coords).unwrap_or_default().to_i32(),
+                        );
+                    }
+                }
+                origin
             } else {
-                let advance = self.ascent as i32 - self.descent as i32;
-                let diff = advance - -(extents.y_max - extents.y_min);
-                extents.y_min + (diff >> 1)
+                None
+            };
+
+            if let Some(origin) = origin {
+                origin
+            } else {
+                let mut advance = self.ascent as i32 - self.descent as i32;
+                if let Some(mvar) = self.mvar.as_ref() {
+                    advance += mvar
+                        .metric_delta(Tag::new(b"hasc"), coords)
+                        .unwrap_or_default()
+                        .to_i32()
+                        - mvar
+                            .metric_delta(Tag::new(b"hdsc"), coords)
+                            .unwrap_or_default()
+                            .to_i32();
+                }
+                let diff = advance - (extents.y_max - extents.y_min);
+                extents.y_max + (diff >> 1)
             }
         } else {
-            self.ascent as i32
+            let mut ascent = self.ascent as i32;
+            if let Some(mvar) = self.mvar.as_ref() {
+                ascent += mvar
+                    .metric_delta(Tag::new(b"hasc"), coords)
+                    .unwrap_or_default()
+                    .to_i32();
+            }
+            ascent
         };
         Some(origin)
     }
@@ -173,21 +213,15 @@ impl<'a> GlyphMetrics<'a> {
             // Return empty extents for empty glyph
             return Some(BoundingBox::default());
         };
-        let mut bbox = BoundingBox {
+        if !coords.is_empty() {
+            return None; // TODO https://github.com/harfbuzz/harfruzz/pull/52#issuecomment-2878117808
+        }
+        Some(BoundingBox {
             x_min: glyph.x_min() as i32,
             x_max: glyph.x_max() as i32,
             y_min: glyph.y_min() as i32,
             y_max: glyph.y_max() as i32,
-        };
-        if !coords.is_empty() {
-            if let Some(deltas) = self.phantom_deltas(gid, coords) {
-                bbox.x_min += deltas[0].x.to_i32();
-                bbox.x_max += deltas[1].x.to_i32();
-                bbox.y_min += deltas[2].y.to_i32();
-                bbox.y_max += deltas[3].y.to_i32();
-            }
-        }
-        Some(bbox)
+        })
     }
 
     fn phantom_deltas(&self, gid: GlyphId, coords: &[F2Dot14]) -> Option<[Point<Fixed>; 4]> {

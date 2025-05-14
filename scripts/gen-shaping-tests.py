@@ -15,7 +15,6 @@ IGNORE_TESTS = [
     "directwrite.tests",
     "uniscribe.tests",
     "arabic-fallback-shaping.tests",
-    "vertical.tests",
 ]
 
 # harfbuzz test cases that will be ignored.
@@ -62,6 +61,9 @@ IGNORE_TEST_CASES = [
     "color_fonts_001",
     "color_fonts_002",
     "color_fonts_003",
+
+    # https://github.com/harfbuzz/harfruzz/pull/52
+    "vertical_016",
 ]
 
 
