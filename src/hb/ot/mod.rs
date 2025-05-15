@@ -12,8 +12,8 @@ use read_fonts::{
         varc::{Condition, CoverageTable},
         variations::{DeltaSetIndex, ItemVariationStore},
     },
-    types::{F2Dot14, GlyphId},
-    FontRef, ReadError, TableProvider,
+    types::{BigEndian, F2Dot14, GlyphId, Offset32},
+    FontData, FontRef, ReadError, ResolveOffset, TableProvider,
 };
 
 pub mod contextual;
@@ -95,11 +95,42 @@ impl<'a> crate::hb::ot_layout::LayoutTable for GposTable<'a> {
     }
 }
 
+#[derive(Clone, Default)]
+pub struct GdefTable<'a> {
+    table: Option<Gdef<'a>>,
+    classes: Option<ClassDef<'a>>,
+    mark_classes: Option<ClassDef<'a>>,
+    mark_sets: Option<(FontData<'a>, &'a [BigEndian<Offset32>])>,
+}
+
+impl<'a> GdefTable<'a> {
+    fn new(font: &FontRef<'a>) -> Self {
+        if let Ok(gdef) = font.gdef() {
+            let classes = gdef.glyph_class_def().transpose().ok().flatten();
+            let mark_classes = gdef.mark_attach_class_def().transpose().ok().flatten();
+            let mark_sets = gdef
+                .mark_glyph_sets_def()
+                .transpose()
+                .ok()
+                .flatten()
+                .map(|sets| (sets.offset_data(), sets.coverage_offsets()));
+            Self {
+                table: Some(gdef),
+                classes,
+                mark_classes,
+                mark_sets,
+            }
+        } else {
+            Self::default()
+        }
+    }
+}
+
 #[derive(Clone)]
 pub struct OtTables<'a> {
     pub gsub: Option<GsubTable<'a>>,
     pub gpos: Option<GposTable<'a>>,
-    pub gdef: Option<Gdef<'a>>,
+    pub gdef: GdefTable<'a>,
     pub gdef_mark_set_digests: &'a [hb_set_digest_t],
     pub coords: &'a [F2Dot14],
     pub var_store: Option<ItemVariationStore<'a>>,
@@ -120,9 +151,10 @@ impl<'a> OtTables<'a> {
         } else {
             &[]
         };
-        let gdef = font.gdef().ok();
+        let gdef = GdefTable::new(font);
         let var_store = if !coords.is_empty() {
-            gdef.as_ref()
+            gdef.table
+                .as_ref()
                 .and_then(|gdef| gdef.item_var_store().transpose().ok().flatten())
         } else {
             None
@@ -138,24 +170,21 @@ impl<'a> OtTables<'a> {
     }
 
     pub fn has_glyph_classes(&self) -> bool {
-        self.gdef
-            .as_ref()
-            .map(|gdef| gdef.glyph_class_def().transpose().ok().flatten().is_some())
-            .unwrap_or(false)
+        self.gdef.classes.is_some()
     }
 
     pub fn glyph_class(&self, glyph_id: u32) -> u16 {
         self.gdef
+            .classes
             .as_ref()
-            .and_then(|gdef| gdef.glyph_class_def().transpose().ok().flatten())
             .map(|class_def| class_def.get((glyph_id as u16).into()))
             .unwrap_or(0)
     }
 
     pub fn glyph_mark_attachment_class(&self, glyph_id: u32) -> u16 {
         self.gdef
+            .mark_classes
             .as_ref()
-            .and_then(|gdef| gdef.mark_attach_class_def().transpose().ok().flatten())
             .map(|class_def| class_def.get((glyph_id as u16).into()))
             .unwrap_or(0)
     }
@@ -165,12 +194,13 @@ impl<'a> OtTables<'a> {
             .gdef_mark_set_digests
             .get(set_index as usize)
             .map(|digest| digest.may_have_glyph(glyph_id.into()))
-            .unwrap_or(true)
+            .unwrap_or(false)
         {
             self.gdef
+                .mark_sets
                 .as_ref()
-                .and_then(|gdef| gdef.mark_glyph_sets_def().transpose().ok().flatten())
-                .and_then(|sets| sets.coverages().get(set_index as usize).ok())
+                .and_then(|(data, offsets)| Some((data, offsets.get(set_index as usize)?.get())))
+                .and_then(|(data, offset)| offset.resolve::<CoverageTable>(data.clone()).ok())
                 .map(|coverage| coverage.get(glyph_id).is_some())
                 .unwrap_or(false)
         } else {

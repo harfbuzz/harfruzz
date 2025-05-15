@@ -21,14 +21,7 @@ struct Value<'a> {
 
 impl Value<'_> {
     fn is_empty(&self) -> bool {
-        self.record.x_placement.is_none()
-            && self.record.y_placement.is_none()
-            && self.record.x_advance.is_none()
-            && self.record.y_advance.is_none()
-            && self.record.x_placement_device.get().is_null()
-            && self.record.y_placement_device.get().is_null()
-            && self.record.x_advance_device.get().is_null()
-            && self.record.y_advance_device.get().is_null()
+        self.record.format.is_empty()
     }
 
     fn apply(&self, ctx: &mut hb_ot_apply_context_t, idx: usize) -> bool {
