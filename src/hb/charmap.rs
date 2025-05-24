@@ -1,3 +1,4 @@
+use super::cache::hb_cache_t;
 use read_fonts::{
     tables::cmap::{Cmap, Cmap14, CmapSubtable, MapVariant, PlatformId},
     types::GlyphId,
@@ -19,14 +20,17 @@ const UNICODE_2_0_FULL_ENCODING: u16 = 4;
 //const UNICODE_VARIATION_ENCODING: u16 = 5;
 const UNICODE_FULL_ENCODING: u16 = 6;
 
-#[derive(Clone, Default)]
+pub type cache_t = hb_cache_t<21, 19, 256, 32>;
+
+#[derive(Clone)]
 pub struct Charmap<'a> {
     subtable: Option<(PlatformId, u16, CmapSubtable<'a>)>,
     vs_subtable: Option<Cmap14<'a>>,
+    cache: &'a cache_t,
 }
 
 impl<'a> Charmap<'a> {
-    pub fn new(font: &FontRef<'a>) -> Self {
+    pub fn new(font: &FontRef<'a>, cache: &'a cache_t) -> Self {
         if let Ok(cmap) = font.cmap() {
             let subtable = find_best_cmap_subtable(&cmap);
             let offset_data = cmap.offset_data();
@@ -42,12 +46,17 @@ impl<'a> Charmap<'a> {
             return Self {
                 subtable,
                 vs_subtable,
+                cache,
             };
         }
-        Self::default()
+        Self {
+            subtable: None,
+            vs_subtable: None,
+            cache,
+        }
     }
 
-    pub fn map(&self, mut c: u32) -> Option<GlyphId> {
+    fn map_impl(&self, mut c: u32) -> Option<GlyphId> {
         let subtable = self.subtable.as_ref()?;
         if subtable.0 == PlatformId::Macintosh && c > 0x7F {
             c = unicode_to_macroman(c);
@@ -89,6 +98,18 @@ impl<'a> Charmap<'a> {
             return self.map(0xF000 + c);
         }
         result
+    }
+
+    #[inline]
+    pub fn map(&self, c: u32) -> Option<GlyphId> {
+        if let Some(gid) = self.cache.get(c) {
+            return Some(GlyphId::new(gid));
+        }
+        let gid = self.map_impl(c);
+        if let Some(gid) = gid {
+            self.cache.set(c, gid.to_u32());
+        }
+        gid
     }
 
     pub fn map_variant(&self, c: u32, vs: u32) -> Option<GlyphId> {
