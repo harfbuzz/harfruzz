@@ -56,7 +56,7 @@ impl<'a> Charmap<'a> {
         }
     }
 
-    fn _map(&self, mut c: u32) -> Option<GlyphId> {
+    fn map_impl(&self, mut c: u32) -> Option<GlyphId> {
         let subtable = self.subtable.as_ref()?;
         if subtable.0 == PlatformId::Macintosh && c > 0x7F {
             c = unicode_to_macroman(c);
@@ -105,7 +105,7 @@ impl<'a> Charmap<'a> {
         if let Some(gid) = self.cache.get(c) {
             return Some(GlyphId::new(gid));
         }
-        let gid = self._map(c);
+        let gid = self.map_impl(c);
         if let Some(gid) = gid {
             self.cache.set(c, gid.to_u32());
         }

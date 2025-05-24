@@ -114,7 +114,7 @@ impl<const KEY_BITS: usize, const VALUE_BITS: usize, const CACHE_SIZE: usize, T:
     #[inline]
     pub fn get(&self, key: u32) -> Option<u32> {
         let index = (key as usize) & (CACHE_SIZE - 1);
-        let stored = T::get(&self.values[index]);
+        let stored = self.values[index].get();
         let tag = stored >> VALUE_BITS;
         let expected_tag = key >> (CACHE_SIZE as u32).ilog2();
 
@@ -133,7 +133,7 @@ impl<const KEY_BITS: usize, const VALUE_BITS: usize, const CACHE_SIZE: usize, T:
 
         let index = (key as usize) & (CACHE_SIZE - 1);
         let packed = ((key >> (CACHE_SIZE as u32).ilog2()) << VALUE_BITS) | value;
-        T::set(&self.values[index], packed);
+        self.values[index].set(packed);
         true
     }
 }
