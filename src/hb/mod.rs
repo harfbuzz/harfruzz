@@ -28,6 +28,7 @@ mod aat_layout_kerx_table;
 mod aat_layout_morx_table;
 mod aat_layout_trak_table;
 mod aat_map;
+mod cache;
 mod charmap;
 pub mod common;
 pub mod face;
