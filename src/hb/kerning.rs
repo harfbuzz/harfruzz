@@ -357,7 +357,7 @@ trait KernStateEntryExt {
     }
 
     fn has_advance(&self) -> bool {
-        self.flags() & 0x4000 != 0
+        self.flags() & 0x4000 == 0
     }
 
     fn has_push(&self) -> bool {
