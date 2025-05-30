@@ -126,7 +126,7 @@ pub(crate) fn apply(
     Some(())
 }
 
-trait SimpleKerning {
+pub trait SimpleKerning {
     fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32>;
 }
 
