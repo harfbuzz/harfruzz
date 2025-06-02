@@ -1,6 +1,7 @@
-use read_fonts::tables::aat::StateEntry;
-use read_fonts::tables::kern;
-use read_fonts::types::GlyphId;
+use read_fonts::{
+    tables::{aat, kern},
+    types::GlyphId,
+};
 
 use super::aat_layout_kerx_table::SimpleKerning;
 use super::buffer::*;
@@ -169,13 +170,11 @@ struct StateMachineDriver {
 const START_OF_TEXT: u16 = 0;
 
 fn apply_state_machine_kerning(
-    subtable: &kern::Subtable1,
+    subtable: &aat::StateTable,
     is_cross_stream: bool,
     kern_mask: hb_mask_t,
     buffer: &mut hb_buffer_t,
 ) {
-    let state_table = &subtable.state_table;
-
     let mut driver = StateMachineDriver {
         stack: [0; 8],
         depth: 0,
@@ -187,13 +186,13 @@ fn apply_state_machine_kerning(
         let class = if buffer.idx < buffer.len {
             buffer.info[buffer.idx]
                 .as_gid16()
-                .and_then(|gid| state_table.class(gid).ok())
+                .and_then(|gid| subtable.class(gid).ok())
                 .unwrap_or(1)
         } else {
             read_fonts::tables::aat::class::END_OF_TEXT
         };
 
-        let entry = match state_table.entry(state, class) {
+        let entry = match subtable.entry(state, class) {
             Ok(v) => v,
             _ => break,
         };
@@ -212,12 +211,11 @@ fn apply_state_machine_kerning(
 
         // Unsafe-to-break if end-of-text would kick in here.
         if buffer.idx + 2 <= buffer.len {
-            let end_entry = match state_table
-                .entry(state as u16, read_fonts::tables::aat::class::END_OF_TEXT)
-            {
-                Ok(v) => v,
-                _ => break,
-            };
+            let end_entry =
+                match subtable.entry(state as u16, read_fonts::tables::aat::class::END_OF_TEXT) {
+                    Ok(v) => v,
+                    _ => break,
+                };
 
             if end_entry.has_offset() {
                 buffer.unsafe_to_break(Some(buffer.idx), Some(buffer.idx + 2));
@@ -247,8 +245,8 @@ fn apply_state_machine_kerning(
 }
 
 fn state_machine_transition(
-    subtable: &kern::Subtable1,
-    entry: &StateEntry,
+    subtable: &aat::StateTable,
+    entry: &aat::StateEntry,
     has_cross_stream: bool,
     kern_mask: hb_mask_t,
     driver: &mut StateMachineDriver,
@@ -265,9 +263,9 @@ fn state_machine_transition(
 
     if entry.has_offset() && driver.depth != 0 {
         let mut value_offset = entry.value_offset();
-        let mut value = match subtable.values.get(value_offset as usize / 2) {
-            Some(v) => v.get(),
-            None => {
+        let mut value = match subtable.read_value::<i16>(value_offset as usize) {
+            Ok(v) => v,
+            _ => {
                 driver.depth = 0;
                 return;
             }
@@ -283,9 +281,7 @@ fn state_machine_transition(
             let mut v = value as i32;
             value_offset = value_offset.wrapping_add(2);
             value = subtable
-                .values
-                .get(value_offset as usize / 2)
-                .map(|v| v.get())
+                .read_value::<i16>(value_offset as usize)
                 .unwrap_or(0);
             if idx >= buffer.len {
                 continue;
@@ -365,7 +361,7 @@ trait KernStateEntryExt {
     }
 }
 
-impl<T> KernStateEntryExt for StateEntry<T> {
+impl<T> KernStateEntryExt for aat::StateEntry<T> {
     fn flags(&self) -> u16 {
         self.flags
     }
