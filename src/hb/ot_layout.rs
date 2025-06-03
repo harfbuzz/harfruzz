@@ -21,8 +21,8 @@ pub fn hb_ot_layout_has_machine_kerning(face: &hb_font_t) -> bool {
     match face.aat_tables.kern {
         Some(ref kern) => kern
             .subtables()
-            .filter_map(|s| s.ok()?.kind().ok())
-            .any(|s| matches!(s, read_fonts::tables::kern::SubtableKind::Format1(..))),
+            .filter_map(|s| s.ok())
+            .any(|s| s.is_state_machine()),
         None => false,
     }
 }

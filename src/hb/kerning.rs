@@ -56,21 +56,20 @@ pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &m
             buffer.reverse();
         }
 
-        if let kern::SubtableKind::Format1(format1) = kind {
-            apply_state_machine_kerning(&format1, is_cross_stream, plan.kern_mask, buffer);
-        } else {
-            if !plan.requested_kerning {
-                continue;
+        match kind {
+            kern::SubtableKind::Format0(format0) if plan.requested_kerning => {
+                apply_simple_kerning(&format0, is_cross_stream, face, plan.kern_mask, buffer);
             }
-            match kind {
-                kern::SubtableKind::Format0(format0) => {
-                    apply_simple_kerning(&format0, is_cross_stream, face, plan.kern_mask, buffer);
-                }
-                kern::SubtableKind::Format2(format2) => {
-                    apply_simple_kerning(&format2, is_cross_stream, face, plan.kern_mask, buffer);
-                }
-                _ => {}
+            kern::SubtableKind::Format1(format1) => {
+                apply_state_machine_kerning(&format1, is_cross_stream, plan.kern_mask, buffer);
             }
+            kern::SubtableKind::Format2(format2) if plan.requested_kerning => {
+                apply_simple_kerning(&format2, is_cross_stream, face, plan.kern_mask, buffer);
+            }
+            kern::SubtableKind::Format3(format3) if plan.requested_kerning => {
+                apply_simple_kerning(&format3, is_cross_stream, face, plan.kern_mask, buffer);
+            }
+            _ => {}
         }
 
         if reverse {
@@ -374,6 +373,12 @@ impl SimpleKerning for kern::Subtable0<'_> {
 }
 
 impl SimpleKerning for kern::Subtable2<'_> {
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
+        self.kerning(left, right)
+    }
+}
+
+impl SimpleKerning for kern::Subtable3<'_> {
     fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
         self.kerning(left, right)
     }
