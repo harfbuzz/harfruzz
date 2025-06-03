@@ -1,6 +1,9 @@
-use super::aat_layout_common::ToTtfParserGid;
-use ttf_parser::{apple_layout, kern, GlyphId};
+use read_fonts::{
+    tables::{aat, kern},
+    types::GlyphId,
+};
 
+use super::aat_layout_kerx_table::SimpleKerning;
 use super::buffer::*;
 use super::ot_layout::TableIndex;
 use super::ot_layout_common::lookup_flags;
@@ -10,24 +13,33 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::{hb_font_t, hb_mask_t};
 
 pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
-    let subtables = match face.aat_tables.kern {
-        Some(table) => table.subtables,
+    let subtables = match face.aat_tables.kern.as_ref() {
+        Some(table) => table.subtables(),
         None => return,
     };
 
     let mut seen_cross_stream = false;
     for subtable in subtables {
-        if subtable.variable {
+        let Ok(subtable) = subtable else {
+            return;
+        };
+
+        if subtable.is_variable() {
             continue;
         }
 
-        if buffer.direction.is_horizontal() != subtable.horizontal {
+        if buffer.direction.is_horizontal() != subtable.is_horizontal() {
             continue;
         }
+
+        let Ok(kind) = subtable.kind() else {
+            continue;
+        };
 
         let reverse = buffer.direction.is_backward();
+        let is_cross_stream = subtable.is_cross_stream();
 
-        if !seen_cross_stream && subtable.has_cross_stream {
+        if !seen_cross_stream && is_cross_stream {
             seen_cross_stream = true;
 
             // Attach all glyphs into a chain.
@@ -44,14 +56,20 @@ pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &m
             buffer.reverse();
         }
 
-        if subtable.has_state_machine {
-            apply_state_machine_kerning(&subtable, plan.kern_mask, buffer);
-        } else {
-            if !plan.requested_kerning {
-                continue;
+        match kind {
+            kern::SubtableKind::Format0(format0) if plan.requested_kerning => {
+                apply_simple_kerning(&format0, is_cross_stream, face, plan.kern_mask, buffer);
             }
-
-            apply_simple_kerning(&subtable, face, plan.kern_mask, buffer);
+            kern::SubtableKind::Format1(format1) => {
+                apply_state_machine_kerning(&format1, is_cross_stream, plan.kern_mask, buffer);
+            }
+            kern::SubtableKind::Format2(format2) if plan.requested_kerning => {
+                apply_simple_kerning(&format2, is_cross_stream, face, plan.kern_mask, buffer);
+            }
+            kern::SubtableKind::Format3(format3) if plan.requested_kerning => {
+                apply_simple_kerning(&format3, is_cross_stream, face, plan.kern_mask, buffer);
+            }
+            _ => {}
         }
 
         if reverse {
@@ -129,24 +147,18 @@ fn machine_kern(
     }
 }
 
-fn apply_simple_kerning(
-    subtable: &kern::Subtable,
+fn apply_simple_kerning<T: SimpleKerning>(
+    subtable: &T,
+    is_cross_stream: bool,
     face: &hb_font_t,
     kern_mask: hb_mask_t,
     buffer: &mut hb_buffer_t,
 ) {
-    machine_kern(
-        face,
-        buffer,
-        kern_mask,
-        subtable.has_cross_stream,
-        |left, right| {
-            subtable
-                .glyphs_kerning(GlyphId(left as u16), GlyphId(right as u16))
-                .map(i32::from)
-                .unwrap_or(0)
-        },
-    );
+    machine_kern(face, buffer, kern_mask, is_cross_stream, |left, right| {
+        subtable
+            .simple_kerning(left.into(), right.into())
+            .unwrap_or(0)
+    });
 }
 
 struct StateMachineDriver {
@@ -154,48 +166,41 @@ struct StateMachineDriver {
     depth: usize,
 }
 
+const START_OF_TEXT: u16 = 0;
+
 fn apply_state_machine_kerning(
-    subtable: &kern::Subtable,
+    subtable: &aat::StateTable,
+    is_cross_stream: bool,
     kern_mask: hb_mask_t,
     buffer: &mut hb_buffer_t,
 ) {
-    let state_table = match subtable.format {
-        kern::Format::Format1(ref state_table) => state_table,
-        _ => return,
-    };
-
     let mut driver = StateMachineDriver {
         stack: [0; 8],
         depth: 0,
     };
 
-    let mut state = apple_layout::state::START_OF_TEXT;
+    let mut state = START_OF_TEXT;
     buffer.idx = 0;
     loop {
         let class = if buffer.idx < buffer.len {
-            state_table
-                .class(buffer.info[buffer.idx].as_glyph().ttfp_gid())
+            buffer.info[buffer.idx]
+                .as_gid16()
+                .and_then(|gid| subtable.class(gid).ok())
                 .unwrap_or(1)
         } else {
-            apple_layout::class::END_OF_TEXT
+            read_fonts::tables::aat::class::END_OF_TEXT
         };
 
-        let entry = match state_table.entry(state, class) {
-            Some(v) => v,
-            None => break,
+        let entry = match subtable.entry(state, class) {
+            Ok(v) => v,
+            _ => break,
         };
 
         // Unsafe-to-break before this if not in state 0, as things might
         // go differently if we start from state 0 here.
-        if state != apple_layout::state::START_OF_TEXT
-            && buffer.backtrack_len() != 0
-            && buffer.idx < buffer.len
-        {
+        if state != START_OF_TEXT && buffer.backtrack_len() != 0 && buffer.idx < buffer.len {
             // If there's no value and we're just epsilon-transitioning to state 0, safe to break.
-            if entry.has_offset()
-                || entry.new_state != apple_layout::state::START_OF_TEXT
-                || entry.has_advance()
-            {
+            if entry.has_offset() || entry.new_state != START_OF_TEXT || entry.has_advance() {
                 buffer.unsafe_to_break_from_outbuffer(
                     Some(buffer.backtrack_len() - 1),
                     Some(buffer.idx + 1),
@@ -205,10 +210,11 @@ fn apply_state_machine_kerning(
 
         // Unsafe-to-break if end-of-text would kick in here.
         if buffer.idx + 2 <= buffer.len {
-            let end_entry = match state_table.entry(state, apple_layout::class::END_OF_TEXT) {
-                Some(v) => v,
-                None => break,
-            };
+            let end_entry =
+                match subtable.entry(state as u16, read_fonts::tables::aat::class::END_OF_TEXT) {
+                    Ok(v) => v,
+                    _ => break,
+                };
 
             if end_entry.has_offset() {
                 buffer.unsafe_to_break(Some(buffer.idx), Some(buffer.idx + 2));
@@ -216,15 +222,15 @@ fn apply_state_machine_kerning(
         }
 
         state_machine_transition(
-            entry,
-            subtable.has_cross_stream,
+            &subtable,
+            &entry,
+            is_cross_stream,
             kern_mask,
-            state_table,
             &mut driver,
             buffer,
         );
 
-        state = state_table.new_state(entry.new_state);
+        state = entry.new_state;
 
         if buffer.idx >= buffer.len {
             break;
@@ -238,10 +244,10 @@ fn apply_state_machine_kerning(
 }
 
 fn state_machine_transition(
-    entry: apple_layout::StateEntry,
+    subtable: &aat::StateTable,
+    entry: &aat::StateEntry,
     has_cross_stream: bool,
     kern_mask: hb_mask_t,
-    state_table: &apple_layout::StateTable,
     driver: &mut StateMachineDriver,
     buffer: &mut hb_buffer_t,
 ) {
@@ -256,9 +262,9 @@ fn state_machine_transition(
 
     if entry.has_offset() && driver.depth != 0 {
         let mut value_offset = entry.value_offset();
-        let mut value = match state_table.kerning(value_offset) {
-            Some(v) => v,
-            None => {
+        let mut value = match subtable.read_value::<i16>(value_offset as usize) {
+            Ok(v) => v,
+            _ => {
                 driver.depth = 0;
                 return;
             }
@@ -272,8 +278,10 @@ fn state_machine_transition(
             driver.depth -= 1;
             let idx = driver.stack[driver.depth];
             let mut v = value as i32;
-            value_offset = value_offset.next();
-            value = state_table.kerning(value_offset).unwrap_or(0);
+            value_offset = value_offset.wrapping_add(2);
+            value = subtable
+                .read_value::<i16>(value_offset as usize)
+                .unwrap_or(0);
             if idx >= buffer.len {
                 continue;
             }
@@ -329,5 +337,49 @@ fn state_machine_transition(
                 buffer.scratch_flags |= HB_BUFFER_SCRATCH_FLAG_HAS_GPOS_ATTACHMENT;
             }
         }
+    }
+}
+
+trait KernStateEntryExt {
+    fn flags(&self) -> u16;
+
+    fn has_offset(&self) -> bool {
+        self.flags() & 0x3FFF != 0
+    }
+
+    fn value_offset(&self) -> u16 {
+        self.flags() & 0x3FFF
+    }
+
+    fn has_advance(&self) -> bool {
+        self.flags() & 0x4000 == 0
+    }
+
+    fn has_push(&self) -> bool {
+        self.flags() & 0x8000 != 0
+    }
+}
+
+impl<T> KernStateEntryExt for aat::StateEntry<T> {
+    fn flags(&self) -> u16 {
+        self.flags
+    }
+}
+
+impl SimpleKerning for kern::Subtable0<'_> {
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
+        self.kerning(left, right)
+    }
+}
+
+impl SimpleKerning for kern::Subtable2<'_> {
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
+        self.kerning(left, right)
+    }
+}
+
+impl SimpleKerning for kern::Subtable3<'_> {
+    fn simple_kerning(&self, left: GlyphId, right: GlyphId) -> Option<i32> {
+        self.kerning(left, right)
     }
 }

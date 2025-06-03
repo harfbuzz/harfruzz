@@ -1,9 +1,7 @@
 use read_fonts::{
-    tables::{ankr::Ankr, feat::Feat, kerx::Kerx, morx::Morx, trak::Trak},
-    types::Tag,
+    tables::{ankr::Ankr, feat::Feat, kern::Kern, kerx::Kerx, morx::Morx, trak::Trak},
     FontRef, TableProvider,
 };
-use ttf_parser::kern::Table as Kern;
 
 #[derive(Clone, Default)]
 pub struct AatTables<'a> {
@@ -20,9 +18,7 @@ impl<'a> AatTables<'a> {
         Self {
             morx: font.morx().ok(),
             ankr: font.ankr().ok(),
-            kern: font
-                .table_data(Tag::new(b"kern"))
-                .and_then(|data| Kern::parse(data.as_bytes())),
+            kern: font.kern().ok(),
             kerx: font.kerx().ok(),
             trak: font.trak().ok(),
             feat: font.feat().ok(),
