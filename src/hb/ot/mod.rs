@@ -3,6 +3,8 @@ use super::{common::TagExt, set_digest::hb_set_digest_t};
 use crate::hb::hb_tag_t;
 use alloc::vec::Vec;
 use lookup::{LookupCache, LookupInfo, SubtableCache};
+use read_fonts::tables::layout::RangeRecord;
+use read_fonts::types::GlyphId16;
 use read_fonts::{
     tables::{
         gdef::Gdef,
@@ -189,6 +191,7 @@ impl<'a> OtTables<'a> {
             .unwrap_or(0)
     }
 
+    #[inline(always)]
     pub fn is_mark_glyph(&self, glyph_id: u32, set_index: u16) -> bool {
         if self
             .gdef_mark_set_digests
@@ -206,6 +209,26 @@ impl<'a> OtTables<'a> {
         } else {
             false
         }
+    }
+
+    pub fn mark_set(&self, set_index: u16) -> Option<CoverageTable<'a>> {
+        self.gdef
+            .mark_sets
+            .as_ref()
+            .and_then(|(data, offsets)| Some((data, offsets.get(set_index as usize)?.get())))
+            .and_then(|(data, offset)| offset.resolve::<CoverageTable>(data.clone()).ok())
+    }
+
+    pub fn mark_set_digest_and_coverage(
+        &self,
+        set_index: u16,
+    ) -> Option<(hb_set_digest_t, ParsedCoverageTable<'a>)> {
+        let mark_set: Option<ParsedCoverageTable<'a>> =
+            self.mark_set(set_index).map(|coverage| coverage.into());
+        self.gdef_mark_set_digests
+            .get(set_index as usize)
+            .cloned()
+            .zip(mark_set)
     }
 
     pub fn table_data_and_lookups(
@@ -492,4 +515,54 @@ fn glyph_class(class_def: Result<ClassDef, ReadError>, gid: GlyphId) -> u16 {
     class_def
         .map(|class_def| class_def.get(gid16))
         .unwrap_or_default()
+}
+
+fn glyph_class2(class_def: &ClassDef, gid: GlyphId) -> u16 {
+    let Ok(gid16) = gid.try_into() else {
+        return 0;
+    };
+    class_def.get(gid16)
+}
+
+#[derive(Clone)]
+pub enum ParsedCoverageTable<'a> {
+    Format1(&'a [BigEndian<GlyphId16>]),
+    Format2(&'a [RangeRecord]),
+}
+
+impl<'a> From<CoverageTable<'a>> for ParsedCoverageTable<'a> {
+    fn from(value: CoverageTable<'a>) -> Self {
+        match value {
+            CoverageTable::Format1(fmt1) => Self::Format1(fmt1.glyph_array()),
+            CoverageTable::Format2(fmt2) => Self::Format2(fmt2.range_records()),
+        }
+    }
+}
+
+impl<'a> ParsedCoverageTable<'a> {
+    pub fn get(&self, gid: GlyphId) -> Option<u16> {
+        let gid: GlyphId16 = gid.try_into().ok()?;
+        use core::cmp::Ordering;
+        match self {
+            Self::Format1(fmt1) => fmt1
+                .binary_search_by_key(&gid, |entry| entry.get())
+                .ok()
+                .map(|idx| idx as u16),
+            Self::Format2(fmt2) => fmt2
+                .binary_search_by(|rec| {
+                    if rec.end_glyph_id() < gid {
+                        Ordering::Less
+                    } else if rec.start_glyph_id() > gid {
+                        Ordering::Greater
+                    } else {
+                        Ordering::Equal
+                    }
+                })
+                .ok()
+                .map(|idx| {
+                    let rec = &fmt2[idx];
+                    rec.start_coverage_index() + gid.to_u16() - rec.start_glyph_id().to_u16()
+                }),
+        }
+    }
 }
