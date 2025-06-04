@@ -117,7 +117,7 @@ impl ShaperInstance {
     }
 }
 
-/// Builder type for constructing a [`Shaper`].
+/// Builder type for constructing a [`Shaper`](crate::Shaper).
 pub struct ShaperBuilder<'a> {
     data: &'a ShaperData,
     font: FontRef<'a>,
@@ -129,21 +129,21 @@ impl<'a> ShaperBuilder<'a> {
     /// Sets an optional instance for the shaper.
     ///
     /// This defines the variable font configuration.
-    pub fn instance(mut self, instance: &'a ShaperInstance) -> Self {
-        self.instance = Some(instance);
+    pub fn instance(mut self, instance: Option<&'a ShaperInstance>) -> Self {
+        self.instance = instance;
         self
     }
 
     /// Sets the point size for the shaper.
     ///
-    /// This controls adjustments provided by the `trak` (tracking) table.
-    pub fn point_size(mut self, size: f32) -> Self {
-        self.point_size = Some(size);
+    /// This controls adjustments provided by the tracking table.
+    pub fn point_size(mut self, size: Option<f32>) -> Self {
+        self.point_size = size;
         self
     }
 
     /// Builds the shaper with the current configuration.
-    pub fn build(self) -> hb_font_t<'a> {
+    pub fn build(self) -> crate::Shaper<'a> {
         let font = self.font;
         let units_per_em = font.head().map(|head| head.units_per_em()).unwrap_or(1000);
         let charmap = Charmap::new(&font, &self.data.cmap_cache);
@@ -180,8 +180,8 @@ pub struct hb_font_t<'a> {
     pub(crate) aat_tables: AatTables<'a>,
 }
 
-impl<'a> hb_font_t<'a> {
-    /// Returns face’s units per EM.
+impl<'a> crate::Shaper<'a> {
+    /// Returns font's units per EM.
     #[inline]
     pub fn units_per_em(&self) -> i32 {
         self.units_per_em as i32
@@ -197,10 +197,10 @@ impl<'a> hb_font_t<'a> {
     /// Consumes the buffer. You can then run [`GlyphBuffer::clear`] to get the [`UnicodeBuffer`] back
     /// without allocating a new one.
     ///
-    /// If you plan to shape multiple strings using the same [`Face`] prefer [`shape_with_plan`].
-    /// This is because [`ShapePlan`] initialization is pretty slow and should preferably be called
-    /// once for each [`Face`].
-    pub fn shape(&self, features: &[Feature], mut buffer: UnicodeBuffer) -> GlyphBuffer {
+    /// If you plan to shape multiple strings, prefer [`shape_with_plan`](Self::shape_with_plan).
+    /// This is because [`ShapePlan`](crate::ShapePlan) initialization is pretty slow and should preferably
+    /// be called once for each shaping configuration.
+    pub fn shape(&self, mut buffer: UnicodeBuffer, features: &[Feature]) -> GlyphBuffer {
         buffer.0.guess_segment_properties();
         let plan = hb_ot_shape_plan_t::new(
             self,
@@ -209,7 +209,7 @@ impl<'a> hb_font_t<'a> {
             buffer.0.language.as_ref(),
             features,
         );
-        self.shape_with_plan(&plan, buffer)
+        self.shape_with_plan(buffer, &plan)
     }
 
     /// Shapes the buffer content using the provided font and plan.
@@ -224,7 +224,7 @@ impl<'a> hb_font_t<'a> {
     ///
     /// Will panic when debugging assertions are enabled if the buffer and plan have mismatched
     /// properties.
-    pub fn shape_with_plan(&self, plan: &hb_ot_shape_plan_t, buffer: UnicodeBuffer) -> GlyphBuffer {
+    pub fn shape_with_plan(&self, buffer: UnicodeBuffer, plan: &hb_ot_shape_plan_t) -> GlyphBuffer {
         let mut buffer = buffer.0;
         buffer.guess_segment_properties();
 

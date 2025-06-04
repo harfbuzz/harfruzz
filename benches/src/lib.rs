@@ -48,12 +48,12 @@ macro_rules! simple_bench {
                         let data = harfruzz::ShaperData::new(&font);
                         let vars: &[CustomVariation] = $variations.as_slice();
                         let instance = harfruzz::ShaperInstance::from_variations(&font, vars.iter().map(|var| (var.tag, var.value)));
-                        let shaper = data.shaper(&font).instance(&instance).build();
+                        let shaper = data.shaper(&font).instance(Some(&instance)).build();
                         let mut buffer = harfruzz::UnicodeBuffer::new();
                         buffer.push_str(&text);
                         buffer.guess_segment_properties();
                         let shape_plan = harfruzz::ShapePlan::new(&shaper, buffer.direction(), Some(buffer.script()), buffer.language().as_ref(), &[]);
-                        shaper.shape_with_plan(&shape_plan, buffer)
+                        shaper.shape_with_plan(buffer, &shape_plan)
                     });
                 })
             }
@@ -84,7 +84,7 @@ macro_rules! simple_bench {
                 let data = harfruzz::ShaperData::new(&font);
                 let vars: &[CustomVariation] = $variations.as_slice();
                 let instance = harfruzz::ShaperInstance::from_variations(&font, vars.iter().map(|var| (var.tag, var.value)));
-                let shaper = data.shaper(&font).instance(&instance).build();
+                let shaper = data.shaper(&font).instance(Some(&instance)).build();
                 let mut buffer = harfruzz::UnicodeBuffer::new();
                 buffer.push_str(&text);
                 buffer.guess_segment_properties();
@@ -94,7 +94,7 @@ macro_rules! simple_bench {
                     test::black_box({
                         let mut filled_buffer = buffer.take().unwrap();
                         filled_buffer.push_str(&text);
-                        let glyph_buffer = shaper.shape_with_plan(&shape_plan, filled_buffer);
+                        let glyph_buffer = shaper.shape_with_plan(filled_buffer, &shape_plan);
                         buffer = Some(glyph_buffer.clear());
                     });
                 })

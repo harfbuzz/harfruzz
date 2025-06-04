@@ -117,11 +117,12 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         .collect();
 
     let data = ShaperData::new(&font);
-    let instance = ShaperInstance::from_variations(&font, &variations);
+    let instance =
+        (!variations.is_empty()).then(|| ShaperInstance::from_variations(&font, &variations));
     let shaper = data
         .shaper(&font)
-        .instance(&instance)
-        .point_size(args.font_ptem.unwrap_or(12.0))
+        .instance(instance.as_ref())
+        .point_size(args.font_ptem)
         .build();
 
     let mut buffer = harfruzz::UnicodeBuffer::new();
@@ -168,7 +169,7 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         features.push(feature);
     }
 
-    let glyph_buffer = shaper.shape(&features, buffer);
+    let glyph_buffer = shaper.shape(buffer, &features);
 
     let mut format_flags = harfruzz::SerializeFlags::default();
     if args.no_glyph_names {

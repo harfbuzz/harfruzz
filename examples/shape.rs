@@ -156,8 +156,8 @@ fn main() {
     let instance = ShaperInstance::from_variations(&font, &args.variations);
     let shaper = data
         .shaper(&font)
-        .instance(&instance)
-        .point_size(args.font_ptem.unwrap_or(12.0))
+        .instance(Some(&instance))
+        .point_size(args.font_ptem)
         .build();
 
     let text = if let Some(path) = args.text_file {
@@ -205,7 +205,7 @@ fn main() {
             buffer.set_not_found_variation_selector_glyph(g);
         }
 
-        let glyph_buffer = shaper.shape(&args.features, buffer);
+        let glyph_buffer = shaper.shape(buffer, &args.features);
 
         let mut format_flags = harfruzz::SerializeFlags::default();
         if args.no_glyph_names {
