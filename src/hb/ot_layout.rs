@@ -4,11 +4,10 @@ use core::ops::{Index, IndexMut};
 
 use super::buffer::*;
 use super::ot::lookup::LookupInfo;
-use super::ot_layout_gsubgpos::OT::{self, check_glyph_property_with_mark_set};
+use super::ot_layout_gsubgpos::OT::{self, check_glyph_property};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
 use super::{hb_font_t, hb_glyph_info_t};
-use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
@@ -176,7 +175,7 @@ fn apply_forward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) -> bo
     while ctx.buffer.idx < ctx.buffer.len && ctx.buffer.successful {
         let cur = ctx.buffer.cur(0);
         if (cur.mask & ctx.lookup_mask()) != 0
-            && check_glyph_property_with_mark_set(cur, ctx.lookup_props(), ctx.mark_set())
+            && check_glyph_property(cur, ctx.lookup_props(), ctx.mark_filter())
             && lookup.apply(ctx, &mut cache).is_some()
         {
             ret = true;
@@ -199,7 +198,7 @@ fn apply_backward(ctx: &mut OT::hb_ot_apply_context_t, lookup: &LookupInfo) -> b
     loop {
         let cur = ctx.buffer.cur(0);
         ret |= (cur.mask & ctx.lookup_mask()) != 0
-            && check_glyph_property_with_mark_set(cur, ctx.lookup_props(), ctx.mark_set())
+            && check_glyph_property(cur, ctx.lookup_props(), ctx.mark_filter())
             && lookup.apply(ctx, &mut cache).is_some();
 
         if ctx.buffer.idx == 0 {

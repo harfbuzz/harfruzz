@@ -4,13 +4,13 @@ use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
 use super::hb_font_t;
 use super::hb_mask_t;
-use super::ot::ParsedCoverageTable;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::set_digest::hb_set_digest_t;
 use super::unicode::hb_unicode_general_category_t;
 use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use read_fonts::tables::layout::SequenceLookupRecord;
+use read_fonts::tables::varc::CoverageTable;
 use read_fonts::types::GlyphId;
 
 /// Value represents glyph id.
@@ -216,6 +216,33 @@ enum may_skip_t {
 
 pub type match_func_t<'a> = dyn Fn(GlyphId, u16) -> bool + 'a;
 
+#[derive(Clone, Default)]
+pub enum MarkFilter<'a> {
+    #[default]
+    None,
+    FilteringSet(hb_set_digest_t, CoverageTable<'a>),
+    AttachmentType(u16),
+}
+
+impl<'a> MarkFilter<'a> {
+    pub fn new<'b>(ctx: &hb_ot_apply_context_t<'b, 'a>, lookup_props: u32) -> Self {
+        if (lookup_props as u16) & lookup_flags::USE_MARK_FILTERING_SET != 0 {
+            let set_index = (lookup_props >> 16) as u16;
+            ctx.face
+                .ot_tables
+                .mark_set_digest_and_coverage(set_index)
+                .map(|(digest, coverage)| MarkFilter::FilteringSet(digest, coverage))
+                .unwrap_or_default()
+        } else if (lookup_props as u16) & lookup_flags::MARK_ATTACHMENT_TYPE_MASK != 0 {
+            MarkFilter::AttachmentType(
+                (lookup_props as u16) & lookup_flags::MARK_ATTACHMENT_TYPE_MASK,
+            )
+        } else {
+            MarkFilter::None
+        }
+    }
+}
+
 struct matcher_t<'a> {
     lookup_props: u32,
     mask: hb_mask_t,
@@ -225,7 +252,7 @@ struct matcher_t<'a> {
     per_syllable: bool,
     syllable: u8,
     matching: Option<&'a match_func_t<'a>>,
-    mark_set: Option<(hb_set_digest_t, ParsedCoverageTable<'a>)>,
+    mark_filter: MarkFilter<'a>,
 }
 
 impl<'a> Default for matcher_t<'a> {
@@ -239,14 +266,14 @@ impl<'a> Default for matcher_t<'a> {
             per_syllable: false,
             syllable: 0,
             matching: None,
-            mark_set: None,
+            mark_filter: MarkFilter::None,
         }
     }
 }
 
 impl<'a> matcher_t<'a> {
     fn new<'b>(ctx: &hb_ot_apply_context_t<'a, 'b>, context_match: bool) -> Self {
-        let mark_set = ctx.mark_set().clone();
+        let mark_filter = ctx.mark_filter().clone();
         matcher_t {
             matching: None,
             lookup_props: ctx.lookup_props(),
@@ -264,7 +291,7 @@ impl<'a> matcher_t<'a> {
             /* Per syllable matching is only for GSUB. */
             per_syllable: ctx.table_index == TableIndex::GSUB && ctx.per_syllable,
             syllable: 0,
-            mark_set,
+            mark_filter,
         }
     }
 
@@ -287,7 +314,7 @@ impl<'a> matcher_t<'a> {
     }
 
     fn may_skip(&self, info: &hb_glyph_info_t) -> may_skip_t {
-        if !check_glyph_property_with_mark_set(info, self.lookup_props, &self.mark_set) {
+        if !check_glyph_property(info, self.lookup_props, &self.mark_filter) {
             return may_skip_t::SKIP_YES;
         }
 
@@ -336,8 +363,9 @@ impl<'a> skipping_iterator_t<'a> {
         self.glyph_data += 1;
     }
 
-    pub fn set_lookup_props(&mut self, lookup_props: u32) {
+    pub fn set_lookup_props<'b>(&mut self, lookup_props: u32, ctx: &hb_ot_apply_context_t<'b, 'a>) {
         self.matcher.lookup_props = lookup_props;
+        self.matcher.mark_filter = MarkFilter::new(ctx, lookup_props);
     }
 
     pub fn enable_matching(&mut self, func: &'a match_func_t<'a>) {
@@ -614,9 +642,9 @@ pub mod OT {
     use crate::hb::set_digest::hb_set_digest_t;
 
     pub fn check_glyph_property(
-        face: &hb_font_t,
         info: &hb_glyph_info_t,
         match_props: u32,
+        mark_filter: &MarkFilter,
     ) -> bool {
         let glyph_props = info.glyph_props();
 
@@ -630,63 +658,19 @@ pub mod OT {
         }
 
         if glyph_props & GlyphPropsFlags::MARK.bits() != 0 {
-            // If using mark filtering sets, the high short of
-            // match_props has the set index.
-            if lookup_flags & lookup_flags::USE_MARK_FILTERING_SET != 0 {
-                let set_index = (match_props >> 16) as u16;
-                // TODO: harfbuzz uses a digest here to speed things up if HB_NO_GDEF_CACHE
-                // is enabled. But a bit harder to implement for us since it's taken care of by
-                // ttf-parser
-                return face
-                    .ot_tables
-                    .is_mark_glyph(info.as_glyph().to_u32(), set_index);
-            }
-
-            // The second byte of match_props has the meaning
-            // "ignore marks of attachment type different than
-            // the attachment type specified."
-            if lookup_flags & lookup_flags::MARK_ATTACHMENT_TYPE_MASK != 0 {
-                return (lookup_flags & lookup_flags::MARK_ATTACHMENT_TYPE_MASK)
-                    == (glyph_props & lookup_flags::MARK_ATTACHMENT_TYPE_MASK);
-            }
-        }
-
-        true
-    }
-
-    pub fn check_glyph_property_with_mark_set(
-        info: &hb_glyph_info_t,
-        match_props: u32,
-        mark_set: &Option<(hb_set_digest_t, ParsedCoverageTable)>,
-    ) -> bool {
-        let glyph_props = info.glyph_props();
-
-        // Lookup flags are lower 16-bit of match props.
-        let lookup_flags = match_props as u16;
-
-        // Not covered, if, for example, glyph class is ligature and
-        // match_props includes LookupFlags::IgnoreLigatures
-        if glyph_props & lookup_flags & lookup_flags::IGNORE_FLAGS != 0 {
-            return false;
-        }
-
-        if glyph_props & GlyphPropsFlags::MARK.bits() != 0 {
-            // If using mark filtering sets, the high short of
-            // match_props has the set index.
-            if let Some((digest, coverage)) = mark_set {
-                let gid = info.as_glyph();
-                if digest.may_have_glyph(gid) {
-                    return coverage.get(gid).is_some();
-                } else {
-                    return false;
+            match mark_filter {
+                MarkFilter::None => {}
+                MarkFilter::FilteringSet(digest, coverage) => {
+                    let gid = info.as_glyph();
+                    if digest.may_have_glyph(gid) {
+                        return coverage.get(gid).is_some();
+                    } else {
+                        return false;
+                    }
                 }
-            }
-            // The second byte of match_props has the meaning
-            // "ignore marks of attachment type different than
-            // the attachment type specified."
-            if lookup_flags & lookup_flags::MARK_ATTACHMENT_TYPE_MASK != 0 {
-                return (lookup_flags & lookup_flags::MARK_ATTACHMENT_TYPE_MASK)
-                    == (glyph_props & lookup_flags::MARK_ATTACHMENT_TYPE_MASK);
+                MarkFilter::AttachmentType(mark_type) => {
+                    return *mark_type == (glyph_props & lookup_flags::MARK_ATTACHMENT_TYPE_MASK)
+                }
             }
         }
 
@@ -701,7 +685,7 @@ pub mod OT {
         pub per_syllable: bool,
         pub lookup_index: u16,
         lookup_props: u32,
-        mark_set: Option<(hb_set_digest_t, ParsedCoverageTable<'b>)>,
+        mark_filter: MarkFilter<'b>,
         pub nesting_level_left: usize,
         pub auto_zwnj: bool,
         pub auto_zwj: bool,
@@ -727,7 +711,7 @@ pub mod OT {
                 per_syllable: false,
                 lookup_index: u16::MAX,
                 lookup_props: 0,
-                mark_set: None,
+                mark_filter: MarkFilter::None,
                 nesting_level_left: MAX_NESTING_LEVEL,
                 auto_zwnj: true,
                 auto_zwj: true,
@@ -759,19 +743,13 @@ pub mod OT {
             self.lookup_props
         }
 
-        pub fn mark_set(&self) -> &Option<(hb_set_digest_t, ParsedCoverageTable<'b>)> {
-            &self.mark_set
+        pub fn mark_filter(&self) -> &MarkFilter<'b> {
+            &self.mark_filter
         }
 
         pub fn set_lookup_props(&mut self, lookup_props: u32) {
             self.lookup_props = lookup_props;
-            self.mark_set = None;
-            self.mark_set = if (lookup_props as u16) & lookup_flags::USE_MARK_FILTERING_SET != 0 {
-                let set_index = (lookup_props >> 16) as u16;
-                self.face.ot_tables.mark_set_digest_and_coverage(set_index)
-            } else {
-                None
-            };
+            self.mark_filter = MarkFilter::new(self, lookup_props);
         }
 
         pub fn recurse(&mut self, sub_lookup_index: u16) -> Option<()> {
@@ -788,7 +766,7 @@ pub mod OT {
 
             self.nesting_level_left -= 1;
             let saved_props = self.lookup_props;
-            let saved_mark_set = self.mark_set.clone();
+            let saved_mark_set = self.mark_filter.clone();
             let saved_index = self.lookup_index;
 
             self.lookup_index = sub_lookup_index;
@@ -802,7 +780,7 @@ pub mod OT {
                     lookup.apply(self, &mut cache)
                 });
             self.lookup_props = saved_props;
-            self.mark_set = saved_mark_set;
+            self.mark_filter = saved_mark_set;
             self.lookup_index = saved_index;
             self.nesting_level_left += 1;
             applied
@@ -879,7 +857,7 @@ pub mod OT {
     }
 }
 
-use OT::{check_glyph_property_with_mark_set, hb_ot_apply_context_t};
+use OT::hb_ot_apply_context_t;
 
 pub fn ligate_input(
     ctx: &mut hb_ot_apply_context_t,
