@@ -17,26 +17,11 @@ bitflags = "2.9"
 bytemuck = { version = "1.22", features = ["extern_crate_alloc"] }
 core_maths = "0.1" # only for no_std builds
 smallvec = "1.14"
-wasmi = { version = "0.40", optional = true }
-log = "0.4"
-read-fonts = { version = "0.29.0", default-features = false, features = ["libm"] }
-
-# TODO: remove entirely
-[dependencies.ttf-parser]
-version = "0.25"
-default-features = false
-features = [
-    "opentype-layout",
-    "apple-layout",
-    "variable-fonts",
-    "glyph-names",
-    "no-std-float",
-]
+read-fonts = { version = "0.29.3", default-features = false, features = ["libm"] }
 
 [features]
 default = ["std"]
-std = ["ttf-parser/std", "read-fonts/std"]
-wasm-shaper = ["std", "dep:wasmi"]
+std = ["read-fonts/std"]
 
 [dev-dependencies]
 pico-args = { version = "0.5", features = ["eq-separator"] }

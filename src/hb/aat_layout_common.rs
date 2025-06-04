@@ -67,14 +67,3 @@ impl<'a> hb_aat_apply_context_t<'a> {
         }
     }
 }
-
-// Remove me when we have AAT tables in read-fonts
-pub(crate) trait ToTtfParserGid: Copy {
-    fn ttfp_gid(self) -> ttf_parser::GlyphId;
-}
-
-impl ToTtfParserGid for read_fonts::types::GlyphId {
-    fn ttfp_gid(self) -> ttf_parser::GlyphId {
-        ttf_parser::GlyphId(self.to_u32() as _)
-    }
-}
