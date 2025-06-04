@@ -6,7 +6,7 @@ use super::buffer::{glyph_flag, hb_buffer_t};
 use super::common::TagExt;
 use super::ot_layout::TableIndex;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use super::{Shaper, hb_mask_t, hb_tag_t, tag, Language, Script};
+use super::{hb_mask_t, hb_tag_t, tag, Language, Script, Shaper};
 
 pub struct hb_ot_map_t {
     found_script: [bool; 2],
@@ -199,11 +199,7 @@ const GLOBAL_BIT_SHIFT: u32 = 8 * core::mem::size_of::<u32>() as u32 - 1;
 const GLOBAL_BIT_MASK: hb_mask_t = 1 << GLOBAL_BIT_SHIFT;
 
 impl<'a> hb_ot_map_builder_t<'a> {
-    pub fn new(
-        face: &'a Shaper<'a>,
-        script: Option<Script>,
-        language: Option<&Language>,
-    ) -> Self {
+    pub fn new(face: &'a Shaper<'a>, script: Option<Script>, language: Option<&Language>) -> Self {
         // Fetch script/language indices for GSUB/GPOS.  We need these later to skip
         // features not available in either table and not waste precious bits for them.
         let (script_tags, lang_tags) = tag::tags_from_script_and_language(script, language);

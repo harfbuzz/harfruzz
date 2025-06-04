@@ -120,7 +120,11 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
 
     let data = ShaperData::new(&font);
     let instance = ShaperInstance::from_variations(&font, &variations);
-    let shaper = data.shaper(&font).instance(&instance).point_size(args.font_ptem.unwrap_or(12.0)).build();
+    let shaper = data
+        .shaper(&font)
+        .instance(&instance)
+        .point_size(args.font_ptem.unwrap_or(12.0))
+        .build();
 
     let mut buffer = harfruzz::UnicodeBuffer::new();
     if let Some(pre_context) = args.pre_context {

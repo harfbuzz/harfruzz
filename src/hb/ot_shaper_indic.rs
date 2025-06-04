@@ -15,7 +15,7 @@ use super::ot_shape_normalize::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::unicode::{hb_gc, CharExt, GeneralCategoryExt};
-use super::{Shaper, hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script};
+use super::{hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script, Shaper};
 
 pub const INDIC_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: Some(collect_features),
@@ -390,12 +390,7 @@ impl IndicWouldSubstituteFeature {
         }
     }
 
-    pub fn would_substitute(
-        &self,
-        map: &hb_ot_map_t,
-        face: &Shaper,
-        glyphs: &[GlyphId],
-    ) -> bool {
+    pub fn would_substitute(&self, map: &hb_ot_map_t, face: &Shaper, glyphs: &[GlyphId]) -> bool {
         for index in self.lookups.clone() {
             let lookup = map.lookup(TableIndex::GSUB, index);
             let ctx = WouldApplyContext {
@@ -662,11 +657,7 @@ fn setup_syllables(_: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t)
     false
 }
 
-fn initial_reordering(
-    plan: &hb_ot_shape_plan_t,
-    face: &Shaper,
-    buffer: &mut hb_buffer_t,
-) -> bool {
+fn initial_reordering(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) -> bool {
     use super::ot_shaper_indic_machine::SyllableType;
 
     let mut ret = false;

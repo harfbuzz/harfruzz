@@ -10,7 +10,7 @@ use super::ot_shape_normalize::HB_OT_SHAPE_NORMALIZATION_MODE_AUTO;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::unicode::*;
-use super::{Shaper, hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script};
+use super::{hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script, Shaper};
 
 const HB_BUFFER_SCRATCH_FLAG_ARABIC_HAS_STCH: hb_buffer_scratch_flags_t =
     HB_BUFFER_SCRATCH_FLAG_SHAPER0;

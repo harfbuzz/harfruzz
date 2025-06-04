@@ -5,7 +5,7 @@ use alloc::vec::Vec;
 use core::cmp::Ordering;
 
 use super::aat_layout::*;
-use super::{Shaper, hb_mask_t, hb_tag_t};
+use super::{hb_mask_t, hb_tag_t, Shaper};
 
 #[derive(Default)]
 pub struct hb_aat_map_t {

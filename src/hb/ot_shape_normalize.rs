@@ -1,10 +1,10 @@
 use super::buffer::*;
 use super::common::hb_codepoint_t;
-use super::Shaper;
 use super::ot_layout::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::{ComposeFn, DecomposeFn, MAX_COMBINING_MARKS};
 use super::unicode::{hb_unicode_funcs_t, CharExt};
+use super::Shaper;
 
 pub struct hb_ot_shape_normalize_context_t<'a> {
     pub plan: &'a hb_ot_shape_plan_t,
@@ -280,11 +280,7 @@ fn compare_combining_class(pa: &hb_glyph_info_t, pb: &hb_glyph_info_t) -> bool {
     a > b
 }
 
-pub fn _hb_ot_shape_normalize(
-    plan: &hb_ot_shape_plan_t,
-    buffer: &mut hb_buffer_t,
-    face: &Shaper,
-) {
+pub fn _hb_ot_shape_normalize(plan: &hb_ot_shape_plan_t, buffer: &mut hb_buffer_t, face: &Shaper) {
     if buffer.is_empty() {
         return;
     }

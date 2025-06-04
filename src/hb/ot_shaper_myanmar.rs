@@ -5,7 +5,7 @@ use super::ot_shape_normalize::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::ot_shaper_indic::{ot_category_t, ot_position_t};
-use super::{Shaper, hb_glyph_info_t, hb_tag_t};
+use super::{hb_glyph_info_t, hb_tag_t, Shaper};
 use crate::hb::ot_shaper_indic::ot_category_t::OT_VPre;
 
 pub const MYANMAR_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {

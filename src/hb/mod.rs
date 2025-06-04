@@ -31,7 +31,6 @@ mod aat_map;
 mod cache;
 mod charmap;
 pub mod common;
-pub mod shaper;
 mod glyph_metrics;
 mod glyph_names;
 mod kerning;
@@ -54,6 +53,7 @@ mod ot_shaper_hangul;
 mod ot_shaper_hebrew;
 mod ot_shaper_indic;
 mod ot_shaper_indic_machine;
+pub mod shaper;
 #[rustfmt::skip]
 mod ot_shaper_indic_table;
 mod ot_shaper_khmer;

@@ -10,7 +10,7 @@ use super::ot_layout_common::lookup_flags;
 use super::ot_layout_gpos_table::attach_type;
 use super::ot_layout_gsubgpos::{skipping_iterator_t, OT::hb_ot_apply_context_t};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use super::{Shaper, hb_mask_t};
+use super::{hb_mask_t, Shaper};
 
 pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
     let subtables = match face.aat_tables.kern.as_ref() {

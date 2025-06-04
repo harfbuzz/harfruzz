@@ -5,8 +5,8 @@ use read_fonts::types::{BigEndian, Fixed};
 use read_fonts::FontData;
 
 use super::buffer::hb_buffer_t;
-use super::Shaper;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
+use super::Shaper;
 
 pub fn apply(_plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) -> Option<()> {
     let trak = face.aat_tables.trak.as_ref()?;

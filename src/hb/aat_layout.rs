@@ -534,11 +534,7 @@ pub fn hb_aat_layout_remove_deleted_glyphs(buffer: &mut hb_buffer_t) {
     }
 }
 
-pub fn hb_aat_layout_position(
-    plan: &hb_ot_shape_plan_t,
-    face: &Shaper,
-    buffer: &mut hb_buffer_t,
-) {
+pub fn hb_aat_layout_position(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
     aat_layout_kerx_table::apply(plan, face, buffer);
 }
 

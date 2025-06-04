@@ -1,7 +1,7 @@
 use crate::hb::{
-    Shaper,
     ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext, OT::hb_ot_apply_context_t},
     set_digest::hb_set_digest_t,
+    Shaper,
 };
 
 use alloc::vec::Vec;

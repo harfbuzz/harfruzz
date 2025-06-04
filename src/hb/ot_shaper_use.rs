@@ -10,7 +10,7 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::ot_shaper_arabic::arabic_shape_plan_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
-use super::{Shaper, hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script};
+use super::{hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script, Shaper};
 
 pub const UNIVERSAL_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: Some(collect_features),

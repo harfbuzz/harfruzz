@@ -5,7 +5,7 @@ use core::any::Any;
 use super::ot_map::*;
 use super::ot_shape::*;
 use super::ot_shaper::*;
-use super::{Shaper, hb_mask_t, Direction, Feature, Language, Script};
+use super::{hb_mask_t, Direction, Feature, Language, Script, Shaper};
 
 /// A reusable plan for shaping a text buffer.
 pub struct hb_ot_shape_plan_t {

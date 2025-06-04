@@ -8,7 +8,7 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::ot_shaper_indic::ot_category_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
-use super::{Shaper, hb_glyph_info_t, hb_mask_t, hb_tag_t};
+use super::{hb_glyph_info_t, hb_mask_t, hb_tag_t, Shaper};
 
 pub const KHMER_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: Some(collect_features),

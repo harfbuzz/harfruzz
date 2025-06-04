@@ -6,7 +6,7 @@ use super::common::TagExt;
 use super::ot_shape::*;
 use super::ot_shape_normalize::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use super::{Shaper, hb_tag_t, script, Direction, Script};
+use super::{hb_tag_t, script, Direction, Script, Shaper};
 
 impl hb_glyph_info_t {
     pub(crate) fn ot_shaper_var_u8_category(&self) -> u8 {

@@ -6,7 +6,7 @@ use read_fonts::types::{GlyphId, GlyphId16};
 use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};
 use super::shaper::hb_glyph_extents_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
-use super::{Shaper, hb_mask_t};
+use super::{hb_mask_t, Shaper};
 use crate::hb::set_digest::hb_set_digest_t;
 use crate::{script, BufferClusterLevel, BufferFlags, Direction, Language, Script, SerializeFlags};
 

@@ -7,7 +7,7 @@ use super::ot::lookup::LookupInfo;
 use super::ot_layout_gsubgpos::OT;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
-use super::{Shaper, hb_glyph_info_t};
+use super::{hb_glyph_info_t, Shaper};
 use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 
 pub const MAX_NESTING_LEVEL: usize = 64;

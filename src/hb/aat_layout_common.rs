@@ -1,9 +1,9 @@
 use crate::hb::aat_layout::AAT::DELETED_GLYPH;
 use crate::hb::aat_map::range_flags_t;
 use crate::hb::buffer::{hb_buffer_t, HB_BUFFER_SCRATCH_FLAG_SHAPER0};
-use crate::hb::shaper::Shaper;
 use crate::hb::hb_mask_t;
 use crate::hb::ot_layout::_hb_glyph_info_set_aat_deleted;
+use crate::hb::shaper::Shaper;
 
 pub const HB_BUFFER_SCRATCH_FLAG_AAT_HAS_DELETED: u32 = HB_BUFFER_SCRATCH_FLAG_SHAPER0;
 

@@ -2,11 +2,11 @@
 
 use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
-use super::Shaper;
 use super::hb_mask_t;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
+use super::Shaper;
 use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use read_fonts::tables::layout::SequenceLookupRecord;
 use read_fonts::types::GlyphId;
@@ -609,11 +609,7 @@ pub mod OT {
     use super::*;
     use crate::hb::set_digest::hb_set_digest_t;
 
-    pub fn check_glyph_property(
-        face: &Shaper,
-        info: &hb_glyph_info_t,
-        match_props: u32,
-    ) -> bool {
+    pub fn check_glyph_property(face: &Shaper, info: &hb_glyph_info_t, match_props: u32) -> bool {
         let glyph_props = info.glyph_props();
 
         // Lookup flags are lower 16-bit of match props.

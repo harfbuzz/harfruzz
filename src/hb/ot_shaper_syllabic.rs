@@ -1,5 +1,5 @@
 use super::buffer::{hb_buffer_t, HB_BUFFER_SCRATCH_FLAG_HAS_BROKEN_SYLLABLE};
-use super::{Shaper, hb_glyph_info_t};
+use super::{hb_glyph_info_t, Shaper};
 use crate::BufferFlags;
 
 pub fn insert_dotted_circles(

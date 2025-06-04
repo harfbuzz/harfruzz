@@ -2,9 +2,9 @@
 use core_maths::CoreFloat;
 
 use super::buffer::*;
-use super::Shaper;
 use super::ot_layout::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
+use super::Shaper;
 use crate::Direction;
 
 pub fn position(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {

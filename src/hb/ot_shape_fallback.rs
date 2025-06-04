@@ -1,11 +1,11 @@
 use read_fonts::types::GlyphId;
 
 use super::buffer::{hb_buffer_t, GlyphPosition};
-use super::shaper::hb_glyph_extents_t;
 use super::ot_layout::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
+use super::shaper::hb_glyph_extents_t;
 use super::unicode::*;
-use super::{Shaper, Direction};
+use super::{Direction, Shaper};
 
 fn recategorize_combining_class(u: u32, mut class: u8) -> u8 {
     use modified_combining_class as mcc;
