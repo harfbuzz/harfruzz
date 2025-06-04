@@ -94,7 +94,7 @@ impl Apply for CursivePosFormat1<'_> {
             y_offset = -y_offset;
         }
 
-        let pos = &mut ctx.buffer.pos;        
+        let pos = &mut ctx.buffer.pos;
 
         // If child was already connected to someone else, walk through its old
         // chain and reverse the link direction, such that the whole tree of its
