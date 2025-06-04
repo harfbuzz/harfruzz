@@ -13,18 +13,16 @@ extern crate alloc;
 
 mod hb;
 
-pub use read_fonts::{
-    types::{F2Dot14, Tag},
-    FontRef,
-};
+pub use read_fonts::{types::Tag, FontRef};
 
 pub use hb::buffer::hb_glyph_info_t as GlyphInfo;
 pub use hb::buffer::{GlyphBuffer, GlyphPosition, UnicodeBuffer};
 pub use hb::common::{script, Direction, Feature, Language, Script, Variation};
-pub use hb::face::hb_font_t as Face;
-pub use hb::face::{Shaper, ShaperFont};
 pub use hb::ot_shape_plan::hb_ot_shape_plan_t as ShapePlan;
-pub use hb::shape::{shape, shape_with_plan};
+pub use hb::shaper::{Shaper, ShaperBuilder, ShaperData, ShaperInstance};
+
+/// Type alias for a normalized variation coordinate.
+pub type NormalizedCoord = read_fonts::types::F2Dot14;
 
 bitflags::bitflags! {
     /// Flags for buffers.

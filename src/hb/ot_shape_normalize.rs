@@ -1,6 +1,6 @@
 use super::buffer::*;
 use super::common::hb_codepoint_t;
-use super::hb_font_t;
+use super::Shaper;
 use super::ot_layout::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::{ComposeFn, DecomposeFn, MAX_COMBINING_MARKS};
@@ -9,7 +9,7 @@ use super::unicode::{hb_unicode_funcs_t, CharExt};
 pub struct hb_ot_shape_normalize_context_t<'a> {
     pub plan: &'a hb_ot_shape_plan_t,
     pub buffer: &'a mut hb_buffer_t,
-    pub face: &'a hb_font_t<'a>,
+    pub face: &'a Shaper<'a>,
     pub decompose: DecomposeFn,
     pub compose: ComposeFn,
 }
@@ -93,7 +93,7 @@ fn compose_unicode(
     super::unicode::compose(a, b)
 }
 
-fn set_glyph(info: &mut hb_glyph_info_t, font: &hb_font_t) {
+fn set_glyph(info: &mut hb_glyph_info_t, font: &Shaper) {
     if let Some(glyph_id) = font.get_nominal_glyph(info.glyph_id) {
         info.set_glyph_index(u32::from(glyph_id));
     }
@@ -283,7 +283,7 @@ fn compare_combining_class(pa: &hb_glyph_info_t, pb: &hb_glyph_info_t) -> bool {
 pub fn _hb_ot_shape_normalize(
     plan: &hb_ot_shape_plan_t,
     buffer: &mut hb_buffer_t,
-    face: &hb_font_t,
+    face: &Shaper,
 ) {
     if buffer.is_empty() {
         return;

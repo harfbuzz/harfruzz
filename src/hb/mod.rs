@@ -31,7 +31,7 @@ mod aat_map;
 mod cache;
 mod charmap;
 pub mod common;
-pub mod face;
+pub mod shaper;
 mod glyph_metrics;
 mod glyph_names;
 mod kerning;
@@ -69,7 +69,6 @@ mod ot_shaper_use_table;
 mod aat_layout_common;
 mod ot_shaper_vowel_constraints;
 mod set_digest;
-pub mod shape;
 #[cfg(feature = "wasm-shaper")]
 mod shape_wasm;
 mod tag;
@@ -82,7 +81,7 @@ mod unicode;
 use read_fonts::types::Tag as hb_tag_t;
 
 use self::buffer::hb_glyph_info_t;
-use self::face::hb_font_t;
+use self::shaper::Shaper;
 
 type hb_mask_t = u32;
 

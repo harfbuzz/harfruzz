@@ -1,9 +1,9 @@
 use super::buffer::{hb_buffer_t, HB_BUFFER_SCRATCH_FLAG_HAS_BROKEN_SYLLABLE};
-use super::{hb_font_t, hb_glyph_info_t};
+use super::{Shaper, hb_glyph_info_t};
 use crate::BufferFlags;
 
 pub fn insert_dotted_circles(
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
     broken_syllable_type: u8,
     dottedcircle_category: u8,

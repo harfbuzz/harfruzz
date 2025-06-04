@@ -6,13 +6,8 @@ mod text_rendering_tests;
 #[cfg(feature = "wasm-shaper")]
 mod wasm;
 
+use harfruzz::{BufferFlags, FontRef, ShaperData, ShaperInstance};
 use std::str::FromStr;
-
-use harfruzz::{BufferFlags, ShaperFont};
-use read_fonts::{
-    types::{F2Dot14, Fixed},
-    FontRef, TableProvider,
-};
 
 struct Args {
     face_index: u32,
@@ -123,25 +118,9 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         .map(|s| harfruzz::Variation::from_str(s).unwrap())
         .collect();
 
-    let mut coords = vec![];
-    if let Ok(fvar) = font.fvar() {
-        coords.resize(fvar.axis_count() as usize, F2Dot14::default());
-        fvar.user_to_normalized(
-            font.avar().ok().as_ref(),
-            variations
-                .iter()
-                .map(|var| (var.tag, Fixed::from_f64(var.value as f64))),
-            &mut coords,
-        );
-    }
-    if coords.iter().all(|coord| *coord == F2Dot14::ZERO) {
-        coords.clear();
-    }
-
-    let shaper_font = ShaperFont::new(&font);
-    let mut face = shaper_font.shaper(&font, &coords);
-
-    face.set_points_per_em(args.font_ptem);
+    let data = ShaperData::new(&font);
+    let instance = ShaperInstance::from_variations(&font, &variations);
+    let shaper = data.shaper(&font).instance(&instance).point_size(args.font_ptem.unwrap_or(12.0)).build();
 
     let mut buffer = harfruzz::UnicodeBuffer::new();
     if let Some(pre_context) = args.pre_context {
@@ -187,7 +166,7 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         features.push(feature);
     }
 
-    let glyph_buffer = harfruzz::shape(&face, &features, buffer);
+    let glyph_buffer = shaper.shape(&features, buffer);
 
     let mut format_flags = harfruzz::SerializeFlags::default();
     if args.no_glyph_names {
@@ -214,5 +193,5 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         format_flags |= harfruzz::SerializeFlags::GLYPH_FLAGS;
     }
 
-    glyph_buffer.serialize(&face, format_flags)
+    glyph_buffer.serialize(&shaper, format_flags)
 }

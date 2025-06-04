@@ -1,11 +1,11 @@
 use read_fonts::types::GlyphId;
 
 use super::buffer::{hb_buffer_t, GlyphPosition};
-use super::face::hb_glyph_extents_t;
+use super::shaper::hb_glyph_extents_t;
 use super::ot_layout::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::*;
-use super::{hb_font_t, Direction};
+use super::{Shaper, Direction};
 
 fn recategorize_combining_class(u: u32, mut class: u8) -> u8 {
     use modified_combining_class as mcc;
@@ -89,7 +89,7 @@ fn recategorize_combining_class(u: u32, mut class: u8) -> u8 {
 
 pub fn _hb_ot_shape_fallback_mark_position_recategorize_marks(
     _: &hb_ot_shape_plan_t,
-    _: &hb_font_t,
+    _: &Shaper,
     buffer: &mut hb_buffer_t,
 ) {
     let len = buffer.len;
@@ -129,7 +129,7 @@ fn zero_mark_advances(
 
 fn position_mark(
     _: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     direction: Direction,
     glyph: GlyphId,
     pos: &mut GlyphPosition,
@@ -253,7 +253,7 @@ fn position_mark(
 
 fn position_around_base(
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
     base: usize,
     end: usize,
@@ -370,7 +370,7 @@ fn position_around_base(
 
 fn position_cluster(
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
     start: usize,
     end: usize,
@@ -403,7 +403,7 @@ fn position_cluster(
 
 pub fn position_marks(
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
     adjust_offsets_when_zeroing: bool,
 ) {
@@ -422,13 +422,13 @@ pub fn position_marks(
     position_cluster(plan, face, buffer, start, len, adjust_offsets_when_zeroing);
 }
 
-pub fn _hb_ot_shape_fallback_kern(_: &hb_ot_shape_plan_t, _: &hb_font_t, _: &mut hb_buffer_t) {
+pub fn _hb_ot_shape_fallback_kern(_: &hb_ot_shape_plan_t, _: &Shaper, _: &mut hb_buffer_t) {
     // STUB: this is deprecated in HarfBuzz
 }
 
 pub fn _hb_ot_shape_fallback_spaces(
     _: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
 ) {
     use super::unicode::hb_unicode_funcs_t as t;

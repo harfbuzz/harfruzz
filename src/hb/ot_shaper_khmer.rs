@@ -8,7 +8,7 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::ot_shaper_indic::ot_category_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
-use super::{hb_font_t, hb_glyph_info_t, hb_mask_t, hb_tag_t};
+use super::{Shaper, hb_glyph_info_t, hb_mask_t, hb_tag_t};
 
 pub const KHMER_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: Some(collect_features),
@@ -113,7 +113,7 @@ fn collect_features(planner: &mut hb_ot_shape_planner_t) {
     }
 }
 
-fn setup_syllables(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) -> bool {
+fn setup_syllables(_: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) -> bool {
     super::ot_shaper_khmer_machine::find_syllables_khmer(buffer);
 
     let mut start = 0;
@@ -127,7 +127,7 @@ fn setup_syllables(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer
     false
 }
 
-fn reorder_khmer(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) -> bool {
+fn reorder_khmer(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) -> bool {
     use super::ot_shaper_khmer_machine::SyllableType;
 
     let mut ret = false;
@@ -284,7 +284,7 @@ fn compose(_: &hb_ot_shape_normalize_context_t, a: char, b: char) -> Option<char
     crate::hb::unicode::compose(a, b)
 }
 
-fn setup_masks(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) {
+fn setup_masks(_: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) {
     // We cannot setup masks here.  We save information about characters
     // and setup masks later on in a pause-callback.
     for info in buffer.info_slice_mut() {

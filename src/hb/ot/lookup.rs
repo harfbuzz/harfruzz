@@ -1,5 +1,5 @@
 use crate::hb::{
-    hb_font_t,
+    Shaper,
     ot_layout_gsubgpos::{Apply, WouldApply, WouldApplyContext, OT::hb_ot_apply_context_t},
     set_digest::hb_set_digest_t,
 };
@@ -335,7 +335,7 @@ impl LookupInfo {
 }
 
 impl LookupInfo {
-    pub fn would_apply(&self, face: &hb_font_t, ctx: &WouldApplyContext) -> Option<bool> {
+    pub fn would_apply(&self, face: &Shaper, ctx: &WouldApplyContext) -> Option<bool> {
         let glyph = ctx.glyphs[0];
         if !self.digest.may_have_glyph(glyph) {
             return Some(false);

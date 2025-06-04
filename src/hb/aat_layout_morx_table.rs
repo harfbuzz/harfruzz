@@ -1,6 +1,6 @@
 use super::aat_layout::*;
 use super::aat_map::{hb_aat_map_builder_t, hb_aat_map_t, range_flags_t};
-use super::{hb_font_t, hb_glyph_info_t};
+use super::{Shaper, hb_glyph_info_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
 use crate::hb::ot_layout::MAX_CONTEXT_LENGTH;
 use alloc::vec;
@@ -21,7 +21,7 @@ use read_fonts::types::{BigEndian, FixedSize, GlyphId16};
 
 // Chain::compile_flags in harfbuzz
 pub fn compile_flags(
-    face: &hb_font_t,
+    face: &Shaper,
     builder: &hb_aat_map_builder_t,
     map: &mut hb_aat_map_t,
 ) -> Option<()> {

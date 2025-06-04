@@ -1,14 +1,14 @@
 use crate::hb::aat_layout::AAT::DELETED_GLYPH;
 use crate::hb::aat_map::range_flags_t;
 use crate::hb::buffer::{hb_buffer_t, HB_BUFFER_SCRATCH_FLAG_SHAPER0};
-use crate::hb::face::hb_font_t;
+use crate::hb::shaper::Shaper;
 use crate::hb::hb_mask_t;
 use crate::hb::ot_layout::_hb_glyph_info_set_aat_deleted;
 
 pub const HB_BUFFER_SCRATCH_FLAG_AAT_HAS_DELETED: u32 = HB_BUFFER_SCRATCH_FLAG_SHAPER0;
 
 pub struct hb_aat_apply_context_t<'a> {
-    pub face: &'a hb_font_t<'a>,
+    pub face: &'a Shaper<'a>,
     pub buffer: &'a mut hb_buffer_t,
     pub range_flags: Option<&'a mut [range_flags_t]>,
     pub subtable_flags: hb_mask_t,
@@ -16,7 +16,7 @@ pub struct hb_aat_apply_context_t<'a> {
 }
 
 impl<'a> hb_aat_apply_context_t<'a> {
-    pub fn new(face: &'a hb_font_t<'a>, buffer: &'a mut hb_buffer_t) -> Self {
+    pub fn new(face: &'a Shaper<'a>, buffer: &'a mut hb_buffer_t) -> Self {
         Self {
             face,
             buffer,

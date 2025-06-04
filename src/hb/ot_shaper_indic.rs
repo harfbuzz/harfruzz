@@ -15,7 +15,7 @@ use super::ot_shape_normalize::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::unicode::{hb_gc, CharExt, GeneralCategoryExt};
-use super::{hb_font_t, hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script};
+use super::{Shaper, hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script};
 
 pub const INDIC_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: Some(collect_features),
@@ -393,7 +393,7 @@ impl IndicWouldSubstituteFeature {
     pub fn would_substitute(
         &self,
         map: &hb_ot_map_t,
-        face: &hb_font_t,
+        face: &Shaper,
         glyphs: &[GlyphId],
     ) -> bool {
         for index in self.lookups.clone() {
@@ -608,7 +608,7 @@ fn override_features(planner: &mut hb_ot_shape_planner_t) {
     planner.ot_map.add_gsub_pause(Some(syllabic_clear_var)); // Don't need syllables anymore.
 }
 
-fn preprocess_text(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) {
+fn preprocess_text(_: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) {
     super::ot_shaper_vowel_constraints::preprocess_text_vowel_constraints(buffer);
 }
 
@@ -640,7 +640,7 @@ fn compose(_: &hb_ot_shape_normalize_context_t, a: char, b: char) -> Option<char
     crate::hb::unicode::compose(a, b)
 }
 
-fn setup_masks(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) {
+fn setup_masks(_: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) {
     // We cannot setup masks here.  We save information about characters
     // and setup masks later on in a pause-callback.
     for info in buffer.info_slice_mut() {
@@ -648,7 +648,7 @@ fn setup_masks(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) 
     }
 }
 
-fn setup_syllables(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) -> bool {
+fn setup_syllables(_: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) -> bool {
     super::ot_shaper_indic_machine::find_syllables_indic(buffer);
 
     let mut start = 0;
@@ -664,7 +664,7 @@ fn setup_syllables(_: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer
 
 fn initial_reordering(
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
 ) -> bool {
     use super::ot_shaper_indic_machine::SyllableType;
@@ -699,7 +699,7 @@ fn initial_reordering(
 fn update_consonant_positions(
     plan: &hb_ot_shape_plan_t,
     indic_plan: &IndicShapePlan,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
 ) {
     let mut virama_glyph = None;
@@ -722,7 +722,7 @@ fn update_consonant_positions(
 fn consonant_position_from_face(
     plan: &hb_ot_shape_plan_t,
     indic_plan: &IndicShapePlan,
-    face: &hb_font_t,
+    face: &Shaper,
     consonant: GlyphId,
     virama: GlyphId,
 ) -> u8 {
@@ -782,7 +782,7 @@ fn consonant_position_from_face(
 fn initial_reordering_syllable(
     plan: &hb_ot_shape_plan_t,
     indic_plan: &IndicShapePlan,
-    face: &hb_font_t,
+    face: &Shaper,
     start: usize,
     end: usize,
     buffer: &mut hb_buffer_t,
@@ -817,7 +817,7 @@ fn initial_reordering_syllable(
 fn initial_reordering_consonant_syllable(
     plan: &hb_ot_shape_plan_t,
     indic_plan: &IndicShapePlan,
-    face: &hb_font_t,
+    face: &Shaper,
     start: usize,
     end: usize,
     buffer: &mut hb_buffer_t,
@@ -1338,7 +1338,7 @@ fn initial_reordering_consonant_syllable(
 fn initial_reordering_standalone_cluster(
     plan: &hb_ot_shape_plan_t,
     indic_plan: &IndicShapePlan,
-    face: &hb_font_t,
+    face: &Shaper,
     start: usize,
     end: usize,
     buffer: &mut hb_buffer_t,
@@ -1348,7 +1348,7 @@ fn initial_reordering_standalone_cluster(
     initial_reordering_consonant_syllable(plan, indic_plan, face, start, end, buffer);
 }
 
-fn final_reordering(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) -> bool {
+fn final_reordering(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) -> bool {
     if buffer.is_empty() {
         return false;
     }
@@ -1362,7 +1362,7 @@ fn final_reordering(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb
 
 fn final_reordering_impl(
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     start: usize,
     end: usize,
     buffer: &mut hb_buffer_t,

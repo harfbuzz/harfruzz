@@ -1,7 +1,7 @@
 use core::convert::TryFrom;
 
 use super::buffer::*;
-use super::hb_font_t;
+use super::Shaper;
 use super::ot_layout::TableIndex;
 use super::ot_layout_common::lookup_flags;
 use super::ot_layout_gpos_table::attach_type;
@@ -25,7 +25,7 @@ use read_fonts::types::{BigEndian, FixedSize, GlyphId};
 
 pub(crate) fn apply(
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
 ) -> Option<()> {
     buffer.unsafe_to_concat(None, None);
@@ -152,7 +152,7 @@ fn apply_simple_kerning<T: SimpleKerning>(
     subtable: &Subtable,
     kind: &T,
     plan: &hb_ot_shape_plan_t,
-    face: &hb_font_t,
+    face: &Shaper,
     buffer: &mut hb_buffer_t,
 ) {
     let mut ctx = hb_ot_apply_context_t::new(TableIndex::GPOS, face, buffer);
