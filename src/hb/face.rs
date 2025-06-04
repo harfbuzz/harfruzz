@@ -76,7 +76,7 @@ impl ShaperInstance {
     /// set of normalized coordinates.
     ///
     /// The sequence of coordinates is expected to be in axis order.
-    pub fn from_coords(font: &FontRef, coords: impl Iterator<Item = NormalizedCoord>) -> Self {
+    pub fn from_coords(font: &FontRef, coords: impl IntoIterator<Item = NormalizedCoord>) -> Self {
         let mut this = Self::default();
         this.set_coords(font, coords);
         this
@@ -118,12 +118,12 @@ impl ShaperInstance {
     }
 
     /// Resets the instance for the given font and normalized coordinates.
-    pub fn set_coords(&mut self, font: &FontRef, coords: impl Iterator<Item = F2Dot14>) {
+    pub fn set_coords(&mut self, font: &FontRef, coords: impl IntoIterator<Item = F2Dot14>) {
         self.coords.clear();
         if let Ok(fvar) = font.fvar() {
             let count = fvar.axis_count() as usize;
             self.coords.reserve(count);
-            self.coords.extend(coords.take(count));
+            self.coords.extend(coords.into_iter().take(count));
             self.check_default();
         }
     }
