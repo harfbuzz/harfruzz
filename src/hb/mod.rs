@@ -69,8 +69,6 @@ mod ot_shaper_use_table;
 mod aat_layout_common;
 mod ot_shaper_vowel_constraints;
 mod set_digest;
-#[cfg(feature = "wasm-shaper")]
-mod shape_wasm;
 mod tag;
 mod tag_table;
 mod text_parser;
