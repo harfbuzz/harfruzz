@@ -44,16 +44,24 @@ impl ShaperData {
     }
 }
 
+// Maximum number of coordinates to store inline before spilling to the
+// heap.
+//
+// Any value between 5 and 11 yields a SmallVec footprint of 32 bytes.
+const MAX_INLINE_COORDS: usize = 11;
+
 /// An instance of a variable font.
 #[derive(Clone, Default, Debug)]
 pub struct ShaperInstance {
-    coords: SmallVec<[F2Dot14; 8]>,
+    coords: SmallVec<[F2Dot14; MAX_INLINE_COORDS]>,
     // TODO: this is a good place to hang variation specific caches
 }
 
 impl ShaperInstance {
     /// Creates a new shaper instance for the given font from the specified
     /// list of variation settings.
+    ///
+    /// The setting values are in user space and the order is insignificant.
     pub fn from_variations<V>(font: &FontRef, variations: V) -> Self
     where
         V: IntoIterator,
@@ -66,9 +74,19 @@ impl ShaperInstance {
 
     /// Creates a new shaper instance for the given font from the specified
     /// set of normalized coordinates.
+    ///
+    /// The sequence of coordinates is expected to be in axis order.
     pub fn from_coords(font: &FontRef, coords: impl Iterator<Item = NormalizedCoord>) -> Self {
         let mut this = Self::default();
         this.set_coords(font, coords);
+        this
+    }
+
+    /// Creates a new shaper instance for the given font using the variation
+    /// position from the named instance at the specified index.
+    pub fn from_named_instance(font: &FontRef, index: usize) -> Self {
+        let mut this = Self::default();
+        this.set_named_instance(font, index);
         this
     }
 
@@ -107,6 +125,25 @@ impl ShaperInstance {
             self.coords.reserve(count);
             self.coords.extend(coords.take(count));
             self.check_default();
+        }
+    }
+
+    /// Resets the instance for the given font using the variation
+    /// position from the named instance at the specified index.
+    pub fn set_named_instance(&mut self, font: &FontRef, index: usize) {
+        self.coords.clear();
+        if let Ok(fvar) = font.fvar() {
+            if let Ok((axes, instance)) = fvar
+                .axis_instance_arrays()
+                .and_then(|arrays| Ok((arrays.axes(), arrays.instances().get(index)?)))
+            {
+                self.set_variations(
+                    font,
+                    axes.iter()
+                        .zip(instance.coordinates)
+                        .map(|(axis, coord)| (axis.axis_tag(), coord.get().to_f32())),
+                );
+            }
         }
     }
 
