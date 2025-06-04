@@ -4,7 +4,7 @@ use super::ot_shape_normalize::HB_OT_SHAPE_NORMALIZATION_MODE_AUTO;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::unicode::hb_unicode_general_category_t;
-use super::{script, Shaper};
+use super::{hb_font_t, script};
 
 pub const THAI_SHAPER: hb_ot_shaper_t = hb_ot_shaper_t {
     collect_features: None,
@@ -131,7 +131,7 @@ const RD_MAPPINGS: &[PuaMapping] = &[
     PuaMapping::new(0x0000, 0x0000, 0x0000),
 ];
 
-fn pua_shape(u: u32, action: Action, face: &Shaper) -> u32 {
+fn pua_shape(u: u32, action: Action, face: &hb_font_t) -> u32 {
     let mappings = match action {
         Action::NOP => return u,
         Action::SD => SD_MAPPINGS,
@@ -270,7 +270,7 @@ const BELOW_STATE_MACHINE: &[[BSME; 3]] = &[
     ],
 ];
 
-fn do_pua_shaping(face: &Shaper, buffer: &mut hb_buffer_t) {
+fn do_pua_shaping(face: &hb_font_t, buffer: &mut hb_buffer_t) {
     let mut above_state = ABOVE_START_STATE[Consonant::NotConsonant as usize];
     let mut below_state = BELOW_START_STATE[Consonant::NotConsonant as usize];
     let mut base = 0;
@@ -308,7 +308,7 @@ fn do_pua_shaping(face: &Shaper, buffer: &mut hb_buffer_t) {
 }
 
 // TODO: more tests
-fn preprocess_text(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+fn preprocess_text(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     // This function implements the shaping logic documented here:
     //
     //   https://linux.thai.net/~thep/th-otf/shaping.html

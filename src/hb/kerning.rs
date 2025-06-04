@@ -10,9 +10,9 @@ use super::ot_layout_common::lookup_flags;
 use super::ot_layout_gpos_table::attach_type;
 use super::ot_layout_gsubgpos::{skipping_iterator_t, OT::hb_ot_apply_context_t};
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use super::{hb_mask_t, Shaper};
+use super::{hb_font_t, hb_mask_t};
 
-pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     let subtables = match face.aat_tables.kern.as_ref() {
         Some(table) => table.subtables(),
         None => return,
@@ -80,7 +80,7 @@ pub fn hb_ot_layout_kern(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut 
 
 // TODO: remove
 fn machine_kern(
-    face: &Shaper,
+    face: &hb_font_t,
     buffer: &mut hb_buffer_t,
     kern_mask: hb_mask_t,
     cross_stream: bool,
@@ -150,7 +150,7 @@ fn machine_kern(
 fn apply_simple_kerning<T: SimpleKerning>(
     subtable: &T,
     is_cross_stream: bool,
-    face: &Shaper,
+    face: &hb_font_t,
     kern_mask: hb_mask_t,
     buffer: &mut hb_buffer_t,
 ) {

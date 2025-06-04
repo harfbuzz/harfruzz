@@ -10,7 +10,7 @@ use super::ot_shape_normalize::HB_OT_SHAPE_NORMALIZATION_MODE_AUTO;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::unicode::*;
-use super::{hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script, Shaper};
+use super::{hb_font_t, hb_glyph_info_t, hb_mask_t, hb_tag_t, script, Script};
 
 const HB_BUFFER_SCRATCH_FLAG_ARABIC_HAS_STCH: hb_buffer_scratch_flags_t =
     HB_BUFFER_SCRATCH_FLAG_SHAPER0;
@@ -381,7 +381,7 @@ fn mongolian_variation_selectors(buffer: &mut hb_buffer_t) {
     }
 }
 
-fn setup_masks_arabic_plan(plan: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) {
+fn setup_masks_arabic_plan(plan: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) {
     let arabic_plan = plan.data::<arabic_shape_plan_t>();
     setup_masks_inner(arabic_plan, plan.script, buffer)
 }
@@ -401,7 +401,7 @@ pub fn setup_masks_inner(
     }
 }
 
-fn arabic_fallback_shape(_: &hb_ot_shape_plan_t, _: &Shaper, _: &mut hb_buffer_t) -> bool {
+fn arabic_fallback_shape(_: &hb_ot_shape_plan_t, _: &hb_font_t, _: &mut hb_buffer_t) -> bool {
     false
 }
 
@@ -410,7 +410,7 @@ fn arabic_fallback_shape(_: &hb_ot_shape_plan_t, _: &Shaper, _: &mut hb_buffer_t
 // https://docs.microsoft.com/en-us/typography/script-development/syriac
 // We implement this in a generic way, such that the Arabic subtending
 // marks can use it as well.
-fn record_stch(plan: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) -> bool {
+fn record_stch(plan: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) -> bool {
     let arabic_plan = plan.data::<arabic_shape_plan_t>();
     if !arabic_plan.has_stch {
         return false;
@@ -444,7 +444,7 @@ fn record_stch(plan: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) 
     false
 }
 
-fn apply_stch(face: &Shaper, buffer: &mut hb_buffer_t) {
+fn apply_stch(face: &hb_font_t, buffer: &mut hb_buffer_t) {
     if buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_ARABIC_HAS_STCH == 0 {
         return;
     }
@@ -596,7 +596,7 @@ fn apply_stch(face: &Shaper, buffer: &mut hb_buffer_t) {
     }
 }
 
-fn postprocess_glyphs_arabic(_: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+fn postprocess_glyphs_arabic(_: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     apply_stch(face, buffer)
 }
 

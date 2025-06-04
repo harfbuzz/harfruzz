@@ -4,9 +4,9 @@ use core::convert::TryFrom;
 use read_fonts::types::{GlyphId, GlyphId16};
 
 use super::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};
-use super::shaper::hb_glyph_extents_t;
+use super::face::hb_glyph_extents_t;
 use super::unicode::{CharExt, GeneralCategoryExt};
-use super::{hb_mask_t, Shaper};
+use super::{hb_font_t, hb_mask_t};
 use crate::hb::set_digest::hb_set_digest_t;
 use crate::{script, BufferClusterLevel, BufferFlags, Direction, Language, Script, SerializeFlags};
 
@@ -1775,13 +1775,13 @@ impl GlyphBuffer {
     }
 
     /// Converts the glyph buffer content into a string.
-    pub fn serialize(&self, face: &Shaper, flags: SerializeFlags) -> String {
+    pub fn serialize(&self, face: &hb_font_t, flags: SerializeFlags) -> String {
         self.serialize_impl(face, flags).unwrap_or_default()
     }
 
     fn serialize_impl(
         &self,
-        face: &Shaper,
+        face: &hb_font_t,
         flags: SerializeFlags,
     ) -> Result<String, core::fmt::Error> {
         use core::fmt::Write;

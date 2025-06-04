@@ -143,7 +143,7 @@ impl<'a> ShaperBuilder<'a> {
     }
 
     /// Builds the shaper with the current configuration.
-    pub fn build(self) -> Shaper<'a> {
+    pub fn build(self) -> hb_font_t<'a> {
         let font = self.font;
         let units_per_em = font.head().map(|head| head.units_per_em()).unwrap_or(1000);
         let charmap = Charmap::new(&font, &self.data.cmap_cache);
@@ -154,7 +154,7 @@ impl<'a> ShaperBuilder<'a> {
             .unwrap_or_default();
         let ot_tables = OtTables::new(&font, &self.data.ot_cache, coords);
         let aat_tables = AatTables::new(&font);
-        Shaper {
+        hb_font_t {
             font,
             units_per_em,
             pixels_per_em: None,
@@ -169,7 +169,7 @@ impl<'a> ShaperBuilder<'a> {
 
 /// A configured shaper.
 #[derive(Clone)]
-pub struct Shaper<'a> {
+pub struct hb_font_t<'a> {
     pub(crate) font: FontRef<'a>,
     pub(crate) units_per_em: u16,
     pixels_per_em: Option<(u16, u16)>,
@@ -180,7 +180,7 @@ pub struct Shaper<'a> {
     pub(crate) aat_tables: AatTables<'a>,
 }
 
-impl<'a> Shaper<'a> {
+impl<'a> hb_font_t<'a> {
     /// Returns face’s units per EM.
     #[inline]
     pub fn units_per_em(&self) -> i32 {

@@ -7,17 +7,17 @@ use super::ot::lookup::LookupInfo;
 use super::ot_layout_gsubgpos::OT;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::unicode::{hb_unicode_funcs_t, hb_unicode_general_category_t, GeneralCategoryExt};
-use super::{hb_glyph_info_t, Shaper};
+use super::{hb_font_t, hb_glyph_info_t};
 use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 
 pub const MAX_NESTING_LEVEL: usize = 64;
 pub const MAX_CONTEXT_LENGTH: usize = 64;
 
-pub fn hb_ot_layout_has_kerning(face: &Shaper) -> bool {
+pub fn hb_ot_layout_has_kerning(face: &hb_font_t) -> bool {
     face.aat_tables.kern.is_some()
 }
 
-pub fn hb_ot_layout_has_machine_kerning(face: &Shaper) -> bool {
+pub fn hb_ot_layout_has_machine_kerning(face: &hb_font_t) -> bool {
     match face.aat_tables.kern {
         Some(ref kern) => kern
             .subtables()
@@ -27,7 +27,7 @@ pub fn hb_ot_layout_has_machine_kerning(face: &Shaper) -> bool {
     }
 }
 
-pub fn hb_ot_layout_has_cross_kerning(face: &Shaper) -> bool {
+pub fn hb_ot_layout_has_cross_kerning(face: &hb_font_t) -> bool {
     match face.aat_tables.kern {
         Some(ref kern) => kern
             .subtables()
@@ -41,7 +41,7 @@ pub fn hb_ot_layout_has_cross_kerning(face: &Shaper) -> bool {
 
 // OT::GDEF::is_blocklisted unsupported
 
-pub fn _hb_ot_layout_set_glyph_props(face: &Shaper, buffer: &mut hb_buffer_t) {
+pub fn _hb_ot_layout_set_glyph_props(face: &hb_font_t, buffer: &mut hb_buffer_t) {
     let len = buffer.len;
     for info in &mut buffer.info[..len] {
         info.set_glyph_props(face.glyph_props(info.as_glyph()));
@@ -49,7 +49,7 @@ pub fn _hb_ot_layout_set_glyph_props(face: &Shaper, buffer: &mut hb_buffer_t) {
     }
 }
 
-pub fn hb_ot_layout_has_glyph_classes(face: &Shaper) -> bool {
+pub fn hb_ot_layout_has_glyph_classes(face: &hb_font_t) -> bool {
     face.ot_tables.has_glyph_classes()
 }
 
@@ -95,14 +95,14 @@ pub trait LayoutTable {
 
 /// Called before substitution lookups are performed, to ensure that glyph
 /// class and other properties are set on the glyphs in the buffer.
-pub fn hb_ot_layout_substitute_start(face: &Shaper, buffer: &mut hb_buffer_t) {
+pub fn hb_ot_layout_substitute_start(face: &hb_font_t, buffer: &mut hb_buffer_t) {
     _hb_ot_layout_set_glyph_props(face, buffer)
 }
 
 /// Applies the lookups in the given GSUB or GPOS table.
 pub fn apply_layout_table<T: LayoutTable>(
     plan: &hb_ot_shape_plan_t,
-    face: &Shaper,
+    face: &hb_font_t,
     buffer: &mut hb_buffer_t,
     table: Option<&T>,
 ) {
@@ -650,7 +650,7 @@ pub(crate) fn _hb_glyph_info_clear_substituted(info: &mut hb_glyph_info_t) {
 
 pub fn _hb_clear_substitution_flags(
     _: &hb_ot_shape_plan_t,
-    _: &Shaper,
+    _: &hb_font_t,
     buffer: &mut hb_buffer_t,
 ) -> bool {
     let len = buffer.len;

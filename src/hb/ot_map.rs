@@ -6,7 +6,7 @@ use super::buffer::{glyph_flag, hb_buffer_t};
 use super::common::TagExt;
 use super::ot_layout::TableIndex;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use super::{hb_mask_t, hb_tag_t, tag, Language, Script, Shaper};
+use super::{hb_font_t, hb_mask_t, hb_tag_t, tag, Language, Script};
 
 pub struct hb_ot_map_t {
     found_script: [bool; 2],
@@ -65,7 +65,7 @@ pub struct StageMap {
 
 // Pause functions return true if new glyph indices might have been added to the buffer.
 // This is used to update buffer digest.
-pub type pause_func_t = fn(&hb_ot_shape_plan_t, &Shaper, &mut hb_buffer_t) -> bool;
+pub type pause_func_t = fn(&hb_ot_shape_plan_t, &hb_font_t, &mut hb_buffer_t) -> bool;
 
 impl hb_ot_map_t {
     pub const MAX_BITS: u32 = 8;
@@ -165,7 +165,7 @@ pub const F_RANDOM: u32 = 0x0020; /* Randomly select a glyph from an AlternateSu
 pub const F_PER_SYLLABLE: u32 = 0x0040; /* Contain lookup application to within syllable. */
 
 pub struct hb_ot_map_builder_t<'a> {
-    face: &'a Shaper<'a>,
+    face: &'a hb_font_t<'a>,
     found_script: [bool; 2],
     script_index: [Option<u16>; 2],
     chosen_script: [Option<hb_tag_t>; 2],
@@ -199,7 +199,11 @@ const GLOBAL_BIT_SHIFT: u32 = 8 * core::mem::size_of::<u32>() as u32 - 1;
 const GLOBAL_BIT_MASK: hb_mask_t = 1 << GLOBAL_BIT_SHIFT;
 
 impl<'a> hb_ot_map_builder_t<'a> {
-    pub fn new(face: &'a Shaper<'a>, script: Option<Script>, language: Option<&Language>) -> Self {
+    pub fn new(
+        face: &'a hb_font_t<'a>,
+        script: Option<Script>,
+        language: Option<&Language>,
+    ) -> Self {
         // Fetch script/language indices for GSUB/GPOS.  We need these later to skip
         // features not available in either table and not waste precious bits for them.
         let (script_tags, lang_tags) = tag::tags_from_script_and_language(script, language);

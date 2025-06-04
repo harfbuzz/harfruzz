@@ -5,7 +5,7 @@ use core::any::Any;
 use super::ot_map::*;
 use super::ot_shape::*;
 use super::ot_shaper::*;
-use super::{hb_mask_t, Direction, Feature, Language, Script, Shaper};
+use super::{hb_font_t, hb_mask_t, Direction, Feature, Language, Script};
 
 /// A reusable plan for shaping a text buffer.
 pub struct hb_ot_shape_plan_t {
@@ -44,7 +44,7 @@ impl hb_ot_shape_plan_t {
     /// Returns a plan that can be used for shaping any buffer with the
     /// provided properties.
     pub fn new(
-        face: &Shaper,
+        face: &hb_font_t,
         direction: Direction,
         script: Option<Script>,
         language: Option<&Language>,

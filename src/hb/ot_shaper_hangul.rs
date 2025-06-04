@@ -99,7 +99,7 @@ fn is_hangul_tone(u: u32) -> bool {
     (0x302E..=0x302F).contains(&u)
 }
 
-fn is_zero_width_char(face: &Shaper, c: char) -> bool {
+fn is_zero_width_char(face: &hb_font_t, c: char) -> bool {
     if let Some(glyph) = face.get_nominal_glyph(c as u32) {
         face.glyph_h_advance(glyph) == 0
     } else {
@@ -107,7 +107,7 @@ fn is_zero_width_char(face: &Shaper, c: char) -> bool {
     }
 }
 
-fn preprocess_text_hangul(_: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+fn preprocess_text_hangul(_: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     // Hangul syllables come in two shapes: LV, and LVT.  Of those:
     //
     //   - LV can be precomposed, or decomposed.  Lets call those
@@ -349,7 +349,7 @@ fn preprocess_text_hangul(_: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb
     buffer.sync();
 }
 
-fn setup_masks_hangul(plan: &hb_ot_shape_plan_t, _: &Shaper, buffer: &mut hb_buffer_t) {
+fn setup_masks_hangul(plan: &hb_ot_shape_plan_t, _: &hb_font_t, buffer: &mut hb_buffer_t) {
     let hangul_plan = plan.data::<hangul_shape_plan_t>();
     for info in buffer.info_slice_mut() {
         info.mask |= hangul_plan.mask_array[info.hangul_shaping_feature() as usize];

@@ -6,7 +6,7 @@ use super::common::TagExt;
 use super::ot_shape::*;
 use super::ot_shape_normalize::*;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
-use super::{hb_tag_t, script, Direction, Script, Shaper};
+use super::{hb_font_t, hb_tag_t, script, Direction, Script};
 
 impl hb_glyph_info_t {
     pub(crate) fn ot_shaper_var_u8_category(&self) -> u8 {
@@ -72,11 +72,11 @@ pub struct hb_ot_shaper_t {
 
     /// Called during `shape()`.
     /// Shapers can use to modify text before shaping starts.
-    pub preprocess_text: Option<fn(&hb_ot_shape_plan_t, &Shaper, &mut hb_buffer_t)>,
+    pub preprocess_text: Option<fn(&hb_ot_shape_plan_t, &hb_font_t, &mut hb_buffer_t)>,
 
     /// Called during `shape()`.
     /// Shapers can use to modify text before shaping starts.
-    pub postprocess_glyphs: Option<fn(&hb_ot_shape_plan_t, &Shaper, &mut hb_buffer_t)>,
+    pub postprocess_glyphs: Option<fn(&hb_ot_shape_plan_t, &hb_font_t, &mut hb_buffer_t)>,
 
     /// How to normalize.
     pub normalization_preference: hb_ot_shape_normalization_mode_t,
@@ -90,7 +90,7 @@ pub struct hb_ot_shaper_t {
     /// Called during `shape()`.
     /// Shapers should use map to get feature masks and set on buffer.
     /// Shapers may NOT modify characters.
-    pub setup_masks: Option<fn(&hb_ot_shape_plan_t, &Shaper, &mut hb_buffer_t)>,
+    pub setup_masks: Option<fn(&hb_ot_shape_plan_t, &hb_font_t, &mut hb_buffer_t)>,
 
     /// If not `None`, then must match found GPOS script tag for
     /// GPOS to be applied.  Otherwise, fallback positioning will be used.

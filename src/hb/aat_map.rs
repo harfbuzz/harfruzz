@@ -5,7 +5,7 @@ use alloc::vec::Vec;
 use core::cmp::Ordering;
 
 use super::aat_layout::*;
-use super::{hb_mask_t, hb_tag_t, Shaper};
+use super::{hb_font_t, hb_mask_t, hb_tag_t};
 
 #[derive(Default)]
 pub struct hb_aat_map_t {
@@ -95,7 +95,7 @@ impl Default for hb_aat_map_builder_t {
 }
 
 impl hb_aat_map_builder_t {
-    pub fn add_feature(&mut self, face: &Shaper, feature: &Feature) -> Option<()> {
+    pub fn add_feature(&mut self, face: &hb_font_t, feature: &Feature) -> Option<()> {
         let feat = face.aat_tables.feat.as_ref()?;
 
         if feature.tag == hb_tag_t::new(b"aalt") {
@@ -165,7 +165,7 @@ impl hb_aat_map_builder_t {
         Some(())
     }
 
-    pub fn compile(&mut self, face: &Shaper, m: &mut hb_aat_map_t) {
+    pub fn compile(&mut self, face: &hb_font_t, m: &mut hb_aat_map_t) {
         // Compute active features per range, and compile each.
         let mut feature_events = vec![];
         for feature in &self.features {

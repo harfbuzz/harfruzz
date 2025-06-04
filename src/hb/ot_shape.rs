@@ -6,7 +6,7 @@ use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::ot_shaper::*;
 use super::unicode::{hb_unicode_general_category_t, CharExt, GeneralCategoryExt};
 use super::*;
-use super::{hb_tag_t, Shaper};
+use super::{hb_font_t, hb_tag_t};
 use crate::hb::aat_layout::hb_aat_layout_remove_deleted_glyphs;
 use crate::hb::algs::{rb_flag, rb_flag_unsafe};
 use crate::hb::buffer::glyph_flag::{SAFE_TO_INSERT_TATWEEL, UNSAFE_TO_BREAK, UNSAFE_TO_CONCAT};
@@ -21,7 +21,7 @@ use crate::{Direction, Feature, Language, Script};
 use read_fonts::TableProvider;
 
 pub struct hb_ot_shape_planner_t<'a> {
-    pub face: &'a Shaper<'a>,
+    pub face: &'a hb_font_t<'a>,
     pub direction: Direction,
     pub script: Option<Script>,
     pub ot_map: hb_ot_map_builder_t<'a>,
@@ -33,7 +33,7 @@ pub struct hb_ot_shape_planner_t<'a> {
 
 impl<'a> hb_ot_shape_planner_t<'a> {
     pub fn new(
-        face: &'a Shaper<'a>,
+        face: &'a hb_font_t<'a>,
         direction: Direction,
         script: Option<Script>,
         language: Option<&Language>,
@@ -301,7 +301,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
 
 pub struct hb_ot_shape_context_t<'a> {
     pub plan: &'a hb_ot_shape_plan_t,
-    pub face: &'a Shaper<'a>,
+    pub face: &'a hb_font_t<'a>,
     pub buffer: &'a mut hb_buffer_t,
     // Transient stuff
     pub target_direction: Direction,
@@ -475,7 +475,7 @@ fn position_complex(ctx: &mut hb_ot_shape_context_t) {
     }
 }
 
-fn position_by_plan(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+fn position_by_plan(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     if plan.apply_gpos {
         super::ot_layout_gpos_table::position(plan, face, buffer);
     } else if plan.apply_kerx {
@@ -663,7 +663,7 @@ fn set_unicode_props(buffer: &mut hb_buffer_t) {
 
 pub(crate) fn syllabic_clear_var(
     _: &hb_ot_shape_plan_t,
-    _: &Shaper,
+    _: &hb_font_t,
     buffer: &mut hb_buffer_t,
 ) -> bool {
     for info in &mut buffer.info {
@@ -673,7 +673,7 @@ pub(crate) fn syllabic_clear_var(
     false
 }
 
-fn insert_dotted_circle(buffer: &mut hb_buffer_t, face: &Shaper) {
+fn insert_dotted_circle(buffer: &mut hb_buffer_t, face: &hb_font_t) {
     if !buffer
         .flags
         .contains(BufferFlags::DO_NOT_INSERT_DOTTED_CIRCLE)
@@ -891,7 +891,7 @@ fn zero_mark_widths_by_gdef(buffer: &mut hb_buffer_t, adjust_offsets: bool) {
     }
 }
 
-fn hide_default_ignorables(buffer: &mut hb_buffer_t, face: &Shaper) {
+fn hide_default_ignorables(buffer: &mut hb_buffer_t, face: &hb_font_t) {
     if buffer.scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_DEFAULT_IGNORABLES != 0
         && !buffer
             .flags

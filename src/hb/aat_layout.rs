@@ -4,7 +4,7 @@ use super::buffer::{hb_buffer_t, hb_glyph_info_t};
 use super::hb_tag_t;
 use super::ot_shape_plan::hb_ot_shape_plan_t;
 use super::{aat_layout_kerx_table, aat_layout_morx_table, aat_layout_trak_table};
-use super::{aat_map, Shaper};
+use super::{aat_map, hb_font_t};
 use crate::hb::aat_layout_common::hb_aat_apply_context_t;
 use crate::hb::aat_layout_common::HB_BUFFER_SCRATCH_FLAG_AAT_HAS_DELETED;
 use crate::hb::ot_layout::_hb_glyph_info_is_aat_deleted;
@@ -495,7 +495,7 @@ pub mod AAT {
 
 pub fn hb_aat_layout_substitute(
     plan: &hb_ot_shape_plan_t,
-    face: &Shaper,
+    face: &hb_font_t,
     buffer: &mut hb_buffer_t,
 ) {
     let mut builder = aat_map::hb_aat_map_builder_t::default();
@@ -534,10 +534,14 @@ pub fn hb_aat_layout_remove_deleted_glyphs(buffer: &mut hb_buffer_t) {
     }
 }
 
-pub fn hb_aat_layout_position(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+pub fn hb_aat_layout_position(
+    plan: &hb_ot_shape_plan_t,
+    face: &hb_font_t,
+    buffer: &mut hb_buffer_t,
+) {
     aat_layout_kerx_table::apply(plan, face, buffer);
 }
 
-pub fn hb_aat_layout_track(plan: &hb_ot_shape_plan_t, face: &Shaper, buffer: &mut hb_buffer_t) {
+pub fn hb_aat_layout_track(plan: &hb_ot_shape_plan_t, face: &hb_font_t, buffer: &mut hb_buffer_t) {
     aat_layout_trak_table::apply(plan, face, buffer);
 }

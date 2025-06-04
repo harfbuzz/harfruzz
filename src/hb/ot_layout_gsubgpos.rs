@@ -2,11 +2,11 @@
 
 use super::buffer::hb_glyph_info_t;
 use super::buffer::{hb_buffer_t, GlyphPropsFlags};
+use super::hb_font_t;
 use super::hb_mask_t;
 use super::ot_layout::*;
 use super::ot_layout_common::*;
 use super::unicode::hb_unicode_general_category_t;
-use super::Shaper;
 use crate::hb::ot_layout_gsubgpos::OT::check_glyph_property;
 use read_fonts::tables::layout::SequenceLookupRecord;
 use read_fonts::types::GlyphId;
@@ -280,7 +280,7 @@ impl<'a> matcher_t<'a> {
         may_match_t::MATCH_MAYBE
     }
 
-    fn may_skip(&self, info: &hb_glyph_info_t, face: &Shaper) -> may_skip_t {
+    fn may_skip(&self, info: &hb_glyph_info_t, face: &hb_font_t) -> may_skip_t {
         if !check_glyph_property(face, info, self.lookup_props) {
             return may_skip_t::SKIP_YES;
         }
@@ -305,7 +305,7 @@ impl<'a> matcher_t<'a> {
 // cost, and makes backporting related changes very hard, but it seems unavoidable, unfortunately.
 pub struct skipping_iterator_t<'a, 'b> {
     buffer: &'a hb_buffer_t,
-    face: &'a Shaper<'b>,
+    face: &'a hb_font_t<'b>,
     matcher: matcher_t<'a>,
     buf_len: usize,
     glyph_data: u16,
@@ -609,7 +609,11 @@ pub mod OT {
     use super::*;
     use crate::hb::set_digest::hb_set_digest_t;
 
-    pub fn check_glyph_property(face: &Shaper, info: &hb_glyph_info_t, match_props: u32) -> bool {
+    pub fn check_glyph_property(
+        face: &hb_font_t,
+        info: &hb_glyph_info_t,
+        match_props: u32,
+    ) -> bool {
         let glyph_props = info.glyph_props();
 
         // Lookup flags are lower 16-bit of match props.
@@ -648,7 +652,7 @@ pub mod OT {
 
     pub struct hb_ot_apply_context_t<'a, 'b> {
         pub table_index: TableIndex,
-        pub face: &'a Shaper<'b>,
+        pub face: &'a hb_font_t<'b>,
         pub buffer: &'a mut hb_buffer_t,
         lookup_mask: hb_mask_t,
         pub per_syllable: bool,
@@ -667,7 +671,7 @@ pub mod OT {
     impl<'a, 'b> hb_ot_apply_context_t<'a, 'b> {
         pub fn new(
             table_index: TableIndex,
-            face: &'a Shaper<'b>,
+            face: &'a hb_font_t<'b>,
             buffer: &'a mut hb_buffer_t,
         ) -> Self {
             let buffer_digest = buffer.digest();
