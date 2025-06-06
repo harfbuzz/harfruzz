@@ -53,7 +53,7 @@ macro_rules! simple_bench {
                         buffer.push_str(&text);
                         buffer.guess_segment_properties();
                         let shape_plan = harfruzz::ShapePlan::new(&shaper, buffer.direction(), Some(buffer.script()), buffer.language().as_ref(), &[]);
-                        shaper.shape_with_plan(buffer, &shape_plan)
+                        shaper.shape_with_plan(&shape_plan, buffer, &[])
                     });
                 })
             }
@@ -94,7 +94,7 @@ macro_rules! simple_bench {
                     test::black_box({
                         let mut filled_buffer = buffer.take().unwrap();
                         filled_buffer.push_str(&text);
-                        let glyph_buffer = shaper.shape_with_plan(filled_buffer, &shape_plan);
+                        let glyph_buffer = shaper.shape_with_plan(&shape_plan, filled_buffer, &[]);
                         buffer = Some(glyph_buffer.clear());
                     });
                 })

@@ -12,8 +12,7 @@ use super::glyph_names::GlyphNames;
 use super::ot::{LayoutTable, OtCache, OtTables};
 use super::ot_layout::TableIndex;
 use super::ot_shape::{hb_ot_shape_context_t, shape_internal};
-use super::ot_shape_plan::hb_ot_shape_plan_t;
-use crate::{script, Feature, GlyphBuffer, NormalizedCoord, UnicodeBuffer, Variation};
+use crate::{script, Feature, GlyphBuffer, NormalizedCoord, ShapePlan, UnicodeBuffer, Variation};
 
 /// Data required for shaping with a single font.
 pub struct ShaperData {
@@ -239,14 +238,14 @@ impl<'a> crate::Shaper<'a> {
     /// be called once for each shaping configuration.
     pub fn shape(&self, mut buffer: UnicodeBuffer, features: &[Feature]) -> GlyphBuffer {
         buffer.0.guess_segment_properties();
-        let plan = hb_ot_shape_plan_t::new(
+        let plan = ShapePlan::new(
             self,
             buffer.0.direction,
             buffer.0.script,
             buffer.0.language.as_ref(),
             features,
         );
-        self.shape_with_plan(buffer, &plan, features)
+        self.shape_with_plan(&plan, buffer, features)
     }
 
     /// Shapes the buffer content using the provided font and plan.
@@ -263,8 +262,8 @@ impl<'a> crate::Shaper<'a> {
     /// properties.
     pub fn shape_with_plan(
         &self,
+        plan: &ShapePlan,
         buffer: UnicodeBuffer,
-        plan: &hb_ot_shape_plan_t,
         features: &[Feature],
     ) -> GlyphBuffer {
         let mut buffer = buffer.0;
