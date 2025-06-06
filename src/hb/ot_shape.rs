@@ -381,7 +381,7 @@ fn hb_ot_substitute_plan(ctx: &mut hb_ot_shape_context_t) {
     }
 
     if ctx.plan.apply_morx {
-        aat_layout::hb_aat_layout_substitute(ctx.plan, ctx.face, ctx.buffer);
+        aat_layout::hb_aat_layout_substitute(ctx.plan, ctx.face, ctx.buffer, ctx.features);
     } else {
         super::ot_layout_gsub_table::substitute(ctx.plan, ctx.face, ctx.buffer);
     }

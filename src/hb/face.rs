@@ -237,7 +237,6 @@ impl<'a> crate::Shaper<'a> {
     /// This is because [`ShapePlan`](crate::ShapePlan) initialization is pretty slow and should preferably
     /// be called once for each shaping configuration.
     pub fn shape(&self, mut buffer: UnicodeBuffer, features: &[Feature]) -> GlyphBuffer {
-        buffer.0.guess_segment_properties();
         let plan = ShapePlan::new(
             self,
             buffer.0.direction,
@@ -267,8 +266,6 @@ impl<'a> crate::Shaper<'a> {
         features: &[Feature],
     ) -> GlyphBuffer {
         let mut buffer = buffer.0;
-        buffer.guess_segment_properties();
-
         buffer.enter();
 
         debug_assert_eq!(buffer.direction, plan.direction);
