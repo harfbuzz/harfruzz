@@ -246,7 +246,7 @@ impl<'a> crate::Shaper<'a> {
             buffer.0.language.as_ref(),
             features,
         );
-        self.shape_with_plan(buffer, &plan)
+        self.shape_with_plan(buffer, &plan, features)
     }
 
     /// Shapes the buffer content using the provided font and plan.
@@ -261,7 +261,12 @@ impl<'a> crate::Shaper<'a> {
     ///
     /// Will panic when debugging assertions are enabled if the buffer and plan have mismatched
     /// properties.
-    pub fn shape_with_plan(&self, buffer: UnicodeBuffer, plan: &hb_ot_shape_plan_t) -> GlyphBuffer {
+    pub fn shape_with_plan(
+        &self,
+        buffer: UnicodeBuffer,
+        plan: &hb_ot_shape_plan_t,
+        features: &[Feature],
+    ) -> GlyphBuffer {
         let mut buffer = buffer.0;
         buffer.guess_segment_properties();
 
@@ -281,6 +286,7 @@ impl<'a> crate::Shaper<'a> {
                 face: self,
                 buffer: &mut buffer,
                 target_direction,
+                features,
             });
         }
 

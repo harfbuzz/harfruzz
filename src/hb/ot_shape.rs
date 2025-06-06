@@ -305,6 +305,7 @@ pub struct hb_ot_shape_context_t<'a> {
     pub buffer: &'a mut hb_buffer_t,
     // Transient stuff
     pub target_direction: Direction,
+    pub features: &'a [Feature],
 }
 
 // Pull it all together!
@@ -504,7 +505,7 @@ fn setup_masks(ctx: &mut hb_ot_shape_context_t) {
         func(ctx.plan, ctx.face, ctx.buffer);
     }
 
-    for feature in &ctx.plan.user_features {
+    for feature in ctx.features {
         if !feature.is_global() {
             let (mask, shift) = ctx.plan.ot_map.get_mask(feature.tag);
             ctx.buffer
