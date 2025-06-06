@@ -169,6 +169,7 @@ pub fn shape(font_path: &str, text: &str, options: &str) -> String {
         features.push(feature);
     }
 
+    buffer.guess_segment_properties();
     let glyph_buffer = shaper.shape(buffer, &features);
 
     let mut format_flags = harfruzz::SerializeFlags::default();

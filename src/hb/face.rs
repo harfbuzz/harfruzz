@@ -236,7 +236,7 @@ impl<'a> crate::Shaper<'a> {
     /// If you plan to shape multiple strings, prefer [`shape_with_plan`](Self::shape_with_plan).
     /// This is because [`ShapePlan`](crate::ShapePlan) initialization is pretty slow and should preferably
     /// be called once for each shaping configuration.
-    pub fn shape(&self, mut buffer: UnicodeBuffer, features: &[Feature]) -> GlyphBuffer {
+    pub fn shape(&self, buffer: UnicodeBuffer, features: &[Feature]) -> GlyphBuffer {
         let plan = ShapePlan::new(
             self,
             buffer.0.direction,

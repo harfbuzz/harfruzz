@@ -174,7 +174,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         }
     }
 
-    pub fn compile(mut self, user_features: &[Feature]) -> hb_ot_shape_plan_t {
+    pub fn compile(mut self) -> hb_ot_shape_plan_t {
         let ot_map = self.ot_map.compile();
 
         let frac_mask = ot_map.get_1_mask(hb_tag_t::new(b"frac"));
@@ -288,7 +288,6 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             apply_kerx,
             apply_morx,
             apply_trak,
-            user_features: user_features.to_vec(),
         };
 
         if let Some(func) = self.shaper.create_data {
