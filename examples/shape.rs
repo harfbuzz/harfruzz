@@ -1,11 +1,7 @@
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use harfruzz::ShaperFont;
-use read_fonts::{
-    types::{F2Dot14, Fixed},
-    FontRef, TableProvider,
-};
+use harfruzz::{FontRef, ShaperData, ShaperInstance};
 
 const HELP: &str = "\
 USAGE:
@@ -156,21 +152,13 @@ fn main() {
 
     let font_data = std::fs::read(font_path).unwrap();
     let font = FontRef::from_index(&font_data, args.face_index).unwrap();
-    let mut coords = vec![];
-    if let Ok(fvar) = font.fvar() {
-        coords.resize(fvar.axis_count() as usize, F2Dot14::default());
-        fvar.user_to_normalized(
-            None,
-            args.variations
-                .iter()
-                .map(|var| (var.tag, Fixed::from_f64(var.value as f64))),
-            &mut coords,
-        );
-    }
-    let shaper_font = ShaperFont::new(&font);
-    let mut face = shaper_font.shaper(&font, &coords);
-
-    face.set_points_per_em(args.font_ptem);
+    let data = ShaperData::new(&font);
+    let instance = ShaperInstance::from_variations(&font, &args.variations);
+    let shaper = data
+        .shaper(&font)
+        .instance(Some(&instance))
+        .point_size(args.font_ptem)
+        .build();
 
     let text = if let Some(path) = args.text_file {
         std::fs::read_to_string(path).unwrap()
@@ -217,7 +205,7 @@ fn main() {
             buffer.set_not_found_variation_selector_glyph(g);
         }
 
-        let glyph_buffer = harfruzz::shape(&face, &args.features, buffer);
+        let glyph_buffer = shaper.shape(buffer, &args.features);
 
         let mut format_flags = harfruzz::SerializeFlags::default();
         if args.no_glyph_names {
@@ -244,7 +232,7 @@ fn main() {
             format_flags |= harfruzz::SerializeFlags::GLYPH_FLAGS;
         }
 
-        println!("{}", glyph_buffer.serialize(&face, format_flags));
+        println!("{}", glyph_buffer.serialize(&shaper, format_flags));
     }
 }
 

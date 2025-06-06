@@ -1818,7 +1818,7 @@ impl GlyphBuffer {
     }
 
     /// Converts the glyph buffer content into a string.
-    pub fn serialize(&self, face: &hb_font_t, flags: SerializeFlags) -> String {
+    pub fn serialize(&self, face: &crate::Shaper, flags: SerializeFlags) -> String {
         self.serialize_impl(face, flags).unwrap_or_default()
     }
 

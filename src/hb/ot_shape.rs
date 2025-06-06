@@ -174,7 +174,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
         }
     }
 
-    pub fn compile(mut self, user_features: &[Feature]) -> hb_ot_shape_plan_t {
+    pub fn compile(mut self) -> hb_ot_shape_plan_t {
         let ot_map = self.ot_map.compile();
 
         let frac_mask = ot_map.get_1_mask(hb_tag_t::new(b"frac"));
@@ -288,7 +288,6 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             apply_kerx,
             apply_morx,
             apply_trak,
-            user_features: user_features.to_vec(),
         };
 
         if let Some(func) = self.shaper.create_data {
@@ -305,6 +304,7 @@ pub struct hb_ot_shape_context_t<'a> {
     pub buffer: &'a mut hb_buffer_t,
     // Transient stuff
     pub target_direction: Direction,
+    pub features: &'a [Feature],
 }
 
 // Pull it all together!
@@ -380,7 +380,7 @@ fn hb_ot_substitute_plan(ctx: &mut hb_ot_shape_context_t) {
     }
 
     if ctx.plan.apply_morx {
-        aat_layout::hb_aat_layout_substitute(ctx.plan, ctx.face, ctx.buffer);
+        aat_layout::hb_aat_layout_substitute(ctx.plan, ctx.face, ctx.buffer, ctx.features);
     } else {
         super::ot_layout_gsub_table::substitute(ctx.plan, ctx.face, ctx.buffer);
     }
@@ -504,7 +504,7 @@ fn setup_masks(ctx: &mut hb_ot_shape_context_t) {
         func(ctx.plan, ctx.face, ctx.buffer);
     }
 
-    for feature in &ctx.plan.user_features {
+    for feature in ctx.features {
         if !feature.is_global() {
             let (mask, shift) = ctx.plan.ot_map.get_mask(feature.tag);
             ctx.buffer
