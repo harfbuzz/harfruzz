@@ -964,5 +964,9 @@ fn propagate_flags(buffer: &mut hb_buffer_t) {
                 info.mask = mask;
             }
         }
+
+        for info in &mut buffer.info[start..end] {
+            info.mask = mask;
+        }
     });
 }
