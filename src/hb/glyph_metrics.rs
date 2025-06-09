@@ -17,6 +17,8 @@ pub(crate) struct GlyphMetrics<'a> {
     vorg: Option<Vorg<'a>>,
     glyf: Option<GlyfTables<'a>>,
     mvar: Option<Mvar<'a>>,
+    num_glyphs: u32,
+    upem: u16,
     ascent: i16,
     descent: i16,
 }
@@ -30,6 +32,16 @@ struct GlyfTables<'a> {
 
 impl<'a> GlyphMetrics<'a> {
     pub fn new(font: &FontRef<'a>) -> Self {
+        let num_glyphs = if let Ok(maxp) = font.maxp() {
+            maxp.num_glyphs() as u32
+        } else {
+            0
+        };
+        let upem = if let Ok(head) = font.head() {
+            head.units_per_em()
+        } else {
+            1024
+        };
         let hmtx = font.hmtx().ok();
         let hvar = font.hvar().ok();
         let vmtx = font.vmtx().ok();
@@ -60,6 +72,8 @@ impl<'a> GlyphMetrics<'a> {
             vorg,
             glyf,
             mvar,
+            num_glyphs,
+            upem,
             ascent,
             descent,
         }
@@ -67,13 +81,19 @@ impl<'a> GlyphMetrics<'a> {
 
     pub fn advance_width(&self, gid: impl Into<GlyphId>, coords: &[F2Dot14]) -> Option<i32> {
         let gid = gid.into();
-        let mut advance = if let Some(hmtx) = self.hmtx.as_ref() {
-            hmtx.advance(gid)? as i32
-        } else if let Some(extents) = self.extents(gid, coords) {
-            return Some(extents.x_max + extents.x_min);
+        let advance = if let Some(hmtx) = self.hmtx.as_ref() {
+            hmtx.advance(gid)
         } else {
-            return None;
+            None
         };
+        if advance.is_none() {
+            return if gid.to_u32() < self.num_glyphs {
+                Some(self.upem as i32 / 2)
+            } else {
+                None
+            };
+        }
+        let mut advance = advance.unwrap() as i32;
         if !coords.is_empty() {
             if let Some(hvar) = self.hvar.as_ref() {
                 advance += hvar
@@ -108,11 +128,15 @@ impl<'a> GlyphMetrics<'a> {
 
     pub fn advance_height(&self, gid: impl Into<GlyphId>, coords: &[F2Dot14]) -> Option<i32> {
         let gid = gid.into();
-        let mut advance = if let Some(vmtx) = self.vmtx.as_ref() {
-            vmtx.advance(gid).unwrap_or(0) as i32
+        let advance = if let Some(vmtx) = self.vmtx.as_ref() {
+            vmtx.advance(gid)
         } else {
-            self.ascent as i32 - self.descent as i32
+            None
         };
+        if advance.is_none() {
+            return Some(self.ascent as i32 - self.descent as i32);
+        }
+        let mut advance = advance.unwrap() as i32;
         if !coords.is_empty() {
             if let Some(vvar) = self.vvar.as_ref() {
                 advance += vvar
