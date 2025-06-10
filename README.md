@@ -1,9 +1,9 @@
-# harfruzz
-![Build Status](https://github.com/harfbuzz/harfruzz/workflows/Rust/badge.svg)
-[![Crates.io](https://img.shields.io/crates/v/harfruzz.svg)](https://crates.io/crates/harfruzz)
-[![Documentation](https://docs.rs/harfruzz/badge.svg)](https://docs.rs/harfruzz)
+# harfrust
+![Build Status](https://github.com/harfbuzz/harfrust/workflows/Rust/badge.svg)
+[![Crates.io](https://img.shields.io/crates/v/harfrust.svg)](https://crates.io/crates/harfrust)
+[![Documentation](https://docs.rs/harfrust/badge.svg)](https://docs.rs/harfrust)
 
-`harfruzz` is a fork of [`rustybuzz`](https://docs.rs/rustybuzz) to explore porting from `ttf-parser` to 
+`harfrust` is a fork of [`rustybuzz`](https://docs.rs/rustybuzz) to explore porting from `ttf-parser` to 
 [`read-fonts`](https://docs.rs/read-fonts) to avoid shipping (and maintaining)
 multiple implementations of core font parsing for [`skrifa`](https://docs.rs/skrifa) consumers.
 Further context in https://github.com/googlefonts/fontations/issues/956.
@@ -22,7 +22,7 @@ production and consumption to Rust.
 
 The following conformance issues need to be fixed:
 
-* harfruzz does not yet fully pass the harfbuzz shaping or fuzzing tests
+* harfrust does not yet fully pass the harfbuzz shaping or fuzzing tests
 * Malformed fonts will cause an error
    * HarfBuzz uses fallback/dummy shaper in this case
 * No Arabic fallback shaper (requires subsetting)
@@ -32,7 +32,7 @@ The following conformance issues need to be fixed:
 
 - No font size property. Shaping is always using UnitsPerEm. You should scale the result manually.
 - Most of the TrueType and Unicode handling code was moved into separate crates.
-- harfruzz doesn't interact with any system libraries and must produce exactly the same
+- harfrust doesn't interact with any system libraries and must produce exactly the same
   results on all OS'es and targets.
 - `mort` table is not supported, since it's deprecated by Apple.
 - No `graphite` library support.
@@ -45,11 +45,11 @@ See [benches/README.md](./benches/README.md) for details.
 
 ## Notes about the port
 
-harfruzz is not a faithful port.
+harfrust is not a faithful port.
 
 harfbuzz (C++ edition) can roughly be split into 6 parts: 
 
-1. shaping, handled by harfruzz
+1. shaping, handled by harfrust
 1. subsetting, (`hb-subset`) moves to a standalone crate, [klippa](https://github.com/googlefonts/fontations/tree/main/klippa)
 1. TrueType parsing, handled by [`read-fonts`](https://docs.rs/read-fonts)
 1. Unicode routines, migrated to external crates
@@ -117,6 +117,6 @@ But except that, there are no `unsafe` in this library and in most of its depend
 
 ## License
 
-`harfruzz` is licensed under the **MIT** license.
+`harfrust` is licensed under the **MIT** license.
 
 `harfbuzz` is [licensed](https://github.com/harfbuzz/harfbuzz/blob/main/COPYING) under the **Old MIT**

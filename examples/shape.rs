@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::str::FromStr;
 
-use harfruzz::{FontRef, ShaperData, ShaperInstance};
+use harfrust::{FontRef, ShaperData, ShaperInstance};
 
 const HELP: &str = "\
 USAGE:
@@ -47,17 +47,17 @@ struct Args {
     font_file: Option<PathBuf>,
     face_index: u32,
     font_ptem: Option<f32>,
-    variations: Vec<harfruzz::Variation>,
+    variations: Vec<harfrust::Variation>,
     text: Option<String>,
     text_file: Option<PathBuf>,
     unicodes: Option<String>,
-    direction: Option<harfruzz::Direction>,
-    language: harfruzz::Language,
-    script: Option<harfruzz::Script>,
+    direction: Option<harfrust::Direction>,
+    language: harfrust::Language,
+    script: Option<harfrust::Script>,
     not_found_variation_selector_glyph: Option<u32>,
     utf8_clusters: bool,
-    cluster_level: harfruzz::BufferClusterLevel,
-    features: Vec<harfruzz::Feature>,
+    cluster_level: harfrust::BufferClusterLevel,
+    features: Vec<harfrust::Feature>,
     no_glyph_names: bool,
     no_positions: bool,
     no_advances: bool,
@@ -182,7 +182,7 @@ fn main() {
     };
 
     for text in lines {
-        let mut buffer = harfruzz::UnicodeBuffer::new();
+        let mut buffer = harfrust::UnicodeBuffer::new();
         buffer.push_str(&text);
 
         if let Some(d) = args.direction {
@@ -207,29 +207,29 @@ fn main() {
 
         let glyph_buffer = shaper.shape(buffer, &args.features);
 
-        let mut format_flags = harfruzz::SerializeFlags::default();
+        let mut format_flags = harfrust::SerializeFlags::default();
         if args.no_glyph_names {
-            format_flags |= harfruzz::SerializeFlags::NO_GLYPH_NAMES;
+            format_flags |= harfrust::SerializeFlags::NO_GLYPH_NAMES;
         }
 
         if args.no_clusters || args.ned {
-            format_flags |= harfruzz::SerializeFlags::NO_CLUSTERS;
+            format_flags |= harfrust::SerializeFlags::NO_CLUSTERS;
         }
 
         if args.no_positions {
-            format_flags |= harfruzz::SerializeFlags::NO_POSITIONS;
+            format_flags |= harfrust::SerializeFlags::NO_POSITIONS;
         }
 
         if args.no_advances || args.ned {
-            format_flags |= harfruzz::SerializeFlags::NO_ADVANCES;
+            format_flags |= harfrust::SerializeFlags::NO_ADVANCES;
         }
 
         if args.show_extents {
-            format_flags |= harfruzz::SerializeFlags::GLYPH_EXTENTS;
+            format_flags |= harfrust::SerializeFlags::GLYPH_EXTENTS;
         }
 
         if args.show_flags {
-            format_flags |= harfruzz::SerializeFlags::GLYPH_FLAGS;
+            format_flags |= harfrust::SerializeFlags::GLYPH_FLAGS;
         }
 
         println!("{}", glyph_buffer.serialize(&shaper, format_flags));
@@ -250,39 +250,39 @@ fn parse_unicodes(s: &str) -> Result<String, String> {
     Ok(text)
 }
 
-fn parse_features(s: &str) -> Result<Vec<harfruzz::Feature>, String> {
+fn parse_features(s: &str) -> Result<Vec<harfrust::Feature>, String> {
     let mut features = Vec::new();
     for f in s.split(',') {
-        features.push(harfruzz::Feature::from_str(f)?);
+        features.push(harfrust::Feature::from_str(f)?);
     }
 
     Ok(features)
 }
 
-fn parse_variations(s: &str) -> Result<Vec<harfruzz::Variation>, String> {
+fn parse_variations(s: &str) -> Result<Vec<harfrust::Variation>, String> {
     let mut variations = Vec::new();
     for v in s.split(',') {
-        variations.push(harfruzz::Variation::from_str(&v)?);
+        variations.push(harfrust::Variation::from_str(&v)?);
     }
 
     Ok(variations)
 }
 
-fn parse_cluster(s: &str) -> Result<harfruzz::BufferClusterLevel, String> {
+fn parse_cluster(s: &str) -> Result<harfrust::BufferClusterLevel, String> {
     match s {
-        "0" => Ok(harfruzz::BufferClusterLevel::MonotoneGraphemes),
-        "1" => Ok(harfruzz::BufferClusterLevel::MonotoneCharacters),
-        "2" => Ok(harfruzz::BufferClusterLevel::Characters),
+        "0" => Ok(harfrust::BufferClusterLevel::MonotoneGraphemes),
+        "1" => Ok(harfrust::BufferClusterLevel::MonotoneCharacters),
+        "2" => Ok(harfrust::BufferClusterLevel::Characters),
         _ => Err("invalid cluster level".to_string()),
     }
 }
 
-fn system_language() -> harfruzz::Language {
+fn system_language() -> harfrust::Language {
     unsafe {
         libc::setlocale(libc::LC_ALL, b"\0" as *const _ as *const i8);
         let s = libc::setlocale(libc::LC_CTYPE, std::ptr::null());
         let s = std::ffi::CStr::from_ptr(s);
         let s = s.to_str().expect("locale must be ASCII");
-        harfruzz::Language::from_str(s).unwrap()
+        harfrust::Language::from_str(s).unwrap()
     }
 }
