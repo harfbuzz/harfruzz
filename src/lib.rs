@@ -72,24 +72,15 @@ impl BufferClusterLevel {
     }
     #[inline]
     fn is_monotone(self) -> bool {
-        match self {
-            Self::MonotoneGraphemes | Self::MonotoneCharacters => true,
-            _ => false,
-        }
+        matches!(self, Self::MonotoneGraphemes | Self::MonotoneCharacters)
     }
     #[inline]
     fn is_graphemes(self) -> bool {
-        match self {
-            Self::MonotoneGraphemes | Self::Graphemes => true,
-            _ => false,
-        }
+        matches!(self, Self::MonotoneGraphemes | Self::Graphemes)
     }
     #[inline]
     fn _is_characters(self) -> bool {
-        match self {
-            Self::MonotoneCharacters | Self::Characters => true,
-            _ => false,
-        }
+        matches!(self, Self::MonotoneCharacters | Self::Characters)
     }
 }
 

@@ -49,8 +49,7 @@ impl OtCache {
         if let Ok(gdef) = font.gdef() {
             if let Some(Ok(mark_sets)) = gdef.mark_glyph_sets_def() {
                 gdef_mark_set_digests.extend(mark_sets.coverages().iter().map(|set| {
-                    set.ok()
-                        .and_then(|coverage| Some(hb_set_digest_t::from_coverage(&coverage)))
+                    set.ok().map(|coverage| hb_set_digest_t::from_coverage(&coverage))
                         .unwrap_or_default()
                 }));
             }
@@ -200,7 +199,7 @@ impl<'a> OtTables<'a> {
                 .mark_sets
                 .as_ref()
                 .and_then(|(data, offsets)| Some((data, offsets.get(set_index as usize)?.get())))
-                .and_then(|(data, offset)| offset.resolve::<CoverageTable>(data.clone()).ok())
+                .and_then(|(data, offset)| offset.resolve::<CoverageTable>(*data).ok())
                 .map(|coverage| coverage.get(glyph_id).is_some())
                 .unwrap_or(false)
         } else {
@@ -214,10 +213,10 @@ impl<'a> OtTables<'a> {
     ) -> Option<(&'a [u8], &'a LookupCache)> {
         if table_index == TableIndex::GSUB {
             let table = self.gsub.as_ref()?;
-            Some((table.table.offset_data().as_bytes(), &table.lookups))
+            Some((table.table.offset_data().as_bytes(), table.lookups))
         } else {
             let table = self.gpos.as_ref()?;
-            Some((table.table.offset_data().as_bytes(), &table.lookups))
+            Some((table.table.offset_data().as_bytes(), table.lookups))
         }
     }
 
