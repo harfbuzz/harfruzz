@@ -29,8 +29,6 @@ IGNORE_TEST_CASES = [
     "collections_003",
     # Face index out of bounds. ttf-parser doesn't permit this.
     "collections_006",
-    # no `hhea` table.
-    "indic_decompose_001",
     # Requires support for the ltag table.
     "macos_002",
     # Custom MacOS test. A shortened version of `macos_013`, but with `--show-flags`.
