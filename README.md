@@ -59,8 +59,22 @@ The library is completely safe.
 
 There are no `unsafe` in this library and in most of its dependencies (excluding `bytemuck`).
 
+## Developer documents
+
+For notes on the backporting process of HarfBuzz code, see [docs/backporting.md](docs/backporting.md).
+
+For notes on generating state machine using `ragel`, see [docs/ragel.md](docs/ragel.md).
+
+The following HarfBuzz _studies_ are relevant to HarfRust development:
+
+- 2025 - [Introducing HarfRust][2]
+- 2025 – [Caching][1]
+
 ## License
 
 HarfRust is licensed under the **MIT** license.
 
 HarfBuzz is [licensed](https://github.com/harfbuzz/harfbuzz/blob/main/COPYING) under the **Old MIT**
+
+[2]: https://docs.google.com/document/d/1aH_waagdEM5UhslQxCeFEb82ECBhPlZjy5_MwLNLBYo/preview
+[1]: https://docs.google.com/document/d/1_VgObf6Je0J8byMLsi7HCQHnKo2emGnx_ib_sHo-bt4/preview
