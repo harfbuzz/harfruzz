@@ -57,7 +57,7 @@ impl<'a> hb_ot_shape_planner_t<'a> {
             && (direction.is_horizontal() || face.ot_tables.gsub.is_none());
 
         // https://github.com/harfbuzz/harfbuzz/issues/1528
-        if apply_morx && shaper as *const _ != &DEFAULT_SHAPER as *const _ {
+        if apply_morx && !core::ptr::eq(shaper as *const _, &DEFAULT_SHAPER as *const _) {
             shaper = &DUMBER_SHAPER;
         }
 
