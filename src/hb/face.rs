@@ -1,4 +1,5 @@
 #[cfg(not(feature = "std"))]
+#[allow(unused_imports)]
 use core_maths::CoreFloat;
 use read_fonts::types::{F2Dot14, Fixed, GlyphId};
 use read_fonts::{FontRef, TableProvider};

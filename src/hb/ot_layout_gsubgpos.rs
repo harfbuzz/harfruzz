@@ -225,7 +225,7 @@ struct matcher_t<'a> {
     matching: Option<&'a match_func_t<'a>>,
 }
 
-impl<'a> Default for matcher_t<'a> {
+impl Default for matcher_t<'_> {
     fn default() -> Self {
         matcher_t {
             lookup_props: 0,

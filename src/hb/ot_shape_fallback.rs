@@ -40,23 +40,23 @@ fn recategorize_combining_class(u: u32, mut class: u8) -> u8 {
 
     match class {
         // Hebrew
-        mcc::CCC10 => combining_class::Below, // sheva
-        mcc::CCC11 => combining_class::Below, // hataf segol
-        mcc::CCC12 => combining_class::Below, // hataf patah
-        mcc::CCC13 => combining_class::Below, // hataf qamats
-        mcc::CCC14 => combining_class::Below, // hiriq
-        mcc::CCC15 => combining_class::Below, // tsere
-        mcc::CCC16 => combining_class::Below, // segol
-        mcc::CCC17 => combining_class::Below, // patah
-        mcc::CCC18 => combining_class::Below, // qamats & qamats qatan
-        mcc::CCC20 => combining_class::Below, // qubuts
-        mcc::CCC22 => combining_class::Below, // meteg
+        mcc::CCC10 => combining_class::Below,         // sheva
+        mcc::CCC11 => combining_class::Below,         // hataf segol
+        mcc::CCC12 => combining_class::Below,         // hataf patah
+        mcc::CCC13 => combining_class::Below,         // hataf qamats
+        mcc::CCC14 => combining_class::Below,         // hiriq
+        mcc::CCC15 => combining_class::Below,         // tsere
+        mcc::CCC16 => combining_class::Below,         // segol
+        mcc::CCC17 => combining_class::Below,         // patah
+        mcc::CCC18 => combining_class::Below,         // qamats & qamats qatan
+        mcc::CCC20 => combining_class::Below,         // qubuts
+        mcc::CCC22 => combining_class::Below,         // meteg
         mcc::CCC23 => combining_class::AttachedAbove, // rafe
-        mcc::CCC24 => combining_class::AboveRight, // shin dot
-        mcc::CCC25 => combining_class::AboveLeft, // sin dot
-        mcc::CCC19 => combining_class::AboveLeft, // holam & holam haser for vav
-        mcc::CCC26 => combining_class::Above, // point varika
-        mcc::CCC21 => class,                        // dagesh
+        mcc::CCC24 => combining_class::AboveRight,    // shin dot
+        mcc::CCC25 => combining_class::AboveLeft,     // sin dot
+        mcc::CCC19 => combining_class::AboveLeft,     // holam & holam haser for vav
+        mcc::CCC26 => combining_class::Above,         // point varika
+        mcc::CCC21 => class,                          // dagesh
 
         // Arabic and Syriac
         mcc::CCC27 => combining_class::Above, // fathatan

@@ -183,7 +183,7 @@ fn main() {
 
     for text in lines {
         let mut buffer = harfrust::UnicodeBuffer::new();
-        buffer.push_str(&text);
+        buffer.push_str(text);
 
         if let Some(d) = args.direction {
             buffer.set_direction(d);
@@ -262,7 +262,7 @@ fn parse_features(s: &str) -> Result<Vec<harfrust::Feature>, String> {
 fn parse_variations(s: &str) -> Result<Vec<harfrust::Variation>, String> {
     let mut variations = Vec::new();
     for v in s.split(',') {
-        variations.push(harfrust::Variation::from_str(&v)?);
+        variations.push(harfrust::Variation::from_str(v)?);
     }
 
     Ok(variations)
