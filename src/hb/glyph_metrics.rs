@@ -238,7 +238,7 @@ impl<'a> GlyphMetrics<'a> {
             return Some(BoundingBox::default());
         };
         if !coords.is_empty() {
-            return None; // TODO https://github.com/harfbuzz/harfruzz/pull/52#issuecomment-2878117808
+            return None; // TODO https://github.com/harfbuzz/harfrust/pull/52#issuecomment-2878117808
         }
         Some(BoundingBox {
             x_min: glyph.x_min() as i32,

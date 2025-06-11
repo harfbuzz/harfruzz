@@ -52,12 +52,12 @@ IGNORE_TEST_CASES = [
     "colr_021",
 
     # We ignore extents for COLRv1 in a "forward looking shaper"
-    # (see https://github.com/harfbuzz/harfruzz/pull/4#issuecomment-2252964385)
+    # (see https://github.com/harfbuzz/harfrust/pull/4#issuecomment-2252964385)
     "color_fonts_001",
     "color_fonts_002",
     "color_fonts_003",
 
-    # https://github.com/harfbuzz/harfruzz/pull/52
+    # https://github.com/harfbuzz/harfrust/pull/52
     "vertical_016",
 ]
 

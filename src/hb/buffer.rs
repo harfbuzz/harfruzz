@@ -198,26 +198,26 @@ impl hb_glyph_info_t {
     /// only, even if the breaking position carries the unsafe-to-break flag or when hyphenation
     /// or other text transformation happens at line-break position, in the following way:
     /// 1. Iterate back from the line-break position until the first cluster start position
-    /// that is NOT unsafe-to-concat.
+    ///    that is NOT unsafe-to-concat.
     /// 2. Shape the segment from there till the end of line.
     /// 3. Check whether the resulting glyph-run also is clear of the unsafe-to-concat at its
-    /// start-of-text position; if it is, just splice it into place and the line is shaped;
-    /// If not, move on to a position further back that is clear of unsafe-to-concat and retry
-    /// from there, and repeat.
+    ///    start-of-text position; if it is, just splice it into place and the line is shaped;
+    ///    If not, move on to a position further back that is clear of unsafe-to-concat and retry
+    ///    from there, and repeat.
     ///
     /// At the start of next line a similar algorithm can be implemented. That is:
     /// 1. Iterate forward from the line-break position until the first cluster start position that is
-    /// NOT unsafe-to-concat.
+    ///    NOT unsafe-to-concat.
     /// 2. Shape the segment from beginning of the line to that position.
     /// 3. Check whether the resulting glyph-run also is clear of the unsafe-to-concat at its end-of-text
-    /// position; if it is, just splice it into place and the beginning is shaped; If not, move on to a
-    /// position further forward that is clear of unsafe-to-concat and retry up to there, and repeat. A
-    /// slight complication will arise in the implementation of the algorithm above, because while our
-    /// buffer API has a way to return flags for position corresponding to start-of-text, there is currently
-    /// no position corresponding to end-of-text. This limitation can be alleviated by shaping more text
-    /// than needed and looking for unsafe-to-concat flag within text clusters. The unsafe-to-break flag will
-    /// always imply this flag. To use this flag, you must enable the buffer flag [`BufferFlags::PRODUCE_UNSAFE_TO_CONCAT`]
-    /// during shaping, otherwise the buffer flag will not be reliably produced.
+    ///    position; if it is, just splice it into place and the beginning is shaped; If not, move on to a
+    ///    position further forward that is clear of unsafe-to-concat and retry up to there, and repeat. A
+    ///    slight complication will arise in the implementation of the algorithm above, because while our
+    ///    buffer API has a way to return flags for position corresponding to start-of-text, there is currently
+    ///    no position corresponding to end-of-text. This limitation can be alleviated by shaping more text
+    ///    than needed and looking for unsafe-to-concat flag within text clusters. The unsafe-to-break flag will
+    ///    always imply this flag. To use this flag, you must enable the buffer flag [`BufferFlags::PRODUCE_UNSAFE_TO_CONCAT`]
+    ///    during shaping, otherwise the buffer flag will not be reliably produced.
     pub fn unsafe_to_concat(&self) -> bool {
         self.mask & glyph_flag::UNSAFE_TO_CONCAT != 0
     }
@@ -1113,8 +1113,8 @@ impl hb_buffer_t {
     ) {
         // If the range is not specified, ie. whole buffer, allow it.
         // But if range *is* specified, reject if range is too large.
-        if start.is_some() && end.is_some() {
-            if end.unwrap().wrapping_sub(start.unwrap()) > 255 {
+        if let (Some(start), Some(end)) = (start, end) {
+            if end.wrapping_sub(start) > 255 {
                 return;
             }
         }
