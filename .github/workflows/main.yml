@@ -27,3 +27,9 @@ jobs:
 
     - name: Run tests
       run: cargo test --verbose
+
+    - name: Rustfmt
+      run: cargo fmt --all -- --check
+
+    - name: Clippy
+      run: cargo clippy --all-features --all-targets -- -D warnings
